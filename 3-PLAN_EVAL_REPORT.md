@@ -5,7 +5,7 @@ This file is used to visualize the gaps in the plan. It is used to tell the cove
 
 ## Gaps / Coverage File Location
 
-The file is called `EVAL_plan_coverage.md`. It is in the `docs/` folder.
+The file is called `PLAN_EVAL.md`. It is in the `results/` folder.
 
 ## Instructions
 Build a single-file HTML page that tells the coverage story to stakeholders who will never read the raw tables.
@@ -26,3 +26,7 @@ Design guidance:
 - Should look polished at 1200px wide (screenshot-ready for video).
 
 Do not just render the coverage table with colored rows and call it done. Tell the story.
+
+## Output Location
+
+Write the HTML report to: `results/PLAN_EVAL_REPORT.html`

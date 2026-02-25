@@ -4,11 +4,11 @@ This evaluation step is not used until after an entire plan has been written.
 
 ## PRD Info
 
-The PRD is multiple files. All files are very important. You will find the first file that you need to read in the `docs/shows_prd` folder. It is called `START_HERE.md`. It will give you a roadmap to the important PRD files. For evaluation purposes, all PRD files must be ingested to fully understand the scope of the request itself.
+The PRD is multiple files. All files are very important. You will find the PRD files in the `docs/prd/` folder. Start with `docs/prd/showbiz_prd.md`, then read `docs/prd/showbiz_infra_rider_prd.md`, then all files in `docs/prd/supporting_docs/`. For evaluation purposes, all PRD files must be ingested to fully understand the scope of the request itself.
 
 ## Instructions
 
-Using the original PRD as the source of truth, audit the plan found in the `docs/` folder for coverage and alignment.
+Using the original PRD as the source of truth, audit the plan found in the `results/` folder for coverage and alignment. The plan is called `PLAN.md`.
 
 Your output MUST follow this exact structure, in this order:
 
@@ -145,4 +145,4 @@ Write 3–5 paragraphs that a human reader can use to understand the coverage po
 
 ## Output Location
 
-Write the full evaluation to: `docs/EVAL_plan_coverage.md`
+Write the full evaluation to: `results/PLAN_EVAL.md`
