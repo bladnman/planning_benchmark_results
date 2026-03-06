@@ -2,7 +2,7 @@
 
 ## 0. Purpose
 
-This rider defines **how builds are expected to run, persist data, and remain isolated** when implementing the application described in `showbiz_prd.md`.
+This rider defines **how builds are expected to run, persist data, and remain isolated** when implementing the application described in `product_prd.md`.
 
 It exists to:
 - Reduce infrastructure friction (local + cloud build agents)

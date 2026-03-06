@@ -441,7 +441,7 @@ This functional PRD describes *what* the app does and *how* it works. The follow
 ### `where_is_the_heart_opus.md`
 **Problem statement:** Analysis of what this functional PRD misses—the "soul" gap that would cause a rebuild to lose the app's heart.
 
-### `showbiz_prd_ai_personality_opus.md`
+### `ai_personality_opus.md`
 **AI Personality & Prompt Design Guide:** Full verbatim prompts with annotations, the base personality, feature-specific variations, the 80 starter prompts, the emotional chameleon behavior, the honesty principle, and prompt evolution guidelines.
 
 Key topics covered:
@@ -452,7 +452,7 @@ Key topics covered:
 - The concept/vibe philosophy
 - Red lines that should never be crossed in prompt changes
 
-### `showbiz_prd_philosophy_opus.md`
+### `philosophy_opus.md`
 **Product Philosophy & Emotional Design Guide:** The "why" behind design decisions, emotional targets for each feature, and what makes the app distinct.
 
 Key topics covered:

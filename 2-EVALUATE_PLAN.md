@@ -4,7 +4,7 @@ This evaluation step is not used until after an entire plan has been written.
 
 ## PRD Info
 
-The PRD is multiple files. All files are very important. You will find the PRD files in the `docs/prd/` folder. Start with `docs/prd/showbiz_prd.md`, then read `docs/prd/showbiz_infra_rider_prd.md`, then all files in `docs/prd/supporting_docs/`. For evaluation purposes, all PRD files must be ingested to fully understand the scope of the request itself.
+The PRD is multiple files. All files are very important. You will find the PRD files in the `docs/prd/` folder. Start with `docs/prd/product_prd.md`, then read `docs/prd/infra_rider_prd.md`, then all files in `docs/prd/supporting_docs/`. For evaluation purposes, all PRD files must be ingested to fully understand the scope of the request itself.
 
 ## Instructions
 

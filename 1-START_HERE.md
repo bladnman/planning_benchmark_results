@@ -12,9 +12,9 @@ You are being given a complete product specification to build. The `docs/prd/` f
 
 Read these first, in order:
 
-1. **`docs/prd/showbiz_prd.md`** — The primary product requirements document. Defines what the app does.
+1. **`docs/prd/product_prd.md`** — The primary product requirements document. Defines what the app does.
 
-2. **`docs/prd/showbiz_infra_rider_prd.md`** — Infrastructure and execution requirements. Defines how builds must run.
+2. **`docs/prd/infra_rider_prd.md`** — Infrastructure and execution requirements. Defines how builds must run.
 
 ### Supporting Documents
 
@@ -36,6 +36,6 @@ All documents in `docs/prd/supporting_docs/` provide critical detail referenced 
 
 ## Begin
 
-Read `docs/prd/showbiz_prd.md` now.
+Read `docs/prd/product_prd.md` now.
 
 Write your implementation plan in a file called `results/PLAN.md`.
