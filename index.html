@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planning Benchmark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --bg:#0f0f0e;--bg-warm:#141311;--surface:#1a1917;--surface-raised:#201f1c;
+      --surface-hover:#262522;--border:rgba(255,240,200,0.06);--border-strong:rgba(255,240,200,0.12);
+      --ink:#e8e0d4;--ink-soft:#9a9084;--ink-faint:#6b6158;--ink-muted:#4a443c;
+      --gold:#d4a843;--gold-soft:rgba(212,168,67,0.12);--gold-glow:rgba(212,168,67,0.06);
+      --sage:#6b9e7a;--sage-soft:rgba(107,158,122,0.12);
+      --terra:#c47a5a;--terra-soft:rgba(196,122,90,0.12);
+      --slate:#7a8fa6;--slate-soft:rgba(122,143,166,0.12);
+      --purple:#9b7ec8;--purple-soft:rgba(155,126,200,0.12);
+      --danger:#b85c4a;--danger-soft:rgba(184,92,74,0.12);
+      --font-display:"Libre Caslon Display",Georgia,serif;
+      --font-body:"DM Sans",system-ui,sans-serif;
+      --font-mono:"JetBrains Mono",monospace;
+      --radius-xl:24px;--radius-lg:18px;--radius-md:12px;--radius-sm:8px;
+      --ease-out:cubic-bezier(0.16,1,0.3,1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{min-height:100vh;color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.6;background:var(--bg);-webkit-font-smoothing:antialiased}
+    ::selection{background:rgba(212,168,67,0.28)}
+    a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
+    button,select{font:inherit}
+
+    /* ─── TOPBAR ─── */
+    .topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:rgba(15,15,14,0.85);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border)}
+    .topbar-brand{font-family:var(--font-display);font-size:1.1rem;color:var(--ink);letter-spacing:-0.02em;white-space:nowrap}
+    .topbar-brand span{color:var(--gold)}
+    .topbar-right{display:flex;align-items:center;gap:16px}
+    .topbar-meta{color:var(--ink-faint);font-size:11px;font-family:var(--font-mono);white-space:nowrap}
+    .tab-bar{display:flex;gap:2px;background:var(--surface);border-radius:10px;padding:3px}
+    .tab-btn{padding:6px 14px;border:none;border-radius:8px;background:transparent;color:var(--ink-soft);font:500 12px/1 var(--font-body);letter-spacing:0.01em;cursor:pointer;transition:all 0.2s var(--ease-out);white-space:nowrap}
+    .tab-btn:hover{color:var(--ink);background:var(--surface-hover)}
+    .tab-btn.active{color:var(--bg);background:var(--gold);font-weight:600}
+
+    /* ─── FILTER BAR ─── */
+    .filter-bar{display:flex;align-items:center;gap:10px;padding:8px 24px;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap}
+    .filter-bar.collapsed{display:none}
+    .filter-bar select{padding:5px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised);color:var(--ink);font:400 12px var(--font-body);cursor:pointer}
+    .filter-bar select:focus{outline:1px solid var(--gold);border-color:var(--gold)}
+    .filter-count{color:var(--ink-faint);font-size:12px;font-family:var(--font-mono);margin-left:auto}
+    .filter-clear{padding:4px 10px;border:1px solid var(--border-strong);border-radius:999px;background:transparent;color:var(--ink-faint);font-size:11px;cursor:pointer;transition:all 0.2s}
+    .filter-clear:hover{border-color:var(--terra);color:var(--terra)}
+    .filter-toggle{padding:4px 10px;border:1px solid var(--border-strong);border-radius:999px;background:transparent;color:var(--ink-faint);font-size:11px;cursor:pointer;transition:all 0.2s}
+    .filter-toggle:hover{border-color:var(--gold);color:var(--gold)}
+    .filter-toggle.has-filters{color:var(--gold);border-color:rgba(212,168,67,0.3)}
+
+    /* ─── SCREENS ─── */
+    .screen{display:none;opacity:0;transform:translateY(6px);transition:opacity 0.35s var(--ease-out),transform 0.35s var(--ease-out)}
+    .screen.active{display:block}.screen.visible{opacity:1;transform:translateY(0)}
+    .screen-inner{max-width:1240px;margin:0 auto;padding:32px 24px 80px}
+
+    /* ─── SECTION LABELS ─── */
+    .section-label{display:flex;align-items:center;gap:12px;margin-bottom:20px;color:var(--ink-faint);font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase}
+    .section-label::after{content:"";flex:1;height:1px;background:var(--border)}
+
+    /* ─── STAT STRIP ─── */
+    .stat-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:32px}
+    .stat-card{padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md)}
+    .stat-card .label{color:var(--ink-faint);font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+    .stat-card .value{font-family:var(--font-mono);font-size:1.3rem;font-weight:500;letter-spacing:-0.02em}
+    .stat-card .detail{color:var(--ink-faint);font-size:0.78rem;margin-top:4px}
+
+    /* ─── CARD ─── */
+    .card{padding:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:16px;transition:border-color 0.2s}
+    .card:hover{border-color:var(--border-strong)}
+    .card h3{font-size:1rem;font-weight:600;margin-bottom:12px;letter-spacing:-0.01em}
+    .card-label{display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--ink-faint);font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase}
+    .card-label-dot{width:6px;height:6px;border-radius:50%}
+    .card-body{color:var(--ink-soft);font-size:0.88rem;line-height:1.7}
+    .card-stat{font-family:var(--font-mono);font-size:1.8rem;font-weight:500;letter-spacing:-0.03em;margin-bottom:6px}
+    .card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px}
+    .card.full{grid-column:1/-1}
+
+    /* ─── SCORE STYLING ─── */
+    .sc-high{color:var(--sage)}.sc-mid{color:var(--gold)}.sc-low{color:var(--terra)}
+    .score-chip{display:inline-flex;align-items:center;justify-content:center;min-width:52px;padding:3px 8px;border-radius:999px;font-family:var(--font-mono);font-size:0.78rem;font-weight:500}
+    .score-chip.high{background:var(--sage-soft);color:var(--sage)}.score-chip.mid{background:var(--gold-soft);color:var(--gold)}.score-chip.low{background:var(--danger-soft);color:var(--danger)}
+
+    /* ─── BADGES ─── */
+    .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:0.68rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase}
+    .badge-controlled{background:var(--sage-soft);color:var(--sage);border:1px solid rgba(107,158,122,0.2)}
+    .badge-uncontrolled{background:var(--terra-soft);color:var(--terra);border:1px solid rgba(196,122,90,0.2)}
+    .badge-mismatch{background:var(--gold-soft);color:var(--gold);border:1px solid rgba(212,168,67,0.2)}
+
+    /* ─── CAVEAT ─── */
+    .caveat{display:flex;gap:8px;margin-top:12px;padding:10px 12px;border-radius:var(--radius-sm);background:rgba(196,122,90,0.05);border:1px solid rgba(196,122,90,0.08);color:var(--terra);font-size:0.78rem;line-height:1.55}
+
+    /* ─── CHARTS ─── */
+    .chart-wrap{border-radius:var(--radius-md);overflow:hidden;margin-top:12px}
+    .chart-host{width:100%;min-height:360px}
+    .chart-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    .chart-controls label{color:var(--ink-faint);font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase}
+    .chart-controls select{padding:5px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised);color:var(--ink);font:400 12px var(--font-body);cursor:pointer}
+
+    /* ─── RANKING ─── */
+    .rank-list{display:grid;gap:6px;margin-bottom:32px}
+    .rank-card{display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:16px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;transition:all 0.2s var(--ease-out);position:relative;overflow:hidden}
+    .rank-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--gold-glow),transparent 40%);opacity:0;transition:opacity 0.3s}
+    .rank-card:hover{border-color:var(--border-strong);transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,0,0,0.25)}
+    .rank-card:hover::before{opacity:1}
+    .rank-card.leader{border-color:rgba(212,168,67,0.18);background:linear-gradient(135deg,rgba(212,168,67,0.04),var(--surface) 50%)}
+    .rank-pos{font-family:var(--font-display);font-size:1.4rem;color:var(--ink-muted);text-align:center;position:relative;z-index:1}
+    .rank-card.leader .rank-pos{color:var(--gold)}
+    .rank-body{display:grid;gap:4px;position:relative;z-index:1}
+    .rank-name{font-weight:600;font-size:0.92rem;color:var(--ink)}
+    .rank-meta{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--ink-soft);font-size:0.78rem}
+    .meta-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px}
+    .rank-scores{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+    .rank-score-val{font-family:var(--font-mono);font-size:1.3rem;font-weight:500;min-width:70px;text-align:right}
+    .rank-bar-track{width:100px;height:5px;border-radius:3px;background:var(--surface-hover);overflow:hidden}
+    .rank-bar-fill{height:100%;border-radius:3px;transition:width 0.8s var(--ease-out);width:0}
+    .rank-mini{font-size:0.72rem;font-family:var(--font-mono);color:var(--ink-faint);display:flex;gap:12px}
+
+    /* ─── COMPARE ─── */
+    .picker-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;-webkit-overflow-scrolling:touch}
+    .picker-strip::-webkit-scrollbar{height:4px}.picker-strip::-webkit-scrollbar-track{background:var(--surface)}.picker-strip::-webkit-scrollbar-thumb{background:var(--ink-muted);border-radius:2px}
+    .picker-card{flex:0 0 auto;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);cursor:pointer;transition:all 0.2s;min-width:160px;max-width:220px}
+    .picker-card:hover{border-color:var(--border-strong)}
+    .picker-card.sel-a{border-color:var(--gold);background:var(--gold-soft)}
+    .picker-card.sel-b{border-color:var(--sage);background:var(--sage-soft)}
+    .picker-name{font-weight:600;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .picker-score{font-family:var(--font-mono);font-size:0.78rem;color:var(--ink-soft);margin-top:2px}
+    .picker-tool{font-size:0.72rem;color:var(--ink-faint);margin-top:1px}
+    .compare-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+    .compare-col{padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg)}
+    .compare-col.side-a{border-left:3px solid var(--gold)}
+    .compare-col.side-b{border-left:3px solid var(--sage)}
+    .compare-col-name{font-weight:600;font-size:0.92rem;margin-bottom:2px}
+    .compare-col-meta{color:var(--ink-faint);font-size:0.78rem;margin-bottom:14px}
+    .compare-col-score{font-family:var(--font-mono);font-size:1.8rem;font-weight:500;margin-bottom:14px}
+    .compare-row{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--border);font-size:0.8rem}
+    .compare-row .lbl{color:var(--ink-soft)}.compare-row .val{font-family:var(--font-mono);font-weight:500}
+    .delta-bar-section{padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:16px}
+    .delta-row{display:grid;grid-template-columns:160px 1fr 56px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:0.78rem}
+    .delta-row:last-child{border-bottom:none}
+    .delta-area{color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .delta-track{height:4px;background:var(--surface-hover);border-radius:2px;position:relative}
+    .delta-fill{position:absolute;top:0;height:100%;border-radius:2px;transition:all 0.6s var(--ease-out)}
+    .delta-mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--ink-muted)}
+    .delta-val{font-family:var(--font-mono);font-weight:500;text-align:right;font-size:0.76rem}
+
+    /* ─── EXPLORE TABLE ─── */
+    .explore-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .chip{padding:5px 12px;border:1px solid var(--border-strong);border-radius:999px;background:transparent;color:var(--ink-soft);font:500 12px/1 var(--font-body);cursor:pointer;transition:all 0.2s}
+    .chip:hover{border-color:var(--gold);color:var(--ink)}.chip.active{background:var(--gold-soft);border-color:var(--gold);color:var(--gold)}
+    .tbl-wrap{border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface)}
+    table.ex{width:100%;border-collapse:collapse}
+    table.ex th{padding:11px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faint);background:var(--surface-raised);border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;transition:color 0.15s}
+    table.ex th:hover{color:var(--ink)}table.ex th.sorted{color:var(--gold)}
+    table.ex td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:0.84rem}
+    table.ex tr{cursor:pointer;transition:background 0.12s}
+    table.ex tbody tr:hover{background:var(--surface-hover)}
+    table.ex tbody tr:last-child td{border-bottom:none}
+    table.ex tbody tr.sel{background:rgba(212,168,67,0.06)}
+    .cell-name{font-weight:600;color:var(--ink);font-size:0.88rem}.cell-sub{color:var(--ink-faint);font-size:0.74rem;margin-top:1px}
+    .spark{display:inline-block;width:48px;height:6px;border-radius:3px;background:var(--surface-hover);overflow:hidden;vertical-align:middle;margin-left:6px}
+    .spark-fill{height:100%;border-radius:3px}
+    .mono{font-family:var(--font-mono);font-size:0.78rem;color:var(--ink-soft)}
+    .chk{width:16px;height:16px;accent-color:var(--gold);cursor:pointer}
+
+    /* ─── INSPECT ─── */
+    .inspect-empty{text-align:center;padding:80px 24px;color:var(--ink-faint)}
+    .inspect-empty h3{font-family:var(--font-display);font-size:1.6rem;color:var(--ink-soft);margin-bottom:10px}
+    .inspect-hero{padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--border)}
+    .inspect-hero-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:16px}
+    .inspect-hero h2{font-family:var(--font-display);font-size:1.7rem;letter-spacing:-0.02em;margin-bottom:6px}
+    .inspect-hero-meta{color:var(--ink-soft);font-size:0.85rem;line-height:1.6}
+    .inspect-links{display:flex;flex-wrap:wrap;gap:6px}
+    .inspect-link{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border-strong);border-radius:999px;font-size:0.78rem;color:var(--ink-soft);transition:all 0.2s}
+    .inspect-link:hover{border-color:var(--gold);color:var(--gold);text-decoration:none}
+    .inspect-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}
+    .inspect-stat{padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md)}
+    .inspect-stat .label{color:var(--ink-faint);font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+    .inspect-stat .value{font-family:var(--font-mono);font-size:1.3rem;font-weight:500}
+    .inspect-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+    .inspect-card{padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg)}
+    .inspect-card h4{font-size:0.88rem;font-weight:600;margin-bottom:12px}
+    .inspect-card p,.dl{color:var(--ink-soft);font-size:0.82rem;line-height:1.65;margin-bottom:3px}
+    .dl strong{color:var(--ink);font-weight:500}
+    .gap-item{padding:12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-raised);margin-bottom:6px}
+    .gap-sev{font-size:0.7rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:3px}
+    .gap-sev.critical{color:var(--danger)}.gap-sev.important{color:var(--gold)}
+    .gap-title{font-weight:500;font-size:0.84rem;margin-bottom:3px}
+    .gap-why{color:var(--ink-faint);font-size:0.76rem;line-height:1.55}
+    .tag{display:inline-flex;padding:2px 7px;border-radius:999px;font-size:0.7rem;font-weight:600;text-transform:capitalize}
+    .tag-critical{background:var(--danger-soft);color:var(--danger)}.tag-important{background:var(--gold-soft);color:var(--gold)}.tag-detail{background:var(--sage-soft);color:var(--sage)}
+    .tag-full{background:var(--sage-soft);color:var(--sage)}.tag-partial{background:var(--gold-soft);color:var(--gold)}.tag-missing{background:var(--danger-soft);color:var(--danger)}
+    .req-bar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+    .req-bar select{padding:5px 8px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface);color:var(--ink);font:400 12px var(--font-body)}
+    .req-wrap{border:1px solid var(--border);border-radius:var(--radius-md);overflow-x:auto;background:var(--surface)}
+    table.req{width:100%;border-collapse:collapse;min-width:640px}
+    table.req th{padding:10px 12px;text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-faint);background:var(--surface-raised);border-bottom:1px solid var(--border)}
+    table.req td{padding:8px 12px;border-bottom:1px solid var(--border);font-size:0.78rem;vertical-align:top;color:var(--ink-soft)}
+    table.req tbody tr:last-child td{border-bottom:none}
+
+    /* ─── SELECTION PANEL (for scatter) ─── */
+    .sel-panel{position:fixed;bottom:0;left:0;right:0;z-index:90;background:var(--surface-raised);border-top:1px solid var(--border-strong);padding:16px 24px;transform:translateY(100%);transition:transform 0.35s var(--ease-out);display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+    .sel-panel.open{transform:translateY(0)}
+    .sel-chip{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--radius-md);border:1px solid var(--border-strong);background:var(--surface);min-width:180px}
+    .sel-chip.a{border-color:var(--gold)}.sel-chip.b{border-color:var(--sage)}
+    .sel-chip-name{font-weight:600;font-size:0.82rem}.sel-chip-score{font-family:var(--font-mono);font-size:0.78rem;color:var(--ink-soft)}
+    .sel-delta{font-family:var(--font-mono);font-size:1.1rem;font-weight:500;margin:0 8px}
+    .sel-actions{margin-left:auto;display:flex;gap:8px}
+    .btn{padding:6px 14px;border:1px solid var(--border-strong);border-radius:999px;background:transparent;color:var(--ink-soft);font:500 12px/1 var(--font-body);cursor:pointer;transition:all 0.2s}
+    .btn:hover{border-color:var(--gold);color:var(--gold)}
+    .btn-primary{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+    .btn-primary:hover{background:#c49a38}
+
+    /* ─── NAV HELPER ─── */
+    .breadcrumb{color:var(--ink-faint);font-size:0.8rem;margin-bottom:16px}
+    .breadcrumb a{color:var(--gold)}
+    .nav-row{display:flex;gap:8px;margin-bottom:24px}
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fade-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .anim{opacity:0;animation:fade-up 0.4s var(--ease-out) forwards}
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:900px){.topbar{padding:0 12px}.screen-inner{padding:20px 12px 60px}.card-grid,.inspect-grid,.compare-cols{grid-template-columns:1fr}.inspect-stats{grid-template-columns:repeat(2,1fr)}.rank-card{grid-template-columns:28px 1fr auto;gap:10px;padding:12px 14px}.rank-bar-track,.rank-mini{display:none}.topbar-meta{display:none}.sel-panel{flex-direction:column;align-items:stretch}}
+    @media(max-width:600px){.tab-btn{padding:5px 10px;font-size:11px}.stat-strip{grid-template-columns:1fr 1fr}.filter-bar{padding:6px 12px}}
+  </style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-brand">Planning <span>Benchmark</span></div>
+    <div class="tab-bar" id="tabBar"></div>
+    <div class="topbar-right">
+      <button class="filter-toggle" id="filterToggle" type="button">Filters</button>
+      <div class="topbar-meta" id="topMeta">Loading…</div>
+    </div>
+  </nav>
+  <div class="filter-bar collapsed" id="filterBar"></div>
+
+  <section class="screen active" id="scr-overview"><div class="screen-inner" id="overviewContent"></div></section>
+  <section class="screen" id="scr-scatter"><div class="screen-inner" id="scatterContent"></div></section>
+  <section class="screen" id="scr-compare"><div class="screen-inner" id="compareContent"></div></section>
+  <section class="screen" id="scr-trends"><div class="screen-inner" id="trendsContent"></div></section>
+  <section class="screen" id="scr-explore"><div class="screen-inner" id="exploreContent"></div></section>
+  <section class="screen" id="scr-inspect"><div class="screen-inner" id="inspectContent"></div></section>
+
+  <div class="sel-panel" id="selPanel"></div>
+
+  <script src="./data.js"></script>
+  <script>
+  (function(){
+  "use strict";
+
+  /* ════════════════════════════════════════════
+     STATE
+  ════════════════════════════════════════════ */
+  const S = {
+    screen:"overview",
+    dataset:null,
+    filters:{tool:null,model_family:null,effort:null,planning_mode:null,taxonomy:null,role:null},
+    explore:{sort:"scores.overall",dir:"desc",checked:[]},
+    scatter:{xAxis:"planning_runtime_seconds",yAxis:"scores.overall",colorBy:"tool",selA:null,selB:null},
+    compare:{a:null,b:null},
+    trends:{metric:"scores.overall",groupBy:"tool"},
+    inspect:{level:null,id:null,reqFilters:{area:"all",severity:"all",coverage:"all"}},
+  };
+  const charts={};
+  const SCREENS=[
+    {id:"overview",label:"Overview"},
+    {id:"scatter",label:"Scatter"},
+    {id:"compare",label:"Compare"},
+    {id:"trends",label:"Trends"},
+    {id:"explore",label:"Explore"},
+    {id:"inspect",label:"Inspect"},
+  ];
+  const TOOL_COLORS={"Codex CLI":"#6b9e7a","Claude Code":"#d4a843"};
+  const FAMILY_COLORS={"GPT-5":"#6b9e7a","Claude Opus":"#d4a843","Claude Sonnet":"#c47a5a"};
+  const EFFORT_COLORS={"X-High":"#d4a843","High":"#6b9e7a","Medium":"#7a8fa6","Low":"#9a9084"};
+  const PLAN_COLORS={true:"#6b9e7a",false:"#c47a5a",null:"#7a8fa6"};
+
+  /* ════════════════════════════════════════════
+     UTILS
+  ════════════════════════════════════════════ */
+  function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+  function get(o,p){return p.split(".").reduce((a,k)=>a&&a[k],o)}
+  function safe(v){return Array.isArray(v)?v:[]}
+  function fmtS(v){return v==null||v===""?"n/a":Number(v).toFixed(1)+"%"}
+  function fmtD(s){if(s==null||s==="")return"n/a";s=Math.round(Number(s));if(!s)return"0s";const m=Math.floor(s/60),r=s%60;return m?(r?m+"m "+r+"s":m+"m"):r+"s"}
+  function fmtDate(v){if(!v)return"?";const d=new Date(v);return isNaN(d)?v:d.toLocaleDateString("en-US",{month:"short",day:"numeric"})}
+  function fmtDT(v){if(!v)return"?";const d=new Date(v);return isNaN(d)?v:d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"})}
+  function scCls(v){const n=Number(v);return n>=88?"high":n>=75?"mid":"low"}
+  function scCol(v){const n=Number(v);return n>=88?"var(--sage)":n>=75?"var(--gold)":"var(--terra)"}
+  function toolCol(t){return TOOL_COLORS[t]||"var(--slate)"}
+  function colorFor(run,by){
+    if(by==="tool")return TOOL_COLORS[run.tool]||"#7a8fa6";
+    if(by==="model_family")return FAMILY_COLORS[run.model_family]||"#7a8fa6";
+    if(by==="effort")return EFFORT_COLORS[run.effort]||"#7a8fa6";
+    if(by==="planning_mode")return PLAN_COLORS[run.planning_mode]||"#7a8fa6";
+    return"#d4a843";
+  }
+  function runLabel(r){return r?`${r.model_name} · ${r.tool}${r.planning_mode===false?" · No Plan":""}`:"";}
+  function shortLabel(r){return r?`${r.model_name}${r.planning_mode===false?" (no plan)":""}`:"";}
+
+  /* ════════════════════════════════════════════
+     DATA
+  ════════════════════════════════════════════ */
+  function allRuns(){return safe(S.dataset?.runs)}
+  function allSeries(){return safe(S.dataset?.series)}
+  function allCases(){return safe(S.dataset?.cases)}
+  function filtered(){
+    return allRuns().filter(r=>{
+      const f=S.filters;
+      if(f.tool&&r.tool!==f.tool)return false;
+      if(f.model_family&&r.model_family!==f.model_family)return false;
+      if(f.effort&&r.effort!==f.effort)return false;
+      if(f.planning_mode!==null){if(f.planning_mode==="true"&&r.planning_mode!==true)return false;if(f.planning_mode==="false"&&r.planning_mode!==false)return false;if(f.planning_mode==="null"&&r.planning_mode!=null)return false;}
+      if(f.taxonomy&&r.taxonomy_version!==f.taxonomy)return false;
+      if(f.role&&(r.experiment_role||"baseline")!==f.role)return false;
+      return true;
+    });
+  }
+  function resolveAreaComparison(a,b){
+    const aa=safe(a.area_scores),ba=safe(b.area_scores);
+    if(!aa.length&&!ba.length)return{mode:"severity-only",areas:[]};
+    const na=new Set(aa.map(x=>x.name)),nb=new Set(ba.map(x=>x.name));
+    const common=[...na].filter(n=>nb.has(n));
+    if(common.length>=3)return{mode:"matched",areas:common,areasA:aa,areasB:ba};
+    const all=[...new Set([...na,...nb])];
+    return{mode:"union",areas:all,areasA:aa,areasB:ba,taxA:a.taxonomy_version,taxB:b.taxonomy_version};
+  }
+  function metricVal(r,key){
+    if(key==="scores.overall")return Number(get(r,"scores.overall")||0);
+    if(key==="scores.critical")return Number(get(r,"scores.critical")||0);
+    if(key==="scores.important")return Number(get(r,"scores.important")||0);
+    if(key==="scores.detail")return Number(get(r,"scores.detail")||0);
+    if(key==="planning_runtime_seconds")return Number(r.planning_runtime_seconds||0);
+    if(key==="plan_tool_call_count")return Number(r.plan_tool_call_count||0);
+    if(key==="summary.total_requirements")return Number(get(r,"summary.total_requirements")||0);
+    if(key==="summary.coverage_counts.full")return Number(get(r,"summary.coverage_counts.full")||0);
+    return 0;
+  }
+  function metricLabel(key){
+    const map={"scores.overall":"Overall Score","scores.critical":"Critical Score","scores.important":"Important Score","scores.detail":"Detail Score","planning_runtime_seconds":"Runtime (seconds)","plan_tool_call_count":"Tool Call Count","summary.total_requirements":"Total Requirements","summary.coverage_counts.full":"Full Coverage Count"};
+    return map[key]||key;
+  }
+
+  /* ════════════════════════════════════════════
+     CHART MANAGER
+  ════════════════════════════════════════════ */
+  function getChart(id,hostEl){
+    if(typeof echarts==="undefined")return null;
+    if(charts[id]&&charts[id].getDom()===hostEl)return charts[id];
+    if(charts[id])charts[id].dispose();
+    charts[id]=echarts.init(hostEl,null,{renderer:"canvas"});
+    return charts[id];
+  }
+  function disposeScreen(scrId){
+    Object.keys(charts).forEach(k=>{if(k.startsWith(scrId+"_")){charts[k]?.dispose();delete charts[k];}});
+  }
+  function resizeAll(){Object.values(charts).forEach(c=>c?.resize?.())}
+
+  /* ════════════════════════════════════════════
+     ROUTER
+  ════════════════════════════════════════════ */
+  function renderTabs(){
+    const bar=document.getElementById("tabBar");
+    bar.innerHTML=SCREENS.map(s=>`<button class="tab-btn${S.screen===s.id?" active":""}" data-s="${s.id}">${s.label}</button>`).join("");
+    bar.querySelectorAll(".tab-btn").forEach(b=>b.addEventListener("click",()=>go(b.dataset.s)));
+  }
+  function go(id){
+    disposeScreen(S.screen);
+    document.querySelectorAll(".screen").forEach(s=>{s.classList.remove("active","visible")});
+    S.screen=id;renderTabs();
+    const el=document.getElementById("scr-"+id);
+    if(el){el.classList.add("active");requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("visible")))}
+    renderScreen(id);
+    resizeAll();
+    window.scrollTo({top:0,behavior:"smooth"});
+    updateSelPanel();
+  }
+  function renderScreen(id){
+    if(id==="overview")renderOverview();
+    else if(id==="scatter")renderScatter();
+    else if(id==="compare")renderCompare();
+    else if(id==="trends")renderTrends();
+    else if(id==="explore")renderExplore();
+    else if(id==="inspect")renderInspect();
+  }
+  function goInspect(runId){S.inspect={level:"runs",id:runId,reqFilters:{area:"all",severity:"all",coverage:"all"}};go("inspect")}
+
+  /* ════════════════════════════════════════════
+     FILTER BAR
+  ════════════════════════════════════════════ */
+  function renderFilterBar(){
+    const runs=allRuns();
+    const uniq=(k,fb)=>[...new Set(runs.map(r=>r[k]||fb).filter(Boolean))].sort();
+    const tools=uniq("tool","?"),families=uniq("model_family","?"),efforts=uniq("effort","?"),taxons=uniq("taxonomy_version","?"),roles=uniq("experiment_role","baseline");
+    const planModes=[...new Set(runs.map(r=>String(r.planning_mode)))].sort();
+    const bar=document.getElementById("filterBar");
+    const opt=(arr,sel,fmt)=>arr.map(v=>`<option value="${esc(v)}"${sel===v?" selected":""}>${esc(fmt?fmt(v):v)}</option>`).join("");
+    const fmtPM=v=>v==="true"?"Planning On":v==="false"?"Planning Off":"Unspecified";
+    const activeCount=Object.values(S.filters).filter(v=>v!==null).length;
+    bar.innerHTML=`
+      <label style="color:var(--ink-faint);font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase">Filters</label>
+      <select id="fTool"><option value="">All Tools</option>${opt(tools,S.filters.tool)}</select>
+      <select id="fFamily"><option value="">All Models</option>${opt(families,S.filters.model_family)}</select>
+      <select id="fEffort"><option value="">All Effort</option>${opt(efforts,S.filters.effort)}</select>
+      <select id="fPlan"><option value="">All Planning</option>${opt(planModes,S.filters.planning_mode,fmtPM)}</select>
+      <select id="fTax"><option value="">All Taxonomy</option>${opt(taxons,S.filters.taxonomy)}</select>
+      <select id="fRole"><option value="">All Roles</option>${opt(roles,S.filters.role)}</select>
+      <span class="filter-count">${filtered().length} of ${runs.length} runs</span>
+      ${activeCount?`<button class="filter-clear" id="fClear">Clear</button>`:""}
+    `;
+    const bind=(id,key)=>{const el=bar.querySelector("#"+id);if(el)el.addEventListener("change",()=>{S.filters[key]=el.value||null;onFilterChange()})};
+    bind("fTool","tool");bind("fFamily","model_family");bind("fEffort","effort");bind("fPlan","planning_mode");bind("fTax","taxonomy");bind("fRole","role");
+    const clr=bar.querySelector("#fClear");
+    if(clr)clr.addEventListener("click",()=>{Object.keys(S.filters).forEach(k=>S.filters[k]=null);onFilterChange()});
+    // Update toggle button
+    const tog=document.getElementById("filterToggle");
+    tog.className="filter-toggle"+(activeCount?" has-filters":"");
+    tog.textContent=activeCount?`Filters (${activeCount})`:"Filters";
+  }
+  function onFilterChange(){renderFilterBar();renderScreen(S.screen);updateSelPanel()}
+
+  /* ════════════════════════════════════════════
+     SELECTION PANEL (bottom bar for scatter/explore)
+  ════════════════════════════════════════════ */
+  function updateSelPanel(){
+    const panel=document.getElementById("selPanel");
+    const a=S.scatter.selA?allRuns().find(r=>r.run_id===S.scatter.selA):null;
+    const b=S.scatter.selB?allRuns().find(r=>r.run_id===S.scatter.selB):null;
+    if(!a&&!b){panel.classList.remove("open");panel.innerHTML="";return}
+    panel.classList.add("open");
+    const deltaHtml=a&&b?`<span class="sel-delta" style="color:${Number(get(a,"scores.overall"))>=Number(get(b,"scores.overall"))?"var(--sage)":"var(--terra)"}">${((get(a,"scores.overall")||0)-(get(b,"scores.overall")||0)>0?"+":"")}${((get(a,"scores.overall")||0)-(get(b,"scores.overall")||0)).toFixed(1)}pts</span>`:`<span style="color:var(--ink-faint);font-size:0.82rem">Click another dot to compare</span>`;
+    panel.innerHTML=`
+      ${a?`<div class="sel-chip a"><div><div class="sel-chip-name">${esc(runLabel(a))}</div><div class="sel-chip-score">${fmtS(get(a,"scores.overall"))}</div></div></div>`:""}
+      ${deltaHtml}
+      ${b?`<div class="sel-chip b"><div><div class="sel-chip-name">${esc(runLabel(b))}</div><div class="sel-chip-score">${fmtS(get(b,"scores.overall"))}</div></div></div>`:""}
+      <div class="sel-actions">
+        ${a&&b?`<button class="btn btn-primary" id="selCompare">Open in Compare</button>`:""}
+        <button class="btn" id="selClear">Clear</button>
+      </div>
+    `;
+    panel.querySelector("#selClear")?.addEventListener("click",()=>{S.scatter.selA=null;S.scatter.selB=null;updateSelPanel();if(S.screen==="scatter")renderScatter()});
+    panel.querySelector("#selCompare")?.addEventListener("click",()=>{S.compare.a=S.scatter.selA;S.compare.b=S.scatter.selB;go("compare")});
+  }
+
+  /* ════════════════════════════════════════════
+     OVERVIEW SCREEN
+  ════════════════════════════════════════════ */
+  function renderOverview(){
+    const host=document.getElementById("overviewContent");
+    const runs=filtered().sort((a,b)=>(get(b,"scores.overall")||0)-(get(a,"scores.overall")||0));
+    if(!runs.length){host.innerHTML=`<div class="inspect-empty"><h3>No runs match filters</h3></div>`;return}
+    const best=runs[0],worst=runs[runs.length-1];
+    const avg=runs.reduce((s,r)=>s+Number(get(r,"scores.overall")||0),0)/runs.length;
+    const tools=[...new Set(runs.map(r=>r.tool))],models=[...new Set(runs.map(r=>r.model_name))];
+
+    // Hero
+    let html=`<div class="anim" style="animation-delay:0.05s;margin-bottom:28px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;color:var(--gold);font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase"><span style="display:inline-block;width:20px;height:1px;background:var(--gold)"></span>Specification Fidelity</div>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2rem,4.5vw,3.2rem);line-height:1.05;letter-spacing:-0.03em;margin-bottom:12px"><span style="color:var(--gold)">${esc(best.model_name)}</span> leads at ${fmtS(get(best,"scores.overall"))}</h1>
+      <p style="color:var(--ink-soft);font-size:0.95rem;max-width:600px;line-height:1.65">${runs.length} executions across ${tools.length} tool${tools.length===1?"":"s"} and ${models.length} model${models.length===1?"":"s"}. Best overall: ${fmtS(get(best,"scores.overall"))}. Average: ${fmtS(avg)}.</p>
+    </div>`;
+
+    // Stat strip
+    html+=`<div class="stat-strip anim" style="animation-delay:0.1s">
+      <div class="stat-card"><div class="label">Best</div><div class="value" style="color:var(--sage)">${fmtS(get(best,"scores.overall"))}</div><div class="detail">${esc(shortLabel(best))}</div></div>
+      <div class="stat-card"><div class="label">Average</div><div class="value">${fmtS(avg)}</div><div class="detail">${runs.length} runs</div></div>
+      <div class="stat-card"><div class="label">Spread</div><div class="value">${((get(best,"scores.overall")||0)-(get(worst,"scores.overall")||0)).toFixed(1)}pts</div><div class="detail">Best to worst</div></div>
+      <div class="stat-card"><div class="label">Tools</div><div class="value">${tools.length}</div><div class="detail">${tools.join(", ")}</div></div>
+    </div>`;
+
+    // Scatter preview + ranking side by side
+    html+=`<div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px;margin-bottom:32px" class="anim" style="animation-delay:0.15s">
+      <div class="card" style="margin-bottom:0"><div class="card-label"><span class="card-label-dot" style="background:var(--gold)"></span>Score vs Runtime</div>
+        <div class="chart-host" id="ov_scatter" style="min-height:320px"></div>
+        <div style="color:var(--ink-faint);font-size:0.76rem;margin-top:8px">Click a dot to inspect. Open Scatter tab for advanced controls.</div>
+      </div>
+      <div>
+        <div class="section-label">Rankings</div>
+        <div class="rank-list">${runs.map((r,i)=>{
+          const o=Number(get(r,"scores.overall")||0);
+          return`<div class="rank-card${i===0?" leader":""}" data-rid="${esc(r.run_id)}">
+            <div class="rank-pos">${i+1}</div>
+            <div class="rank-body">
+              <div class="rank-name">${esc(r.model_name)}${r.planning_mode===false?` <span style="color:var(--ink-faint);font-weight:400;font-size:0.8em">No Plan</span>`:""}</div>
+              <div class="rank-meta"><span><span class="meta-dot" style="background:${toolCol(r.tool)}"></span>${esc(r.tool)}</span><span>${esc(r.effort||"Std")}</span><span>${fmtD(r.planning_runtime_seconds)}</span></div>
+              <div class="rank-mini"><span>Crit ${fmtS(get(r,"scores.critical"))}</span><span>Imp ${fmtS(get(r,"scores.important"))}</span></div>
+            </div>
+            <div class="rank-scores"><div><div class="rank-score-val" style="color:${scCol(o)}">${fmtS(o)}</div><div class="rank-bar-track"><div class="rank-bar-fill" style="background:${scCol(o)}" data-w="${o}"></div></div></div></div>
+          </div>`}).join("")}</div>
+      </div>
+    </div>`;
+
+    // Insight cards
+    const codexR=runs.filter(r=>/codex/i.test(r.tool)),claudeR=runs.filter(r=>/claude/i.test(r.tool));
+    const codexAvg=codexR.length?codexR.reduce((s,r)=>s+Number(get(r,"scores.overall")||0),0)/codexR.length:0;
+    const claudeAvg=claudeR.length?claudeR.reduce((s,r)=>s+Number(get(r,"scores.overall")||0),0)/claudeR.length:0;
+    const tdelta=codexAvg-claudeAvg;
+    const planWith=runs.find(r=>r.series_id==="opus_4_6__claude_code__high"&&r.planning_mode!==false);
+    const planWithout=runs.find(r=>r.series_id==="opus_4_6__claude_code__high"&&r.planning_mode===false);
+    const pdelta=planWith&&planWithout?Number(get(planWith,"scores.overall")||0)-Number(get(planWithout,"scores.overall")||0):null;
+
+    html+=`<div class="card-grid anim" style="animation-delay:0.25s">`;
+    if(codexR.length&&claudeR.length){
+      html+=`<div class="card"><div class="card-label"><span class="card-label-dot" style="background:var(--sage)"></span>Tool Comparison</div>
+        <div class="card-stat ${tdelta>0?"sc-high":"sc-low"}">${tdelta>0?"+":""}${tdelta.toFixed(1)}pts</div>
+        <div style="font-weight:600;margin-bottom:6px">Codex CLI ${tdelta>0?"outscores":"trails"} Claude Code on average</div>
+        <div class="card-body">Codex: ${fmtS(codexAvg)} (${codexR.length} runs). Claude Code: ${fmtS(claudeAvg)} (${claudeR.length} runs).</div>
+        <div class="caveat"><span>&#9888;</span><span><span class="badge badge-uncontrolled">Uncontrolled</span> Different models and effort levels. Descriptive, not causal.</span></div>
+      </div>`;
+    }
+    if(pdelta!==null){
+      html+=`<div class="card"><div class="card-label"><span class="card-label-dot" style="background:var(--gold)"></span>Planning Mode Effect</div>
+        <div class="card-stat ${pdelta>0?"sc-high":"sc-low"}">${pdelta>0?"+":""}${pdelta.toFixed(1)}pts</div>
+        <div style="font-weight:600;margin-bottom:6px">Planning mode ${pdelta>0?"improves":"hurts"} Opus 4.6</div>
+        <div class="card-body">With: ${fmtS(get(planWith,"scores.overall"))}. Without: ${fmtS(get(planWithout,"scores.overall"))}. Same model, tool, effort.</div>
+        <div class="caveat"><span>&#10003;</span><span><span class="badge badge-controlled">Controlled</span> Only planning mode changed. One run each.</span></div>
+      </div>`;
+    }
+    // Severity bar chart
+    html+=`<div class="card"><div class="card-label"><span class="card-label-dot" style="background:var(--slate)"></span>Score by Severity</div>
+      <div class="chart-host" id="ov_severity" style="min-height:220px"></div></div>`;
+    // Data sufficiency
+    const hasPlanPair=planWith&&planWithout;
+    html+=`<div class="card"><div class="card-label"><span class="card-label-dot" style="background:var(--ink-faint)"></span>Data Sufficiency</div>
+      <div style="font-weight:600;margin-bottom:10px">What can this dataset answer?</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${suffItem(tools.size>1?"suggestive":"insufficient","Tool effect on quality",tools.size>1?"Multiple tools, but not yet paired with same model+effort.":"Only one tool in view.")}
+        ${suffItem(hasPlanPair?"answerable":"insufficient","Planning mode effect",hasPlanPair?"Controlled pair exists (Opus 4.6 ± planning).":"No paired planning comparison in view.")}
+        ${suffItem(runs.length>=3?"answerable":"suggestive","Which model plans best?",runs.length+" setups. Rankings visible but confounded by tool/effort.")}
+        ${suffItem("insufficient","Result stability","No repeated executions yet. Every result is a single run.")}
+      </div>
+    </div>`;
+    html+=`</div>`;
+
+    host.innerHTML=html;
+    // Animate bars
+    requestAnimationFrame(()=>{host.querySelectorAll("[data-w]").forEach(el=>{setTimeout(()=>el.style.width=el.dataset.w+"%",80)})});
+    // Attach click
+    host.querySelectorAll("[data-rid]").forEach(el=>el.addEventListener("click",()=>goInspect(el.dataset.rid)));
+    // Charts
+    renderOvScatter(runs);
+    renderOvSeverity(runs);
+  }
+  function suffItem(status,q,a){
+    const icon=status==="answerable"?"&#10003;":status==="suggestive"?"&#9679;":"&#10007;";
+    return`<div style="padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-raised)">
+      <div style="font-size:0.7rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;color:${status==="answerable"?"var(--sage)":status==="suggestive"?"var(--gold)":"var(--terra)"}">${icon} ${status}</div>
+      <div style="font-weight:500;font-size:0.82rem;margin-bottom:3px">${esc(q)}</div>
+      <div style="color:var(--ink-faint);font-size:0.76rem;line-height:1.5">${esc(a)}</div>
+    </div>`;
+  }
+  function renderOvScatter(runs){
+    const host=document.getElementById("ov_scatter");if(!host||typeof echarts==="undefined")return;
+    const ch=getChart("overview_scatter",host);
+    ch.setOption({
+      backgroundColor:"transparent",animation:true,animationDuration:600,
+      tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontFamily:"DM Sans",fontSize:12},
+        formatter:p=>`<b>${esc(runLabel(runs[p.dataIndex]))}</b><br>Overall: ${fmtS(p.value[1])}<br>Runtime: ${fmtD(p.value[0])}`},
+      grid:{top:12,right:16,bottom:36,left:16,containLabel:true},
+      xAxis:{type:"value",name:"Runtime (sec)",nameLocation:"middle",nameGap:24,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+      yAxis:{type:"value",min:60,max:100,name:"Overall %",nameLocation:"middle",nameGap:36,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:"{value}%"},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+      series:[{type:"scatter",data:runs.map(r=>[Number(r.planning_runtime_seconds||0),Number(get(r,"scores.overall")||0)]),symbolSize:r=>Math.max(10,Math.min(22,(r[1]/100)*20)),itemStyle:{color:p=>toolCol(runs[p.dataIndex]?.tool),borderColor:"rgba(0,0,0,0.3)",borderWidth:1},emphasis:{itemStyle:{borderColor:"var(--gold)",borderWidth:3}},label:{show:runs.length<=8,position:"right",color:"#9a9084",fontFamily:"DM Sans",fontSize:11,formatter:p=>shortLabel(runs[p.dataIndex])}}]
+    });
+    ch.off("click");ch.on("click",p=>{if(p.dataIndex!=null)goInspect(runs[p.dataIndex].run_id)});
+  }
+  function renderOvSeverity(runs){
+    const host=document.getElementById("ov_severity");if(!host||typeof echarts==="undefined")return;
+    const ch=getChart("overview_severity",host);
+    const sorted=runs.slice().sort((a,b)=>(get(b,"scores.overall")||0)-(get(a,"scores.overall")||0));
+    const labels=sorted.map(r=>shortLabel(r));
+    ch.setOption({
+      backgroundColor:"transparent",animation:true,animationDuration:500,
+      tooltip:{trigger:"axis",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12}},
+      legend:{bottom:0,textStyle:{color:"#9a9084",fontSize:11}},
+      grid:{top:8,right:12,bottom:36,left:12,containLabel:true},
+      yAxis:{type:"category",data:labels.reverse(),axisTick:{show:false},axisLine:{show:false},axisLabel:{color:"#9a9084",fontSize:10,width:100,overflow:"truncate"}},
+      xAxis:{type:"value",min:0,max:100,axisLabel:{color:"#6b6158",formatter:"{value}%",fontSize:10},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+      series:[
+        {name:"Critical",type:"bar",barWidth:7,stack:null,data:sorted.slice().reverse().map(r=>Number(get(r,"scores.critical")||0)),itemStyle:{color:"#c47a5a",borderRadius:[0,4,4,0]}},
+        {name:"Important",type:"bar",barWidth:7,data:sorted.slice().reverse().map(r=>Number(get(r,"scores.important")||0)),itemStyle:{color:"#d4a843",borderRadius:[0,4,4,0]}},
+        {name:"Detail",type:"bar",barWidth:7,data:sorted.slice().reverse().map(r=>Number(get(r,"scores.detail")||0)),itemStyle:{color:"#7a8fa6",borderRadius:[0,4,4,0]}}
+      ]
+    });
+  }
+
+  /* ════════════════════════════════════════════
+     SCATTER SCREEN
+  ════════════════════════════════════════════ */
+  function renderScatter(){
+    const host=document.getElementById("scatterContent");
+    const runs=filtered();
+    const yOpts=[["scores.overall","Overall Score"],["scores.critical","Critical Score"],["scores.important","Important Score"],["scores.detail","Detail Score"]];
+    const xOpts=[["planning_runtime_seconds","Runtime (sec)"],["plan_tool_call_count","Tool Call Count"],["scores.overall","Overall Score"],["scores.critical","Critical Score"],["summary.total_requirements","Total Requirements"],["summary.coverage_counts.full","Full Coverage Count"]];
+    const cOpts=[["tool","Tool"],["model_family","Model Family"],["effort","Effort"],["planning_mode","Planning Mode"]];
+    const mkOpt=(arr,sel)=>arr.map(([v,l])=>`<option value="${v}"${sel===v?" selected":""}>${l}</option>`).join("");
+
+    host.innerHTML=`
+      <div class="section-label">Scatter Plot Explorer</div>
+      <div class="chart-controls">
+        <label>Y</label><select id="scY">${mkOpt(yOpts,S.scatter.yAxis)}</select>
+        <label>X</label><select id="scX">${mkOpt(xOpts,S.scatter.xAxis)}</select>
+        <label>Color</label><select id="scC">${mkOpt(cOpts,S.scatter.colorBy)}</select>
+      </div>
+      <div class="card" style="padding:16px"><div class="chart-host" id="sc_main" style="min-height:460px"></div></div>
+      <div style="color:var(--ink-faint);font-size:0.78rem;margin-top:8px">Click a dot to select. Click a second dot to compare. Click empty space to clear. ${runs.length} runs visible.</div>
+    `;
+    ["scY","scX","scC"].forEach(id=>{
+      host.querySelector("#"+id)?.addEventListener("change",e=>{
+        if(id==="scY")S.scatter.yAxis=e.target.value;
+        if(id==="scX")S.scatter.xAxis=e.target.value;
+        if(id==="scC")S.scatter.colorBy=e.target.value;
+        buildScatterChart(runs);
+      });
+    });
+    buildScatterChart(runs);
+  }
+  function buildScatterChart(runs){
+    const host=document.getElementById("sc_main");if(!host||typeof echarts==="undefined")return;
+    const ch=getChart("scatter_main",host);
+    const xKey=S.scatter.xAxis,yKey=S.scatter.yAxis,cBy=S.scatter.colorBy;
+    // Group by color
+    const groups=new Map();
+    runs.forEach((r,i)=>{
+      const gk=cBy==="tool"?r.tool:cBy==="model_family"?r.model_family:cBy==="effort"?r.effort:cBy==="planning_mode"?String(r.planning_mode):"all";
+      if(!groups.has(gk))groups.set(gk,[]);
+      groups.get(gk).push({run:r,idx:i,x:metricVal(r,xKey),y:metricVal(r,yKey)});
+    });
+    const yIsScore=yKey.startsWith("scores.");
+    const xIsScore=xKey.startsWith("scores.");
+    const series=[];
+    const allColors=["#d4a843","#6b9e7a","#c47a5a","#7a8fa6","#9b7ec8"];
+    let ci=0;
+    groups.forEach((items,gk)=>{
+      const col=colorFor(items[0].run,cBy)||allColors[ci%allColors.length];
+      series.push({
+        name:gk==="null"?"Unspecified":gk==="true"?"Plan On":gk==="false"?"Plan Off":gk,
+        type:"scatter",
+        data:items.map(d=>{
+          const isSelA=d.run.run_id===S.scatter.selA;
+          const isSelB=d.run.run_id===S.scatter.selB;
+          return{value:[d.x,d.y],itemStyle:isSelA?{borderColor:"#d4a843",borderWidth:3,shadowBlur:8,shadowColor:"rgba(212,168,67,0.4)"}:isSelB?{borderColor:"#6b9e7a",borderWidth:3,shadowBlur:8,shadowColor:"rgba(107,158,122,0.4)"}:undefined,_rid:d.run.run_id}}),
+        symbolSize:d=>Math.max(12,Math.min(24,((d[1]||50)/100)*22)),
+        itemStyle:{color:col,borderColor:"rgba(0,0,0,0.25)",borderWidth:1},
+        emphasis:{itemStyle:{borderWidth:3}},
+        label:{show:runs.length<=10,position:"right",color:"#9a9084",fontFamily:"DM Sans",fontSize:10,formatter:p=>{const r=items[p.dataIndex]?.run;return r?shortLabel(r):""}},
+      });
+      ci++;
+    });
+    ch.setOption({
+      backgroundColor:"transparent",animation:true,animationDuration:500,
+      tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},
+        formatter:p=>{const rid=p.data._rid;const r=runs.find(x=>x.run_id===rid);return r?`<b>${esc(runLabel(r))}</b><br>${metricLabel(yKey)}: ${yIsScore?fmtS(p.value[1]):p.value[1]}<br>${metricLabel(xKey)}: ${xIsScore?fmtS(p.value[0]):p.value[0]}<br>Effort: ${r.effort||"?"}`:""}},
+      legend:{bottom:0,textStyle:{color:"#9a9084",fontSize:11}},
+      grid:{top:16,right:20,bottom:40,left:20,containLabel:true},
+      xAxis:{type:"value",name:metricLabel(xKey),nameLocation:"middle",nameGap:28,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:xIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+      yAxis:{type:"value",name:metricLabel(yKey),nameLocation:"middle",nameGap:40,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:yIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false},...(yIsScore?{min:Math.max(0,Math.floor(Math.min(...runs.map(r=>metricVal(r,yKey)))/5)*5-5),max:100}:{})},
+      dataZoom:[{type:"inside",xAxisIndex:0},{type:"inside",yAxisIndex:0}],
+      series
+    },true);
+    ch.off("click");
+    ch.on("click",p=>{
+      if(!p.data||!p.data._rid)return;
+      const rid=p.data._rid;
+      if(S.scatter.selA===rid){S.scatter.selA=S.scatter.selB;S.scatter.selB=null;}
+      else if(S.scatter.selB===rid){S.scatter.selB=null;}
+      else if(!S.scatter.selA){S.scatter.selA=rid;}
+      else if(!S.scatter.selB){S.scatter.selB=rid;}
+      else{S.scatter.selA=rid;S.scatter.selB=null;}
+      updateSelPanel();
+      buildScatterChart(runs);
+    });
+    // Click on blank to clear
+    ch.getZr().off("click");
+    ch.getZr().on("click",e=>{if(!ch.containPixel("grid",e.offsetX!==undefined?[e.offsetX,e.offsetY]:[e.event.offsetX,e.event.offsetY]))return;if(!e.target){S.scatter.selA=null;S.scatter.selB=null;updateSelPanel();buildScatterChart(runs)}});
+  }
+
+  /* ════════════════════════════════════════════
+     COMPARE SCREEN
+  ════════════════════════════════════════════ */
+  function renderCompare(){
+    const host=document.getElementById("compareContent");
+    const runs=allRuns().sort((a,b)=>(get(b,"scores.overall")||0)-(get(a,"scores.overall")||0));
+    const a=S.compare.a?runs.find(r=>r.run_id===S.compare.a):null;
+    const b=S.compare.b?runs.find(r=>r.run_id===S.compare.b):null;
+
+    // Presets
+    const planWith=runs.find(r=>r.series_id==="opus_4_6__claude_code__high"&&r.planning_mode!==false);
+    const planWithout=runs.find(r=>r.series_id==="opus_4_6__claude_code__high"&&r.planning_mode===false);
+    const presets=[];
+    if(planWith&&planWithout)presets.push({label:"Planning Mode Pair",a:planWith.run_id,b:planWithout.run_id,badge:"controlled"});
+    if(runs.length>=2)presets.push({label:"Best vs Worst",a:runs[0].run_id,b:runs[runs.length-1].run_id,badge:"uncontrolled"});
+
+    let html=`<div class="section-label">Compare Any Two Executions</div>`;
+    if(presets.length){
+      html+=`<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">`;
+      presets.forEach((p,i)=>{html+=`<button class="btn" data-pa="${esc(p.a)}" data-pb="${esc(p.b)}">${p.label} <span class="badge badge-${p.badge}" style="margin-left:4px">${p.badge}</span></button>`});
+      html+=`</div>`;
+    }
+    html+=`<div style="margin-bottom:6px;color:var(--ink-faint);font-size:0.78rem">Click one card for Side A (gold), click another for Side B (green). ${a?"Side A: "+esc(shortLabel(a))+".":"No Side A."} ${b?"Side B: "+esc(shortLabel(b))+".":"No Side B."}</div>`;
+    html+=`<div class="picker-strip" id="cmpPicker">`;
+    runs.forEach(r=>{
+      const isSA=r.run_id===S.compare.a,isSB=r.run_id===S.compare.b;
+      html+=`<div class="picker-card${isSA?" sel-a":""}${isSB?" sel-b":""}" data-cid="${esc(r.run_id)}">
+        <div class="picker-name">${esc(r.model_name)}${r.planning_mode===false?" (no plan)":""}</div>
+        <div class="picker-score">${fmtS(get(r,"scores.overall"))}</div>
+        <div class="picker-tool"><span class="meta-dot" style="background:${toolCol(r.tool)};display:inline-block"></span> ${esc(r.tool)} · ${esc(r.effort||"Std")}</div>
+      </div>`;
+    });
+    html+=`</div>`;
+
+    if(a&&b){html+=renderCompareWorkspace(a,b)}
+    else{html+=`<div style="padding:40px;text-align:center;color:var(--ink-faint)">Select two executions above to compare them side by side.</div>`}
+
+    host.innerHTML=html;
+    // Picker clicks
+    host.querySelectorAll("[data-cid]").forEach(el=>el.addEventListener("click",()=>{
+      const rid=el.dataset.cid;
+      if(S.compare.a===rid){S.compare.a=S.compare.b;S.compare.b=null}
+      else if(S.compare.b===rid){S.compare.b=null}
+      else if(!S.compare.a){S.compare.a=rid}
+      else if(!S.compare.b){S.compare.b=rid}
+      else{S.compare.a=rid;S.compare.b=null}
+      renderCompare();
+    }));
+    // Preset clicks
+    host.querySelectorAll("[data-pa]").forEach(el=>el.addEventListener("click",()=>{S.compare.a=el.dataset.pa;S.compare.b=el.dataset.pb;renderCompare()}));
+    // Init radar if present
+    initCompareRadar(a,b);
+  }
+  function renderCompareWorkspace(a,b){
+    const oa=Number(get(a,"scores.overall")||0),ob=Number(get(b,"scores.overall")||0),delta=oa-ob;
+    const comp=resolveAreaComparison(a,b);
+    // Detect what varies
+    const diffs=[],same=[];
+    [["Model",a.model_name,b.model_name],["Tool",a.tool,b.tool],["Effort",a.effort,b.effort],["Planning",String(a.planning_mode),String(b.planning_mode)]].forEach(([k,va,vb])=>{if(va===vb)same.push(k);else diffs.push(k)});
+    const isControlled=diffs.length===1;
+
+    let h=`<div style="display:flex;align-items:center;gap:10px;margin:20px 0 14px"><span class="badge badge-${isControlled?"controlled":"uncontrolled"}">${isControlled?"Controlled":"Uncontrolled"}</span>
+      <span style="color:var(--ink-faint);font-size:0.78rem">${diffs.length?`Differs: ${diffs.join(", ")}. Held constant: ${same.join(", ")}.`:"Identical configurations."}</span></div>`;
+    // Side by side
+    h+=`<div class="compare-cols">${compCol(a,"side-a")}${compCol(b,"side-b")}</div>`;
+    // Delta summary
+    h+=`<div style="text-align:center;margin:16px 0;font-family:var(--font-mono);font-size:1.4rem;font-weight:500;color:${delta>=0?"var(--sage)":"var(--terra)"}">${delta>=0?"+":""}${delta.toFixed(1)}pts overall delta</div>`;
+    // Severity bars (always works)
+    h+=`<div class="delta-bar-section"><div style="font-weight:600;font-size:0.88rem;margin-bottom:12px">Score Delta by Severity</div>`;
+    ["critical","important","detail"].forEach(tier=>{
+      const va=Number(get(a,"scores."+tier)||0),vb=Number(get(b,"scores."+tier)||0),d=va-vb;
+      const pct=Math.min(Math.abs(d)/40*50,50);
+      h+=`<div class="delta-row"><div class="delta-area">${tier.charAt(0).toUpperCase()+tier.slice(1)}</div>
+        <div class="delta-track"><div class="delta-mid"></div><div class="delta-fill" style="${d>=0?"left:50%;width:"+pct+"%":"right:50%;width:"+pct+"%"};background:${d>=0?"var(--sage)":"var(--terra)"}"></div></div>
+        <div class="delta-val" style="color:${d>=0?"var(--sage)":"var(--terra)"}">${d>=0?"+":""}${d.toFixed(1)}</div></div>`;
+    });
+    h+=`</div>`;
+
+    // Area comparison
+    if(comp.mode==="matched"){
+      h+=`<div class="delta-bar-section"><div style="font-weight:600;font-size:0.88rem;margin-bottom:12px">Area Score Delta (${comp.areas.length} common areas)</div>`;
+      comp.areas.sort((x,y)=>{
+        const da=(comp.areasA.find(z=>z.name===x)?.score||0)-(comp.areasB.find(z=>z.name===x)?.score||0);
+        const db=(comp.areasA.find(z=>z.name===y)?.score||0)-(comp.areasB.find(z=>z.name===y)?.score||0);
+        return Math.abs(db)-Math.abs(da);
+      });
+      comp.areas.forEach(name=>{
+        const sa=comp.areasA.find(z=>z.name===name)?.score||0,sb=comp.areasB.find(z=>z.name===name)?.score||0,d=sa-sb;
+        const pct=Math.min(Math.abs(d)/40*50,50);
+        h+=`<div class="delta-row"><div class="delta-area" title="${esc(name)}">${esc(name)}</div>
+          <div class="delta-track"><div class="delta-mid"></div><div class="delta-fill" style="${d>=0?"left:50%;width:"+pct+"%":"right:50%;width:"+pct+"%"};background:${d>=0?"var(--sage)":"var(--terra)"}"></div></div>
+          <div class="delta-val" style="color:${d>=0?"var(--sage)":"var(--terra)"}">${d>=0?"+":""}${d.toFixed(1)}</div></div>`;
+      });
+      h+=`</div>`;
+      h+=`<div class="card" style="padding:16px"><div style="font-weight:600;font-size:0.88rem;margin-bottom:8px">Radar Overlay</div><div class="chart-host" id="cmp_radar" style="min-height:380px"></div></div>`;
+    } else if(comp.mode==="union"){
+      h+=`<div class="delta-bar-section"><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="font-weight:600;font-size:0.88rem">Area Scores (union view)</span><span class="badge badge-mismatch">Different taxonomy</span></div>
+        <div style="color:var(--ink-faint);font-size:0.78rem;margin-bottom:12px">These runs used different evaluation rubrics (${esc(comp.taxA||"?")} vs ${esc(comp.taxB||"?")}). Areas shown from both; gaps indicate areas not in that rubric.</div>`;
+      comp.areas.forEach(name=>{
+        const sa=comp.areasA.find(z=>z.name===name)?.score,sb=comp.areasB.find(z=>z.name===name)?.score;
+        h+=`<div class="delta-row"><div class="delta-area" title="${esc(name)}">${esc(name)}</div>
+          <div style="display:flex;gap:8px;align-items:center"><span style="font-family:var(--font-mono);font-size:0.76rem;color:${sa!=null?"var(--gold)":"var(--ink-muted)"};min-width:48px">${sa!=null?sa.toFixed(1)+"%":"n/a"}</span>
+          <span style="font-family:var(--font-mono);font-size:0.76rem;color:${sb!=null?"var(--sage)":"var(--ink-muted)"};min-width:48px">${sb!=null?sb.toFixed(1)+"%":"n/a"}</span></div>
+          <div class="delta-val" style="color:var(--ink-faint)">${sa!=null&&sb!=null?((sa-sb>=0?"+":"")+(sa-sb).toFixed(1)):"—"}</div></div>`;
+      });
+      h+=`</div>`;
+    }
+    return h;
+  }
+  function compCol(r,cls){
+    const o=Number(get(r,"scores.overall")||0);
+    return`<div class="compare-col ${cls}" style="cursor:pointer" data-crid="${esc(r.run_id)}">
+      <div class="compare-col-name">${esc(r.model_name)}${r.planning_mode===false?" (No Plan)":""}</div>
+      <div class="compare-col-meta">${esc(r.tool)} · ${esc(r.effort||"Std")} · ${fmtD(r.planning_runtime_seconds)}</div>
+      <div class="compare-col-score" style="color:${scCol(o)}">${fmtS(o)}</div>
+      ${["critical","important","detail"].map(t=>`<div class="compare-row"><span class="lbl">${t.charAt(0).toUpperCase()+t.slice(1)}</span><span class="val">${fmtS(get(r,"scores."+t))}</span></div>`).join("")}
+      <div class="compare-row"><span class="lbl">Runtime</span><span class="val">${fmtD(r.planning_runtime_seconds)}</span></div>
+      <div class="compare-row"><span class="lbl">Tool Calls</span><span class="val">${r.plan_tool_call_count||"n/a"}</span></div>
+    </div>`;
+  }
+  function initCompareRadar(a,b){
+    const host=document.getElementById("cmp_radar");if(!host||!a||!b||typeof echarts==="undefined")return;
+    const comp=resolveAreaComparison(a,b);if(comp.mode!=="matched")return;
+    const ch=getChart("compare_radar",host);
+    ch.setOption({
+      backgroundColor:"transparent",animationDuration:600,color:["#d4a843","#6b9e7a"],
+      tooltip:{backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12}},
+      legend:{bottom:0,textStyle:{color:"#9a9084",fontSize:11}},
+      radar:{radius:"56%",splitNumber:4,indicator:comp.areas.map(n=>({name:n,max:100})),axisName:{color:"#6b6158",fontSize:9,fontWeight:500},axisLine:{lineStyle:{color:"rgba(255,240,200,0.08)"}},splitArea:{areaStyle:{color:["transparent","rgba(255,240,200,0.015)"]}},splitLine:{lineStyle:{color:"rgba(255,240,200,0.06)"}}},
+      series:[{type:"radar",data:[
+        {name:shortLabel(a),value:comp.areas.map(n=>comp.areasA.find(x=>x.name===n)?.score||0),areaStyle:{color:"rgba(212,168,67,0.12)"},lineStyle:{color:"#d4a843",width:2},itemStyle:{color:"#d4a843"},symbolSize:5},
+        {name:shortLabel(b),value:comp.areas.map(n=>comp.areasB.find(x=>x.name===n)?.score||0),areaStyle:{color:"rgba(107,158,122,0.12)"},lineStyle:{color:"#6b9e7a",width:2},itemStyle:{color:"#6b9e7a"},symbolSize:5}
+      ]}]
+    });
+    // Click compare cols to inspect
+    document.querySelectorAll("[data-crid]").forEach(el=>el.addEventListener("click",()=>goInspect(el.dataset.crid)));
+  }
+
+  /* ════════════════════════════════════════════
+     TRENDS SCREEN
+  ════════════════════════════════════════════ */
+  function renderTrends(){
+    const host=document.getElementById("trendsContent");
+    const runs=filtered().sort((a,b)=>new Date(a.captured_at||0)-new Date(b.captured_at||0));
+    const mOpts=[["scores.overall","Overall"],["scores.critical","Critical"],["scores.important","Important"],["scores.detail","Detail"]];
+    const gOpts=[["tool","By Tool"],["model_family","By Model"],["effort","By Effort"],["none","Individual"]];
+    host.innerHTML=`
+      <div class="section-label">Score Trends Over Time</div>
+      <div class="chart-controls">
+        <label>Metric</label><select id="trM">${mOpts.map(([v,l])=>`<option value="${v}"${S.trends.metric===v?" selected":""}>${l}</option>`).join("")}</select>
+        <label>Group</label><select id="trG">${gOpts.map(([v,l])=>`<option value="${v}"${S.trends.groupBy===v?" selected":""}>${l}</option>`).join("")}</select>
+      </div>
+      <div class="card" style="padding:16px"><div class="chart-host" id="tr_main" style="min-height:400px"></div></div>
+      ${runs.length<6?`<div style="color:var(--ink-faint);font-size:0.78rem;margin-top:8px">Time trends become more meaningful with 10+ runs. Currently ${runs.length} visible.</div>`:""}
+    `;
+    host.querySelector("#trM")?.addEventListener("change",e=>{S.trends.metric=e.target.value;buildTrendsChart(runs)});
+    host.querySelector("#trG")?.addEventListener("change",e=>{S.trends.groupBy=e.target.value;buildTrendsChart(runs)});
+    buildTrendsChart(runs);
+  }
+  function buildTrendsChart(runs){
+    const host=document.getElementById("tr_main");if(!host||typeof echarts==="undefined")return;
+    const ch=getChart("trends_main",host);
+    const mk=S.trends.metric,gb=S.trends.groupBy;
+    const isScore=mk.startsWith("scores.");
+    if(gb==="none"){
+      ch.setOption({
+        backgroundColor:"transparent",animation:true,
+        tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},formatter:p=>{const r=runs[p.dataIndex];return`<b>${esc(runLabel(r))}</b><br>${metricLabel(mk)}: ${isScore?fmtS(p.value[1]):p.value[1]}<br>${fmtDT(r.captured_at)}`}},
+        grid:{top:16,right:20,bottom:32,left:20,containLabel:true},
+        xAxis:{type:"time",axisLabel:{color:"#6b6158",fontSize:10},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+        yAxis:{type:"value",...(isScore?{min:50,max:100}:{}),axisLabel:{color:"#6b6158",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+        series:[{type:"scatter",data:runs.map(r=>[new Date(r.captured_at).getTime(),metricVal(r,mk)]),symbolSize:14,itemStyle:{color:p=>toolCol(runs[p.dataIndex]?.tool),borderColor:"rgba(0,0,0,0.3)",borderWidth:1},label:{show:runs.length<=8,position:"top",color:"#9a9084",fontSize:10,formatter:p=>shortLabel(runs[p.dataIndex])}}]
+      },true);
+    } else {
+      const groups=new Map();
+      runs.forEach(r=>{const k=gb==="tool"?r.tool:gb==="model_family"?r.model_family:r.effort||"?";if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r)});
+      const colors=["#d4a843","#6b9e7a","#c47a5a","#7a8fa6","#9b7ec8"];
+      let ci=0;
+      const series=[];
+      groups.forEach((gRuns,gk)=>{
+        const col=colors[ci%colors.length];ci++;
+        series.push({name:gk,type:gRuns.length>1?"line":"scatter",data:gRuns.map(r=>[new Date(r.captured_at).getTime(),metricVal(r,mk)]),symbolSize:12,itemStyle:{color:col},lineStyle:{color:col,width:2},smooth:true});
+      });
+      ch.setOption({
+        backgroundColor:"transparent",animation:true,
+        tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12}},
+        legend:{bottom:0,textStyle:{color:"#9a9084",fontSize:11}},
+        grid:{top:16,right:20,bottom:40,left:20,containLabel:true},
+        xAxis:{type:"time",axisLabel:{color:"#6b6158",fontSize:10},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+        yAxis:{type:"value",...(isScore?{min:50,max:100}:{}),axisLabel:{color:"#6b6158",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+        series
+      },true);
+    }
+    ch.off("click");ch.on("click",p=>{if(p.dataIndex!=null){const r=runs[p.dataIndex];if(r)goInspect(r.run_id)}});
+  }
+
+  /* ════════════════════════════════════════════
+     EXPLORE SCREEN
+  ════════════════════════════════════════════ */
+  function renderExplore(){
+    const host=document.getElementById("exploreContent");
+    let runs=filtered();
+    // Sort
+    runs.sort((a,b)=>{
+      const va=get(a,S.explore.sort)??0,vb=get(b,S.explore.sort)??0;
+      const d=S.explore.dir==="desc"?-1:1;
+      return typeof va==="number"||typeof vb==="number"?(Number(va)-Number(vb))*d:String(va).localeCompare(String(vb))*d;
+    });
+    const si=k=>S.explore.sort===k?(S.explore.dir==="desc"?" ↓":" ↑"):"";
+    const sc=k=>S.explore.sort===k?" sorted":"";
+    const checked=S.explore.checked;
+    host.innerHTML=`
+      <div class="section-label">All Executions</div>
+      ${checked.length>=2?`<div style="margin-bottom:12px"><button class="btn btn-primary" id="exCmp">Compare Selected (${checked.length})</button> <button class="btn" id="exClr">Clear</button></div>`:""}
+      <div class="tbl-wrap"><table class="ex"><thead><tr>
+        <th style="width:28px"></th>
+        <th data-s="model_name"${sc("model_name")}>Model${si("model_name")}</th>
+        <th data-s="tool"${sc("tool")}>Tool${si("tool")}</th>
+        <th data-s="effort"${sc("effort")}>Effort${si("effort")}</th>
+        <th data-s="scores.overall"${sc("scores.overall")}>Overall${si("scores.overall")}</th>
+        <th data-s="scores.critical"${sc("scores.critical")}>Critical${si("scores.critical")}</th>
+        <th data-s="scores.important"${sc("scores.important")}>Important${si("scores.important")}</th>
+        <th data-s="scores.detail"${sc("scores.detail")}>Detail${si("scores.detail")}</th>
+        <th data-s="planning_runtime_seconds"${sc("planning_runtime_seconds")}>Runtime${si("planning_runtime_seconds")}</th>
+        <th data-s="plan_tool_call_count"${sc("plan_tool_call_count")}>Calls${si("plan_tool_call_count")}</th>
+        <th>Date</th>
+      </tr></thead><tbody>
+      ${runs.map(r=>{
+        const o=Number(get(r,"scores.overall")||0);
+        return`<tr class="${checked.includes(r.run_id)?"sel":""}">
+          <td><input type="checkbox" class="chk" data-chk="${esc(r.run_id)}" ${checked.includes(r.run_id)?"checked":""}></td>
+          <td><div class="cell-name">${esc(r.model_name)}</div><div class="cell-sub">${esc(r.manufacturer)}${r.planning_mode===false?" · No Planning":""}</div></td>
+          <td><span class="meta-dot" style="background:${toolCol(r.tool)};display:inline-block"></span> ${esc(r.tool)}</td>
+          <td style="color:var(--ink-soft)">${esc(r.effort||"Std")}</td>
+          <td><span class="score-chip ${scCls(o)}">${fmtS(o)}</span><span class="spark"><span class="spark-fill" style="width:${o}%;background:${scCol(o)}"></span></span></td>
+          <td><span class="score-chip ${scCls(get(r,"scores.critical"))}">${fmtS(get(r,"scores.critical"))}</span></td>
+          <td><span class="score-chip ${scCls(get(r,"scores.important"))}">${fmtS(get(r,"scores.important"))}</span></td>
+          <td><span class="score-chip ${scCls(get(r,"scores.detail"))}">${fmtS(get(r,"scores.detail"))}</span></td>
+          <td class="mono">${fmtD(r.planning_runtime_seconds)}</td>
+          <td class="mono">${r.plan_tool_call_count||"—"}</td>
+          <td class="mono">${fmtDate(r.captured_at)}</td>
+        </tr>`}).join("")}
+      </tbody></table></div>
+      <div style="margin-top:10px;color:var(--ink-faint);font-size:0.78rem">${runs.length} execution${runs.length===1?"":"s"} · Click row to inspect · Check two to compare</div>
+    `;
+    // Sort
+    host.querySelectorAll("th[data-s]").forEach(th=>th.addEventListener("click",()=>{const k=th.dataset.s;if(S.explore.sort===k)S.explore.dir=S.explore.dir==="desc"?"asc":"desc";else{S.explore.sort=k;S.explore.dir=k.startsWith("scores.")?"desc":"asc"}renderExplore()}));
+    // Row click (on non-checkbox cells)
+    host.querySelectorAll("table.ex tbody tr").forEach((tr,i)=>{tr.addEventListener("click",e=>{if(e.target.classList.contains("chk"))return;goInspect(runs[i].run_id)})});
+    // Checkboxes
+    host.querySelectorAll(".chk").forEach(chk=>chk.addEventListener("change",e=>{
+      const rid=chk.dataset.chk;
+      if(chk.checked){if(!S.explore.checked.includes(rid))S.explore.checked.push(rid)}
+      else{S.explore.checked=S.explore.checked.filter(x=>x!==rid)}
+      renderExplore();
+    }));
+    // Compare button
+    host.querySelector("#exCmp")?.addEventListener("click",()=>{if(S.explore.checked.length>=2){S.compare.a=S.explore.checked[0];S.compare.b=S.explore.checked[1];go("compare")}});
+    host.querySelector("#exClr")?.addEventListener("click",()=>{S.explore.checked=[];renderExplore()});
+  }
+
+  /* ════════════════════════════════════════════
+     INSPECT SCREEN
+  ════════════════════════════════════════════ */
+  function renderInspect(){
+    const host=document.getElementById("inspectContent");
+    const run=S.inspect.id?allRuns().find(r=>r.run_id===S.inspect.id):null;
+    if(!run){host.innerHTML=`<div class="inspect-empty"><h3>No selection</h3><p style="color:var(--ink-faint);max-width:380px;margin:0 auto;line-height:1.6">Click any execution in Overview, Scatter, Explore, or Compare to inspect its full detail.</p></div>`;return}
+    const arts=run.artifacts||{};const o=Number(get(run,"scores.overall")||0);
+    const observed=get(run,"metadata.observed.plan_session")||{};
+    const outcome=run.metadata?.outcome||{};
+    const allR=filtered().sort((a,b)=>(get(b,"scores.overall")||0)-(get(a,"scores.overall")||0));
+    const rank=allR.findIndex(r=>r.run_id===run.run_id)+1;
+    const rIdx=allR.findIndex(r=>r.run_id===run.run_id);
+    const prev=rIdx>0?allR[rIdx-1]:null,next=rIdx<allR.length-1?allR[rIdx+1]:null;
+
+    let h=`<div class="breadcrumb"><a href="#" data-goto="explore">Explore</a> › ${esc(runLabel(run))}</div>`;
+    if(prev||next){
+      h+=`<div class="nav-row">`;
+      if(prev)h+=`<button class="btn" data-nav="${esc(prev.run_id)}">← ${esc(shortLabel(prev))}</button>`;
+      if(next)h+=`<button class="btn" data-nav="${esc(next.run_id)}">${esc(shortLabel(next))} →</button>`;
+      h+=`</div>`;
+    }
+    h+=`<div class="inspect-hero"><div class="inspect-hero-top"><div>
+      <h2>${esc(run.model_name)}${run.planning_mode===false?" · No Planning":""}</h2>
+      <div class="inspect-hero-meta">${esc(run.manufacturer)} · ${esc(run.tool)} · ${esc(run.effort||"Std")} · ${esc(run.experiment_role||"baseline")}${rank?` · <b>Rank #${rank}</b> of ${allR.length}`:""}<br>${fmtDT(run.captured_at)} · Evaluator: ${esc(run.evaluator_model||"?")}</div>
+    </div><div class="inspect-links">
+      ${arts.plan_url?`<a class="inspect-link" href="${esc(arts.plan_url)}" target="_blank">Plan</a>`:""}
+      ${arts.plan_eval_url?`<a class="inspect-link" href="${esc(arts.plan_eval_url)}" target="_blank">Evaluation</a>`:""}
+      ${arts.plan_eval_report_url&&run.plan_eval_report_generated?`<a class="inspect-link" href="${esc(arts.plan_eval_report_url)}" target="_blank">Report</a>`:""}
+      ${arts.run_metadata_url?`<a class="inspect-link" href="${esc(arts.run_metadata_url)}" target="_blank">Metadata</a>`:""}
+    </div></div></div>`;
+    h+=`<div class="inspect-stats">
+      <div class="inspect-stat"><div class="label">Overall</div><div class="value" style="color:${scCol(o)}">${fmtS(o)}</div></div>
+      <div class="inspect-stat"><div class="label">Critical</div><div class="value">${fmtS(get(run,"scores.critical"))}</div></div>
+      <div class="inspect-stat"><div class="label">Runtime</div><div class="value">${fmtD(run.planning_runtime_seconds)}</div></div>
+      <div class="inspect-stat"><div class="label">Tool Calls</div><div class="value">${run.plan_tool_call_count||"—"}</div></div>
+    </div>`;
+    h+=`<div class="inspect-grid">
+      <div class="inspect-card"><h4>Declared Scenario</h4>
+        <div class="dl"><strong>Case:</strong> ${esc(run.case_label||"Default")} · ${esc(run.experiment_role||"baseline")}</div>
+        <div class="dl"><strong>Planning:</strong> ${run.planning_mode===true?"Enabled":run.planning_mode===false?"Disabled":"Unspecified"}</div>
+        <div class="dl"><strong>Prompt:</strong> ${esc(run.prompt_profile||"?")}</div>
+        <div class="dl"><strong>Inference:</strong> ${esc(run.inference_profile||"Default")}</div>
+        <div class="dl"><strong>Tags:</strong> ${safe(run.experiment_tags).join(", ")||"None"}</div>
+      </div>
+      <div class="inspect-card"><h4>Observed Session</h4>
+        <div class="dl"><strong>Duration:</strong> ${fmtD(observed.duration_seconds)}</div>
+        <div class="dl"><strong>Tool Calls:</strong> ${observed.tool_call_count||run.plan_tool_call_count||"?"}</div>
+        <div class="dl"><strong>Messages:</strong> ${observed.user_message_count||"?"} user · ${observed.assistant_message_count||"?"} asst</div>
+        <div class="dl"><strong>Tokens:</strong> ${observed.input_tokens?Number(observed.input_tokens).toLocaleString():"?"} in · ${observed.output_tokens?Number(observed.output_tokens).toLocaleString():"?"} out</div>
+        <div class="dl"><strong>Saved:</strong> ${run.plan_saved?"Yes":run.save_blocked_by_mode?"Blocked":"No"}</div>
+        <div class="dl"><strong>Report:</strong> ${run.plan_eval_report_generated?"Generated":"Missing"}</div>
+      </div>
+    </div>`;
+    // Gaps + narrative
+    const gaps=safe(run.top_gaps),narr=run.narrative||{};
+    h+=`<div class="inspect-grid">
+      <div class="inspect-card"><h4>Top Gaps</h4>${gaps.length?gaps.map(g=>`<div class="gap-item"><div class="gap-sev ${g.severity}">${esc(g.severity||"?")} · ${esc(g.id||"")}</div><div class="gap-title">${esc(g.label||"")}</div><div class="gap-why">${esc(g.why||"")}</div></div>`).join(""):`<p style="color:var(--ink-faint);font-size:0.82rem">No gaps captured.</p>`}</div>
+      <div class="inspect-card"><h4>Narrative</h4>${["overall_posture","strength_clusters","weakness_clusters","risk_assessment","remediation_guidance"].filter(k=>narr[k]).map(k=>`<div style="margin-bottom:10px"><div style="font-weight:600;font-size:0.78rem;color:var(--ink);margin-bottom:2px">${k.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase())}</div><div style="color:var(--ink-soft);font-size:0.78rem;line-height:1.6">${esc(narr[k])}</div></div>`).join("")||`<p style="color:var(--ink-faint);font-size:0.82rem">No narrative.</p>`}</div>
+    </div>`;
+    // Requirements
+    const allReqs=safe(run.requirements);
+    if(allReqs.length){
+      const rf=S.inspect.reqFilters;
+      const areas=[...new Set(allReqs.map(r=>r.area).filter(Boolean))].sort();
+      const filt=allReqs.filter(r=>(rf.area==="all"||r.area===rf.area)&&(rf.severity==="all"||r.severity===rf.severity)&&(rf.coverage==="all"||r.coverage===rf.coverage));
+      h+=`<div class="inspect-card" style="grid-column:1/-1"><h4>Requirements (${filt.length} of ${allReqs.length})</h4>
+        <div class="req-bar">
+          <select id="rqA"><option value="all">All areas</option>${areas.map(a=>`<option value="${esc(a)}"${rf.area===a?" selected":""}>${esc(a)}</option>`).join("")}</select>
+          <select id="rqS"><option value="all">All severity</option>${["critical","important","detail"].map(v=>`<option value="${v}"${rf.severity===v?" selected":""}>${v}</option>`).join("")}</select>
+          <select id="rqC"><option value="all">All coverage</option>${["full","partial","missing"].map(v=>`<option value="${v}"${rf.coverage===v?" selected":""}>${v}</option>`).join("")}</select>
+        </div>
+        <div class="req-wrap"><table class="req"><thead><tr><th>ID</th><th>Area</th><th>Requirement</th><th>Severity</th><th>Coverage</th><th>Evidence</th></tr></thead><tbody>
+        ${filt.length?filt.map(r=>`<tr><td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap">${esc(r.id||"")}</td><td>${esc(r.area||"")}</td><td><div style="font-weight:500;color:var(--ink)">${esc(r.label||"")}</div>${r.gap?`<div style="color:var(--terra);font-size:0.74rem;margin-top:2px">${esc(r.gap)}</div>`:""}</td><td><span class="tag tag-${r.severity||"detail"}">${esc(r.severity||"?")}</span></td><td><span class="tag tag-${r.coverage||"missing"}">${esc(r.coverage||"?")}</span></td><td style="font-size:0.74rem">${esc(r.evidence||"—")}</td></tr>`).join(""):`<tr><td colspan="6" style="text-align:center;color:var(--ink-faint);padding:20px">No matching requirements.</td></tr>`}
+        </tbody></table></div></div>`;
+    }
+
+    host.innerHTML=h;
+    // Handlers
+    host.querySelectorAll("[data-goto]").forEach(el=>el.addEventListener("click",e=>{e.preventDefault();go(el.dataset.goto)}));
+    host.querySelectorAll("[data-nav]").forEach(el=>el.addEventListener("click",()=>{S.inspect.id=el.dataset.nav;S.inspect.reqFilters={area:"all",severity:"all",coverage:"all"};renderInspect()}));
+    ["rqA","rqS","rqC"].forEach(id=>{host.querySelector("#"+id)?.addEventListener("change",()=>{S.inspect.reqFilters.area=host.querySelector("#rqA")?.value||"all";S.inspect.reqFilters.severity=host.querySelector("#rqS")?.value||"all";S.inspect.reqFilters.coverage=host.querySelector("#rqC")?.value||"all";renderInspect()})});
+  }
+
+  /* ════════════════════════════════════════════
+     INIT
+  ════════════════════════════════════════════ */
+  async function init(){
+    try{
+      const d=window.__DASHBOARD_DATA__&&typeof window.__DASHBOARD_DATA__==="object"?window.__DASHBOARD_DATA__:await fetch("./dashboard-data.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()});
+      S.dataset=d;
+      document.getElementById("topMeta").textContent=fmtDT(d.generated_at);
+      renderTabs();renderFilterBar();
+      document.getElementById("filterToggle").addEventListener("click",()=>{const bar=document.getElementById("filterBar");bar.classList.toggle("collapsed")});
+      renderOverview();
+      requestAnimationFrame(()=>document.getElementById("scr-overview").classList.add("visible"));
+      window.addEventListener("resize",resizeAll);
+    }catch(e){
+      document.getElementById("topMeta").textContent="Error";
+      document.getElementById("overviewContent").innerHTML=`<div class="inspect-empty"><h3>Failed to load</h3><p style="color:var(--ink-faint)">${esc(e.message)}</p></div>`;
+    }
+  }
+  init();
+  })();
+  </script>
+</body>
+</html>

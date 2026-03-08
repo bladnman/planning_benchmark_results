@@ -1,0 +1,3464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planning Benchmark Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --bg: #f5efe4;
+      --bg-strong: #ede1cb;
+      --surface: rgba(255, 251, 245, 0.86);
+      --surface-strong: rgba(255, 248, 238, 0.96);
+      --surface-quiet: rgba(245, 236, 221, 0.78);
+      --border: rgba(72, 53, 32, 0.18);
+      --border-strong: rgba(72, 53, 32, 0.28);
+      --ink: #1d1a16;
+      --ink-soft: #5a5145;
+      --ink-faint: #887a68;
+      --teal: #1f6f6d;
+      --teal-soft: rgba(31, 111, 109, 0.12);
+      --clay: #af5a3c;
+      --amber: #c38a2c;
+      --olive: #7d8d4f;
+      --danger: #944c33;
+      --shadow: 0 24px 60px rgba(90, 63, 24, 0.12);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --font-display: "Fraunces", Georgia, serif;
+      --font-body: "IBM Plex Sans", sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: var(--font-body);
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.7), transparent 34%),
+        radial-gradient(circle at top right, rgba(31, 111, 109, 0.08), transparent 30%),
+        linear-gradient(180deg, #f7f2e8 0%, #f2eadc 52%, #eee2cf 100%);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    .page-shell {
+      width: min(1440px, calc(100vw - 32px));
+      margin: 20px auto 36px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px 34px 30px;
+      border: 1px solid var(--border);
+      border-radius: 36px;
+      background:
+        linear-gradient(140deg, rgba(255, 250, 243, 0.94), rgba(240, 231, 214, 0.92)),
+        radial-gradient(circle at 85% 20%, rgba(31, 111, 109, 0.18), transparent 24%);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -90px -90px auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(175, 90, 60, 0.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      font-weight: 600;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 28px;
+      align-items: end;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-family: var(--font-display);
+      font-size: clamp(2.3rem, 4vw, 4.4rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .hero-meta {
+      display: grid;
+      gap: 12px;
+      justify-items: stretch;
+    }
+
+    .hero-card {
+      border: 1px solid rgba(31, 111, 109, 0.14);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.62);
+      padding: 18px 20px;
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-card .label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink-faint);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-card .value {
+      font-size: 1rem;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .dashboard {
+      margin-top: 22px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: 0 20px 40px rgba(55, 35, 14, 0.08);
+      backdrop-filter: blur(18px);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 24px 0;
+    }
+
+    .panel-header h2,
+    .panel-header h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      letter-spacing: -0.03em;
+    }
+
+    .panel-subtitle {
+      margin: 5px 24px 0;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      padding: 22px 24px 24px;
+    }
+
+    .stat-card {
+      border: 1px solid rgba(31, 111, 109, 0.14);
+      border-radius: 18px;
+      padding: 16px 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(247, 240, 229, 0.82));
+    }
+
+    .stat-card .label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink-faint);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .stat-card .value {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .stat-card .detail {
+      display: block;
+      margin-top: 8px;
+      color: var(--ink-soft);
+      font-size: 0.83rem;
+      line-height: 1.45;
+    }
+
+    .controls {
+      padding: 22px 24px 24px;
+    }
+
+    .workspace-panel .panel-header {
+      align-items: flex-start;
+    }
+
+    .workspace-body {
+      padding: 18px 24px 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .workspace-subtitle {
+      margin: 6px 0 0;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .control {
+      display: grid;
+      gap: 7px;
+    }
+
+    .control label {
+      color: var(--ink-faint);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+    }
+
+    .control select {
+      min-height: 46px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--ink);
+      padding: 0 14px;
+    }
+
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .preset-row .label {
+      color: var(--ink-faint);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+    }
+
+    .chip {
+      min-height: 40px;
+      padding: 0 14px;
+      border: 1px solid rgba(31, 111, 109, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
+    }
+
+    .chip:hover {
+      transform: translateY(-1px);
+      border-color: rgba(31, 111, 109, 0.34);
+    }
+
+    .chip.active {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #fff;
+    }
+
+    .utility-button,
+    .inline-button {
+      min-height: 40px;
+      padding: 0 14px;
+      border: 1px solid rgba(31, 111, 109, 0.2);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+    }
+
+    .utility-button:hover,
+    .inline-button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(31, 111, 109, 0.36);
+      background: rgba(255, 255, 255, 0.94);
+    }
+
+    .inline-button {
+      min-height: 32px;
+      padding: 0 12px;
+      font-size: 0.85rem;
+    }
+
+    .view-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(31, 111, 109, 0.12);
+      color: var(--teal);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .filter-shell,
+    .fold-panel {
+      border: 1px solid rgba(31, 111, 109, 0.12);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.46);
+      overflow: hidden;
+    }
+
+    .filter-shell summary,
+    .fold-panel summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .filter-shell summary::-webkit-details-marker,
+    .fold-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .filter-shell[open] summary,
+    .fold-panel[open] summary {
+      border-bottom: 1px solid rgba(31, 111, 109, 0.12);
+    }
+
+    .filter-shell summary strong,
+    .fold-panel summary strong {
+      display: block;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .filter-shell summary .label,
+    .fold-panel summary .label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--ink-faint);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .filter-summary-note {
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      padding: 6px 18px 22px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 940px;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 14px 14px 12px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      background: rgba(245, 238, 226, 0.94);
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    thead button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      text-transform: inherit;
+      letter-spacing: inherit;
+      font: inherit;
+    }
+
+    tbody tr {
+      transition: background-color 0.16s ease, transform 0.16s ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    tbody tr.selected-row {
+      background: rgba(31, 111, 109, 0.08);
+    }
+
+    tbody td {
+      padding: 15px 14px;
+      border-bottom: 1px solid rgba(90, 81, 69, 0.1);
+      vertical-align: top;
+      color: var(--ink);
+    }
+
+    .row-select {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--teal);
+      cursor: pointer;
+    }
+
+    .model-cell {
+      display: grid;
+      gap: 4px;
+      min-width: 210px;
+    }
+
+    .model-name {
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .model-meta,
+    .quiet {
+      color: var(--ink-soft);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .score-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 74px;
+      min-height: 38px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      background: rgba(31, 111, 109, 0.12);
+      color: var(--teal);
+    }
+
+    .detail-button {
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid rgba(31, 111, 109, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .detail-button:hover {
+      border-color: rgba(31, 111, 109, 0.34);
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .view-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+    }
+
+    .pane-grid {
+      display: grid;
+      gap: 18px;
+      animation: panel-in 240ms ease;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      padding: 0 24px 24px;
+    }
+
+    .insight-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .subpanel {
+      border: 1px solid rgba(31, 111, 109, 0.12);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(245, 236, 221, 0.7));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    .subpanel .panel-header {
+      padding-top: 18px;
+    }
+
+    .subpanel .panel-subtitle {
+      margin-top: 4px;
+    }
+
+    .heatmap-wrap {
+      padding: 18px 18px 22px;
+    }
+
+    .heatmap-scroll {
+      overflow: auto;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .heatmap-table {
+      min-width: 100%;
+      border-spacing: 0;
+    }
+
+    .heatmap-table th,
+    .heatmap-table td {
+      padding: 0;
+      border-bottom: 1px solid rgba(90, 81, 69, 0.08);
+      border-right: 1px solid rgba(90, 81, 69, 0.08);
+      text-align: center;
+    }
+
+    .heatmap-table th {
+      min-width: 78px;
+      padding: 12px 8px;
+      font-size: 11px;
+      color: var(--ink-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(247, 240, 229, 0.96);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .heatmap-table th:first-child {
+      min-width: 240px;
+      text-align: left;
+      position: sticky;
+      left: 0;
+      z-index: 3;
+    }
+
+    .heatmap-row-label {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      text-align: left;
+      background: rgba(255, 252, 248, 0.98);
+      padding: 14px 14px;
+    }
+
+    .heatmap-label {
+      display: grid;
+      gap: 4px;
+    }
+
+    .heatmap-score {
+      width: 100%;
+      min-width: 76px;
+      min-height: 66px;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    .heatmap-score:hover {
+      outline: 2px solid rgba(31, 111, 109, 0.24);
+      outline-offset: -2px;
+    }
+
+    .heatmap-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 16px;
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .chart-panel {
+      padding: 18px 18px 22px;
+    }
+
+    .chart-shell {
+      position: relative;
+      min-height: 430px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(245, 236, 221, 0.74));
+    }
+
+    .chart-shell canvas,
+    .chart-host {
+      width: 100% !important;
+      height: 360px !important;
+    }
+
+    .chart-host {
+      min-height: 360px;
+    }
+
+    .chart-note,
+    .empty-state,
+    .error-state {
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .selection-tray {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .selection-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .selection-header .label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--ink-faint);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .selection-header strong {
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .selection-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .selection-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(31, 111, 109, 0.14);
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .selection-chip.auto {
+      background: rgba(31, 111, 109, 0.08);
+      border-color: rgba(31, 111, 109, 0.18);
+    }
+
+    .selection-chip-body {
+      display: grid;
+      gap: 3px;
+    }
+
+    .selection-chip strong {
+      font-size: 0.92rem;
+      line-height: 1.2;
+    }
+
+    .selection-chip .quiet {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .selection-remove {
+      border: 0;
+      background: transparent;
+      color: var(--teal);
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    .selection-empty {
+      margin: 0;
+    }
+
+    .question-grid {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .question-card {
+      border: 1px solid rgba(31, 111, 109, 0.12);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.78);
+      display: grid;
+      gap: 8px;
+    }
+
+    .question-card .label {
+      color: var(--ink-faint);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .question-card strong {
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .question-status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .question-status.ready {
+      background: rgba(31, 111, 109, 0.12);
+      color: var(--teal);
+    }
+
+    .question-status.partial {
+      background: rgba(195, 138, 44, 0.16);
+      color: #8b5e13;
+    }
+
+    .question-status.blocked {
+      background: rgba(148, 76, 51, 0.14);
+      color: var(--danger);
+    }
+
+    .table-meta {
+      padding: 0 24px 18px;
+      color: var(--ink-soft);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .detail-panel {
+      overflow: hidden;
+      animation: panel-in 240ms ease;
+    }
+
+    .detail-body {
+      padding: 18px 24px 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .detail-hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(90, 81, 69, 0.12);
+    }
+
+    .detail-hero h3 {
+      margin: 0 0 6px;
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      letter-spacing: -0.04em;
+    }
+
+    .detail-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .detail-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(31, 111, 109, 0.2);
+      background: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+    }
+
+    .detail-link:hover {
+      border-color: rgba(31, 111, 109, 0.35);
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-card {
+      border: 1px solid rgba(31, 111, 109, 0.12);
+      border-radius: 18px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.68);
+    }
+
+    .mini-card .label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .mini-card .value {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      line-height: 1;
+    }
+
+    .detail-columns {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 18px;
+    }
+
+    .detail-card {
+      border: 1px solid rgba(31, 111, 109, 0.12);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .detail-card h4 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .detail-card p {
+      margin: 0;
+      color: var(--ink-soft);
+      line-height: 1.65;
+    }
+
+    .gap-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .gap-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 247, 241, 0.86);
+      border: 1px solid rgba(175, 90, 60, 0.12);
+    }
+
+    .gap-item strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.95rem;
+    }
+
+    .gap-meta {
+      color: var(--ink-faint);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .narrative-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .requirements-toolbar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .requirements-toolbar select {
+      min-height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0 12px;
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    .requirements-table-wrap {
+      overflow: auto;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.54);
+    }
+
+    .requirements-table {
+      min-width: 100%;
+      border-spacing: 0;
+    }
+
+    .requirements-table th,
+    .requirements-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(90, 81, 69, 0.08);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .requirements-table th {
+      background: rgba(247, 240, 229, 0.94);
+      color: var(--ink-faint);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .severity-critical {
+      background: rgba(148, 76, 51, 0.14);
+      color: var(--danger);
+    }
+
+    .severity-important {
+      background: rgba(195, 138, 44, 0.16);
+      color: #8b5e13;
+    }
+
+    .severity-detail {
+      background: rgba(125, 141, 79, 0.16);
+      color: #5d6d33;
+    }
+
+    .coverage-full {
+      background: rgba(31, 111, 109, 0.14);
+      color: var(--teal);
+    }
+
+    .coverage-partial {
+      background: rgba(195, 138, 44, 0.16);
+      color: #8b5e13;
+    }
+
+    .coverage-missing {
+      background: rgba(148, 76, 51, 0.14);
+      color: var(--danger);
+    }
+
+    .requirements-count {
+      color: var(--ink-faint);
+      font-size: 0.9rem;
+    }
+
+    .footer {
+      padding: 18px 24px 24px;
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    @keyframes panel-in {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-grid,
+      .overview-grid,
+      .view-grid,
+      .detail-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .controls-grid,
+      .stats-grid,
+      .mini-stats,
+      .narrative-grid,
+      .requirements-toolbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page-shell {
+        width: min(100vw - 18px, 100%);
+        margin-top: 10px;
+      }
+
+      .hero,
+      .panel {
+        border-radius: 24px;
+      }
+
+      .hero {
+        padding: 24px 22px 22px;
+      }
+
+      .panel-header {
+        padding: 20px 18px 0;
+      }
+
+      .panel-subtitle,
+      .stats-grid,
+      .workspace-body,
+      .controls,
+      .table-meta,
+      .detail-body,
+      .footer {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .controls-grid,
+      .stats-grid,
+      .mini-stats,
+      .narrative-grid,
+      .requirements-toolbar,
+      .question-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .table-wrap,
+      .heatmap-wrap,
+      .chart-panel {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .chart-shell canvas,
+      .chart-host {
+        height: 300px !important;
+      }
+
+      .filter-shell summary,
+      .fold-panel summary,
+      .selection-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero">
+      <p class="eyebrow">Specification Fidelity Dashboard</p>
+      <div class="hero-grid">
+        <div>
+          <h1>Planning Benchmark</h1>
+          <p>Failure shapes, not just scores. Compare benchmark setups, scenario variants, and raw executions without burying harness effects, experimental variants, or planning-runtime behavior.</p>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-card">
+            <span class="label">Generated</span>
+            <span class="value" id="generatedAt">Loading...</span>
+          </div>
+          <div class="hero-card">
+            <span class="label">Dataset</span>
+            <span class="value" id="taxonomySummary">Waiting for dataset</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard">
+      <section class="panel workspace-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Control Room</h2>
+            <p class="workspace-subtitle" id="workspaceSubtitle">Switch between overview, leaderboard, and inspection. Filters stay available, but they no longer own the whole page.</p>
+          </div>
+          <button class="utility-button" id="resetFiltersButton" type="button">Reset focus</button>
+        </div>
+        <div class="workspace-body">
+          <div class="preset-row" id="panelRow">
+            <span class="label">Screen</span>
+          </div>
+          <div class="preset-row" id="viewRow">
+            <span class="label">Lens</span>
+          </div>
+          <div class="preset-row" id="presetRow">
+            <span class="label">Presets</span>
+          </div>
+          <p class="workspace-subtitle" id="viewDefinition">A lens decides what one row means: a benchmark setup, a scenario variant, or a single execution.</p>
+          <details class="filter-shell" id="filterShell">
+            <summary>
+              <div>
+                <span class="label">Advanced Filters</span>
+                <strong id="filterSummary">No filters applied</strong>
+              </div>
+              <span class="filter-summary-note" id="filterSummaryNote">Open filters</span>
+            </summary>
+            <div class="controls">
+              <div class="controls-grid">
+                <div class="control">
+                  <label for="manufacturerFilter">Manufacturer</label>
+                  <select id="manufacturerFilter"></select>
+                </div>
+                <div class="control">
+                  <label for="toolFilter">Tool</label>
+                  <select id="toolFilter"></select>
+                </div>
+                <div class="control">
+                  <label for="effortFilter">Effort</label>
+                  <select id="effortFilter"></select>
+                </div>
+                <div class="control">
+                  <label for="evaluatorFilter">Evaluator</label>
+                  <select id="evaluatorFilter"></select>
+                </div>
+                <div class="control">
+                  <label for="planningModeFilter">Planning Mode</label>
+                  <select id="planningModeFilter"></select>
+                </div>
+                <div class="control">
+                  <label for="inferenceProfileFilter">Inference Profile</label>
+                  <select id="inferenceProfileFilter"></select>
+                </div>
+                <div class="control">
+                  <label for="contextWindowFilter">Context Window</label>
+                  <select id="contextWindowFilter"></select>
+                </div>
+                <div class="control">
+                  <label for="promptProfileFilter">Prompt Profile</label>
+                  <select id="promptProfileFilter"></select>
+                </div>
+                <div class="control">
+                  <label for="roleFilter">Run Role</label>
+                  <select id="roleFilter"></select>
+                </div>
+                <div class="control">
+                  <label for="comparisonFilter">Area Comparison</label>
+                  <select id="comparisonFilter"></select>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="pane-grid" id="storyPane">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Story</h2>
+            <span class="view-badge" id="visibleSummaryBadge">Loading view</span>
+          </div>
+          <p class="panel-subtitle" id="overviewSubtitle">Start here. The overview should tell you what is happening before you ever open the long table.</p>
+          <div class="stats-grid" id="statsGrid"></div>
+          <div class="overview-grid">
+            <div class="insight-stack">
+              <section class="subpanel">
+                <div class="panel-header">
+                  <h3>What This Dataset Can Answer</h3>
+                </div>
+                <p class="panel-subtitle" id="questionGridSubtitle">These cards tell you which questions are actually answerable with the visible data.</p>
+                <div class="question-grid" id="questionGrid"></div>
+              </section>
+            </div>
+
+            <section class="subpanel">
+              <div class="panel-header">
+                <h3>Average Outcome By Tool</h3>
+              </div>
+              <p class="panel-subtitle" id="toolStorySubtitle">This is descriptive, not a controlled experiment, unless the card set below says the comparison is paired.</p>
+              <div class="chart-panel">
+                <div class="chart-shell">
+                  <div class="chart-host" id="scoreProfileChart"></div>
+                  <p class="chart-note hidden" id="scoreProfileNote"></p>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="overview-grid">
+            <section class="subpanel">
+              <div class="panel-header">
+                <h3>Top Visible Subjects</h3>
+              </div>
+              <p class="panel-subtitle" id="topChartSubtitle">Ranking by overall score for the current lens.</p>
+              <div class="chart-panel">
+                <div class="chart-shell">
+                  <div class="chart-host" id="topChart"></div>
+                  <p class="chart-note hidden" id="topChartNote"></p>
+                </div>
+              </div>
+            </section>
+
+            <div class="insight-stack">
+              <section class="subpanel">
+                <div class="panel-header">
+                  <h3>Story Notes</h3>
+                </div>
+                <p class="panel-subtitle" id="storyNotesSubtitle">Use this to understand what the dashboard is really comparing right now.</p>
+                <div class="selection-tray" id="storyNotes"></div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="pane-grid hidden" id="comparePane">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Compare</h2>
+            <span class="view-badge" id="compareSummaryBadge">Stage selections</span>
+          </div>
+          <p class="panel-subtitle" id="compareSubtitle">Pick up to three items from the explorer. This screen exists only for direct side-by-side comparison.</p>
+          <div class="selection-tray" id="selectionTray"></div>
+        </section>
+
+        <section class="view-grid compare-grid">
+          <section class="panel">
+            <div class="panel-header">
+              <h3>Comparison Radar</h3>
+            </div>
+            <p class="panel-subtitle" id="radarSubtitle">Select up to three visible subjects at the current level to compare their functional-area fingerprints.</p>
+            <div class="chart-panel">
+              <div class="chart-shell">
+                <div class="chart-host" id="radarChart"></div>
+                <p class="chart-note hidden" id="radarNote"></p>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <h3>Functional-Area Heatmap</h3>
+            </div>
+            <details class="fold-panel" id="heatmapFold">
+              <summary>
+                <div>
+                  <span class="label">Secondary Diagnostic View</span>
+                  <strong>Open the area-by-area heatmap</strong>
+                </div>
+                <span class="filter-summary-note">Use when you need exact area spread</span>
+              </summary>
+              <p class="panel-subtitle" id="heatmapSubtitle">Comparison-ready visible subjects appear here at the current grouping level.</p>
+              <div class="heatmap-wrap">
+                <div id="heatmapHost"></div>
+              </div>
+            </details>
+          </section>
+        </section>
+      </section>
+
+      <section class="panel hidden" id="explorePane">
+        <div class="panel-header">
+          <h2>Explorer</h2>
+        </div>
+        <p class="panel-subtitle" id="leaderboardSubtitle">This is the sortable ledger for people who already know what they are looking for.</p>
+        <div class="table-meta" id="exploreGlossary"></div>
+        <div class="table-meta" id="tableSummary"></div>
+        <div class="table-wrap">
+          <table>
+            <thead id="resultsHead"></thead>
+            <tbody id="resultsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel detail-panel hidden" id="inspectPane">
+        <div class="panel-header">
+          <h3 id="detailTitle">Series Detail</h3>
+        </div>
+        <p class="panel-subtitle" id="detailSubtitle">The detail pane follows the current grouping level and exposes variants, runtime capture, and requirement coverage.</p>
+        <div class="detail-body" id="detailBody"></div>
+      </section>
+
+      <section class="panel footer" id="footerNote"></section>
+    </section>
+  </main>
+
+  <script src="./data.js"></script>
+  <script>
+    const VIEW_OPTIONS = [
+      { id: "series", label: "Setups" },
+      { id: "cases", label: "Variants" },
+      { id: "runs", label: "Executions" },
+    ];
+
+    const PANE_OPTIONS = [
+      { id: "story", label: "Story" },
+      { id: "compare", label: "Compare" },
+      { id: "explore", label: "Explorer" },
+      { id: "inspect", label: "Inspect" },
+    ];
+
+    const PRESETS = [
+      { id: "all", label: "All" },
+      { id: "baseline", label: "Baseline" },
+      { id: "variants", label: "Variants Only" },
+      { id: "latest", label: "Latest Only" },
+      { id: "comparable", label: "Comparison Ready" },
+      { id: "codex", label: "Codex CLI" },
+      { id: "claude", label: "Claude Code" },
+    ];
+
+    const RADAR_COLORS = [
+      { stroke: "#1f6f6d", fill: "rgba(31, 111, 109, 0.16)" },
+      { stroke: "#af5a3c", fill: "rgba(175, 90, 60, 0.16)" },
+      { stroke: "#8b6a14", fill: "rgba(139, 106, 20, 0.16)" },
+    ];
+
+    const EMPTY_REQUIREMENT_FILTERS = () => ({
+      area: "all",
+      severity: "all",
+      coverage: "all",
+    });
+
+    const state = {
+      dataset: null,
+      pane: "story",
+      view: "series",
+      filteredItems: [],
+      sortKey: "scores.overall",
+      sortDir: "desc",
+      selectedIds: {
+        series: [],
+        cases: [],
+        runs: [],
+      },
+      detail: {
+        view: "series",
+        id: null,
+      },
+      preset: "all",
+      requirementFilters: EMPTY_REQUIREMENT_FILTERS(),
+      filters: {
+        manufacturer: "all",
+        tool: "all",
+        effort: "all",
+        evaluator: "all",
+        planningMode: "all",
+        inferenceProfile: "all",
+        contextWindow: "all",
+        promptProfile: "all",
+        role: "all",
+        comparison: "all",
+      },
+    };
+
+    let radarChart = null;
+    let topChart = null;
+    let scoreProfileChart = null;
+
+    function getValue(object, path) {
+      return path.split(".").reduce((value, key) => value && value[key], object);
+    }
+
+    function safeArray(value) {
+      return Array.isArray(value) ? value : [];
+    }
+
+    function pluralize(count, singular, plural = `${singular}s`) {
+      return `${count} ${count === 1 ? singular : plural}`;
+    }
+
+    function formatDate(value) {
+      if (!value) return "Unknown";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }).format(date);
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "Unknown";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      }).format(date);
+    }
+
+    function formatScore(value) {
+      if (value === null || value === undefined || value === "") return "n/a";
+      return `${Number(value).toFixed(1)}%`;
+    }
+
+    function formatInteger(value) {
+      if (value === null || value === undefined || value === "") return "0";
+      return Number(value).toLocaleString("en-US");
+    }
+
+    function formatDuration(value) {
+      if (value === null || value === undefined || value === "") return "n/a";
+      const seconds = Math.max(0, Math.round(Number(value)));
+      if (!seconds) return "0s";
+      const minutes = Math.floor(seconds / 60);
+      const remain = seconds % 60;
+      if (!minutes) return `${remain}s`;
+      if (!remain) return `${minutes}m`;
+      return `${minutes}m ${remain}s`;
+    }
+
+    function formatScoreRange(range) {
+      const min = Number(getValue(range || {}, "overall_min"));
+      const max = Number(getValue(range || {}, "overall_max"));
+      if (!Number.isFinite(min) || !Number.isFinite(max)) return "n/a";
+      if (min === max) return formatScore(max);
+      return `${formatScore(min)} - ${formatScore(max)}`;
+    }
+
+    function formatRuntimeRange(range) {
+      const min = Number(getValue(range || {}, "min"));
+      const max = Number(getValue(range || {}, "max"));
+      if (!Number.isFinite(min) || !Number.isFinite(max)) return "n/a";
+      if (min === max) return formatDuration(max);
+      return `${formatDuration(min)} - ${formatDuration(max)}`;
+    }
+
+    function formatContextWindow(value) {
+      if (value === null || value === undefined || value === "") return "Default";
+      return `${formatInteger(value)} tokens`;
+    }
+
+    function formatMaybeCost(value) {
+      if (value === null || value === undefined || value === "") return "n/a";
+      return `$${Number(value).toFixed(2)}`;
+    }
+
+    function normalizePlanningMode(value) {
+      if (value === true) return "enabled";
+      if (value === false) return "disabled";
+      return "unknown";
+    }
+
+    function planningModeLabel(value) {
+      const normalized = normalizePlanningMode(value);
+      if (normalized === "enabled") return "Plan mode on";
+      if (normalized === "disabled") return "Plan mode off";
+      return "Plan mode unspecified";
+    }
+
+    function contextBucket(value) {
+      return value === null || value === undefined || value === "" ? "default" : String(value);
+    }
+
+    function viewLabel(view = state.view) {
+      const match = VIEW_OPTIONS.find((option) => option.id === view);
+      return match ? match.label : view;
+    }
+
+    function datasetItems(view = state.view) {
+      return safeArray(state.dataset && state.dataset[view]);
+    }
+
+    function itemId(item, view = state.view) {
+      if (view === "series") return item.series_id;
+      if (view === "cases") return item.case_id;
+      return item.run_id;
+    }
+
+    function runById(runId) {
+      return datasetItems("runs").find((run) => run.run_id === runId);
+    }
+
+    function caseById(caseId) {
+      return datasetItems("cases").find((item) => item.case_id === caseId);
+    }
+
+    function seriesById(seriesId) {
+      return datasetItems("series").find((item) => item.series_id === seriesId);
+    }
+
+    function itemRuns(item, view = state.view) {
+      if (!item) return [];
+      if (view === "runs") return [item];
+      if (view === "cases") {
+        const nested = safeArray(item.runs);
+        if (nested.length) return nested;
+        return datasetItems("runs").filter((run) => run.case_id === item.case_id);
+      }
+      const cases = safeArray(item.cases).length ? safeArray(item.cases) : datasetItems("cases").filter((entry) => entry.series_id === item.series_id);
+      const nestedRuns = cases.flatMap((entry) => safeArray(entry.runs));
+      if (nestedRuns.length) return nestedRuns;
+      return datasetItems("runs").filter((run) => run.series_id === item.series_id);
+    }
+
+    function itemCases(item, view = state.view) {
+      if (!item) return [];
+      if (view === "cases") return [item];
+      if (view === "runs") {
+        const found = caseById(item.case_id);
+        return found ? [found] : [];
+      }
+      const nested = safeArray(item.cases);
+      if (nested.length) return nested;
+      return datasetItems("cases").filter((entry) => entry.series_id === item.series_id);
+    }
+
+    function representativeRun(item, view = state.view) {
+      if (!item) return null;
+      if (view === "runs") return item;
+      if (view === "cases") {
+        return runById(item.primary_run_id) || itemRuns(item, view)[0] || null;
+      }
+      return runById(item.representative_run_id) || itemRuns(item, view)[0] || null;
+    }
+
+    function latestTimestamp(item, view = state.view) {
+      if (!item) return null;
+      if (view === "runs") return item.captured_at;
+      if (view === "cases" && item.latest_run_at) return item.latest_run_at;
+      const timestamps = itemRuns(item, view)
+        .map((run) => run.captured_at)
+        .filter(Boolean)
+        .sort((left, right) => new Date(right) - new Date(left));
+      return timestamps[0] || null;
+    }
+
+    function itemSubject(item, view = state.view) {
+      const run = representativeRun(item, view);
+      if (!run) return "Unknown";
+      if (view === "series") return `${run.model_name} · ${run.tool} · ${run.effort || "No effort"}`;
+      if (view === "cases") return `${run.model_name} · ${item.case_label || "Default"}`;
+      return `${run.model_name} · Run ${run.replicate_index || 1}`;
+    }
+
+    function itemManufacturer(item, view = state.view) {
+      const run = representativeRun(item, view);
+      return (item && item.manufacturer) || (run && run.manufacturer) || "Unknown";
+    }
+
+    function itemTool(item, view = state.view) {
+      const run = representativeRun(item, view);
+      return (item && item.tool) || (run && run.tool) || "Unknown";
+    }
+
+    function itemEffort(item, view = state.view) {
+      const run = representativeRun(item, view);
+      return (item && item.effort) || (run && run.effort) || "None";
+    }
+
+    function itemEvaluator(item, view = state.view) {
+      const runs = itemRuns(item, view);
+      return runs.find((run) => run.evaluator_model)?.evaluator_model || "Unknown";
+    }
+
+    function itemPromptProfile(item, view = state.view) {
+      const run = representativeRun(item, view);
+      return (item && item.prompt_profile) || (run && run.prompt_profile) || "Unknown";
+    }
+
+    function scoreSpread(item) {
+      const range = item.score_range || {};
+      const min = Number(range.overall_min);
+      const max = Number(range.overall_max);
+      if (!Number.isFinite(min) || !Number.isFinite(max)) return 0;
+      return max - min;
+    }
+
+    function uniqueValues(runs, key, fallback = null) {
+      return Array.from(
+        new Set(
+          runs
+            .map((run) => (run[key] === null || run[key] === undefined || run[key] === "" ? fallback : run[key]))
+            .filter((value) => value !== null && value !== undefined && value !== "")
+        )
+      ).sort((a, b) => String(a).localeCompare(String(b)));
+    }
+
+    function buildOptionList(select, values, label, formatter = (value) => value) {
+      select.innerHTML = "";
+      const all = document.createElement("option");
+      all.value = "all";
+      all.textContent = label;
+      select.appendChild(all);
+      values.forEach((value) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = formatter(value);
+        select.appendChild(option);
+      });
+    }
+
+    function paneLabel(pane = state.pane) {
+      const match = PANE_OPTIONS.find((option) => option.id === pane);
+      return match ? match.label : pane;
+    }
+
+    function shortenLabel(value, max = 46) {
+      const text = String(value || "");
+      if (text.length <= max) return text;
+      return `${text.slice(0, max - 1)}…`;
+    }
+
+    function activeFocusCount() {
+      let count = Object.values(state.filters).filter((value) => value !== "all").length;
+      if (state.preset !== "all") count += 1;
+      return count;
+    }
+
+    function resetFocus() {
+      state.pane = "story";
+      state.preset = "all";
+      state.sortKey = "scores.overall";
+      state.sortDir = "desc";
+      state.selectedIds = {
+        series: [],
+        cases: [],
+        runs: [],
+      };
+      state.detail = {
+        view: state.view,
+        id: null,
+      };
+      state.requirementFilters = EMPTY_REQUIREMENT_FILTERS();
+      state.filters = {
+        manufacturer: "all",
+        tool: "all",
+        effort: "all",
+        evaluator: "all",
+        planningMode: "all",
+        inferenceProfile: "all",
+        contextWindow: "all",
+        promptProfile: "all",
+        role: "all",
+        comparison: "all",
+      };
+      refresh();
+    }
+
+    function openDetail(view, id) {
+      state.view = view;
+      state.pane = "inspect";
+      state.detail = { view, id };
+      state.requirementFilters = EMPTY_REQUIREMENT_FILTERS();
+      refresh();
+      requestAnimationFrame(() => {
+        document.getElementById("inspectPane")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+
+    function availableComparableView() {
+      return ["cases", "runs", "series"].find((view) => {
+        if (view === state.view) return false;
+        return datasetItems(view).some((item) => item.supports_area_comparison && safeArray(item.area_scores).length);
+      }) || null;
+    }
+
+    function syncPaneVisibility() {
+      document.getElementById("storyPane").classList.toggle("hidden", state.pane !== "story");
+      document.getElementById("comparePane").classList.toggle("hidden", state.pane !== "compare");
+      document.getElementById("explorePane").classList.toggle("hidden", state.pane !== "explore");
+      document.getElementById("inspectPane").classList.toggle("hidden", state.pane !== "inspect");
+      requestAnimationFrame(() => resizeCharts());
+    }
+
+    function resizeCharts() {
+      [topChart, scoreProfileChart, radarChart].forEach((chart) => {
+        if (chart && typeof chart.resize === "function") chart.resize();
+      });
+    }
+
+    function ensureChart(hostId, existingChart) {
+      if (typeof echarts === "undefined") return null;
+      const host = document.getElementById(hostId);
+      if (!host) return null;
+      if (existingChart && typeof existingChart.getDom === "function" && existingChart.getDom() === host) {
+        return existingChart;
+      }
+      if (existingChart && typeof existingChart.dispose === "function") {
+        existingChart.dispose();
+      }
+      return echarts.init(host, null, { renderer: "canvas" });
+    }
+
+    function lensDefinition(view = state.view) {
+      if (view === "series") {
+        return "Setup: same model, agent system, and effort level. Use this when you want to compare benchmark configurations at the highest level.";
+      }
+      if (view === "cases") {
+        return "Variant: one deliberate scenario/configuration inside a setup, such as planning mode, context window, or prompt profile.";
+      }
+      return "Execution: one concrete attempt of a variant. Use this when you care about runtime, tool calls, save behavior, or replicates.";
+    }
+
+    function uniqueVisibleRuns() {
+      const seen = new Set();
+      return state.filteredItems.flatMap((item) => itemRuns(item, state.view)).filter((run) => {
+        if (!run || seen.has(run.run_id)) return false;
+        seen.add(run.run_id);
+        return true;
+      });
+    }
+
+    function countDistinct(values) {
+      return new Set(values.filter((value) => value !== null && value !== undefined && value !== "")).size;
+    }
+
+    function pairableToolGroups(runs) {
+      const groups = new Map();
+      runs.forEach((run) => {
+        const key = [
+          run.model_id || run.model_name,
+          run.effort_slug || run.effort || "none",
+          run.case_slug || "default",
+          run.prompt_profile_slug || run.prompt_profile || "default",
+          run.inference_profile_slug || run.inference_profile || "default",
+          run.requested_context_window_tokens || "default",
+          normalizePlanningMode(run.planning_mode),
+        ].join("|");
+        if (!groups.has(key)) groups.set(key, new Set());
+        groups.get(key).add(run.tool_slug || run.tool);
+      });
+      return Array.from(groups.values()).filter((tools) => tools.size > 1).length;
+    }
+
+    function pairablePlanningGroups(runs) {
+      const groups = new Map();
+      runs.forEach((run) => {
+        const key = [
+          run.series_id || "",
+          run.inference_profile_slug || run.inference_profile || "default",
+          run.prompt_profile_slug || run.prompt_profile || "default",
+          run.requested_context_window_tokens || "default",
+        ].join("|");
+        if (!groups.has(key)) groups.set(key, new Set());
+        groups.get(key).add(normalizePlanningMode(run.planning_mode));
+      });
+      return Array.from(groups.values()).filter((modes) => modes.has("enabled") && modes.has("disabled")).length;
+    }
+
+    function repeatableCaseCount(runs) {
+      const counts = new Map();
+      runs.forEach((run) => {
+        const key = run.case_id || run.run_id;
+        counts.set(key, (counts.get(key) || 0) + 1);
+      });
+      return Array.from(counts.values()).filter((count) => count > 1).length;
+    }
+
+    function variantSeriesCount(items = datasetItems("series")) {
+      return items.filter((item) => Number(item.case_count || 0) > 1).length;
+    }
+
+    function questionCardMarkup(label, title, status, body) {
+      return `
+        <article class="question-card">
+          <span class="label">${escapeHtml(label)}</span>
+          <strong>${escapeHtml(title)}</strong>
+          <span class="question-status ${escapeAttribute(status.tone)}">${escapeHtml(status.label)}</span>
+          <p>${escapeHtml(body)}</p>
+        </article>
+      `;
+    }
+
+    function selectedIdsForView() {
+      return state.selectedIds[state.view];
+    }
+
+    function setSelectedIdsForView(next) {
+      state.selectedIds[state.view] = next;
+    }
+
+    function applyPreset(items, view = state.view) {
+      let active = items.slice();
+      if (state.preset === "baseline") {
+        if (view === "cases" || view === "runs") active = active.filter((item) => Boolean(item.baseline_case));
+      }
+      if (state.preset === "variants") {
+        if (view === "series") {
+          active = active.filter((item) => Number(item.case_count || 0) > 1 || Number(item.run_count || 0) > 1);
+        } else if (view === "cases") {
+          active = active.filter((item) => !item.baseline_case || Number(item.run_count || 0) > 1);
+        } else {
+          active = active.filter((item) => !item.baseline_case || Number(item.replicate_index || 1) > 1);
+        }
+      }
+      if (state.preset === "latest") {
+        if (view === "runs") {
+          const byCase = new Map();
+          active
+            .slice()
+            .sort((left, right) => new Date(right.captured_at || 0) - new Date(left.captured_at || 0))
+            .forEach((run) => {
+              const key = run.case_id || run.series_id || run.run_id;
+              if (!byCase.has(key)) byCase.set(key, run);
+            });
+          active = Array.from(byCase.values());
+        }
+      }
+      if (state.preset === "comparable") {
+        active = active.filter((item) => item.supports_area_comparison);
+      }
+      if (state.preset === "codex") {
+        active = active.filter((item) => itemTool(item, view) === "Codex CLI");
+      }
+      if (state.preset === "claude") {
+        active = active.filter((item) => itemTool(item, view) === "Claude Code");
+      }
+      return active;
+    }
+
+    function applyFilters(items, view = state.view) {
+      return items.filter((item) => {
+        const runs = itemRuns(item, view);
+        if (state.filters.manufacturer !== "all" && !runs.some((run) => run.manufacturer === state.filters.manufacturer)) return false;
+        if (state.filters.tool !== "all" && !runs.some((run) => run.tool === state.filters.tool)) return false;
+        if (state.filters.effort !== "all" && !runs.some((run) => (run.effort || "None") === state.filters.effort)) return false;
+        if (state.filters.evaluator !== "all" && !runs.some((run) => (run.evaluator_model || "Unknown") === state.filters.evaluator)) return false;
+        if (state.filters.planningMode !== "all" && !runs.some((run) => normalizePlanningMode(run.planning_mode) === state.filters.planningMode)) return false;
+        if (state.filters.inferenceProfile !== "all" && !runs.some((run) => (run.inference_profile || "Default") === state.filters.inferenceProfile)) return false;
+        if (state.filters.contextWindow !== "all" && !runs.some((run) => contextBucket(run.requested_context_window_tokens) === state.filters.contextWindow)) return false;
+        if (state.filters.promptProfile !== "all" && !runs.some((run) => (run.prompt_profile || "Unknown") === state.filters.promptProfile)) return false;
+        if (state.filters.role !== "all" && !runs.some((run) => (run.experiment_role || "baseline") === state.filters.role)) return false;
+        if (state.filters.comparison === "ready" && !item.supports_area_comparison) return false;
+        if (state.filters.comparison === "legacy" && item.supports_area_comparison) return false;
+        return true;
+      });
+    }
+
+    function itemSortValue(item, sortKey, view = state.view) {
+      const run = representativeRun(item, view);
+      if (sortKey === "subject") return itemSubject(item, view);
+      if (sortKey === "tool") return itemTool(item, view);
+      if (sortKey === "effort") return itemEffort(item, view);
+      if (sortKey === "case_count") return Number(item.case_count || itemCases(item, view).length || 0);
+      if (sortKey === "run_count") return Number(item.run_count || itemRuns(item, view).length || 0);
+      if (sortKey === "runtime") {
+        if (view === "runs") return Number(item.planning_runtime_seconds || 0);
+        if (view === "cases") return Number(getValue(item, "runtime_range_seconds.max") || 0);
+        return itemRuns(item, view).reduce((max, current) => Math.max(max, Number(current.planning_runtime_seconds || 0)), 0);
+      }
+      if (sortKey === "latest") return new Date(latestTimestamp(item, view) || 0).getTime();
+      if (sortKey === "tool_calls") {
+        if (view === "runs") return Number(item.plan_tool_call_count || 0);
+        return itemRuns(item, view).reduce((max, current) => Math.max(max, Number(current.plan_tool_call_count || 0)), 0);
+      }
+      if (sortKey === "saved") {
+        if (view === "runs") return item.plan_saved ? 1 : 0;
+        return itemRuns(item, view).filter((current) => current.plan_saved).length;
+      }
+      if (sortKey === "score_spread") return scoreSpread(item);
+      if (sortKey.startsWith("scores.")) return Number(getValue(item, sortKey) || 0);
+      const direct = getValue(item, sortKey);
+      if (direct !== null && direct !== undefined) return direct;
+      if (run) {
+        const runValue = getValue(run, sortKey);
+        if (runValue !== null && runValue !== undefined) return runValue;
+      }
+      return "";
+    }
+
+    function sortItems(items, view = state.view) {
+      const direction = state.sortDir === "asc" ? 1 : -1;
+      return items.slice().sort((left, right) => {
+        const a = itemSortValue(left, state.sortKey, view);
+        const b = itemSortValue(right, state.sortKey, view);
+        if (typeof a === "number" || typeof b === "number") return (Number(a || 0) - Number(b || 0)) * direction;
+        return String(a || "").localeCompare(String(b || "")) * direction;
+      });
+    }
+
+    function refreshFilteredItems() {
+      const base = applyPreset(datasetItems(state.view), state.view);
+      state.filteredItems = sortItems(applyFilters(base, state.view), state.view);
+      const visibleIds = new Set(state.filteredItems.map((item) => itemId(item, state.view)));
+      setSelectedIdsForView(selectedIdsForView().filter((id) => visibleIds.has(id)));
+      if (state.detail.view !== state.view || !visibleIds.has(state.detail.id)) {
+        state.detail = {
+          view: state.view,
+          id: null,
+        };
+        state.requirementFilters = EMPTY_REQUIREMENT_FILTERS();
+      }
+    }
+
+    function comparableItems() {
+      return state.filteredItems.filter((item) => item.supports_area_comparison && safeArray(item.area_scores).length);
+    }
+
+    function scoreToColor(score) {
+      const numeric = Math.max(0, Math.min(100, Number(score) || 0));
+      const hue = 18 + (numeric / 100) * 156;
+      const saturation = 44 + (numeric / 100) * 18;
+      const lightness = 86 - (numeric / 100) * 36;
+      return `hsl(${hue} ${saturation}% ${lightness}%)`;
+    }
+
+    function scoreToTextColor(score) {
+      return Number(score) >= 68 ? "#10201f" : "#2d2018";
+    }
+
+    function scorePill(value) {
+      return `<span class="score-pill">${formatScore(value)}</span>`;
+    }
+
+    function caseConfigSummary(caseItem) {
+      return [
+        caseItem.case_label || "Default",
+        caseItem.inference_profile || "Default",
+        formatContextWindow(caseItem.requested_context_window_tokens),
+        planningModeLabel(caseItem.planning_mode),
+      ].filter(Boolean).join(" · ");
+    }
+
+    function runConfigSummary(run) {
+      return [
+        run.inference_profile || "Default",
+        formatContextWindow(run.requested_context_window_tokens),
+        planningModeLabel(run.planning_mode),
+        run.prompt_profile || "Unknown prompt",
+      ].filter(Boolean).join(" · ");
+    }
+
+    function subjectCellMarkup(item, view = state.view) {
+      const run = representativeRun(item, view);
+      if (!run) {
+        return `
+          <div class="model-cell">
+            <span class="model-name">Unknown</span>
+            <span class="model-meta">No representative run</span>
+          </div>
+        `;
+      }
+      if (view === "series") {
+        const variants = Number(item.variant_count || Math.max(0, Number(item.case_count || 0) - 1));
+        const replicates = Number(item.repeat_run_count || 0);
+        return `
+          <div class="model-cell">
+            <span class="model-name">${escapeHtml(run.model_name)}</span>
+            <span class="model-meta">${escapeHtml(run.manufacturer)} · ${escapeHtml(run.tool)} · ${escapeHtml(run.effort || "No effort")}</span>
+            <span class="quiet">${pluralize(Number(item.case_count || 0), "case")} · ${pluralize(Number(item.run_count || 0), "run")} · ${variants ? `${variants} variants` : "baseline only"}${replicates ? ` · ${pluralize(replicates, "replicate")}` : ""}</span>
+          </div>
+        `;
+      }
+      if (view === "cases") {
+        return `
+          <div class="model-cell">
+            <span class="model-name">${escapeHtml(run.model_name)} · ${escapeHtml(item.case_label || "Default")}</span>
+            <span class="model-meta">${escapeHtml(run.manufacturer)} · ${escapeHtml(run.tool)} · ${escapeHtml(run.effort || "No effort")}</span>
+            <span class="quiet">${escapeHtml(item.experiment_role || "baseline")} · latest ${escapeHtml(formatDate(item.latest_run_at || run.captured_at))}</span>
+          </div>
+        `;
+      }
+      return `
+        <div class="model-cell">
+          <span class="model-name">${escapeHtml(run.model_name)} · Execution ${escapeHtml(String(run.replicate_index || 1))}</span>
+          <span class="model-meta">${escapeHtml(run.manufacturer)} · ${escapeHtml(run.tool)} · ${escapeHtml(run.effort || "No effort")}</span>
+          <span class="quiet">${escapeHtml(formatDate(run.captured_at))}${run.plan_saved ? "" : run.save_blocked_by_mode ? " · save blocked by mode" : " · unsaved plan"}</span>
+        </div>
+      `;
+    }
+
+    function columnsForView(view = state.view) {
+      if (view === "series") {
+        return [
+          { label: "Radar", key: null },
+          { label: "Setup", key: "subject" },
+          { label: "Variants", key: "case_count" },
+          { label: "Executions", key: "run_count" },
+          { label: "Overall", key: "scores.overall" },
+          { label: "Critical", key: "scores.critical" },
+          { label: "Important", key: "scores.important" },
+          { label: "Spread", key: "score_spread" },
+          { label: "Detail", key: null },
+        ];
+      }
+      if (view === "cases") {
+        return [
+          { label: "Radar", key: null },
+          { label: "Variant", key: "subject" },
+          { label: "Config", key: "prompt_profile" },
+          { label: "Executions", key: "run_count" },
+          { label: "Overall", key: "scores.overall" },
+          { label: "Critical", key: "scores.critical" },
+          { label: "Important", key: "scores.important" },
+          { label: "Runtime", key: "runtime" },
+          { label: "Detail", key: null },
+        ];
+      }
+      return [
+        { label: "Radar", key: null },
+        { label: "Run", key: "subject" },
+        { label: "Config", key: "prompt_profile" },
+        { label: "Runtime", key: "runtime" },
+        { label: "Tool Calls", key: "tool_calls" },
+        { label: "Overall", key: "scores.overall" },
+        { label: "Critical", key: "scores.critical" },
+        { label: "Important", key: "scores.important" },
+        { label: "Saved", key: "saved" },
+        { label: "Detail", key: null },
+      ];
+    }
+
+    function renderPaneButtons() {
+      const row = document.getElementById("panelRow");
+      row.innerHTML = `<span class="label">Screen</span>`;
+      PANE_OPTIONS.forEach((option) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `chip${state.pane === option.id ? " active" : ""}`;
+        button.textContent = option.label;
+        button.addEventListener("click", () => {
+          state.pane = option.id;
+          refresh();
+        });
+        row.appendChild(button);
+      });
+    }
+
+    function renderViewButtons() {
+      const row = document.getElementById("viewRow");
+      row.innerHTML = `<span class="label">Lens</span>`;
+      VIEW_OPTIONS.forEach((option) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `chip${state.view === option.id ? " active" : ""}`;
+        button.textContent = option.label;
+        button.addEventListener("click", () => {
+          state.view = option.id;
+          state.pane = "story";
+          refresh();
+        });
+        row.appendChild(button);
+      });
+    }
+
+    function renderPresetButtons() {
+      const row = document.getElementById("presetRow");
+      row.innerHTML = `<span class="label">Presets</span>`;
+      PRESETS.forEach((preset) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `chip${state.preset === preset.id ? " active" : ""}`;
+        button.textContent = preset.label;
+        button.addEventListener("click", () => {
+          state.preset = preset.id;
+          refresh();
+        });
+        row.appendChild(button);
+      });
+    }
+
+    function syncFilterControls() {
+      document.getElementById("manufacturerFilter").value = state.filters.manufacturer;
+      document.getElementById("toolFilter").value = state.filters.tool;
+      document.getElementById("effortFilter").value = state.filters.effort;
+      document.getElementById("evaluatorFilter").value = state.filters.evaluator;
+      document.getElementById("planningModeFilter").value = state.filters.planningMode;
+      document.getElementById("inferenceProfileFilter").value = state.filters.inferenceProfile;
+      document.getElementById("contextWindowFilter").value = state.filters.contextWindow;
+      document.getElementById("promptProfileFilter").value = state.filters.promptProfile;
+      document.getElementById("roleFilter").value = state.filters.role;
+      document.getElementById("comparisonFilter").value = state.filters.comparison;
+    }
+
+    function renderFilterSummary() {
+      const active = activeFocusCount();
+      document.getElementById("filterSummary").textContent =
+        active ? `${active} focus constraint${active === 1 ? "" : "s"} active` : "Everything visible in the current lens";
+      document.getElementById("filterSummaryNote").textContent =
+        active ? "Open to refine or clear" : "Open filters";
+    }
+
+    function renderCopy() {
+      document.getElementById("viewDefinition").textContent = lensDefinition(state.view);
+      document.getElementById("workspaceSubtitle").textContent =
+        state.pane === "story"
+          ? "Start with the story. This screen should tell you what is knowable, what is only suggestive, and what the dataset still cannot answer."
+          : state.pane === "compare"
+            ? "This screen is only for side-by-side comparison. Nothing is implicit here: if nothing is staged, nothing gets compared."
+            : state.pane === "explore"
+              ? "Explorer is the ledger view. Use it when you already know the question and need the sortable raw list."
+              : "Inspect is the deep read: declared scenario, runtime behavior, artifacts, and requirement-level evidence for one subject.";
+      document.getElementById("overviewSubtitle").textContent =
+        state.view === "series"
+          ? "Read the benchmark as setups first: model plus agent system plus effort. This is the cleanest way to ask who is leading overall."
+          : state.view === "cases"
+            ? "Read the benchmark as scenario variants when you want to isolate config changes like planning mode, context window, or prompt profile."
+            : "Read the benchmark as single executions when you care about runtime, save behavior, tool-call volume, or replicate drift.";
+      document.getElementById("leaderboardSubtitle").textContent =
+        state.view === "series"
+          ? "Each row is a benchmark setup. Use the ledger when you need to sort setups or stage specific comparisons."
+          : state.view === "cases"
+            ? "Each row is a scenario variant. Use this to compare deliberate config changes inside a setup."
+            : "Each row is one concrete execution. Use this when you need runtime and artifact-level truth.";
+      document.getElementById("topChartSubtitle").textContent =
+        `Top overall performers in the visible ${viewLabel(state.view).toLowerCase()} lens. Click a bar to inspect the underlying evidence.`;
+      document.getElementById("toolStorySubtitle").textContent =
+        `Average overall outcome by tool for visible ${viewLabel(state.view).toLowerCase()}. Treat this as descriptive unless the story cards say a paired comparison exists.`;
+      document.getElementById("questionGridSubtitle").textContent =
+        `These cards translate the current visible data into benchmark questions instead of internal storage jargon.`;
+      document.getElementById("selectionTraySubtitle").textContent =
+        `Selections here drive the radar directly. If this tray is empty, the radar is intentionally empty too.`;
+      document.getElementById("compareSubtitle").textContent =
+        `Stage up to three visible ${viewLabel(state.view).toLowerCase()} from Explorer for direct side-by-side comparison.`;
+      document.getElementById("heatmapSubtitle").textContent =
+        `Open this only when you need area-by-area spread. Legacy taxonomy rows stay in the leaderboard but not in this matrix.`;
+      document.getElementById("radarSubtitle").textContent =
+        `Stage up to three visible ${viewLabel(state.view).toLowerCase()} for direct area-profile comparison.`;
+      document.getElementById("detailTitle").textContent = `${viewLabel(state.view)} Inspect`;
+      document.getElementById("detailSubtitle").textContent =
+        state.view === "series"
+          ? "Inspect the representative setup story, then drill into specific variants and executions."
+          : state.view === "cases"
+            ? "Inspect one variant, then drill into its raw executions."
+            : "Inspect declared scenario fields, observed session metrics, outcome state, and full requirement coverage.";
+      document.getElementById("visibleSummaryBadge").textContent =
+        `${state.filteredItems.length} visible ${viewLabel(state.view).toLowerCase()}`;
+      document.getElementById("compareSummaryBadge").textContent =
+        `${explicitSelectedRadarItems().length} staged`;
+    }
+
+    function renderStats() {
+      const items = state.filteredItems;
+      const comparable = items.filter((item) => item.supports_area_comparison).length;
+      const avg = items.length ? items.reduce((sum, item) => sum + Number(getValue(item, "scores.overall") || 0), 0) / items.length : 0;
+      const bestItem = items.length
+        ? items.reduce((best, item) => (Number(getValue(item, "scores.overall") || 0) > Number(getValue(best, "scores.overall") || 0) ? item : best), items[0])
+        : null;
+      const best = bestItem ? Number(getValue(bestItem, "scores.overall") || 0) : 0;
+      const underView =
+        state.view === "series"
+          ? items.reduce((sum, item) => sum + Number(item.case_count || 0), 0)
+          : state.view === "cases"
+            ? items.reduce((sum, item) => sum + Number(item.run_count || 0), 0)
+            : items.map((item) => Number(item.planning_runtime_seconds || 0)).filter(Boolean);
+
+      document.getElementById("statsGrid").innerHTML = `
+        <article class="stat-card">
+          <span class="label">Visible ${viewLabel(state.view)}</span>
+          <span class="value">${items.length}</span>
+          <span class="detail">Current screen: ${escapeHtml(paneLabel())}</span>
+        </article>
+        <article class="stat-card">
+          <span class="label">Best Overall</span>
+          <span class="value">${items.length ? best.toFixed(1) : "0.0"}%</span>
+          <span class="detail">${bestItem ? escapeHtml(shortenLabel(itemSubject(bestItem, state.view), 54)) : "No visible subject"}</span>
+        </article>
+        <article class="stat-card">
+          <span class="label">Average Overall</span>
+          <span class="value">${items.length ? avg.toFixed(1) : "0.0"}%</span>
+          <span class="detail">${comparable} comparison-ready ${viewLabel(state.view).toLowerCase()}</span>
+        </article>
+        <article class="stat-card">
+          <span class="label">${state.view === "runs" ? "Average Runtime" : state.view === "cases" ? "Executions Under View" : "Variants Under View"}</span>
+          <span class="value">${
+            state.view === "runs"
+              ? escapeHtml(String(underView.length ? formatDuration(underView.reduce((sum, value) => sum + value, 0) / underView.length) : "n/a"))
+              : escapeHtml(String(underView))
+          }</span>
+          <span class="detail">${state.preset === "all" ? "All preset" : `${escapeHtml(PRESETS.find((preset) => preset.id === state.preset)?.label || state.preset)} preset`}</span>
+        </article>
+      `;
+    }
+
+    function renderQuestionGrid() {
+      const host = document.getElementById("questionGrid");
+      const runs = uniqueVisibleRuns();
+      const toolPairs = pairableToolGroups(runs);
+      const planningPairs = pairablePlanningGroups(runs);
+      const repeatedCases = repeatableCaseCount(runs);
+      const variedSeries = variantSeriesCount(datasetItems("series").filter((item) => {
+        const visibleSeriesIds = new Set(state.filteredItems.map((entry) => entry.series_id || itemId(entry, state.view)));
+        return visibleSeriesIds.has(item.series_id);
+      }));
+      const cards = [
+        questionCardMarkup(
+          "Tool Effect",
+          toolPairs
+            ? "Harness effect can be tested"
+            : countDistinct(runs.map((run) => run.tool_slug || run.tool)) > 1
+              ? "Tool effect is suggestive, not controlled"
+              : "Tool effect is not visible here",
+          toolPairs
+            ? { tone: "ready", label: `${toolPairs} paired tool comparison${toolPairs === 1 ? "" : "s"}` }
+            : countDistinct(runs.map((run) => run.tool_slug || run.tool)) > 1
+              ? { tone: "partial", label: "Uncontrolled tool mix" }
+              : { tone: "blocked", label: "Need more tool diversity" },
+          toolPairs
+            ? `The visible data includes ${toolPairs} matched comparison ${toolPairs === 1 ? "group" : "groups"} where tool choice changes while the surrounding setup stays fixed.`
+            : countDistinct(runs.map((run) => run.tool_slug || run.tool)) > 1
+              ? "You can see average tool differences, but not an apples-to-apples tool effect yet."
+              : "This lens does not include enough tool variation to talk about harness effect."
+        ),
+        questionCardMarkup(
+          "Scenario Effect",
+          variedSeries
+            ? "Variant story is visible"
+            : "Scenario variation is thin",
+          variedSeries
+            ? { tone: "ready", label: `${variedSeries} setup${variedSeries === 1 ? "" : "s"} with variants` }
+            : { tone: "blocked", label: "Need more within-setup variants" },
+          variedSeries
+            ? "At least one setup has multiple scenario variants, so you can start asking whether deliberate config changes move outcomes."
+            : "The visible data is mostly single-variant setups, so there is not much scenario story to tell yet."
+        ),
+        questionCardMarkup(
+          "Planning Mode",
+          planningPairs
+            ? "Planning-mode comparison exists"
+            : countDistinct(runs.map((run) => normalizePlanningMode(run.planning_mode))) > 1
+              ? "Planning mode appears, but not as a clean pair"
+              : "Planning mode is not testable yet",
+          planningPairs
+            ? { tone: "ready", label: `${planningPairs} matched planning pair${planningPairs === 1 ? "" : "s"}` }
+            : countDistinct(runs.map((run) => normalizePlanningMode(run.planning_mode))) > 1
+              ? { tone: "partial", label: "Mixed planning states" }
+              : { tone: "blocked", label: "Need both on and off" },
+          planningPairs
+            ? "You have both planning-on and planning-off variants inside the same setup, which is the right structure for this question."
+            : countDistinct(runs.map((run) => normalizePlanningMode(run.planning_mode))) > 1
+              ? "Planning mode differs somewhere in the visible set, but not yet in a tightly matched way."
+              : "The visible set does not yet contain enough planning-mode variation to isolate its effect."
+        ),
+        questionCardMarkup(
+          "Repeatability",
+          repeatedCases
+            ? "Repeatability can be inspected"
+            : "No replicate story yet",
+          repeatedCases
+            ? { tone: "ready", label: `${repeatedCases} variant${repeatedCases === 1 ? "" : "s"} with repeats` }
+            : { tone: "blocked", label: "Need replicates" },
+          repeatedCases
+            ? "At least one variant has multiple executions, so you can inspect run-to-run drift."
+            : "The visible set has no repeated executions for the same variant, so stability is still unknown."
+        ),
+      ];
+      host.innerHTML = cards.join("");
+    }
+
+    function renderStoryNotes() {
+      const host = document.getElementById("storyNotes");
+      const runs = uniqueVisibleRuns();
+      const toolCount = countDistinct(runs.map((run) => run.tool || run.tool_slug));
+      const modelCount = countDistinct(runs.map((run) => run.model_name || run.model_id));
+      const toolAverages = Array.from(
+        runs.reduce((groups, run) => {
+          const key = run.tool || run.tool_slug || "Unknown";
+          if (!groups.has(key)) groups.set(key, []);
+          groups.get(key).push(Number(getValue(run, "scores.overall") || 0));
+          return groups;
+        }, new Map())
+      ).map(([tool, values]) => `${tool}: ${formatScore(values.reduce((sum, value) => sum + value, 0) / values.length)}`);
+      const pairText = pairableToolGroups(runs)
+        ? `${pairableToolGroups(runs)} paired tool comparison${pairableToolGroups(runs) === 1 ? "" : "s"} are available.`
+        : "No paired tool comparison is available yet.";
+      host.innerHTML = `
+        <p class="selection-empty"><strong>Lens:</strong> ${escapeHtml(lensDefinition(state.view))}</p>
+        <p class="selection-empty"><strong>Visible scope:</strong> ${state.filteredItems.length} ${escapeHtml(viewLabel(state.view).toLowerCase())}, ${modelCount} model${modelCount === 1 ? "" : "s"}, ${toolCount} tool${toolCount === 1 ? "" : "s"}.</p>
+        <p class="selection-empty"><strong>Average overall by tool:</strong> ${escapeHtml(toolAverages.join(" · ") || "Not enough data")}</p>
+        <p class="selection-empty"><strong>Comparison warning:</strong> ${escapeHtml(pairText)}</p>
+      `;
+    }
+
+    function renderExploreGlossary() {
+      document.getElementById("exploreGlossary").innerHTML = `
+        <strong>How to read this:</strong>
+        Setup = model + tool + effort.
+        Variant = one deliberate scenario/configuration inside a setup.
+        Execution = one actual attempt of that variant.
+        Current lens: ${escapeHtml(viewLabel(state.view))}.
+      `;
+    }
+
+    function sortLabel() {
+      const column = columnsForView(state.view).find((entry) => entry.key === state.sortKey);
+      return column ? column.label : state.sortKey;
+    }
+
+    function explicitSelectedRadarItems() {
+      return selectedIdsForView()
+        .map((id) => state.filteredItems.find((item) => itemId(item, state.view) === id))
+        .filter(Boolean)
+        .filter((item) => item.supports_area_comparison)
+        .slice(0, 3);
+    }
+
+    function selectedRadarItems() {
+      return explicitSelectedRadarItems();
+    }
+
+    function renderSelectionTray() {
+      const host = document.getElementById("selectionTray");
+      const selected = explicitSelectedRadarItems();
+      const comparable = comparableItems();
+      const suggestedView = availableComparableView();
+
+      if (!selected.length) {
+        host.innerHTML = comparable.length
+          ? `<p class="selection-empty">Nothing is selected yet. Use the <strong>Radar</strong> checkboxes in Explorer to stage up to three ${escapeHtml(viewLabel(state.view).toLowerCase())} for comparison.</p>`
+          : `<p class="selection-empty">No comparison-ready ${escapeHtml(viewLabel(state.view).toLowerCase())} are visible in this lens.${suggestedView ? ` <button class="inline-button" type="button" data-switch-view="${escapeAttribute(suggestedView)}">Switch to ${escapeHtml(viewLabel(suggestedView))}</button>` : ""}</p>`;
+        host.querySelectorAll("[data-switch-view]").forEach((button) => {
+          button.addEventListener("click", () => {
+            state.view = button.dataset.switchView;
+            state.pane = "compare";
+            refresh();
+          });
+        });
+        return;
+      }
+
+      host.innerHTML = `
+        <div class="selection-header">
+          <div>
+            <span class="label">Radar Set</span>
+            <strong>${selected.length} staged ${viewLabel(state.view).toLowerCase()} for comparison</strong>
+          </div>
+          <button class="utility-button" id="clearSelectionButton" type="button">Clear selection</button>
+        </div>
+        <div class="selection-chip-row">
+          ${selected.map((item) => `
+            <div class="selection-chip">
+              <div class="selection-chip-body">
+                <strong>${escapeHtml(shortenLabel(radarLabel(item, state.view), 44))}</strong>
+                <span class="quiet">${escapeHtml(formatScore(getValue(item, "scores.overall")))} overall · ${escapeHtml(itemTool(item, state.view))}</span>
+              </div>
+              <button class="selection-remove" type="button" data-remove-selection="${escapeAttribute(itemId(item, state.view))}" aria-label="Remove ${escapeAttribute(radarLabel(item, state.view))}">×</button>
+            </div>
+          `).join("")}
+        </div>
+      `;
+
+      document.getElementById("clearSelectionButton").addEventListener("click", () => {
+        setSelectedIdsForView([]);
+        refresh();
+      });
+      host.querySelectorAll("[data-remove-selection]").forEach((button) => {
+        button.addEventListener("click", () => {
+          setSelectedIdsForView(selectedIdsForView().filter((id) => id !== button.dataset.removeSelection));
+          refresh();
+        });
+      });
+    }
+
+    function renderTopChart() {
+      const host = document.getElementById("topChart");
+      const note = document.getElementById("topChartNote");
+      const items = state.filteredItems
+        .slice()
+        .sort((left, right) => Number(getValue(right, "scores.overall") || 0) - Number(getValue(left, "scores.overall") || 0))
+        .slice(0, 8);
+
+      if (!items.length || typeof echarts === "undefined") {
+        host.classList.add("hidden");
+        note.classList.remove("hidden");
+        note.textContent = items.length ? "Charting library unavailable." : `No ${viewLabel(state.view).toLowerCase()} match the current focus.`;
+        if (topChart && typeof topChart.dispose === "function") {
+          topChart.dispose();
+          topChart = null;
+        }
+        return;
+      }
+
+      host.classList.remove("hidden");
+      note.classList.add("hidden");
+      topChart = ensureChart("topChart", topChart);
+      const labels = items.map((item) => shortenLabel(radarLabel(item, state.view), 34));
+      topChart.setOption({
+        animationDuration: 700,
+        animationEasing: "cubicOut",
+        grid: { top: 10, right: 24, bottom: 8, left: 12, containLabel: true },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: { type: "shadow" },
+          formatter(params) {
+            const point = params[0];
+            const item = items[point.dataIndex];
+            return `<strong>${escapeHtml(radarLabel(item, state.view))}</strong><br>Overall ${formatScore(point.value)}`;
+          },
+        },
+        xAxis: {
+          type: "value",
+          min: 0,
+          max: 100,
+          axisLabel: { formatter: "{value}%", color: "#887a68" },
+          splitLine: { lineStyle: { color: "rgba(90, 81, 69, 0.12)" } },
+        },
+        yAxis: {
+          type: "category",
+          data: labels,
+          axisTick: { show: false },
+          axisLine: { show: false },
+          axisLabel: { color: "#4f463a", fontSize: 12 },
+        },
+        series: [{
+          type: "bar",
+          data: items.map((item) => Number(getValue(item, "scores.overall") || 0)),
+          barWidth: 18,
+          itemStyle: {
+            borderRadius: [0, 10, 10, 0],
+            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+              { offset: 0, color: "#2a9d8f" },
+              { offset: 1, color: "#78c6bb" },
+            ]),
+          },
+          label: {
+            show: true,
+            position: "right",
+            color: "#4f463a",
+            formatter: ({ value }) => `${Number(value).toFixed(1)}%`,
+          },
+        }],
+      });
+      topChart.off("click");
+      topChart.on("click", (params) => {
+        const item = items[params.dataIndex];
+        if (item) openDetail(state.view, itemId(item, state.view));
+      });
+    }
+
+    function renderScoreProfileChart() {
+      const host = document.getElementById("scoreProfileChart");
+      const note = document.getElementById("scoreProfileNote");
+      const runs = uniqueVisibleRuns();
+
+      if (!runs.length || typeof echarts === "undefined") {
+        host.classList.add("hidden");
+        note.classList.remove("hidden");
+        note.textContent = runs.length ? "Charting library unavailable." : "No visible items to summarize.";
+        if (scoreProfileChart && typeof scoreProfileChart.dispose === "function") {
+          scoreProfileChart.dispose();
+          scoreProfileChart = null;
+        }
+        return;
+      }
+
+      const toolGroups = Array.from(
+        runs.reduce((groups, run) => {
+          const key = run.tool || run.tool_slug || "Unknown";
+          if (!groups.has(key)) groups.set(key, []);
+          groups.get(key).push(Number(getValue(run, "scores.overall") || 0));
+          return groups;
+        }, new Map())
+      ).map(([tool, values]) => ({
+        tool,
+        average: values.reduce((sum, value) => sum + value, 0) / values.length,
+        count: values.length,
+      })).sort((left, right) => right.average - left.average);
+
+      host.classList.remove("hidden");
+      note.classList.add("hidden");
+      scoreProfileChart = ensureChart("scoreProfileChart", scoreProfileChart);
+      scoreProfileChart.setOption({
+        animationDuration: 700,
+        animationEasing: "cubicOut",
+        grid: { top: 18, right: 18, bottom: 24, left: 24, containLabel: true },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: { type: "shadow" },
+          formatter(params) {
+            const point = params[0];
+            const entry = toolGroups[point.dataIndex];
+            return `<strong>${escapeHtml(point.name)}</strong><br>Average overall ${Number(point.value).toFixed(1)}%<br>${entry.count} run${entry.count === 1 ? "" : "s"} in view`;
+          },
+        },
+        yAxis: {
+          type: "category",
+          data: toolGroups.map((entry) => entry.tool),
+          axisTick: { show: false },
+          axisLine: { show: false },
+          axisLabel: { color: "#4f463a" },
+        },
+        xAxis: {
+          type: "value",
+          min: 0,
+          max: 100,
+          axisLabel: { formatter: "{value}%", color: "#887a68" },
+          splitLine: { lineStyle: { color: "rgba(90, 81, 69, 0.12)" } },
+        },
+        series: [{
+          type: "bar",
+          barWidth: 22,
+          data: toolGroups.map((entry) => ({
+            value: entry.average,
+            itemStyle: {
+              borderRadius: [0, 10, 10, 0],
+              color: entry.tool.toLowerCase().includes("codex")
+                ? "#1f6f6d"
+                : entry.tool.toLowerCase().includes("claude")
+                  ? "#af5a3c"
+                  : "#8b6a14",
+            },
+          })),
+          label: {
+            show: true,
+            position: "right",
+            color: "#4f463a",
+            formatter: ({ value }) => `${Number(value).toFixed(1)}%`,
+          },
+        }],
+      });
+    }
+
+    function renderTableHead() {
+      const head = document.getElementById("resultsHead");
+      const row = document.createElement("tr");
+      columnsForView(state.view).forEach((column) => {
+        const cell = document.createElement("th");
+        if (!column.key) {
+          cell.textContent = column.label;
+        } else {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.dataset.sort = column.key;
+          button.textContent = state.sortKey === column.key ? `${column.label} ${state.sortDir === "asc" ? "↑" : "↓"}` : column.label;
+          button.addEventListener("click", () => {
+            if (state.sortKey === column.key) {
+              state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+            } else {
+              state.sortKey = column.key;
+              state.sortDir = column.key.startsWith("scores.") ? "desc" : "asc";
+            }
+            refresh();
+          });
+          cell.appendChild(button);
+        }
+        row.appendChild(cell);
+      });
+      head.innerHTML = "";
+      head.appendChild(row);
+    }
+
+    function renderRowMarkup(item, view = state.view) {
+      if (view === "series") {
+        return `
+          <td>${subjectCellMarkup(item, view)}</td>
+          <td class="quiet">${pluralize(Number(item.case_count || 0), "variant")}<br>${item.baseline_case_id ? `baseline ${escapeHtml(item.baseline_case_id.split("__").slice(-1)[0] || "default")}` : "no baseline tagged"}</td>
+          <td class="quiet">${pluralize(Number(item.run_count || 0), "execution")}<br>latest ${escapeHtml(formatDate(latestTimestamp(item, view)))}</td>
+          <td>${scorePill(getValue(item, "scores.overall"))}</td>
+          <td>${scorePill(getValue(item, "scores.critical"))}</td>
+          <td>${scorePill(getValue(item, "scores.important"))}</td>
+          <td class="quiet">${escapeHtml(formatScoreRange(item.score_range))}<br>${escapeHtml(formatRuntimeRange(item.runtime_range_seconds))}</td>
+        `;
+      }
+      if (view === "cases") {
+        return `
+          <td>${subjectCellMarkup(item, view)}</td>
+          <td class="quiet">${escapeHtml(caseConfigSummary(item))}<br>${escapeHtml(item.prompt_profile || "Unknown prompt")}</td>
+          <td class="quiet">${pluralize(Number(item.run_count || 0), "execution")}<br>${escapeHtml(formatDate(item.latest_run_at))}</td>
+          <td>${scorePill(getValue(item, "scores.overall"))}</td>
+          <td>${scorePill(getValue(item, "scores.critical"))}</td>
+          <td>${scorePill(getValue(item, "scores.important"))}</td>
+          <td class="quiet">${escapeHtml(formatRuntimeRange(item.runtime_range_seconds))}</td>
+        `;
+      }
+      return `
+        <td>${subjectCellMarkup(item, view)}</td>
+        <td class="quiet">${escapeHtml(runConfigSummary(item))}<br>${escapeHtml(item.experiment_role || "baseline")} · case ${escapeHtml(item.case_label || "Default")}</td>
+        <td class="quiet">${escapeHtml(formatDuration(item.planning_runtime_seconds))}</td>
+        <td class="quiet">${escapeHtml(formatInteger(item.plan_tool_call_count || 0))}</td>
+        <td>${scorePill(getValue(item, "scores.overall"))}</td>
+        <td>${scorePill(getValue(item, "scores.critical"))}</td>
+        <td>${scorePill(getValue(item, "scores.important"))}</td>
+        <td class="quiet">${item.plan_saved ? "Saved" : item.save_blocked_by_mode ? "Blocked by mode" : "No"}</td>
+      `;
+    }
+
+    function renderTable() {
+      renderTableHead();
+      const body = document.getElementById("resultsBody");
+      body.innerHTML = "";
+      document.getElementById("tableSummary").textContent =
+        `Sorted by ${sortLabel()} ${state.sortDir === "asc" ? "ascending" : "descending"} · ${state.filteredItems.length} visible ${viewLabel(state.view).toLowerCase()} · use Radar checkboxes to stage comparison, then jump to Compare.`;
+
+      const columns = columnsForView(state.view).length;
+      if (!state.filteredItems.length) {
+        body.innerHTML = `
+          <tr>
+            <td colspan="${columns}">
+              <p class="empty-state">No ${viewLabel(state.view).toLowerCase()} match the current filters.</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      state.filteredItems.forEach((item) => {
+        const id = itemId(item, state.view);
+        const row = document.createElement("tr");
+        if (state.detail.view === state.view && state.detail.id === id) row.classList.add("selected-row");
+        row.innerHTML = `
+          <td><input class="row-select" type="checkbox" aria-label="Compare ${escapeAttribute(itemSubject(item, state.view))}" ${selectedIdsForView().includes(id) ? "checked" : ""}></td>
+          ${renderRowMarkup(item, state.view)}
+          <td><button class="detail-button" type="button">Inspect</button></td>
+        `;
+
+        row.querySelector(".row-select").addEventListener("change", (event) => {
+          const checked = event.target.checked;
+          let next = selectedIdsForView().slice();
+          if (checked && next.length >= 3) {
+            event.target.checked = false;
+            return;
+          }
+          if (checked) {
+            next.push(id);
+          } else {
+            next = next.filter((value) => value !== id);
+          }
+          setSelectedIdsForView(next);
+          if (next.length) state.pane = "compare";
+          refresh();
+        });
+
+        row.querySelector(".detail-button").addEventListener("click", () => {
+          openDetail(state.view, id);
+        });
+
+        body.appendChild(row);
+      });
+    }
+
+    function heatmapLabel(item, view = state.view) {
+      const run = representativeRun(item, view);
+      if (!run) return "Unknown";
+      if (view === "series") return `${run.model_name} · ${run.tool}`;
+      if (view === "cases") return `${run.model_name} · ${item.case_label || "Default"}`;
+      return `${run.model_name} · r${run.replicate_index || 1}`;
+    }
+
+    function renderHeatmap() {
+      const host = document.getElementById("heatmapHost");
+      const items = comparableItems();
+
+      if (!items.length) {
+        host.innerHTML = `<p class="empty-state">No visible ${viewLabel(state.view).toLowerCase()} support functional-area comparison yet.</p>`;
+        return;
+      }
+
+      const areas = safeArray(items[0].area_scores).map((area) => area.name);
+      const table = document.createElement("table");
+      table.className = "heatmap-table";
+
+      const thead = document.createElement("thead");
+      const headerRow = document.createElement("tr");
+      const lead = document.createElement("th");
+      lead.textContent = viewLabel(state.view);
+      headerRow.appendChild(lead);
+      areas.forEach((area) => {
+        const cell = document.createElement("th");
+        cell.textContent = area;
+        headerRow.appendChild(cell);
+      });
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+      items.forEach((item) => {
+        const row = document.createElement("tr");
+        const label = document.createElement("td");
+        label.className = "heatmap-row-label";
+        label.innerHTML = `
+          <div class="heatmap-label">
+            <strong>${escapeHtml(heatmapLabel(item, state.view))}</strong>
+            <span class="quiet">${escapeHtml(formatScore(getValue(item, "scores.overall")))} · ${escapeHtml(itemTool(item, state.view))}</span>
+          </div>
+        `;
+        row.appendChild(label);
+
+        safeArray(item.area_scores).forEach((area) => {
+          const cell = document.createElement("td");
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "heatmap-score";
+          button.style.background = scoreToColor(area.score);
+          button.style.color = scoreToTextColor(area.score);
+          button.textContent = `${Number(area.score).toFixed(1)}%`;
+          button.title = `${heatmapLabel(item, state.view)}\n${area.name}\n${Number(area.score).toFixed(1)}%\n${area.counts.full} full · ${area.counts.partial} partial · ${area.counts.missing} missing`;
+          button.addEventListener("click", () => {
+            state.detail = { view: state.view, id: itemId(item, state.view) };
+            state.requirementFilters = {
+              area: area.name,
+              severity: "all",
+              coverage: "all",
+            };
+            renderTable();
+            renderDetail();
+          });
+          cell.appendChild(button);
+          row.appendChild(cell);
+        });
+        tbody.appendChild(row);
+      });
+      table.appendChild(tbody);
+
+      host.innerHTML = "";
+      const scroller = document.createElement("div");
+      scroller.className = "heatmap-scroll";
+      scroller.appendChild(table);
+      host.appendChild(scroller);
+      host.insertAdjacentHTML(
+        "beforeend",
+        `
+          <div class="heatmap-legend">
+            <span class="legend-item"><span class="legend-swatch" style="background:${scoreToColor(20)}"></span>Low coverage</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:${scoreToColor(55)}"></span>Mixed coverage</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:${scoreToColor(90)}"></span>High coverage</span>
+          </div>
+        `
+      );
+    }
+
+    function currentDetailItem() {
+      if (!state.detail.id) return null;
+      if (state.detail.view === "series") return seriesById(state.detail.id);
+      if (state.detail.view === "cases") return caseById(state.detail.id);
+      return runById(state.detail.id);
+    }
+
+    function radarLabel(item, view = state.view) {
+      const run = representativeRun(item, view);
+      if (!run) return "Unknown";
+      if (view === "series") return `${run.model_name} · ${run.tool} · ${run.effort || "No effort"}`;
+      if (view === "cases") return `${run.model_name} · ${item.case_label || "Default"}`;
+      return `${run.model_name} · r${run.replicate_index || 1}`;
+    }
+
+    function renderRadar() {
+      const note = document.getElementById("radarNote");
+      const host = document.getElementById("radarChart");
+      const items = selectedRadarItems();
+
+      if (!items.length || typeof echarts === "undefined") {
+        const suggestedView = !items.length ? availableComparableView() : null;
+        note.innerHTML = items.length
+          ? `Charting library unavailable.`
+          : `Select up to three comparison-ready ${escapeHtml(viewLabel(state.view).toLowerCase())} from Explorer to render the radar.${suggestedView ? ` <button class="inline-button" type="button" data-switch-view="${escapeAttribute(suggestedView)}">Switch to ${escapeHtml(viewLabel(suggestedView))}</button>` : ""}`;
+        note.classList.remove("hidden");
+        host.classList.add("hidden");
+        note.querySelectorAll("[data-switch-view]").forEach((button) => {
+          button.addEventListener("click", () => {
+            state.view = button.dataset.switchView;
+            state.pane = "compare";
+            refresh();
+          });
+        });
+        if (radarChart && typeof radarChart.dispose === "function") radarChart.dispose();
+        radarChart = null;
+        return;
+      }
+
+      note.classList.add("hidden");
+      host.classList.remove("hidden");
+      const labels = safeArray(items[0].area_scores).map((area) => area.name);
+      radarChart = ensureChart("radarChart", radarChart);
+      radarChart.setOption({
+        animationDuration: 700,
+        animationEasing: "cubicOut",
+        color: items.map((_, index) => RADAR_COLORS[index % RADAR_COLORS.length].stroke),
+        tooltip: {
+          trigger: "item",
+          formatter(params) {
+            const item = items[params.dataIndex];
+            const lines = safeArray(item.area_scores).map((area) => `${area.name}: ${Number(area.score).toFixed(1)}%`).join("<br>");
+            return `<strong>${escapeHtml(radarLabel(item, state.view))}</strong><br>${lines}`;
+          },
+        },
+        legend: {
+          bottom: 0,
+          textStyle: { color: "#5a5145", fontFamily: "IBM Plex Sans", fontSize: 12 },
+        },
+        radar: {
+          radius: "62%",
+          splitNumber: 5,
+          indicator: labels.map((label) => ({ name: label, max: 100 })),
+          axisName: { color: "#4f463a", fontFamily: "IBM Plex Sans", fontSize: 11, fontWeight: 600 },
+          axisLine: { lineStyle: { color: "rgba(90, 81, 69, 0.18)" } },
+          splitArea: { areaStyle: { color: ["rgba(255,255,255,0.08)", "rgba(31,111,109,0.03)"] } },
+          splitLine: { lineStyle: { color: "rgba(90, 81, 69, 0.16)" } },
+        },
+        series: [{
+          type: "radar",
+          data: items.map((item, index) => {
+            const colors = RADAR_COLORS[index % RADAR_COLORS.length];
+            return {
+              name: radarLabel(item, state.view),
+              value: labels.map((label) => {
+                const match = safeArray(item.area_scores).find((area) => area.name === label);
+                return match ? Number(match.score) : 0;
+              }),
+              areaStyle: { color: colors.fill },
+              lineStyle: { color: colors.stroke, width: 2.5 },
+              itemStyle: { color: colors.stroke },
+              symbolSize: 7,
+            };
+          }),
+        }],
+      });
+    }
+
+    function filteredRequirements(requirements) {
+      return requirements.filter((requirement) => {
+        if (state.requirementFilters.area !== "all" && requirement.area !== state.requirementFilters.area) return false;
+        if (state.requirementFilters.severity !== "all" && requirement.severity !== state.requirementFilters.severity) return false;
+        if (state.requirementFilters.coverage !== "all" && requirement.coverage !== state.requirementFilters.coverage) return false;
+        return true;
+      });
+    }
+
+    function narrativeSections(item) {
+      const narrative = item.narrative || {};
+      return [
+        { key: "overall_posture", label: "Overall Posture" },
+        { key: "strength_clusters", label: "Strength Clusters" },
+        { key: "weakness_clusters", label: "Weakness Clusters" },
+        { key: "risk_assessment", label: "Risk Assessment" },
+        { key: "remediation_guidance", label: "Remediation Guidance" },
+      ].filter((section) => narrative[section.key]);
+    }
+
+    function renderRequirementFilters(item) {
+      const requirements = safeArray(item.requirements);
+      const areas = Array.from(new Set(requirements.map((requirement) => requirement.area).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+      return `
+        <div class="requirements-toolbar">
+          <select id="detailAreaFilter">
+            <option value="all">All areas</option>
+            ${areas.map((area) => `<option value="${escapeAttribute(area)}"${state.requirementFilters.area === area ? " selected" : ""}>${escapeHtml(area)}</option>`).join("")}
+          </select>
+          <select id="detailSeverityFilter">
+            <option value="all">All severity</option>
+            ${["critical", "important", "detail"].map((value) => `<option value="${value}"${state.requirementFilters.severity === value ? " selected" : ""}>${value}</option>`).join("")}
+          </select>
+          <select id="detailCoverageFilter">
+            <option value="all">All coverage</option>
+            ${["full", "partial", "missing"].map((value) => `<option value="${value}"${state.requirementFilters.coverage === value ? " selected" : ""}>${value}</option>`).join("")}
+          </select>
+        </div>
+      `;
+    }
+
+    function renderRequirementSection(item) {
+      const allRequirements = safeArray(item.requirements);
+      const requirements = filteredRequirements(allRequirements);
+      return `
+        <section class="detail-card">
+          <h4>Requirement Coverage</h4>
+          ${renderRequirementFilters(item)}
+          <div class="requirements-count">${requirements.length} of ${allRequirements.length} requirements shown</div>
+          <div class="requirements-table-wrap">
+            <table class="requirements-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Area</th>
+                  <th>Requirement</th>
+                  <th>Severity</th>
+                  <th>Coverage</th>
+                  <th>Evidence</th>
+                  <th>Gap</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  requirements.length
+                    ? requirements.map((requirement) => `
+                      <tr>
+                        <td><code>${escapeHtml(requirement.id || "")}</code></td>
+                        <td>${escapeHtml(requirement.area || "")}</td>
+                        <td>
+                          <strong>${escapeHtml(requirement.label || "")}</strong>
+                          <div class="quiet">${escapeHtml(requirement.source || "")}</div>
+                        </td>
+                        <td><span class="tag severity-${escapeAttribute(requirement.severity || "detail")}">${escapeHtml(requirement.severity || "detail")}</span></td>
+                        <td><span class="tag coverage-${escapeAttribute(requirement.coverage || "missing")}">${escapeHtml(requirement.coverage || "missing")}</span></td>
+                        <td>${escapeHtml(requirement.evidence || "none")}</td>
+                        <td>${escapeHtml(requirement.gap || "")}</td>
+                      </tr>
+                    `).join("")
+                    : `<tr><td colspan="7"><p class="empty-state">No requirements match the current detail filters.</p></td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderTopGapsBlock(item) {
+      const topGaps = safeArray(item.top_gaps);
+      return `
+        <article class="detail-card">
+          <h4>Top Gaps</h4>
+          <div class="gap-list">
+            ${
+              topGaps.length
+                ? topGaps.map((gap) => `
+                  <div class="gap-item">
+                    <span class="gap-meta">${escapeHtml(gap.severity || "unknown")} · ${escapeHtml(gap.id || "n/a")}</span>
+                    <strong>${escapeHtml(gap.label || "Untitled gap")}</strong>
+                    <span class="quiet">${escapeHtml(gap.why || gap.description || "")}</span>
+                  </div>
+                `).join("")
+                : `<p class="quiet">No structured gap list was captured for this subject.</p>`
+            }
+          </div>
+        </article>
+      `;
+    }
+
+    function renderNarrativeBlock(item) {
+      const sections = narrativeSections(item);
+      return `
+        <article class="detail-card">
+          <h4>Narrative</h4>
+          <div class="narrative-grid">
+            ${
+              sections.length
+                ? sections.map((section) => `
+                  <article class="detail-card">
+                    <h4>${escapeHtml(section.label)}</h4>
+                    <p>${escapeHtml(item.narrative[section.key])}</p>
+                  </article>
+                `).join("")
+                : `<p class="quiet">No structured narrative was captured for this subject.</p>`
+            }
+          </div>
+        </article>
+      `;
+    }
+
+    function scenarioLines(scenario) {
+      const lines = [];
+      if (scenario && scenario.label) lines.push(`<p><strong>Scenario:</strong> ${escapeHtml(scenario.label)}</p>`);
+      if (scenario && scenario.description) lines.push(`<p>${escapeHtml(scenario.description)}</p>`);
+      if (scenario && scenario.hypothesis) lines.push(`<p><strong>Hypothesis:</strong> ${escapeHtml(scenario.hypothesis)}</p>`);
+      return lines.length ? lines.join("") : `<p>No structured scenario was captured for this subject yet.</p>`;
+    }
+
+    function artifactLink(url, label, enabled = true) {
+      if (!url || !enabled) return "";
+      return `<a class="detail-link" href="${escapeAttribute(url)}" target="_blank" rel="noreferrer">${escapeHtml(label)}</a>`;
+    }
+
+    function renderSeriesDetail(series) {
+      const run = representativeRun(series, "series");
+      const cases = itemCases(series, "series");
+      const allRuns = itemRuns(series, "series");
+      const runtimeValues = allRuns.map((entry) => Number(entry.planning_runtime_seconds || 0)).filter(Boolean);
+      const runtimeRange = runtimeValues.length ? `${formatDuration(Math.min(...runtimeValues))} - ${formatDuration(Math.max(...runtimeValues))}` : "n/a";
+
+      return `
+        <section class="detail-hero">
+          <div>
+            <h3>${escapeHtml(run ? run.model_name : "Unknown setup")}</h3>
+            <p class="quiet">${escapeHtml(itemManufacturer(series, "series"))} · ${escapeHtml(itemTool(series, "series"))} · ${escapeHtml(itemEffort(series, "series"))}</p>
+            <p class="quiet">${pluralize(Number(series.case_count || 0), "variant")} · ${pluralize(Number(series.run_count || 0), "execution")} · ${pluralize(Number(series.repeat_run_count || 0), "replicate")} · evaluator ${escapeHtml(itemEvaluator(series, "series"))}${series.supports_area_comparison ? "" : " · legacy area taxonomy"}</p>
+          </div>
+          <div class="detail-links">
+            ${artifactLink(series.artifacts && series.artifacts.plan_url, "Representative Plan")}
+            ${artifactLink(series.artifacts && series.artifacts.plan_eval_url, "Representative Eval")}
+            ${artifactLink(series.artifacts && series.artifacts.plan_eval_data_url, "Representative Eval JSON")}
+            ${artifactLink(series.artifacts && series.artifacts.plan_eval_report_url, "Representative Report", series.plan_eval_report_generated)}
+            ${artifactLink(series.artifacts && series.artifacts.run_metadata_url, "Representative Metadata")}
+          </div>
+        </section>
+
+        <section class="mini-stats">
+          <article class="mini-card"><span class="label">Overall</span><span class="value">${formatScore(getValue(series, "scores.overall"))}</span></article>
+          <article class="mini-card"><span class="label">Variants</span><span class="value">${formatInteger(series.case_count || 0)}</span></article>
+          <article class="mini-card"><span class="label">Executions</span><span class="value">${formatInteger(series.run_count || 0)}</span></article>
+          <article class="mini-card"><span class="label">Runtime Range</span><span class="value">${escapeHtml(runtimeRange)}</span></article>
+        </section>
+
+        <section class="detail-columns">
+          <article class="detail-card">
+            <h4>Variants In Setup</h4>
+            <div class="gap-list">
+              ${
+                cases.length
+                  ? cases.map((caseItem) => `
+                    <div class="gap-item">
+                      <span class="gap-meta">${escapeHtml(caseItem.experiment_role || "baseline")} · ${escapeHtml(caseItem.case_id || "")}</span>
+                      <strong>${escapeHtml(caseItem.case_label || "Default")}</strong>
+                      <span class="quiet">${escapeHtml(caseConfigSummary(caseItem))}</span>
+                      <span class="quiet">Overall ${escapeHtml(formatScore(getValue(caseItem, "scores.overall")))} · ${pluralize(Number(caseItem.run_count || 0), "run")} · spread ${escapeHtml(formatScoreRange(caseItem.score_range))} · ${escapeHtml(formatRuntimeRange(caseItem.runtime_range_seconds))}</span>
+                      <div style="margin-top:10px;"><button class="detail-button" type="button" data-open-view="cases" data-open-id="${escapeAttribute(caseItem.case_id)}">Open variant</button></div>
+                    </div>
+                  `).join("")
+                  : `<p class="quiet">No variants found under this setup.</p>`
+              }
+            </div>
+          </article>
+          <article class="detail-card">
+            <h4>Setup Summary</h4>
+            <p><strong>Prompt profile:</strong> ${escapeHtml(itemPromptProfile(series, "series"))}</p>
+            <p><strong>Score spread across executions:</strong> ${escapeHtml(formatScoreRange(series.score_range))}</p>
+            <p><strong>Runtime spread across executions:</strong> ${escapeHtml(formatRuntimeRange(series.runtime_range_seconds))}</p>
+            <p><strong>Variants:</strong> ${escapeHtml(String(series.variant_count || 0))}</p>
+            <p><strong>Baseline variant:</strong> ${escapeHtml(series.baseline_case_id || "None tagged")}</p>
+            <p><strong>Representative variant:</strong> ${escapeHtml(series.representative_case_id || "Unknown")}</p>
+            <p><strong>Latest execution:</strong> ${escapeHtml(series.latest_run_id || "Unknown")} · ${escapeHtml(formatDate(series.latest_run_at))}</p>
+            <p><strong>Step 3 coverage:</strong> ${escapeHtml(`${series.report_generated_count || 0} of ${series.run_count || 0} executions generated reports`)}</p>
+            ${scenarioLines(run && run.scenario)}
+          </article>
+        </section>
+
+        <section class="detail-columns">
+          ${renderTopGapsBlock(series)}
+          ${renderNarrativeBlock(series)}
+        </section>
+
+        ${renderRequirementSection(series)}
+      `;
+    }
+
+    function renderCaseDetail(caseItem) {
+      const run = representativeRun(caseItem, "cases");
+      const runs = itemRuns(caseItem, "cases");
+      return `
+        <section class="detail-hero">
+          <div>
+            <h3>${escapeHtml(run ? run.model_name : "Unknown variant")} · ${escapeHtml(caseItem.case_label || "Default")}</h3>
+            <p class="quiet">${escapeHtml(itemManufacturer(caseItem, "cases"))} · ${escapeHtml(itemTool(caseItem, "cases"))} · ${escapeHtml(itemEffort(caseItem, "cases"))}</p>
+            <p class="quiet">${escapeHtml(caseItem.experiment_role || "baseline")} · ${escapeHtml(caseConfigSummary(caseItem))}${caseItem.supports_area_comparison ? "" : " · legacy area taxonomy"}</p>
+          </div>
+          <div class="detail-links">
+            ${artifactLink(caseItem.artifacts && caseItem.artifacts.plan_url, "Plan")}
+            ${artifactLink(caseItem.artifacts && caseItem.artifacts.plan_eval_url, "Eval")}
+            ${artifactLink(caseItem.artifacts && caseItem.artifacts.plan_eval_data_url, "Eval JSON")}
+            ${artifactLink(caseItem.artifacts && caseItem.artifacts.plan_eval_report_url, "Report", caseItem.plan_eval_report_generated)}
+            ${artifactLink(caseItem.artifacts && caseItem.artifacts.run_metadata_url, "Primary Metadata")}
+          </div>
+        </section>
+
+        <section class="mini-stats">
+          <article class="mini-card"><span class="label">Overall</span><span class="value">${formatScore(getValue(caseItem, "scores.overall"))}</span></article>
+          <article class="mini-card"><span class="label">Executions</span><span class="value">${formatInteger(caseItem.run_count || 0)}</span></article>
+          <article class="mini-card"><span class="label">Score Spread</span><span class="value">${escapeHtml(formatScoreRange(caseItem.score_range))}</span></article>
+          <article class="mini-card"><span class="label">Runtime Range</span><span class="value">${escapeHtml(formatRuntimeRange(caseItem.runtime_range_seconds))}</span></article>
+        </section>
+
+        <section class="detail-columns">
+          <article class="detail-card">
+            <h4>Scenario</h4>
+            <p><strong>Prompt profile:</strong> ${escapeHtml(caseItem.prompt_profile || "Unknown")}</p>
+            <p><strong>Context window:</strong> ${escapeHtml(formatContextWindow(caseItem.requested_context_window_tokens))}</p>
+            <p><strong>Planning mode:</strong> ${escapeHtml(planningModeLabel(caseItem.planning_mode))}</p>
+            <p><strong>Step 3 coverage:</strong> ${escapeHtml(`${caseItem.report_generated_count || 0} of ${caseItem.run_count || 0} executions generated reports`)}</p>
+            ${scenarioLines(caseItem.scenario)}
+          </article>
+          <article class="detail-card">
+            <h4>Executions In Variant</h4>
+            <div class="gap-list">
+              ${
+                runs.length
+                  ? runs.map((entry) => `
+                    <div class="gap-item">
+                      <span class="gap-meta">execution ${escapeHtml(String(entry.replicate_index || 1))} · ${escapeHtml(formatDate(entry.captured_at))}</span>
+                      <strong>${escapeHtml(entry.run_id)}</strong>
+                      <span class="quiet">${escapeHtml(formatDuration(entry.planning_runtime_seconds))} · ${escapeHtml(formatInteger(entry.plan_tool_call_count || 0))} tool calls · ${entry.plan_saved ? "saved" : entry.save_blocked_by_mode ? "blocked by mode" : "not saved"}</span>
+                      <div style="margin-top:10px;"><button class="detail-button" type="button" data-open-view="runs" data-open-id="${escapeAttribute(entry.run_id)}">Open execution</button></div>
+                    </div>
+                  `).join("")
+                  : `<p class="quiet">No executions found for this variant.</p>`
+              }
+            </div>
+          </article>
+        </section>
+
+        <section class="detail-columns">
+          ${renderTopGapsBlock(caseItem)}
+          ${renderNarrativeBlock(caseItem)}
+        </section>
+
+        ${renderRequirementSection(caseItem)}
+      `;
+    }
+
+    function summarizeToolCalls(map) {
+      const entries = Object.entries(map || {});
+      if (!entries.length) return "n/a";
+      return entries
+        .sort((left, right) => Number(right[1]) - Number(left[1]))
+        .map(([name, count]) => `${name} ${count}`)
+        .join(" · ");
+    }
+
+    function renderRunDetail(run) {
+      const metadata = run.metadata || {};
+      const declared = metadata.declared || {};
+      const observedPlan = getValue(metadata, "observed.plan_session") || {};
+      const observedEval = getValue(metadata, "observed.eval_session") || {};
+      const outcome = metadata.outcome || {};
+      return `
+        <section class="detail-hero">
+          <div>
+            <h3>${escapeHtml(run.model_name)} · Execution ${escapeHtml(String(run.replicate_index || 1))}</h3>
+            <p class="quiet">${escapeHtml(run.manufacturer)} · ${escapeHtml(run.tool)} · ${escapeHtml(run.effort || "No effort")} · evaluator ${escapeHtml(run.evaluator_model || "Unknown")}</p>
+            <p class="quiet">${escapeHtml(run.run_id)} · captured ${escapeHtml(formatDateTime(run.captured_at))}${run.supports_area_comparison ? "" : " · legacy area taxonomy"}</p>
+          </div>
+          <div class="detail-links">
+            ${artifactLink(run.artifacts && run.artifacts.plan_url, "Plan")}
+            ${artifactLink(run.artifacts && run.artifacts.plan_eval_url, "Eval")}
+            ${artifactLink(run.artifacts && run.artifacts.plan_eval_data_url, "Eval JSON")}
+            ${artifactLink(run.artifacts && run.artifacts.plan_eval_report_url, "Report", run.plan_eval_report_generated)}
+            ${artifactLink(run.artifacts && run.artifacts.run_metadata_url, "Metadata")}
+          </div>
+        </section>
+
+        <section class="mini-stats">
+          <article class="mini-card"><span class="label">Overall</span><span class="value">${formatScore(getValue(run, "scores.overall"))}</span></article>
+          <article class="mini-card"><span class="label">Plan Runtime</span><span class="value">${escapeHtml(formatDuration(run.planning_runtime_seconds))}</span></article>
+          <article class="mini-card"><span class="label">Tool Calls</span><span class="value">${formatInteger(run.plan_tool_call_count || 0)}</span></article>
+          <article class="mini-card"><span class="label">Requirements</span><span class="value">${formatInteger(safeArray(run.requirements).length)}</span></article>
+        </section>
+
+        <section class="detail-columns">
+          <article class="detail-card">
+            <h4>Declared Scenario</h4>
+            <p><strong>Case:</strong> ${escapeHtml(run.case_label || "Default")} · ${escapeHtml(run.experiment_role || "baseline")}</p>
+            <p><strong>Inference profile:</strong> ${escapeHtml(run.inference_profile || "Default")}</p>
+            <p><strong>Requested context:</strong> ${escapeHtml(formatContextWindow(run.requested_context_window_tokens))}</p>
+            <p><strong>Planning mode:</strong> ${escapeHtml(planningModeLabel(run.planning_mode))}</p>
+            <p><strong>Prompt profile:</strong> ${escapeHtml(run.prompt_profile || "Unknown")}</p>
+            <p><strong>Tags:</strong> ${escapeHtml(safeArray(run.experiment_tags).join(", ") || "None")}</p>
+            ${scenarioLines(declared.scenario || run.scenario)}
+          </article>
+          <article class="detail-card">
+            <h4>Observed Session</h4>
+            <p><strong>Plan session:</strong> ${escapeHtml(formatDuration(observedPlan.duration_seconds))} · ${escapeHtml(formatInteger(observedPlan.tool_call_count || 0))} tool calls</p>
+            <p><strong>Observed context:</strong> ${escapeHtml(formatContextWindow(observedPlan.context_window_tokens))}</p>
+            <p><strong>Messages:</strong> ${escapeHtml(formatInteger(observedPlan.user_message_count || 0))} user · ${escapeHtml(formatInteger(observedPlan.assistant_message_count || 0))} assistant</p>
+            <p><strong>Tokens:</strong> ${escapeHtml(formatInteger(observedPlan.input_tokens || 0))} in · ${escapeHtml(formatInteger(observedPlan.cached_input_tokens || 0))} cached · ${escapeHtml(formatInteger(observedPlan.output_tokens || 0))} out</p>
+            <p><strong>Tool mix:</strong> ${escapeHtml(summarizeToolCalls(observedPlan.tool_calls_by_name))}</p>
+            <p><strong>Eval session:</strong> ${escapeHtml(formatDuration(observedEval.duration_seconds))} · ${escapeHtml(formatDateTime(observedEval.started_at))}</p>
+          </article>
+        </section>
+
+        <section class="detail-columns">
+          <article class="detail-card">
+            <h4>Outcome</h4>
+            <p><strong>Completion:</strong> ${escapeHtml(outcome.completion_state || "unknown")}</p>
+            <p><strong>Plan saved:</strong> ${run.plan_saved ? "Yes" : run.save_blocked_by_mode ? "Blocked by mode" : "No"}</p>
+            <p><strong>Step 3 report:</strong> ${run.plan_eval_report_generated ? "Generated" : "Missing"}</p>
+            <p><strong>Artifact latency:</strong> ${escapeHtml(formatDuration(outcome.artifact_latency_seconds))}</p>
+            <p><strong>Plan written:</strong> ${escapeHtml(formatDateTime(outcome.plan_written_at))}</p>
+            <p><strong>Report written:</strong> ${escapeHtml(formatDateTime(outcome.plan_eval_report_written_at))}</p>
+            <p><strong>Plan session completed:</strong> ${escapeHtml(formatDateTime(outcome.plan_session_completed_at))}</p>
+            <p><strong>Estimated plan cost:</strong> ${escapeHtml(formatMaybeCost(run.plan_estimated_cost_usd))}</p>
+          </article>
+          ${renderTopGapsBlock(run)}
+        </section>
+
+        ${renderNarrativeBlock(run)}
+        ${renderRequirementSection(run)}
+      `;
+    }
+
+    function renderDetail() {
+      const host = document.getElementById("detailBody");
+      const item = currentDetailItem();
+
+      if (!item) {
+        const suggestions = state.filteredItems
+          .slice()
+          .sort((left, right) => Number(getValue(right, "scores.overall") || 0) - Number(getValue(left, "scores.overall") || 0))
+          .slice(0, 3);
+        host.innerHTML = suggestions.length
+          ? `
+            <div class="detail-card">
+              <h4>Start Here</h4>
+              <p class="quiet">You have not selected a ${viewLabel(state.view).toLowerCase()} yet. These are the top visible candidates to inspect.</p>
+              <div class="gap-list" style="margin-top:14px;">
+                ${suggestions.map((entry) => `
+                  <div class="gap-item">
+                    <span class="gap-meta">${escapeHtml(formatScore(getValue(entry, "scores.overall")))} overall</span>
+                    <strong>${escapeHtml(itemSubject(entry, state.view))}</strong>
+                    <span class="quiet">${escapeHtml(itemTool(entry, state.view))} · ${escapeHtml(itemEffort(entry, state.view))}</span>
+                    <div style="margin-top:10px;"><button class="detail-button" type="button" data-open-view="${escapeAttribute(state.view)}" data-open-id="${escapeAttribute(itemId(entry, state.view))}">Inspect this</button></div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          `
+          : `<p class="empty-state">Pick a ${viewLabel(state.view).toLowerCase()} from Explorer or click a bar in Story to inspect the full evaluation detail.</p>`;
+        attachDetailHandlers();
+        return;
+      }
+
+      if (state.detail.view === "series") {
+        host.innerHTML = renderSeriesDetail(item);
+      } else if (state.detail.view === "cases") {
+        host.innerHTML = renderCaseDetail(item);
+      } else {
+        host.innerHTML = renderRunDetail(item);
+      }
+
+      attachDetailHandlers();
+    }
+
+    function attachDetailHandlers() {
+      const area = document.getElementById("detailAreaFilter");
+      const severity = document.getElementById("detailSeverityFilter");
+      const coverage = document.getElementById("detailCoverageFilter");
+      if (area) {
+        area.addEventListener("change", (event) => {
+          state.requirementFilters.area = event.target.value;
+          renderDetail();
+        });
+      }
+      if (severity) {
+        severity.addEventListener("change", (event) => {
+          state.requirementFilters.severity = event.target.value;
+          renderDetail();
+        });
+      }
+      if (coverage) {
+        coverage.addEventListener("change", (event) => {
+          state.requirementFilters.coverage = event.target.value;
+          renderDetail();
+        });
+      }
+      document.querySelectorAll("[data-open-view]").forEach((button) => {
+        button.addEventListener("click", () => {
+          openDetail(button.dataset.openView, button.dataset.openId);
+        });
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function escapeAttribute(value) {
+      return escapeHtml(value);
+    }
+
+    function refresh() {
+      renderPaneButtons();
+      renderViewButtons();
+      renderPresetButtons();
+      refreshFilteredItems();
+      syncFilterControls();
+      renderFilterSummary();
+      renderCopy();
+      renderStats();
+      renderExploreGlossary();
+      syncPaneVisibility();
+      renderTable();
+      renderDetail();
+      if (state.pane === "story") {
+        renderQuestionGrid();
+        renderStoryNotes();
+        renderTopChart();
+        renderScoreProfileChart();
+      }
+      if (state.pane === "compare") {
+        renderSelectionTray();
+        renderHeatmap();
+        renderRadar();
+      }
+      const summary = state.dataset.summary || {};
+      document.getElementById("footerNote").innerHTML = `
+        <strong>Data source:</strong> <code>data.js</code> / <code>dashboard-data.json</code> generated from benchmark run artifacts.
+        Dataset totals: ${summary.series_count || datasetItems("series").length} setups, ${summary.case_count || datasetItems("cases").length} variants, ${summary.run_count || datasetItems("runs").length} executions.
+        Visible ${viewLabel(state.view).toLowerCase()}: ${state.filteredItems.length}. Current screen: ${paneLabel()}. Radar only renders explicit staged selections.
+      `;
+    }
+
+    function attachEvents() {
+      [
+        ["manufacturerFilter", "manufacturer"],
+        ["toolFilter", "tool"],
+        ["effortFilter", "effort"],
+        ["evaluatorFilter", "evaluator"],
+        ["planningModeFilter", "planningMode"],
+        ["inferenceProfileFilter", "inferenceProfile"],
+        ["contextWindowFilter", "contextWindow"],
+        ["promptProfileFilter", "promptProfile"],
+        ["roleFilter", "role"],
+        ["comparisonFilter", "comparison"],
+      ].forEach(([elementId, key]) => {
+        document.getElementById(elementId).addEventListener("change", (event) => {
+          state.filters[key] = event.target.value;
+          refresh();
+        });
+      });
+      document.getElementById("resetFiltersButton").addEventListener("click", resetFocus);
+      window.addEventListener("resize", resizeCharts);
+    }
+
+    function initFilters() {
+      const runs = datasetItems("runs");
+      buildOptionList(document.getElementById("manufacturerFilter"), uniqueValues(runs, "manufacturer"), "All manufacturers");
+      buildOptionList(document.getElementById("toolFilter"), uniqueValues(runs, "tool"), "All tools");
+      buildOptionList(document.getElementById("effortFilter"), uniqueValues(runs, "effort", "None"), "All effort levels");
+      buildOptionList(document.getElementById("evaluatorFilter"), uniqueValues(runs, "evaluator_model", "Unknown"), "All evaluators");
+      buildOptionList(document.getElementById("planningModeFilter"), ["enabled", "disabled", "unknown"], "All planning modes", (value) => planningModeLabel(value === "enabled" ? true : value === "disabled" ? false : null));
+      buildOptionList(document.getElementById("inferenceProfileFilter"), uniqueValues(runs, "inference_profile", "Default"), "All inference profiles");
+      buildOptionList(
+        document.getElementById("contextWindowFilter"),
+        Array.from(new Set(runs.map((run) => contextBucket(run.requested_context_window_tokens)))).sort((left, right) => String(left).localeCompare(String(right))),
+        "All context windows",
+        (value) => formatContextWindow(value === "default" ? null : value)
+      );
+      buildOptionList(document.getElementById("promptProfileFilter"), uniqueValues(runs, "prompt_profile", "Unknown"), "All prompt profiles");
+      buildOptionList(document.getElementById("roleFilter"), uniqueValues(runs, "experiment_role", "baseline"), "All roles");
+      document.getElementById("comparisonFilter").innerHTML = `
+        <option value="all">All rows</option>
+        <option value="ready">Comparison-ready only</option>
+        <option value="legacy">Legacy taxonomy only</option>
+      `;
+    }
+
+    async function loadDashboard() {
+      try {
+        const inlineDataset = window.__DASHBOARD_DATA__;
+        const dataset = inlineDataset && typeof inlineDataset === "object"
+          ? inlineDataset
+          : await (async () => {
+              const response = await fetch("./dashboard-data.json", { cache: "no-store" });
+              if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+              return response.json();
+            })();
+        state.dataset = {
+          generated_at: dataset.generated_at,
+          taxonomy_versions: safeArray(dataset.taxonomy_versions),
+          summary: dataset.summary || {},
+          series: safeArray(dataset.series),
+          cases: safeArray(dataset.cases),
+          runs: safeArray(dataset.runs),
+        };
+
+        document.getElementById("generatedAt").textContent = state.dataset.generated_at ? formatDateTime(state.dataset.generated_at) : "Unknown";
+        const summary = state.dataset.summary || {};
+        document.getElementById("taxonomySummary").textContent = `${summary.series_count || state.dataset.series.length} setups · ${summary.case_count || state.dataset.cases.length} variants · ${summary.run_count || state.dataset.runs.length} executions`;
+
+        initFilters();
+        attachEvents();
+        refresh();
+      } catch (error) {
+        document.getElementById("generatedAt").textContent = "Unavailable";
+        document.getElementById("taxonomySummary").textContent = "Unavailable";
+        document.getElementById("statsGrid").innerHTML = "";
+        document.getElementById("resultsHead").innerHTML = "";
+        document.getElementById("resultsBody").innerHTML = `
+          <tr>
+            <td colspan="10">
+              <p class="error-state">Failed to load <code>dashboard-data.json</code>. ${escapeHtml(error.message)}</p>
+            </td>
+          </tr>
+        `;
+        document.getElementById("heatmapHost").innerHTML = `<p class="error-state">Heatmap unavailable until the dataset is generated.</p>`;
+        document.getElementById("radarNote").textContent = "Radar unavailable until the dataset is generated.";
+        document.getElementById("radarNote").classList.remove("hidden");
+        document.getElementById("detailBody").innerHTML = `<p class="error-state">Detail panel unavailable until the dataset is generated.</p>`;
+        document.getElementById("footerNote").innerHTML = `Generate <code>dashboard-data.json</code> before opening the dashboard.`;
+      }
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>
