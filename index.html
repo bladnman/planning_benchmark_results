@@ -296,7 +296,7 @@
     dataset:null,
     filters:{tool:null,model_family:null,effort:null,planning_mode:null,taxonomy:null,role:null},
     explore:{sort:"scores.overall",dir:"desc",checked:[]},
-    scatter:{plotType:"hbar",metric:"scores.overall",sortBy:"scores.overall",colorBy:"tool",selected:[],axisMin:null,xMetric:"planning_runtime_seconds",yMetric:"scores.overall",xMin:null,yMin:null},
+    scatter:{plotType:"hbar",metric:"scores.overall",sortBy:"scores.overall",colorBy:"tool",selected:[],axisMin:null,xMetric:"planning_runtime_seconds",yMetric:"scores.overall",xMin:null,yMin:null,bulkGroup:"model_family",bulkValue:""},
     compare:{a:null,b:null},
     trends:{metric:"scores.overall",groupBy:"tool",chartType:"line"},
     inspect:{level:null,id:null,origin:"overview",open:false,reqFilters:{area:"all",severity:"all",coverage:"all"}},
@@ -392,6 +392,18 @@
     if(key==="plan_tool_call_count")return String(v||0);
     if(key.startsWith("scores."))return fmtS(v);
     return String(v);
+  }
+  function bulkValueFor(r,group){
+    if(group==="planning_mode")return String(r.planning_mode);
+    return String(r?.[group]??"");
+  }
+  function bulkValueLabel(group,value){
+    if(group==="planning_mode")return planningLabel(value==="true"?true:value==="false"?false:null);
+    return value||"Unknown";
+  }
+  function bulkValuesFor(runs,group){
+    const values=[...new Set(runs.map(r=>bulkValueFor(r,group)).filter(Boolean))];
+    return values.sort((a,b)=>bulkValueLabel(group,a).localeCompare(bulkValueLabel(group,b)));
   }
   function titleCase(v){return String(v||"").replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase())}
   function screenLabel(id){return SCREENS.find(s=>s.id===id)?.label||titleCase(id)}
@@ -716,6 +728,11 @@
     const fallbackCount=S.scatter.plotType==="scatter"?Math.min(20,runs.length):Math.min(8,runs.length);
     const chartRuns=selectedRuns.length?selectedRuns:runs.slice(0,fallbackCount);
     const compareReady=selectedRuns.length>=2;
+    const bulkGroups=[["model_family","Model Family"],["tool","Tool"],["effort","Effort"],["planning_mode","Planning"]];
+    const bulkGroup=S.scatter.bulkGroup||"model_family";
+    const bulkValues=bulkValuesFor(runs,bulkGroup);
+    if(!bulkValues.includes(S.scatter.bulkValue))S.scatter.bulkValue=bulkValues[0]||"";
+    const bulkMatches=S.scatter.bulkValue?runs.filter(r=>bulkValueFor(r,bulkGroup)===S.scatter.bulkValue):[];
 
     host.innerHTML=`
       <div class="section-label">Select & See</div>
@@ -734,9 +751,18 @@
         <label>Color</label><select id="scC">${mkOpt(cOpts,S.scatter.colorBy)}</select>
       </div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+        <button class="btn" id="scSelectAll"${runs.length?"":" disabled"} type="button">Select All Visible</button>
         <button class="btn${selectedRuns.length?" btn-primary":""}" id="scClear"${selectedRuns.length?"":" disabled"} type="button">Clear Selection</button>
         <button class="btn" id="scCompare"${compareReady?"":" disabled"} type="button">Compare First Two</button>
-        <span style="color:var(--ink-faint);font-size:0.8rem">${selectedRuns.length?`${selectedRuns.length} selected`:`Showing top ${chartRuns.length} visible runs`}</span>
+        <span style="color:var(--ink-faint);font-size:0.8rem">${selectedRuns.length?`${selectedRuns.length} selected`:`Showing top ${chartRuns.length} of ${runs.length} visible runs`}</span>
+      </div>
+      <div class="chart-controls" style="margin-bottom:14px">
+        <label>Bulk Select</label>
+        <select id="scBulkGroup">${mkOpt(bulkGroups,bulkGroup)}</select>
+        <select id="scBulkValue">${bulkValues.map(v=>`<option value="${esc(v)}"${S.scatter.bulkValue===v?" selected":""}>${esc(bulkValueLabel(bulkGroup,v))}</option>`).join("")}</select>
+        <button class="btn" id="scBulkAdd"${bulkMatches.length?"":" disabled"} type="button">Add Matching (${bulkMatches.length})</button>
+        <button class="btn" id="scBulkOnly"${bulkMatches.length?"":" disabled"} type="button">Only Matching</button>
+        <span style="color:var(--ink-faint);font-size:0.8rem">${bulkMatches.length?`${bulkMatches.length} ${bulkValueLabel(bulkGroup,S.scatter.bulkValue)} runs visible`:"No matches in current filter set"}</span>
       </div>
       <div class="select-grid">
         ${runs.map(r=>{
@@ -757,6 +783,8 @@
     host.querySelector("#scYMetric")?.addEventListener("change",e=>{S.scatter.yMetric=e.target.value;renderScatter()});
     host.querySelector("#scSort")?.addEventListener("change",e=>{S.scatter.sortBy=e.target.value;renderScatter()});
     host.querySelector("#scC")?.addEventListener("change",e=>{S.scatter.colorBy=e.target.value;buildScatterChart()});
+    host.querySelector("#scBulkGroup")?.addEventListener("change",e=>{S.scatter.bulkGroup=e.target.value;S.scatter.bulkValue="";renderScatter()});
+    host.querySelector("#scBulkValue")?.addEventListener("change",e=>{S.scatter.bulkValue=e.target.value;renderScatter()});
     host.querySelector("#scAxisMin")?.addEventListener("input",e=>{S.scatter.axisMin=parseAxisInput(e.target.value);buildScatterChart()});
     host.querySelector("#scXMin")?.addEventListener("input",e=>{S.scatter.xMin=parseAxisInput(e.target.value);buildScatterChart()});
     host.querySelector("#scYMin")?.addEventListener("input",e=>{S.scatter.yMin=parseAxisInput(e.target.value);buildScatterChart()});
@@ -766,7 +794,18 @@
       else S.scatter.selected.push(rid);
       renderScatter();
     }));
+    host.querySelector("#scSelectAll")?.addEventListener("click",()=>{S.scatter.selected=runs.map(r=>r.run_id);renderScatter()});
     host.querySelector("#scClear")?.addEventListener("click",()=>{S.scatter.selected=[];renderScatter()});
+    host.querySelector("#scBulkAdd")?.addEventListener("click",()=>{
+      const ids=new Set(S.scatter.selected);
+      bulkMatches.forEach(r=>ids.add(r.run_id));
+      S.scatter.selected=[...ids];
+      renderScatter();
+    });
+    host.querySelector("#scBulkOnly")?.addEventListener("click",()=>{
+      S.scatter.selected=bulkMatches.map(r=>r.run_id);
+      renderScatter();
+    });
     host.querySelector("#scCompare")?.addEventListener("click",()=>{
       const picks=scatterSelectedRuns();
       if(picks.length>=2){S.compare.a=picks[0].run_id;S.compare.b=picks[1].run_id;go("compare")}
