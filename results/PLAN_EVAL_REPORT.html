@@ -1,678 +1,442 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Plan Coverage Report</title>
-    <style>
-      :root {
-        --bg: #f4efe6;
-        --ink: #132033;
-        --muted: #5f6c7b;
-        --panel: rgba(255, 255, 255, 0.82);
-        --panel-strong: rgba(255, 255, 255, 0.92);
-        --line: rgba(19, 32, 51, 0.12);
-        --navy: #17324d;
-        --teal: #0f8b8d;
-        --gold: #d98f2b;
-        --coral: #c45b4d;
-        --green: #23836d;
-        --shadow: 0 22px 60px rgba(25, 41, 58, 0.12);
-        --radius: 24px;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        color: var(--ink);
-        font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-        background:
-          radial-gradient(circle at top left, rgba(217, 143, 43, 0.18), transparent 28%),
-          radial-gradient(circle at top right, rgba(15, 139, 141, 0.16), transparent 24%),
-          linear-gradient(180deg, #f8f4ec 0%, #f0e8dc 100%);
-      }
-
-      .page {
-        width: min(1200px, calc(100vw - 48px));
-        margin: 28px auto 40px;
-      }
-
-      .hero {
-        padding: 36px;
-        border: 1px solid var(--line);
-        border-radius: 32px;
-        background:
-          linear-gradient(135deg, rgba(23, 50, 77, 0.96), rgba(20, 72, 99, 0.88)),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-        color: #f8f4ec;
-        box-shadow: var(--shadow);
-      }
-
-      .hero-top {
-        display: flex;
-        justify-content: space-between;
-        gap: 24px;
-        align-items: flex-start;
-      }
-
-      .eyebrow {
-        display: inline-block;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(248, 244, 236, 0.12);
-        border: 1px solid rgba(248, 244, 236, 0.15);
-        font-size: 12px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-      }
-
-      h1,
-      h2,
-      h3 {
-        margin: 0;
-        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-      }
-
-      h1 {
-        margin-top: 16px;
-        font-size: clamp(2.5rem, 5vw, 4.2rem);
-        line-height: 0.98;
-      }
-
-      .hero-copy {
-        max-width: 720px;
-      }
-
-      .hero-copy p {
-        margin: 14px 0 0;
-        color: rgba(248, 244, 236, 0.82);
-        font-size: 18px;
-        line-height: 1.5;
-      }
-
-      .hero-note {
-        margin-top: 16px;
-        font-size: 13px;
-        color: rgba(248, 244, 236, 0.68);
-      }
-
-      .hero-grid {
-        display: grid;
-        grid-template-columns: 1.35fr 1fr;
-        gap: 22px;
-        margin-top: 28px;
-      }
-
-      .score-card,
-      .stats,
-      .panel,
-      .gap-card {
-        border-radius: var(--radius);
-        border: 1px solid var(--line);
-        background: var(--panel);
-        box-shadow: var(--shadow);
-      }
-
-      .score-card {
-        display: grid;
-        grid-template-columns: 210px 1fr;
-        gap: 22px;
-        padding: 24px;
-        color: var(--ink);
-        background:
-          radial-gradient(circle at 20% 15%, rgba(217, 143, 43, 0.18), transparent 30%),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.85));
-      }
-
-      .score-ring {
-        width: 190px;
-        height: 190px;
-        border-radius: 50%;
-        display: grid;
-        place-items: center;
-        background:
-          conic-gradient(var(--green) 0 89.39%, rgba(19, 32, 51, 0.08) 89.39% 100%);
-        position: relative;
-      }
-
-      .score-ring::before {
-        content: "";
-        position: absolute;
-        inset: 16px;
-        border-radius: 50%;
-        background: #fbfaf7;
-        box-shadow: inset 0 0 0 1px rgba(19, 32, 51, 0.06);
-      }
-
-      .score-value {
-        position: relative;
-        text-align: center;
-      }
-
-      .score-value strong {
-        display: block;
-        font-size: 40px;
-        line-height: 1;
-      }
-
-      .score-value span {
-        display: block;
-        margin-top: 6px;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--muted);
-      }
-
-      .score-copy h2 {
-        font-size: 34px;
-        line-height: 1.05;
-      }
-
-      .score-copy p {
-        margin: 12px 0 0;
-        color: var(--muted);
-        line-height: 1.6;
-      }
-
-      .score-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 18px;
-      }
-
-      .pill {
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(23, 50, 77, 0.06);
-        border: 1px solid rgba(23, 50, 77, 0.1);
-        font-size: 13px;
-        color: var(--navy);
-      }
-
-      .stats {
-        padding: 22px;
-        background: rgba(248, 244, 236, 0.14);
-        border-color: rgba(248, 244, 236, 0.12);
-        color: #f8f4ec;
-      }
-
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 14px;
-        margin-top: 16px;
-      }
-
-      .stat {
-        padding: 16px;
-        border-radius: 18px;
-        background: rgba(248, 244, 236, 0.08);
-        border: 1px solid rgba(248, 244, 236, 0.12);
-      }
-
-      .stat .label {
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: rgba(248, 244, 236, 0.66);
-      }
-
-      .stat .value {
-        margin-top: 8px;
-        font-size: 32px;
-        line-height: 1;
-        font-weight: 700;
-      }
-
-      .stat .detail {
-        margin-top: 8px;
-        font-size: 13px;
-        color: rgba(248, 244, 236, 0.76);
-      }
-
-      section {
-        margin-top: 22px;
-      }
-
-      .panel {
-        padding: 24px;
-        background: var(--panel-strong);
-      }
-
-      .section-head {
-        display: flex;
-        justify-content: space-between;
-        gap: 16px;
-        align-items: baseline;
-        margin-bottom: 16px;
-      }
-
-      .section-head p {
-        margin: 0;
-        color: var(--muted);
-      }
-
-      .arc {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-      }
-
-      .arc-step {
-        padding: 20px;
-        border-radius: 20px;
-        border: 1px solid var(--line);
-        background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(245,240,232,0.88));
-      }
-
-      .arc-step .step {
-        color: var(--teal);
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-      }
-
-      .arc-step h3 {
-        margin-top: 10px;
-        font-size: 24px;
-      }
-
-      .arc-step p {
-        margin: 12px 0 0;
-        color: var(--muted);
-        line-height: 1.6;
-      }
-
-      .area-grid {
-        display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 18px;
-      }
-
-      .bars {
-        display: grid;
-        gap: 14px;
-      }
-
-      .bar-row {
-        padding: 14px 16px;
-        border-radius: 18px;
-        background: rgba(23, 50, 77, 0.03);
-      }
-
-      .bar-head {
-        display: flex;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 8px;
-        font-size: 14px;
-      }
-
-      .bar-head strong {
-        font-weight: 700;
-      }
-
-      .bar-head span {
-        color: var(--muted);
-      }
-
-      .track {
-        height: 10px;
-        border-radius: 999px;
-        background: rgba(19, 32, 51, 0.08);
-        overflow: hidden;
-      }
-
-      .fill {
-        height: 100%;
-        border-radius: 999px;
-        background: linear-gradient(90deg, var(--teal), var(--green));
-      }
-
-      .summary-card {
-        border-radius: 22px;
-        padding: 22px;
-        background:
-          radial-gradient(circle at top right, rgba(196, 91, 77, 0.12), transparent 30%),
-          linear-gradient(180deg, rgba(23, 50, 77, 0.96), rgba(22, 42, 66, 0.96));
-        color: #f8f4ec;
-      }
-
-      .summary-card h3 {
-        font-size: 28px;
-      }
-
-      .summary-card p {
-        margin: 12px 0 0;
-        color: rgba(248, 244, 236, 0.76);
-        line-height: 1.6;
-      }
-
-      .split {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 18px;
-      }
-
-      ul {
-        margin: 14px 0 0;
-        padding-left: 18px;
-      }
-
-      li {
-        margin-top: 10px;
-        color: var(--muted);
-        line-height: 1.55;
-      }
-
-      .gap-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-      }
-
-      .gap-card {
-        padding: 20px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(244,239,230,0.88));
-      }
-
-      .gap-card .severity {
-        display: inline-block;
-        padding: 6px 10px;
-        border-radius: 999px;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        background: rgba(196, 91, 77, 0.12);
-        color: var(--coral);
-      }
-
-      .gap-card h3 {
-        margin-top: 12px;
-        font-size: 24px;
-      }
-
-      .gap-card p {
-        margin: 10px 0 0;
-        color: var(--muted);
-        line-height: 1.6;
-      }
-
-      .footer-note {
-        margin-top: 18px;
-        color: var(--muted);
-        font-size: 13px;
-      }
-
-      @media (max-width: 980px) {
-        .hero-grid,
-        .area-grid,
-        .split,
-        .gap-grid,
-        .arc,
-        .score-card {
-          grid-template-columns: 1fr;
-        }
-
-        .score-ring {
-          margin: 0 auto;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="page">
-      <header class="hero">
-        <div class="hero-top">
-          <div class="hero-copy">
-            <span class="eyebrow">Stakeholder Briefing</span>
-            <h1>Strong implementation plan, but several critical behavioral contracts are still loose.</h1>
-            <p>
-              The plan covers core architecture, navigation, show detail, person detail, and export
-              well. The remaining risk is concentrated in AI guardrails, recommendation actionability,
-              overlay fidelity, and preservation of user history rather than in app plumbing.
-            </p>
-            <div class="hero-note">
-              This run contains one plan snapshot. The “after” view below is the audit-corrected
-              readiness picture derived from <code>results/PLAN_EVAL.md</code>.
-            </div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Plan Evaluation Report</title>
+  <style>
+    :root {
+      --bg: #f4efe7;
+      --bg-2: #efe5d7;
+      --paper: rgba(255, 251, 244, 0.92);
+      --ink: #172026;
+      --muted: #5b6469;
+      --line: rgba(23, 32, 38, 0.12);
+      --navy: #153b4a;
+      --teal: #2c7a6f;
+      --amber: #c48a1d;
+      --red: #b24a3f;
+      --sand: #dcc8aa;
+      --shadow: 0 18px 50px rgba(21, 59, 74, 0.12);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(196, 138, 29, 0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(44, 122, 111, 0.16), transparent 24%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    }
+    .page {
+      width: min(1200px, calc(100vw - 40px));
+      margin: 28px auto 44px;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-bottom: 22px;
+    }
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .score-card { padding: 26px; position: relative; overflow: hidden; }
+    .score-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -70px -70px auto;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(196, 138, 29, 0.2), transparent 68%);
+      pointer-events: none;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+      line-height: 1.02;
+      font-weight: 700;
+    }
+    h1 { font-size: 42px; margin-top: 12px; max-width: 9ch; }
+    .subhead { margin-top: 12px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+    .dial {
+      width: 220px;
+      height: 220px;
+      margin: 24px auto 18px;
+      border-radius: 50%;
+      background: conic-gradient(var(--teal) 0 77.3%, rgba(23, 32, 38, 0.10) 77.3% 100%);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+    .dial::after {
+      content: "";
+      width: 166px;
+      height: 166px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #fffaf2 0%, #f5eee5 100%);
+      border: 1px solid rgba(23, 32, 38, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
+      position: absolute;
+    }
+    .dial-inner { position: relative; z-index: 1; text-align: center; }
+    .dial-score { font-size: 52px; font-weight: 800; letter-spacing: -0.04em; color: var(--navy); }
+    .dial-label { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+    .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+    .mini { padding: 12px; border-radius: 16px; background: rgba(255,255,255,0.6); border: 1px solid var(--line); }
+    .mini .k { font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+    .mini .v { margin-top: 6px; font-size: 28px; font-weight: 750; }
+    .hero-story { padding: 28px; display: grid; gap: 20px; }
+    .story-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: center; }
+    .story-step { padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.62); border: 1px solid var(--line); min-height: 150px; }
+    .story-step h3 { font-size: 24px; margin-bottom: 10px; }
+    .story-step p { margin: 0; color: var(--muted); line-height: 1.55; }
+    .arrow { font-size: 36px; color: var(--amber); opacity: 0.8; text-align: center; }
+    .note { padding: 14px 16px; border-left: 4px solid var(--amber); background: rgba(196, 138, 29, 0.10); border-radius: 14px; color: #674b10; line-height: 1.5; }
+    .section { margin-top: 22px; }
+    .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+    .section-head h2 { font-size: 28px; }
+    .section-head p { margin: 0; color: var(--muted); }
+    .three-up { display: grid; grid-template-columns: 1.15fr 1.15fr 1fr; gap: 18px; }
+    .panel { padding: 22px; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 11px; border-radius: 999px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .pill.good { background: rgba(44, 122, 111, 0.12); color: var(--teal); }
+    .pill.mid { background: rgba(196, 138, 29, 0.14); color: #94640d; }
+    .pill.risk { background: rgba(178, 74, 63, 0.12); color: var(--red); }
+    .metric-list { display: grid; gap: 14px; margin-top: 18px; }
+    .metric-row { display: grid; grid-template-columns: 110px 1fr 56px; gap: 12px; align-items: center; }
+    .metric-row .label { font-weight: 650; }
+    .bar { height: 10px; border-radius: 999px; background: rgba(23, 32, 38, 0.10); overflow: hidden; }
+    .fill { height: 100%; border-radius: inherit; }
+    .fill.good { background: linear-gradient(90deg, #2c7a6f, #4ab3a3); }
+    .fill.mid { background: linear-gradient(90deg, #c48a1d, #f1b84e); }
+    .fill.risk { background: linear-gradient(90deg, #b24a3f, #dd6f63); }
+    .risk-list, .gap-grid, .area-grid, .narrative-grid { display: grid; gap: 14px; }
+    .risk-item { padding: 14px 16px; border-radius: 16px; border: 1px solid var(--line); background: rgba(255,255,255,0.55); }
+    .risk-item strong { display: block; margin-bottom: 6px; }
+    .risk-item p { margin: 0; color: var(--muted); line-height: 1.5; }
+    .gap-grid { grid-template-columns: repeat(5, 1fr); }
+    .gap-card { padding: 20px; min-height: 240px; }
+    .gap-id { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .gap-card h3 { font-size: 24px; margin-top: 10px; }
+    .gap-card p { color: var(--muted); line-height: 1.55; margin: 12px 0 0; }
+    .area-grid { grid-template-columns: repeat(2, 1fr); }
+    .area-row { padding: 18px 20px; display: grid; grid-template-columns: 1fr 92px; gap: 18px; align-items: center; }
+    .area-row h3 { font-size: 22px; margin-bottom: 10px; }
+    .area-row .meta { color: var(--muted); font-size: 14px; }
+    .score-chip {
+      width: 92px; height: 92px; border-radius: 24px; display: grid; place-items: center;
+      font-size: 28px; font-weight: 800; color: var(--navy); background: linear-gradient(180deg, rgba(21, 59, 74, 0.06), rgba(21, 59, 74, 0.14));
+      border: 1px solid var(--line);
+    }
+    .narrative-grid { grid-template-columns: repeat(2, 1fr); }
+    .narrative-card { padding: 22px; }
+    .narrative-card h3 { font-size: 24px; margin-bottom: 10px; }
+    .narrative-card p { margin: 0; color: var(--muted); line-height: 1.65; }
+    footer { margin-top: 22px; color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 1100px) {
+      .hero, .three-up, .gap-grid, .area-grid, .narrative-grid { grid-template-columns: 1fr; }
+      .story-grid { grid-template-columns: 1fr; }
+      .arrow { display: none; }
+      h1 { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <article class="card score-card">
+        <div class="eyebrow">Stakeholder Brief</div>
+        <h1>Plan Readiness Audit</h1>
+        <p class="subhead">This dashboard summarizes the current implementation plan against the frozen 99-requirement benchmark denominator.</p>
+        <div class="dial">
+          <div class="dial-inner">
+            <div class="dial-score">77.3%</div>
+            <div class="dial-label">Overall Coverage</div>
           </div>
         </div>
+        <div class="mini-grid">
+          <div class="mini"><div class="k">Full</div><div class="v">57</div></div>
+          <div class="mini"><div class="k">Partial</div><div class="v">39</div></div>
+          <div class="mini"><div class="k">Missing</div><div class="v">3</div></div>
+        </div>
+      </article>
+      <article class="card hero-story">
+        <div>
+          <div class="eyebrow">Audit Arc</div>
+          <h2 style="font-size:34px; margin-top:10px;">From narrative plan to scored readiness</h2>
+        </div>
+        <div class="story-grid">
+          <div class="story-step">
+            <h3>Before Audit</h3>
+            <p>One implementation plan was submitted, but this run did not include a separate revised-plan artifact or a pre-audit coverage score.</p>
+          </div>
+          <div class="arrow">→</div>
+          <div class="story-step">
+            <h3>After Audit</h3>
+            <p>The submitted plan scores 77.3% against the frozen denominator, with 57 full, 39 partial, and 3 missing requirements.</p>
+          </div>
+        </div>
+        <div class="note">This dashboard shows the audit arc from unscored plan narrative to quantified coverage because no distinct revised-plan delta was captured in the source markdown.</div>
+      </article>
+    </section>
 
-        <div class="hero-grid">
-          <div class="score-card">
-            <div class="score-ring">
-              <div class="score-value">
-                <strong>89.39%</strong>
-                <span>overall coverage</span>
-              </div>
+    <section class="section">
+      <div class="section-head">
+        <h2>What This Means</h2>
+        <p>High confidence in infrastructure and core show-detail scaffolding; lower confidence in exact AI contracts, persistence edge cases, person detail fidelity, and export completeness.</p>
+      </div>
+      <div class="three-up">
+        <article class="card panel">
+          <span class="pill good">What’s Strong</span>
+          <div class="metric-list">
+            <div class="metric-row">
+              <div class="label">Benchmark Runtime &amp; Isolation</div>
+              <div class="bar"><div class="fill good" style="width:94.1%"></div></div>
+              <div style="text-align:right; font-weight:700;">94.1%</div>
             </div>
-            <div class="score-copy">
-              <h2>Ready to build core flows. Not yet tight enough to trust cross-surface behavior by default.</h2>
-              <p>
-                79 requirements are fully covered, 19 are only partially covered, and 1 is missing.
-                The plan looks broad and credible at first pass, but the audit shows four critical
-                partials that matter directly to AI trust and personalized data behavior.
-              </p>
-              <div class="score-meta">
-                <div class="pill">79 full</div>
-                <div class="pill">19 partial</div>
-                <div class="pill">1 missing</div>
-                <div class="pill">20 undercovered total</div>
-              </div>
+            <div class="metric-row">
+              <div class="label">AI Voice, Persona &amp; Quality</div>
+              <div class="bar"><div class="fill good" style="width:92.9%"></div></div>
+              <div style="text-align:right; font-weight:700;">92.9%</div>
+            </div>
+            <div class="metric-row">
+              <div class="label">Show Detail &amp; Relationship UX</div>
+              <div class="bar"><div class="fill good" style="width:85.7%"></div></div>
+              <div style="text-align:right; font-weight:700;">85.7%</div>
             </div>
           </div>
+        </article>
+        <article class="card panel">
+          <span class="pill risk">What’s At Risk</span>
+          <div class="risk-list" style="margin-top:18px;">
+            <div class="risk-item">
+              <strong>Person Detail · 50.0%</strong>
+              <p>0 full, 4 partial, 0 missing requirements.</p>
+            </div>
+            <div class="risk-item">
+              <strong>Ask Chat · 60.0%</strong>
+              <p>3 full, 6 partial, 1 missing requirements.</p>
+            </div>
+            <div class="risk-item">
+              <strong>Settings &amp; Export · 62.5%</strong>
+              <p>2 full, 1 partial, 1 missing requirements.</p>
+            </div>
+            <div class="risk-item">
+              <strong>Concepts, Explore Similar &amp; Alchemy · 70.0%</strong>
+              <p>4 full, 6 partial, 0 missing requirements.</p>
+            </div>
+          </div>
+        </article>
+        <article class="card panel">
+          <span class="pill mid">Severity Picture</span>
+          <div class="metric-list">
+            <div class="metric-row">
+              <div class="label">Critical</div>
+              <div class="bar"><div class="fill good" style="width:86.7%"></div></div>
+              <div style="text-align:right; font-weight:700;">86.7%</div>
+            </div>
+            <div class="metric-row">
+              <div class="label">Important</div>
+              <div class="bar"><div class="fill mid" style="width:73.9%"></div></div>
+              <div style="text-align:right; font-weight:700;">73.9%</div>
+            </div>
+            <div class="metric-row">
+              <div class="label">Detail</div>
+              <div class="bar"><div class="fill risk" style="width:50.0%"></div></div>
+              <div style="text-align:right; font-weight:700;">50.0%</div>
+            </div>
+          </div>
+          <div class="risk-list" style="margin-top:18px;">
+            <div class="risk-item">
+              <strong>Critical exposure</strong>
+              <p>8 critical requirements are still partial and 0 critical requirements are missing.</p>
+            </div>
+            <div class="risk-item">
+              <strong>Open missing items</strong>
+              <p>PRD-050, PRD-074, PRD-099</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
 
-          <div class="stats">
-            <span class="eyebrow">Severity View</span>
-            <div class="stats-grid">
-              <div class="stat">
-                <div class="label">Critical</div>
-                <div class="value">93.33%</div>
-                <div class="detail">26 full, 4 partial, 0 missing</div>
-              </div>
-              <div class="stat">
-                <div class="label">Important</div>
-                <div class="value">88.06%</div>
-                <div class="detail">52 full, 14 partial, 1 missing</div>
-              </div>
-              <div class="stat">
-                <div class="label">Detail</div>
-                <div class="value">75.00%</div>
-                <div class="detail">1 full, 1 partial</div>
-              </div>
-              <div class="stat">
-                <div class="label">Confidence Call</div>
-                <div class="value">Medium</div>
-                <div class="detail">Core build is well specified; cross-surface behavior still needs tighter contracts.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+    <section class="section">
+      <div class="section-head">
+        <h2>Top Gaps And Why They Matter</h2>
+        <p>These are the highest-priority requirement misses still exposed by the current plan.</p>
+      </div>
+      <div class="gap-grid">
+        <article class="card gap-card">
+          <span class="pill risk">critical</span>
+          <div class="gap-id">PRD-072</div>
+          <h3>Emit `commentary` plus exact `showList` contract</h3>
+          <p>Without the exact structured Ask contract, the mentioned-shows row can break or mis-map titles, collapsing one of the main AI-to-detail navigation loops.</p>
+        </article>
+        <article class="card gap-card">
+          <span class="pill risk">critical</span>
+          <div class="gap-id">PRD-018</div>
+          <h3>Overlay saved user data on every show appearance</h3>
+          <p>If saved-user overlays do not consistently win everywhere a show appears, the core product promise of your version of the catalog becomes unreliable.</p>
+        </article>
+        <article class="card gap-card">
+          <span class="pill risk">critical</span>
+          <div class="gap-id">PRD-025</div>
+          <h3>Removing status deletes show and all My Data</h3>
+          <p>Ambiguous removal semantics create ghost-record risk and make collection membership harder to reason about for users, tests, and sync logic.</p>
+        </article>
+        <article class="card gap-card">
+          <span class="pill risk">critical</span>
+          <div class="gap-id">PRD-026</div>
+          <h3>Re-add preserves My Data and refreshes public data</h3>
+          <p>A vague re-add path risks either losing My Data after removal or restoring stale fields, which directly undermines trust in persistence.</p>
+        </article>
+        <article class="card gap-card">
+          <span class="pill risk">critical</span>
+          <div class="gap-id">PRD-098</div>
+          <h3>Export saved shows and My Data as zip</h3>
+          <p>Exporting raw JSON instead of a zip backup misses the explicit portability contract stakeholders will expect for data ownership and recovery.</p>
+        </article>
+      </div>
+    </section>
 
-      <section class="panel">
-        <div class="section-head">
-          <h2>The Before/After Arc</h2>
-          <p>How the plan reads before audit vs what the canonical requirement pass reveals.</p>
-        </div>
-        <div class="arc">
-          <div class="arc-step">
-            <div class="step">Before Audit</div>
-            <h3>Looks comprehensive</h3>
-            <p>
-              The seven-phase plan has clear architecture, routes, schemas, API surfaces, and
-              screen breakdowns. On a skim, it feels close to “ready to execute.”
-            </p>
+    <section class="section">
+      <div class="section-head">
+        <h2>Area Coverage Heatmap</h2>
+        <p>Weighted scores derived directly from the requirement table in <code>PLAN_EVAL.md</code>.</p>
+      </div>
+      <div class="area-grid">
+        <article class="card area-row">
+          <div>
+            <h3>Benchmark Runtime &amp; Isolation</h3>
+            <div class="bar" style="margin: 12px 0 10px;"><div class="fill good" style="width:94.1%"></div></div>
+            <div class="meta">15 full · 2 partial · 0 missing · 17 total</div>
           </div>
-          <div class="arc-step">
-            <div class="step">Audit Lens</div>
-            <h3>99 fixed requirements applied</h3>
-            <p>
-              The plan was tested against the frozen canonical catalog, not a fresh interpretation.
-              That prevents denominator drift and exposes where coverage is explicit versus implied.
-            </p>
+          <div class="score-chip">94</div>
+        </article>
+        <article class="card area-row">
+          <div>
+            <h3>Collection Data &amp; Persistence</h3>
+            <div class="bar" style="margin: 12px 0 10px;"><div class="fill mid" style="width:75.0%"></div></div>
+            <div class="meta">10 full · 10 partial · 0 missing · 20 total</div>
           </div>
-          <div class="arc-step">
-            <div class="step">After Audit</div>
-            <h3>Risk narrows, not broadens</h3>
-            <p>
-              Coverage lands at 89.39%. The issues are concentrated in AI guardrails, recommendation
-              resolution, overlay fidelity, and re-add semantics, not in the foundation.
-            </p>
+          <div class="score-chip">75</div>
+        </article>
+        <article class="card area-row">
+          <div>
+            <h3>App Navigation &amp; Discover Shell</h3>
+            <div class="bar" style="margin: 12px 0 10px;"><div class="fill mid" style="width:75.0%"></div></div>
+            <div class="meta">2 full · 2 partial · 0 missing · 4 total</div>
           </div>
-        </div>
-      </section>
+          <div class="score-chip">75</div>
+        </article>
+        <article class="card area-row">
+          <div>
+            <h3>Collection Home &amp; Search</h3>
+            <div class="bar" style="margin: 12px 0 10px;"><div class="fill mid" style="width:72.2%"></div></div>
+            <div class="meta">5 full · 3 partial · 1 missing · 9 total</div>
+          </div>
+          <div class="score-chip">72</div>
+        </article>
+        <article class="card area-row">
+          <div>
+            <h3>Show Detail &amp; Relationship UX</h3>
+            <div class="bar" style="margin: 12px 0 10px;"><div class="fill good" style="width:85.7%"></div></div>
+            <div class="meta">10 full · 4 partial · 0 missing · 14 total</div>
+          </div>
+          <div class="score-chip">86</div>
+        </article>
+        <article class="card area-row">
+          <div>
+            <h3>Ask Chat</h3>
+            <div class="bar" style="margin: 12px 0 10px;"><div class="fill risk" style="width:60.0%"></div></div>
+            <div class="meta">3 full · 6 partial · 1 missing · 10 total</div>
+          </div>
+          <div class="score-chip">60</div>
+        </article>
+        <article class="card area-row">
+          <div>
+            <h3>Concepts, Explore Similar &amp; Alchemy</h3>
+            <div class="bar" style="margin: 12px 0 10px;"><div class="fill mid" style="width:70.0%"></div></div>
+            <div class="meta">4 full · 6 partial · 0 missing · 10 total</div>
+          </div>
+          <div class="score-chip">70</div>
+        </article>
+        <article class="card area-row">
+          <div>
+            <h3>AI Voice, Persona &amp; Quality</h3>
+            <div class="bar" style="margin: 12px 0 10px;"><div class="fill good" style="width:92.9%"></div></div>
+            <div class="meta">6 full · 1 partial · 0 missing · 7 total</div>
+          </div>
+          <div class="score-chip">93</div>
+        </article>
+        <article class="card area-row">
+          <div>
+            <h3>Person Detail</h3>
+            <div class="bar" style="margin: 12px 0 10px;"><div class="fill risk" style="width:50.0%"></div></div>
+            <div class="meta">0 full · 4 partial · 0 missing · 4 total</div>
+          </div>
+          <div class="score-chip">50</div>
+        </article>
+        <article class="card area-row">
+          <div>
+            <h3>Settings &amp; Export</h3>
+            <div class="bar" style="margin: 12px 0 10px;"><div class="fill risk" style="width:62.5%"></div></div>
+            <div class="meta">2 full · 1 partial · 1 missing · 4 total</div>
+          </div>
+          <div class="score-chip">62</div>
+        </article>
+      </div>
+    </section>
 
-      <section class="panel">
-        <div class="section-head">
-          <h2>Coverage by Functional Area</h2>
-          <p>Strongest areas are fully or nearly fully covered; AI quality is the clear outlier and collection semantics need one more pass.</p>
-        </div>
-        <div class="area-grid">
-          <div class="bars">
-            <div class="bar-row">
-              <div class="bar-head"><strong>App Navigation &amp; Discover Shell</strong><span>100.00%</span></div>
-              <div class="track"><div class="fill" style="width: 100%"></div></div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-head"><strong>Person Detail</strong><span>100.00%</span></div>
-              <div class="track"><div class="fill" style="width: 100%"></div></div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-head"><strong>Settings &amp; Export</strong><span>100.00%</span></div>
-              <div class="track"><div class="fill" style="width: 100%"></div></div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-head"><strong>Benchmark Runtime &amp; Isolation</strong><span>97.06%</span></div>
-              <div class="track"><div class="fill" style="width: 97.06%"></div></div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-head"><strong>Ask Chat</strong><span>95.00%</span></div>
-              <div class="track"><div class="fill" style="width: 95%"></div></div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-head"><strong>Show Detail &amp; Relationship UX</strong><span>92.86%</span></div>
-              <div class="track"><div class="fill" style="width: 92.86%"></div></div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-head"><strong>Collection Data &amp; Persistence</strong><span>85.00%</span></div>
-              <div class="track"><div class="fill" style="width: 85%"></div></div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-head"><strong>Collection Home &amp; Search</strong><span>88.89%</span></div>
-              <div class="track"><div class="fill" style="width: 88.89%"></div></div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-head"><strong>Concepts, Explore Similar &amp; Alchemy</strong><span>85.00%</span></div>
-              <div class="track"><div class="fill" style="width: 85%"></div></div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-head"><strong>AI Voice, Persona &amp; Quality</strong><span>64.29%</span></div>
-              <div class="track"><div class="fill" style="width: 64.29%; background: linear-gradient(90deg, var(--gold), var(--coral));"></div></div>
-            </div>
-          </div>
-          <div class="summary-card">
-            <h3>What this means</h3>
-            <p>
-              The core app shape is not the problem. The plan is already highly credible on runtime,
-              navigation, detail screens, and export. The risk is that a few behavioral contracts still
-              cut across multiple surfaces at once, which means drift can show up in both AI behavior
-              and personalized data handling.
-            </p>
-            <p>
-              In practical terms: this is a buildable plan, but not yet a fully benchmark-hardened one.
-            </p>
-          </div>
-        </div>
-      </section>
+    <section class="section">
+      <div class="section-head">
+        <h2>Coverage Narrative</h2>
+        <p>Interpretation pulled from the completed markdown evaluation.</p>
+      </div>
+      <div class="narrative-grid">
+        <article class="card narrative-card">
+          <h3>Overall Posture</h3>
+          <p>This is a structurally sound plan with meaningful product-contract gaps. It would likely produce a working Next.js and Supabase application with the right major screens, but several exact behaviors that make the product trustworthy remain under-specified, especially around Ask output structure, collection lifecycle edge cases, and export fidelity.</p>
+        </article>
+        <article class="card narrative-card">
+          <h3>Strength Clusters</h3>
+          <p>The plan is strongest in Benchmark Runtime &amp; Isolation, Show Detail &amp; Relationship UX, and AI Voice, Persona &amp; Quality. Those areas have concrete architecture, schema, routing, and phased build tasks, so a team could start implementation with relatively little ambiguity about the runtime, persistence model, or the major show-detail and AI voice surfaces.</p>
+        </article>
+        <article class="card narrative-card">
+          <h3>Weakness Clusters</h3>
+          <p>The gaps are not random. They cluster in Ask Chat, Concepts, Explore Similar &amp; Alchemy, and Collection Data &amp; Persistence, where the PRD depends on exact behavioral contracts rather than broad feature existence. Person Detail and Settings &amp; Export are also weak, but in a different way: they are present in the plan as shells, yet still off-spec on important specifics such as gallery depth, analytics shape, backup packaging, and export formatting.</p>
+        </article>
+        <article class="card narrative-card">
+          <h3>Risk Assessment</h3>
+          <p>If this plan were executed as-is, the first thing a stakeholder or QA reviewer would notice is a product that looks broadly complete but breaks key invisible contracts. Ask could render recommendations without a reliable machine-readable mention payload, saved-state overlays could drift across browse surfaces, removed and re-added shows could behave inconsistently, and export would land in the wrong format. Those are not cosmetic misses; they affect trust, recoverability, and the app&#x27;s taste-aware discovery loop.</p>
+        </article>
+      </div>
+      <article class="card narrative-card" style="margin-top:14px;">
+        <h3>Remediation Guidance</h3>
+        <p>The plan needs another pass focused on precise acceptance criteria, not more broad architecture. Tighten the data-lifecycle rules for removal, re-add, Scoop persistence, sync, and upgrades; specify the exact Ask and concept-response contracts including retries and domain redirects; define the navigation-shell and Search behavior more explicitly; and expand the Person Detail and export sections so they match the PRD&#x27;s concrete UX and data-format requirements rather than placeholder feature shells.</p>
+      </article>
+    </section>
 
-      <section class="split">
-        <div class="panel">
-          <div class="section-head">
-            <h2>What’s Strong</h2>
-            <p>Areas that should give stakeholders confidence.</p>
-          </div>
-          <ul>
-            <li>Runtime and isolation requirements are almost fully covered, including namespace scoping, user scoping, migrations, and benchmark-friendly auth injection.</li>
-            <li>Navigation, person detail, and settings/export all score at 100%, which means the non-AI shell of the product is well specified.</li>
-            <li>Show Detail and Ask are both high-coverage areas, so the plan already captures the product’s main engagement surfaces in substantial detail.</li>
-            <li>Collection save/remove defaults, timestamp fields, export shape, and data continuity are handled concretely rather than left as vague follow-up work.</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <div class="section-head">
-            <h2>What’s At Risk</h2>
-            <p>The gaps do cluster, and the pattern matters.</p>
-          </div>
-          <ul>
-            <li>AI Voice, Persona &amp; Quality is the weakest area by a wide margin at 64.29%.</li>
-            <li>There are now four critical partials, and three of them sit directly on the product’s core promise: personalized overlays, AI actionability, and user-history preservation.</li>
-            <li>Recommendation quality is described, but not validated; there is no planned rubric or integrity hard-fail.</li>
-            <li>Several “exact semantics” items remain loose: hidden <code>Next</code>, Search-on-launch behavior, Search tone, detail-page order, duplicate merge handling, and transient provider-detail boundaries.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="section-head">
-          <h2>Top Gaps and Why They Matter</h2>
-          <p>The issues most likely to show up first in QA, stakeholder review, or user trust.</p>
-        </div>
-        <div class="gap-grid">
-          <article class="gap-card">
-            <span class="severity">Critical • PRD-086</span>
-            <h3>Shared AI guardrails</h3>
-            <p>
-              The plan references guardrails, but not as a single reusable contract. Without that,
-              spoiler policy, domain limits, and honesty standards can drift surface by surface.
-            </p>
-          </article>
-          <article class="gap-card">
-            <span class="severity">Critical • PRD-018</span>
-            <h3>Overlay everywhere</h3>
-            <p>
-              The plan states that the user's saved view should follow a show everywhere, but it only
-              concretely wires badges and merged detail fetches. That leaves the central personalization
-              promise under-specified outside key screens.
-            </p>
-          </article>
-          <article class="gap-card">
-            <span class="severity">Critical • PRD-031</span>
-            <h3>Real-show resolution</h3>
-            <p>
-              Ask has an explicit resolver path, but Explore Similar and Alchemy do not. That creates a
-              real risk of dead-end recommendations in the app’s most differentiated discovery surfaces.
-            </p>
-          </article>
-          <article class="gap-card">
-            <span class="severity">Critical • PRD-026</span>
-            <h3>Re-add data preservation</h3>
-            <p>
-              The removal flow hard-deletes the show row, but the checklist also says re-adding should
-              preserve prior My Data. Without a concrete retention model, that promise is not credible yet.
-            </p>
-          </article>
-          <article class="gap-card">
-            <span class="severity">Important • PRD-091</span>
-            <h3>Discovery validation rubric</h3>
-            <p>
-              There is no discovery-quality rubric or hard-fail integrity gate, so weak or hallucinated
-              recommendations could ship without any explicit quality checkpoint.
-            </p>
-          </article>
-        </div>
-        <div class="footer-note">
-          Source of truth: <code>results/PLAN_EVAL.md</code>. All scores and risk calls above are derived from that completed evaluation, not recomputed from the PRD.
-        </div>
-      </section>
-    </div>
-  </body>
+    <footer>
+      Source of truth: results/PLAN_EVAL.md · Generated from the completed markdown evaluation only.
+    </footer>
+  </div>
+</body>
 </html>
