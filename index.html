@@ -309,7 +309,7 @@
     {id:"trends",label:"Trends"},
     {id:"explore",label:"Explore"},
   ];
-  const TOOL_COLORS={"Codex CLI":"#6b9e7a","Claude Code":"#d4a843","Cursor":"#7a8fa6","Gemini CLI":"#b88c63"};
+  const TOOL_COLORS={"Codex CLI":"#6fd0c1","Claude Code":"#f4e3a3","Cursor":"#8fb7ff","Gemini CLI":"#e2a56f"};
   const FAMILY_COLORS={"GPT-5":"#6b9e7a","Claude Opus":"#d4a843","Claude Sonnet":"#c47a5a"};
   const EFFORT_COLORS={"X-High":"#d4a843","High":"#6b9e7a","Medium":"#7a8fa6","Low":"#9a9084"};
   const PLAN_COLORS={true:"#6b9e7a",false:"#c47a5a",null:"#7a8fa6"};
@@ -327,6 +327,13 @@
   function scCls(v){const n=Number(v);return n>=88?"high":n>=75?"mid":"low"}
   function scCol(v){const n=Number(v);return n>=88?"var(--sage)":n>=75?"var(--gold)":"var(--terra)"}
   function toolCol(t){return TOOL_COLORS[t]||"var(--slate)"}
+  function toolSymbol(t){
+    if(t==="Codex CLI")return "rect";
+    if(t==="Claude Code")return "diamond";
+    if(t==="Cursor")return "circle";
+    if(t==="Gemini CLI")return "triangle";
+    return "circle";
+  }
   function colorFor(run,by){
     if(by==="tool")return TOOL_COLORS[run.tool]||"#7a8fa6";
     if(by==="model_family")return FAMILY_COLORS[run.model_family]||"#7a8fa6";
@@ -339,8 +346,8 @@
     const style={color:colorFor(run,by)};
     if(by==="family_tool"){
       style.borderColor=toolCol(run.tool);
-      style.borderWidth=kind==="scatter"?3:2;
-      style.shadowBlur=kind==="scatter"?0:6;
+      style.borderWidth=kind==="scatter"?4:3;
+      style.shadowBlur=kind==="scatter"?2:8;
       style.shadowColor="rgba(0,0,0,0.18)";
     }else if(kind==="scatter"){
       style.borderColor="rgba(0,0,0,0.3)";
@@ -349,7 +356,7 @@
     return style;
   }
   function colorModeHelp(by){
-    if(by==="family_tool")return"Fill shows model family. Outline shows tool.";
+    if(by==="family_tool")return"Fill shows model family. Tool shows up as marker shape and accent outline.";
     if(by==="tool")return"Color shows tool.";
     if(by==="model_family")return"Color shows model family.";
     if(by==="effort")return"Color shows effort.";
@@ -863,7 +870,7 @@
         grid:{top:18,right:20,bottom:36,left:20,containLabel:true},
         xAxis:{type:"value",min:xMin,...(xIsScore?{max:100}:{}),name:metricLabel(xMetric),nameLocation:"middle",nameGap:28,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:xIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
         yAxis:{type:"value",min:yMin,...(yIsScore?{max:100}:{}),name:metricLabel(yMetric),nameLocation:"middle",nameGap:40,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:yIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
-        series:[{type:"scatter",data:chartRuns.map(r=>({value:[metricVal(r,xMetric),metricVal(r,yMetric)],_rid:r.run_id,itemStyle:itemStyleFor(r,S.scatter.colorBy,"scatter")})),symbolSize:p=>Math.max(12,Math.min(26,((p[1]||50)/100)*20)),label:{show:chartRuns.length<=10,position:"right",color:"#b8aea0",fontSize:10,fontWeight:600,formatter:p=>chartLabel(chartRuns.find(x=>x.run_id===p.data._rid),true)}}]
+        series:[{type:"scatter",data:chartRuns.map(r=>({value:[metricVal(r,xMetric),metricVal(r,yMetric)],_rid:r.run_id,itemStyle:itemStyleFor(r,S.scatter.colorBy,"scatter"),symbol:S.scatter.colorBy==="family_tool"?toolSymbol(r.tool):"circle"})),symbol:p=>p.data.symbol||"circle",symbolSize:p=>Math.max(12,Math.min(26,((p[1]||50)/100)*20)),label:{show:chartRuns.length<=10,position:"right",color:"#b8aea0",fontSize:10,fontWeight:600,formatter:p=>chartLabel(chartRuns.find(x=>x.run_id===p.data._rid),true)}}]
       },true);
       ch.off("click");
       ch.on("click",p=>{if(p.data&&p.data._rid)openInspect(p.data._rid,"scatter")});
@@ -872,6 +879,8 @@
     const labels=chartRuns.map(r=>chartLabel(r,S.scatter.plotType==="vbar")).reverse();
     const values=chartRuns.map(r=>metricVal(r,metric)).reverse();
     const axisMin=resolvedAxisMin(chartRuns.map(r=>metricVal(r,metric)),isScore,S.scatter.axisMin);
+    const axisMax=Math.max(...chartRuns.map(r=>metricVal(r,metric)));
+    const markerBase=axisMin+Math.max((axisMax-axisMin||1)*0.02,isScore?0.3:0.4);
     if(S.scatter.plotType==="vbar"){
       const orderedRuns=chartRuns.slice();
       ch.setOption({
@@ -880,7 +889,12 @@
         grid:{top:20,right:16,bottom:90,left:12,containLabel:true},
         xAxis:{type:"category",data:orderedRuns.map(r=>chartLabel(r,true)),axisTick:{show:false},axisLine:{show:false},axisLabel:{color:"#b8aea0",fontSize:10,fontWeight:600,interval:0,rotate:0}},
         yAxis:{type:"value",min:axisMin,...(isScore?{max:100}:{}),name:metricLabel(metric),nameLocation:"middle",nameGap:42,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
-        series:[{type:"bar",data:orderedRuns.map(r=>({value:metricVal(r,metric),itemStyle:itemStyleFor(r,S.scatter.colorBy,"bar"),_rid:r.run_id})),barWidth:24,itemStyle:{borderRadius:[4,4,0,0]}}]
+        series:[
+          {type:"bar",data:orderedRuns.map(r=>({value:metricVal(r,metric),itemStyle:itemStyleFor(r,S.scatter.colorBy,"bar"),_rid:r.run_id})),barWidth:24,itemStyle:{borderRadius:[4,4,0,0]}},
+          ...(S.scatter.colorBy==="family_tool"
+            ?[{type:"scatter",data:orderedRuns.map(r=>({value:[chartLabel(r,true),markerBase],_rid:r.run_id,itemStyle:{color:toolCol(r.tool)},symbol:toolSymbol(r.tool)})),symbol:p=>p.data.symbol||"circle",symbolSize:12,silent:true,z:6}]
+            :[])
+        ]
       },true);
       ch.off("click");
       ch.on("click",p=>{if(p.data&&p.data._rid)openInspect(p.data._rid,"scatter")});
@@ -892,7 +906,12 @@
       grid:{top:12,right:16,bottom:12,left:12,containLabel:true},
       xAxis:{type:"value",min:axisMin,...(isScore?{max:100}:{}),name:metricLabel(metric),nameLocation:"middle",nameGap:26,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
       yAxis:{type:"category",data:labels,axisTick:{show:false},axisLine:{show:false},axisLabel:{color:"#b8aea0",fontSize:10,fontWeight:600,width:240,overflow:"truncate"}},
-      series:[{type:"bar",data:values.map((value,idx)=>({value,itemStyle:itemStyleFor(chartRuns[chartRuns.length-1-idx],S.scatter.colorBy,"bar"),_rid:chartRuns[chartRuns.length-1-idx].run_id})),barWidth:14,itemStyle:{borderRadius:[0,4,4,0]}}]
+      series:[
+        {type:"bar",data:values.map((value,idx)=>({value,itemStyle:itemStyleFor(chartRuns[chartRuns.length-1-idx],S.scatter.colorBy,"bar"),_rid:chartRuns[chartRuns.length-1-idx].run_id})),barWidth:14,itemStyle:{borderRadius:[0,4,4,0]}},
+        ...(S.scatter.colorBy==="family_tool"
+          ?[{type:"scatter",data:chartRuns.map(r=>({value:[markerBase,chartLabel(r,false)],_rid:r.run_id,itemStyle:{color:toolCol(r.tool)},symbol:toolSymbol(r.tool)})).reverse(),symbol:p=>p.data.symbol||"circle",symbolSize:12,silent:true,z:6}]
+          :[])
+      ]
     },true);
     ch.off("click");
     ch.on("click",p=>{if(p.data&&p.data._rid)openInspect(p.data._rid,"scatter")});
