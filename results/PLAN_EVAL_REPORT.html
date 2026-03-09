@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plan Evaluation Report</title>
+  <style>
+:root {
+  --bg: #f4efe6;
+  --bg-strong: #efe6d6;
+  --panel: rgba(255, 252, 247, 0.84);
+  --panel-strong: rgba(255, 249, 241, 0.96);
+  --ink: #1f2930;
+  --muted: #5e6a70;
+  --line: rgba(31, 41, 48, 0.12);
+  --teal: #0f766e;
+  --teal-soft: #d6f0eb;
+  --amber: #b7791f;
+  --amber-soft: #fff1cc;
+  --rose: #b44b45;
+  --rose-soft: #fde4e0;
+  --slate-soft: #e9ecef;
+  --shadow: 0 22px 45px rgba(49, 55, 57, 0.12);
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 32%),
+    radial-gradient(circle at top right, rgba(180, 75, 69, 0.12), transparent 34%),
+    linear-gradient(180deg, var(--bg) 0%, #f8f4ec 48%, #f2ede2 100%);
+  color: var(--ink);
+}
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 42px 28px 54px;
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1.35fr 0.95fr;
+  gap: 24px;
+  align-items: stretch;
+}
+.card {
+  background: var(--panel);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+}
+.hero-copy { padding: 34px 34px 30px; }
+.eyebrow {
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 12px;
+  color: var(--teal);
+  font-weight: 700;
+}
+.hero h1, h2, h3 {
+  font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  letter-spacing: -0.02em;
+}
+.hero h1 {
+  margin: 0 0 14px;
+  font-size: 54px;
+  line-height: 0.96;
+}
+.lede {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 62ch;
+}
+.score-shell {
+  padding: 28px 28px 24px;
+  display: grid;
+  gap: 18px;
+}
+.score-top {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: 18px;
+  align-items: center;
+}
+.ring {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: conic-gradient(var(--teal) 0 51.5%, rgba(15, 118, 110, 0.12) 51.5% 100%);
+  display: grid;
+  place-items: center;
+  position: relative;
+  margin: 0 auto;
+}
+.ring::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #fffdf9 0%, #f6f1e7 100%);
+  box-shadow: inset 0 0 0 1px rgba(31, 41, 48, 0.06);
+}
+.ring-value {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+.ring-value strong {
+  display: block;
+  font-size: 42px;
+  line-height: 1;
+}
+.ring-value span {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.score-copy h2 { margin: 0 0 8px; font-size: 28px; }
+.score-copy p { margin: 0; color: var(--muted); line-height: 1.5; }
+.mix { display: grid; gap: 10px; }
+.mix-bar {
+  display: grid;
+  grid-template-columns: 25.0% 53.0% 21.0%;
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--slate-soft);
+}
+.mix-bar .full { background: linear-gradient(90deg, #0f766e, #14b8a6); }
+.mix-bar .partial { background: linear-gradient(90deg, #d49b3a, #f0c15a); }
+.mix-bar .missing { background: linear-gradient(90deg, #b44b45, #dd6b5f); }
+.mix-legend {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  font-size: 13px;
+}
+.mix-legend div {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.65);
+  border: 1px solid var(--line);
+}
+.mix-legend strong { display: block; font-size: 18px; margin-bottom: 2px; }
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 18px;
+}
+.metric { padding: 20px 20px 18px; }
+.metric .label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.metric .value { font-size: 34px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
+.metric p { margin: 0; color: var(--muted); line-height: 1.45; font-size: 14px; }
+.metric.teal { background: linear-gradient(180deg, rgba(214, 240, 235, 0.82), rgba(255,255,255,0.78)); }
+.metric.amber { background: linear-gradient(180deg, rgba(255, 241, 204, 0.84), rgba(255,255,255,0.78)); }
+.metric.rose { background: linear-gradient(180deg, rgba(253, 228, 224, 0.86), rgba(255,255,255,0.78)); }
+.arc {
+  margin-top: 24px;
+  padding: 26px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+}
+.arc-card {
+  border-radius: var(--radius-lg);
+  padding: 22px 22px 18px;
+  border: 1px solid var(--line);
+  min-height: 178px;
+}
+.arc-card.before { background: linear-gradient(180deg, rgba(15,118,110,0.08), rgba(255,255,255,0.76)); }
+.arc-card.after { background: linear-gradient(180deg, rgba(180,75,69,0.08), rgba(255,255,255,0.78)); }
+.arc-card .tag {
+  display: inline-block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.arc-card h3 { margin: 0 0 8px; font-size: 28px; }
+.arc-card p { margin: 0; color: var(--muted); line-height: 1.5; }
+.arc-arrow {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #fffdf9, #f1eadb);
+  border: 1px solid var(--line);
+  color: var(--teal);
+  font-size: 34px;
+}
+.arc-note {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  color: var(--muted);
+  padding-top: 2px;
+}
+.two-col {
+  display: grid;
+  grid-template-columns: 1.02fr 0.98fr;
+  gap: 18px;
+  margin-top: 24px;
+}
+.panel { padding: 24px 24px 22px; }
+.panel h2 { margin: 0 0 14px; font-size: 30px; }
+.panel .subcopy { margin: 0 0 18px; color: var(--muted); line-height: 1.55; }
+.area-list { display: grid; gap: 14px; }
+.area-row {
+  padding: 16px 16px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid var(--line);
+}
+.area-head { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; margin-bottom: 10px; }
+.area-head strong { font-size: 17px; }
+.area-head span { color: var(--muted); font-size: 14px; }
+.bar-track { height: 10px; border-radius: 999px; background: rgba(31,41,48,0.08); overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #0f766e, #14b8a6); }
+.bar-fill.risk { background: linear-gradient(90deg, #b44b45, #dd6b5f); }
+.gaps { margin-top: 24px; padding: 24px; }
+.gaps h2 { margin: 0 0 16px; font-size: 30px; }
+.gap-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.gap-card {
+  border-radius: 18px;
+  padding: 18px 16px 16px;
+  background: linear-gradient(180deg, rgba(253,228,224,0.74), rgba(255,255,255,0.92));
+  border: 1px solid rgba(180,75,69,0.18);
+  min-height: 236px;
+}
+.gap-card .meta { font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--rose); margin-bottom: 10px; }
+.gap-card h3 { margin: 0 0 10px; font-size: 24px; line-height: 1.05; }
+.gap-card p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 14px; }
+.narrative-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 24px; }
+.narrative-card { padding: 22px; }
+.narrative-card h3 { margin: 0 0 10px; font-size: 28px; }
+.narrative-card p { margin: 0; color: var(--muted); line-height: 1.6; }
+.footer { margin-top: 20px; text-align: right; font-size: 12px; color: var(--muted); }
+@media (max-width: 1024px) {
+  .hero, .two-col, .narrative-grid, .grid-4 { grid-template-columns: 1fr; }
+  .gap-grid { grid-template-columns: repeat(2, 1fr); }
+  .arc { grid-template-columns: 1fr; }
+  .arc-arrow { display: none; }
+  .score-top { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .page { padding: 20px 14px 32px; }
+  .hero h1 { font-size: 40px; }
+  .gap-grid { grid-template-columns: 1fr; }
+  .mix-legend { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="card hero-copy">
+        <p class="eyebrow">Stakeholder Coverage Brief</p>
+        <h1>Broad feature coverage, but too many benchmark contracts stay implicit.</h1>
+        <p class="lede">The submitted plan touches 9 of 10 functional areas, yet the audited score lands at 51.5%. Core architecture and the main library/detail flows are present, but AI contracts, data durability, Person Detail, and Settings/export remain materially underplanned.</p>
+      </div>
+      <div class="card score-shell">
+        <div class="score-top">
+          <div class="ring">
+            <div class="ring-value">
+              <strong>51.5%</strong>
+              <span>Overall Coverage</span>
+            </div>
+          </div>
+          <div class="score-copy">
+            <h2>Audit Result</h2>
+            <p>This is a structurally sound high-level plan with concerning holes. It covers the stack choice, isolation model, core library flows, and the existence of the major discovery surfaces, but it leaves too many benchmark-scored behaviors at the level of implication rather than explicit implementation intent.</p>
+          </div>
+        </div>
+        <div class="mix">
+          <div class="mix-bar">
+            <div class="full"></div>
+            <div class="partial"></div>
+            <div class="missing"></div>
+          </div>
+          <div class="mix-legend">
+            <div><strong>25</strong><span>Full</span></div>
+            <div><strong>53</strong><span>Partial</span></div>
+            <div><strong>21</strong><span>Missing</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid-4">
+      
+    <div class="card metric teal">
+      <div class="label">Critical Score</div>
+      <div class="value">66.7%</div>
+      <p>12 full, 16 partial, 2 missing across 30 critical requirements.</p>
+    </div>
+    
+    <div class="card metric amber">
+      <div class="label">Important Score</div>
+      <div class="value">47.0%</div>
+      <p>13 full, 37 partial, 17 missing across 67 important requirements.</p>
+    </div>
+    
+    <div class="card metric rose">
+      <div class="label">Detail Score</div>
+      <div class="value">0.0%</div>
+      <p>0 full, 0 partial, 2 missing across 2 detail requirements.</p>
+    </div>
+    
+<div class="card metric">
+  <div class="label">Breadth vs Depth</div>
+  <div class="value">9/10</div>
+  <p>Functional areas touched before audit versus 51.5% requirement coverage after scoring.</p>
+</div>
+
+    </section>
+
+    <section class="card arc">
+      <div class="arc-card before">
+        <div class="tag">Before audit</div>
+        <h3>Broad surface plan</h3>
+        <p>The submitted plan mentions or implies <strong>9 of 10 functional areas</strong>, with visible emphasis on infra, library, detail, and discovery.</p>
+      </div>
+      <div class="arc-arrow">→</div>
+      <div class="arc-card after">
+        <div class="tag">After requirement scoring</div>
+        <h3>Depth falls to 51.5%</h3>
+        <p>Once scored against the frozen benchmark catalog, only <strong>25</strong> requirements are fully covered while <strong>53</strong> stay underspecified and <strong>21</strong> are absent.</p>
+      </div>
+      <div class="arc-note">Before = apparent breadth of the submitted plan. After = audited benchmark coverage derived from <code>results/PLAN_EVAL.md</code>. No separate revised-plan artifact was provided in this run.</div>
+    </section>
+
+    <section class="two-col">
+      <div class="card panel">
+        <h2>What's strong</h2>
+        <p class="subcopy">The plan is strongest in **Benchmark Runtime &amp; Isolation**, where it names Next.js, Supabase, namespace scoping, user identity, migrations, and developer scripts. It is also reasonably strong in **Show Detail &amp; Relationship UX** and the core collection mechanics inside **Collection Data &amp; Persistence**, especially around auto-save triggers, removal semantics, grouping, and the high-level Detail-page layout.</p>
+        <div class="area-list">
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Benchmark Runtime &amp; Isolation</strong>
+        <span>64.7%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 64.7%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">8 full, 6 partial, 3 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Show Detail &amp; Relationship UX</strong>
+        <span>60.7%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 60.7%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">4 full, 9 partial, 1 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Collection Data &amp; Persistence</strong>
+        <span>57.5%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 57.5%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">5 full, 13 partial, 2 missing</div>
+    </div>
+    </div>
+      </div>
+      <div class="card panel">
+        <h2>What's at risk</h2>
+        <p class="subcopy">The biggest weakness cluster is AI behavioral specificity. **Ask Chat**, **AI Voice, Persona &amp; Quality**, and parts of **Concepts, Explore Similar &amp; Alchemy** are mostly partial because the plan references the supporting guides without translating them into concrete contracts, fallback behavior, validation rules, or surface-specific tasking. A second cluster is long-tail product completeness: **Person Detail** is entirely absent, and **Settings &amp; Export** stays too vague for a benchmark that scores exact output behavior.</p>
+        <div class="area-list">
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Person Detail</strong>
+        <span>0.0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill risk" style="width: 0.0%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">0 full, 0 partial, 4 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Ask Chat</strong>
+        <span>35.0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill risk" style="width: 35.0%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">1 full, 5 partial, 4 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Collection Home &amp; Search</strong>
+        <span>50.0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill risk" style="width: 50.0%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">3 full, 3 partial, 3 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Concepts, Explore Similar &amp; Alchemy</strong>
+        <span>50.0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill risk" style="width: 50.0%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">2 full, 6 partial, 2 missing</div>
+    </div>
+    </div>
+      </div>
+    </section>
+
+    <section class="card gaps">
+      <h2>Top gaps and why they matter</h2>
+      <div class="gap-grid">
+    <div class="gap-card">
+      <div class="meta">**PRD-034** • critical</div>
+      <h3>Preserve saved libraries across data-model upgrades: The plan never addresses upgrade continuity, so a schema or storage revision could wipe the user’s core asset and break the benchmark’s continuity promise.</h3>
+      <p></p>
+    </div>
+    
+    <div class="gap-card">
+      <div class="meta">**PRD-016** • critical</div>
+      <h3>Make client cache safe to discard: Without an explicit disposable-cache strategy, clearing local state or reinstalling the app can appear to lose user data and undermine backend durability.</h3>
+      <p></p>
+    </div>
+    
+    <div class="gap-card">
+      <div class="meta">**PRD-037** • critical</div>
+      <h3>Merge catalog fields safely and maintain timestamps: The plan lacks the concrete merge rules that protect user edits during catalog refreshes, sync, and re-add flows, so data correctness is still under-specified.</h3>
+      <p></p>
+    </div>
+    
+    <div class="gap-card">
+      <div class="meta">**PRD-072** • critical</div>
+      <h3>Emit `commentary` plus exact `showList` contract: Ask depends on a strict model-output contract to render actionable mentions, and the plan only covers part of that contract.</h3>
+      <p></p>
+    </div>
+    
+    <div class="gap-card">
+      <div class="meta">**PRD-031** • critical</div>
+      <h3>Resolve AI recommendations to real selectable shows: If recommendations are not mapped deterministically into real show objects, discovery becomes non-actionable exactly where the product is supposed to convert curiosity into saves.</h3>
+      <p></p>
+    </div>
+    </div>
+    </section>
+
+    <section class="narrative-grid">
+      <div class="card narrative-card">
+        <h3>Risk Assessment</h3>
+        <p>If this plan were executed as-is, the first visible failure would be a product that looks directionally correct but fails acceptance on exact behavior. QA would likely catch AI mention-contract drift, missing chat starter/summarization flows, absent person-detail functionality, and weak persistence guarantees around cache clearing, upgrades, and merge safety before users ever see a polished “complete” build.</p>
+      </div>
+      <div class="card narrative-card">
+        <h3>Remediation Guidance</h3>
+        <p>The missing work is less about adding entirely new architecture and more about converting vague intent into explicit contracts. The plan needs a tighter persistence-spec section for cache disposal, version continuity, and merge rules; explicit tasking for Ask and concept-output contracts, retries, and validation; and new sections for Person Detail plus exact export behavior. In other words, the next revision should deepen specification and acceptance criteria, not just add more implementation phases.</p>
+      </div>
+      <div class="card narrative-card">
+        <h3>Functional-Area Coverage</h3>
+        <div class="area-list">
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Benchmark Runtime &amp; Isolation</strong>
+        <span>64.7%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 64.7%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">8 full, 6 partial, 3 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Collection Data &amp; Persistence</strong>
+        <span>57.5%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 57.5%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">5 full, 13 partial, 2 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>App Navigation &amp; Discover Shell</strong>
+        <span>50.0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 50.0%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">1 full, 2 partial, 1 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Collection Home &amp; Search</strong>
+        <span>50.0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 50.0%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">3 full, 3 partial, 3 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Show Detail &amp; Relationship UX</strong>
+        <span>60.7%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 60.7%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">4 full, 9 partial, 1 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Ask Chat</strong>
+        <span>35.0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 35.0%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">1 full, 5 partial, 4 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Concepts, Explore Similar &amp; Alchemy</strong>
+        <span>50.0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 50.0%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">2 full, 6 partial, 2 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>AI Voice, Persona &amp; Quality</strong>
+        <span>50.0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 50.0%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">0 full, 7 partial, 0 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Person Detail</strong>
+        <span>0.0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 0.0%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">0 full, 0 partial, 4 missing</div>
+    </div>
+    
+    <div class="area-row">
+      <div class="area-head">
+        <strong>Settings &amp; Export</strong>
+        <span>50.0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width: 50.0%"></div></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;">1 full, 2 partial, 1 missing</div>
+    </div>
+    </div>
+      </div>
+    </section>
+
+    <div class="footer">Generated from PLAN_EVAL.md on 2026-03-08</div>
+  </main>
+</body>
+</html>

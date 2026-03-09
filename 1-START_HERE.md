@@ -1,8 +1,10 @@
 # START HERE
 
-You are being given a complete product specification to build. The `docs/prd/` folder contains everything required to understand and implement a fully functional application.
+You are being given a complete product specification to plan. The `docs/prd/` folder contains everything required to understand the full application scope.
 
-**Your task:** Read and deeply understand all documentation in `docs/prd/`, then create a comprehensive implementation plan and build the system.
+**Your task:** Read and deeply understand all documentation in `docs/prd/`, then create a comprehensive implementation plan.
+
+Do **not** implement the product. Do **not** start coding. The only deliverable for this step is the implementation plan.
 
 ---
 
@@ -18,7 +20,7 @@ Read these first, in order:
 
 ### Supporting Documents
 
-All documents in `docs/prd/supporting_docs/` provide critical detail referenced by the main PRD. Read all of them.
+All documents in `docs/prd/supporting_docs/` provide critical detail referenced by the main PRD. Read them recursively, including nested technical docs such as `docs/prd/supporting_docs/technical_docs/`.
 
 ---
 
@@ -30,7 +32,9 @@ All documents in `docs/prd/supporting_docs/` provide critical detail referenced 
 
 - **Plan comprehensively.** Your implementation plan should demonstrate that you understood the full scope of what needs to be built and how it fits together.
 
-- **Build completely.** Implement the system as specified.
+- **Do not implement.** Do not create source files, modify application code, or otherwise begin building the system in this step.
+
+- **Produce one deliverable.** The output of this step is `results/PLAN.md` only.
 
 ---
 
@@ -39,3 +43,5 @@ All documents in `docs/prd/supporting_docs/` provide critical detail referenced 
 Read `docs/prd/product_prd.md` now.
 
 Write your implementation plan in a file called `results/PLAN.md`.
+
+If your current execution mode forbids file writes, complete the plan anyway and explicitly state that the plan is complete but could not be saved because writes were blocked by the execution mode. Do not implement the product in that case either.

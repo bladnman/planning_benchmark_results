@@ -1,0 +1,160 @@
+{
+  "schema_version": 2,
+  "run_id": "gemini_3_1_pro__gemini_cli",
+  "worktree_name": "gemini_3_1_pro__gemini_cli",
+  "branch_name": "benchmarks/gemini_3_1_pro__gemini_cli",
+  "captured_at": "2026-03-09T01:13:35.358996Z",
+  "paths": {
+    "run_path": "/Users/mmaher/code/planning_benchmark_control/runs/gemini_3_1_pro__gemini_cli",
+    "results_dir": "/Users/mmaher/code/planning_benchmark_control/runs/gemini_3_1_pro__gemini_cli/results"
+  },
+  "subject": {
+    "model_slug": "gemini_3_1_pro",
+    "model_name": "Gemini 3.1 Pro",
+    "model_family": "Gemini 3",
+    "manufacturer": "Google",
+    "tool_slug": "gemini_cli",
+    "tool": "Gemini CLI",
+    "effort_slug": null,
+    "effort": null,
+    "variant_slug": null,
+    "variant": null
+  },
+  "grouping": {
+    "model_id": "gemini_3_1_pro",
+    "series_id": "gemini_3_1_pro__gemini_cli",
+    "case_id": "gemini_3_1_pro__gemini_cli",
+    "case_slug": null,
+    "case_label": "Default",
+    "replicate_index": 1,
+    "baseline_case": true
+  },
+  "declared": {
+    "inference_profile_slug": "default",
+    "inference_profile": "Default",
+    "requested_context_window_tokens": null,
+    "planning_mode": null,
+    "prompt_profile_slug": "default_step1",
+    "prompt_profile": "Default Step 1",
+    "experiment_role": "baseline",
+    "experiment_tags": [],
+    "scenario": {
+      "slug": null,
+      "label": null,
+      "description": null,
+      "hypothesis": null
+    },
+    "case_slug": null
+  },
+  "planning": {
+    "prompt_path": "1-START_HERE.md",
+    "prompt_git_sha": "f2c8fd17f8538b82614fc5d4cf073c520360bf38",
+    "prompt_profile_slug": "default_step1",
+    "prompt_profile": "Default Step 1"
+  },
+  "evaluation": {
+    "evaluator_model": "gpt-5.4",
+    "evaluator_provider": "openai",
+    "prompt_path": "2-EVALUATE_PLAN.md",
+    "prompt_git_sha": "ff336f1da5a131fab72b1ad200abe0bee4872850",
+    "evaluation_session_path": "/Users/mmaher/.codex/sessions/2026/03/08/rollout-2026-03-08T18-03-17-019cd01e-ad65-71e1-b04e-86b06c08797c.jsonl",
+    "evaluation_started_at": "2026-03-09T01:03:21.162Z",
+    "evaluation_ended_at": "2026-03-09T01:14:21.157Z",
+    "evaluation_duration_seconds": 659
+  },
+  "snapshot": {
+    "swe_bench_verified": {
+      "source_url": null,
+      "value": null
+    },
+    "pricing": {
+      "cached_input_usd_per_mtok": null,
+      "output_usd_per_mtok": null,
+      "input_usd_per_mtok": null,
+      "source_url": null
+    },
+    "frontier": {
+      "note": null,
+      "source": "manual",
+      "value": null
+    },
+    "context_window_tokens": {
+      "source_url": null,
+      "value": null
+    }
+  },
+  "observed": {
+    "plan_session": {
+      "source_tool": "codex_cli",
+      "session_path": "/Users/mmaher/.codex/sessions/2026/03/08/rollout-2026-03-08T18-03-17-019cd01e-ad65-71e1-b04e-86b06c08797c.jsonl",
+      "started_at": "2026-03-09T01:03:21.162Z",
+      "ended_at": "2026-03-09T01:14:21.157Z",
+      "duration_seconds": 659,
+      "model": "gpt-5.4",
+      "provider": "openai",
+      "version": "0.112.0",
+      "collaboration_mode": "default",
+      "context_window_tokens": 258400,
+      "assistant_message_count": 11,
+      "user_message_count": 5,
+      "tool_call_count": 70,
+      "tool_calls_by_name": {
+        "close_agent": 2,
+        "exec_command": 38,
+        "spawn_agent": 2,
+        "update_plan": 2,
+        "wait": 3,
+        "write_stdin": 23
+      },
+      "interrupted_count": 0,
+      "task_complete_count": 1,
+      "input_tokens": 1813127,
+      "cached_input_tokens": 1766016,
+      "output_tokens": 38324,
+      "estimated_cost_usd": null
+    },
+    "eval_session": {
+      "source_tool": "codex_cli",
+      "session_path": "/Users/mmaher/.codex/sessions/2026/03/08/rollout-2026-03-08T18-03-17-019cd01e-ad65-71e1-b04e-86b06c08797c.jsonl",
+      "started_at": "2026-03-09T01:03:21.162Z",
+      "ended_at": "2026-03-09T01:14:21.157Z",
+      "duration_seconds": 659,
+      "model": "gpt-5.4",
+      "provider": "openai",
+      "version": "0.112.0",
+      "collaboration_mode": "default",
+      "context_window_tokens": 258400,
+      "assistant_message_count": 11,
+      "user_message_count": 5,
+      "tool_call_count": 70,
+      "tool_calls_by_name": {
+        "close_agent": 2,
+        "exec_command": 38,
+        "spawn_agent": 2,
+        "update_plan": 2,
+        "wait": 3,
+        "write_stdin": 23
+      },
+      "interrupted_count": 0,
+      "task_complete_count": 1,
+      "input_tokens": 1813127,
+      "cached_input_tokens": 1766016,
+      "output_tokens": 38324,
+      "estimated_cost_usd": null
+    }
+  },
+  "outcome": {
+    "plan_path": "/Users/mmaher/code/planning_benchmark_control/runs/gemini_3_1_pro__gemini_cli/results/PLAN.md",
+    "plan_saved": true,
+    "plan_written_at": "2026-03-09T00:22:03.264172Z",
+    "plan_eval_path": "/Users/mmaher/code/planning_benchmark_control/runs/gemini_3_1_pro__gemini_cli/results/PLAN_EVAL.md",
+    "plan_eval_written_at": "2026-03-09T01:13:35.358996Z",
+    "plan_eval_report_path": "/Users/mmaher/code/planning_benchmark_control/runs/gemini_3_1_pro__gemini_cli/results/PLAN_EVAL_REPORT.html",
+    "plan_eval_report_generated": true,
+    "plan_eval_report_written_at": "2026-03-09T01:13:58.664598Z",
+    "plan_session_completed_at": "2026-03-09T01:14:21.157Z",
+    "save_blocked_by_mode": false,
+    "artifact_latency_seconds": 0,
+    "completion_state": "complete"
+  }
+}
