@@ -870,7 +870,7 @@
         grid:{top:18,right:20,bottom:36,left:20,containLabel:true},
         xAxis:{type:"value",min:xMin,...(xIsScore?{max:100}:{}),name:metricLabel(xMetric),nameLocation:"middle",nameGap:28,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:xIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
         yAxis:{type:"value",min:yMin,...(yIsScore?{max:100}:{}),name:metricLabel(yMetric),nameLocation:"middle",nameGap:40,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:yIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
-        series:[{type:"scatter",data:chartRuns.map(r=>({value:[metricVal(r,xMetric),metricVal(r,yMetric)],_rid:r.run_id,itemStyle:itemStyleFor(r,S.scatter.colorBy,"scatter"),symbol:S.scatter.colorBy==="family_tool"?toolSymbol(r.tool):"circle"})),symbol:p=>p.data.symbol||"circle",symbolSize:p=>Math.max(12,Math.min(26,((p[1]||50)/100)*20)),label:{show:chartRuns.length<=10,position:"right",color:"#b8aea0",fontSize:10,fontWeight:600,formatter:p=>chartLabel(chartRuns.find(x=>x.run_id===p.data._rid),true)}}]
+        series:[{type:"scatter",data:chartRuns.map(r=>({value:[metricVal(r,xMetric),metricVal(r,yMetric)],_rid:r.run_id,itemStyle:itemStyleFor(r,S.scatter.colorBy,"scatter"),symbol:S.scatter.colorBy==="family_tool"?toolSymbol(r.tool):"circle"})),symbol:(value,params)=>params?.data?.symbol||"circle",symbolSize:p=>Math.max(12,Math.min(26,((p[1]||50)/100)*20)),label:{show:chartRuns.length<=10,position:"right",color:"#b8aea0",fontSize:10,fontWeight:600,formatter:p=>chartLabel(chartRuns.find(x=>x.run_id===p.data._rid),true)}}]
       },true);
       ch.off("click");
       ch.on("click",p=>{if(p.data&&p.data._rid)openInspect(p.data._rid,"scatter")});
@@ -892,7 +892,7 @@
         series:[
           {type:"bar",data:orderedRuns.map(r=>({value:metricVal(r,metric),itemStyle:itemStyleFor(r,S.scatter.colorBy,"bar"),_rid:r.run_id})),barWidth:24,itemStyle:{borderRadius:[4,4,0,0]}},
           ...(S.scatter.colorBy==="family_tool"
-            ?[{type:"scatter",data:orderedRuns.map(r=>({value:[chartLabel(r,true),markerBase],_rid:r.run_id,itemStyle:{color:toolCol(r.tool)},symbol:toolSymbol(r.tool)})),symbol:p=>p.data.symbol||"circle",symbolSize:12,silent:true,z:6}]
+            ?[{type:"scatter",data:orderedRuns.map(r=>({value:[chartLabel(r,true),markerBase],_rid:r.run_id,itemStyle:{color:toolCol(r.tool)},symbol:toolSymbol(r.tool)})),symbol:(value,params)=>params?.data?.symbol||"circle",symbolSize:12,silent:true,z:6}]
             :[])
         ]
       },true);
@@ -909,7 +909,7 @@
       series:[
         {type:"bar",data:values.map((value,idx)=>({value,itemStyle:itemStyleFor(chartRuns[chartRuns.length-1-idx],S.scatter.colorBy,"bar"),_rid:chartRuns[chartRuns.length-1-idx].run_id})),barWidth:14,itemStyle:{borderRadius:[0,4,4,0]}},
         ...(S.scatter.colorBy==="family_tool"
-          ?[{type:"scatter",data:chartRuns.map(r=>({value:[markerBase,chartLabel(r,false)],_rid:r.run_id,itemStyle:{color:toolCol(r.tool)},symbol:toolSymbol(r.tool)})).reverse(),symbol:p=>p.data.symbol||"circle",symbolSize:12,silent:true,z:6}]
+          ?[{type:"scatter",data:chartRuns.map(r=>({value:[markerBase,chartLabel(r,false)],_rid:r.run_id,itemStyle:{color:toolCol(r.tool)},symbol:toolSymbol(r.tool)})).reverse(),symbol:(value,params)=>params?.data?.symbol||"circle",symbolSize:12,silent:true,z:6}]
           :[])
       ]
     },true);
