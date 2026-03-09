@@ -296,7 +296,7 @@
     dataset:null,
     filters:{tool:null,model_family:null,effort:null,planning_mode:null,taxonomy:null,role:null},
     explore:{sort:"scores.overall",dir:"desc",checked:[]},
-    scatter:{plotType:"hbar",metric:"scores.overall",sortBy:"scores.overall",colorBy:"tool",selected:[],axisMin:null,xMetric:"planning_runtime_seconds",yMetric:"scores.overall",xMin:null,yMin:null,bulkGroup:"model_family",bulkValue:""},
+    scatter:{plotType:"hbar",metric:"scores.overall",sortBy:"scores.overall",colorBy:"family_tool",selected:[],axisMin:null,xMetric:"planning_runtime_seconds",yMetric:"scores.overall",xMin:null,yMin:null,bulkGroup:"model_family",bulkValue:""},
     compare:{a:null,b:null},
     trends:{metric:"scores.overall",groupBy:"tool",chartType:"line"},
     inspect:{level:null,id:null,origin:"overview",open:false,reqFilters:{area:"all",severity:"all",coverage:"all"}},
@@ -309,7 +309,7 @@
     {id:"trends",label:"Trends"},
     {id:"explore",label:"Explore"},
   ];
-  const TOOL_COLORS={"Codex CLI":"#6b9e7a","Claude Code":"#d4a843"};
+  const TOOL_COLORS={"Codex CLI":"#6b9e7a","Claude Code":"#d4a843","Cursor":"#7a8fa6","Gemini CLI":"#b88c63"};
   const FAMILY_COLORS={"GPT-5":"#6b9e7a","Claude Opus":"#d4a843","Claude Sonnet":"#c47a5a"};
   const EFFORT_COLORS={"X-High":"#d4a843","High":"#6b9e7a","Medium":"#7a8fa6","Low":"#9a9084"};
   const PLAN_COLORS={true:"#6b9e7a",false:"#c47a5a",null:"#7a8fa6"};
@@ -332,7 +332,29 @@
     if(by==="model_family")return FAMILY_COLORS[run.model_family]||"#7a8fa6";
     if(by==="effort")return EFFORT_COLORS[run.effort]||"#7a8fa6";
     if(by==="planning_mode")return PLAN_COLORS[run.planning_mode]||"#7a8fa6";
+    if(by==="family_tool")return FAMILY_COLORS[run.model_family]||"#7a8fa6";
     return"#d4a843";
+  }
+  function itemStyleFor(run,by,kind){
+    const style={color:colorFor(run,by)};
+    if(by==="family_tool"){
+      style.borderColor=toolCol(run.tool);
+      style.borderWidth=kind==="scatter"?3:2;
+      style.shadowBlur=kind==="scatter"?0:6;
+      style.shadowColor="rgba(0,0,0,0.18)";
+    }else if(kind==="scatter"){
+      style.borderColor="rgba(0,0,0,0.3)";
+      style.borderWidth=1;
+    }
+    return style;
+  }
+  function colorModeHelp(by){
+    if(by==="family_tool")return"Fill shows model family. Outline shows tool.";
+    if(by==="tool")return"Color shows tool.";
+    if(by==="model_family")return"Color shows model family.";
+    if(by==="effort")return"Color shows effort.";
+    if(by==="planning_mode")return"Color shows planning mode.";
+    return"";
   }
   function planningLabel(v){return v===true?"Plan Mode":v===false?"No Plan":"Default / Unspecified";}
   function planningShort(v){return v===true?"(plan)":v===false?"(no plan)":"(default)";}
@@ -719,7 +741,7 @@
     const runs=sortScatterRuns(filtered().slice());
     const metricOpts=[["scores.overall","Overall Score"],["scores.critical","Critical Score"],["scores.important","Important Score"],["scores.detail","Detail Score"],["planning_runtime_seconds","Runtime"],["plan_tool_call_count","Tool Calls"]];
     const sortOpts=[["scores.overall","Overall"],["scores.critical","Critical"],["scores.important","Important"],["scores.detail","Detail"],["planning_runtime_seconds","Runtime"],["plan_tool_call_count","Tool Calls"]];
-    const cOpts=[["tool","Tool"],["model_family","Model Family"],["effort","Effort"],["planning_mode","Planning Mode"]];
+    const cOpts=[["family_tool","Family + Tool"],["tool","Tool"],["model_family","Model Family"],["effort","Effort"],["planning_mode","Planning Mode"]];
     const plotOpts=[["hbar","Horizontal Bars"],["vbar","Vertical Bars"],["scatter","Scatter"]];
     const mkOpt=(arr,sel)=>arr.map(([v,l])=>`<option value="${v}"${sel===v?" selected":""}>${l}</option>`).join("");
     const visibleIds=new Set(runs.map(r=>r.run_id));
@@ -750,6 +772,7 @@
         <label>Sort</label><select id="scSort">${mkOpt(sortOpts,S.scatter.sortBy)}</select>
         <label>Color</label><select id="scC">${mkOpt(cOpts,S.scatter.colorBy)}</select>
       </div>
+      <div style="color:var(--ink-faint);font-size:0.78rem;margin:-4px 0 12px">${esc(colorModeHelp(S.scatter.colorBy))}</div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
         <button class="btn" id="scSelectAll"${runs.length?"":" disabled"} type="button">Select All Visible</button>
         <button class="btn${selectedRuns.length?" btn-primary":""}" id="scClear"${selectedRuns.length?"":" disabled"} type="button">Clear Selection</button>
@@ -840,7 +863,7 @@
         grid:{top:18,right:20,bottom:36,left:20,containLabel:true},
         xAxis:{type:"value",min:xMin,...(xIsScore?{max:100}:{}),name:metricLabel(xMetric),nameLocation:"middle",nameGap:28,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:xIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
         yAxis:{type:"value",min:yMin,...(yIsScore?{max:100}:{}),name:metricLabel(yMetric),nameLocation:"middle",nameGap:40,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:yIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
-        series:[{type:"scatter",data:chartRuns.map(r=>({value:[metricVal(r,xMetric),metricVal(r,yMetric)],_rid:r.run_id})),symbolSize:p=>Math.max(12,Math.min(26,((p[1]||50)/100)*20)),itemStyle:{color:p=>colorFor(chartRuns.find(x=>x.run_id===p.data._rid),S.scatter.colorBy),borderColor:"rgba(0,0,0,0.3)",borderWidth:1},label:{show:chartRuns.length<=10,position:"right",color:"#b8aea0",fontSize:10,fontWeight:600,formatter:p=>chartLabel(chartRuns.find(x=>x.run_id===p.data._rid),true)}}]
+        series:[{type:"scatter",data:chartRuns.map(r=>({value:[metricVal(r,xMetric),metricVal(r,yMetric)],_rid:r.run_id,itemStyle:itemStyleFor(r,S.scatter.colorBy,"scatter")})),symbolSize:p=>Math.max(12,Math.min(26,((p[1]||50)/100)*20)),label:{show:chartRuns.length<=10,position:"right",color:"#b8aea0",fontSize:10,fontWeight:600,formatter:p=>chartLabel(chartRuns.find(x=>x.run_id===p.data._rid),true)}}]
       },true);
       ch.off("click");
       ch.on("click",p=>{if(p.data&&p.data._rid)openInspect(p.data._rid,"scatter")});
@@ -857,7 +880,7 @@
         grid:{top:20,right:16,bottom:90,left:12,containLabel:true},
         xAxis:{type:"category",data:orderedRuns.map(r=>chartLabel(r,true)),axisTick:{show:false},axisLine:{show:false},axisLabel:{color:"#b8aea0",fontSize:10,fontWeight:600,interval:0,rotate:0}},
         yAxis:{type:"value",min:axisMin,...(isScore?{max:100}:{}),name:metricLabel(metric),nameLocation:"middle",nameGap:42,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
-        series:[{type:"bar",data:orderedRuns.map(r=>({value:metricVal(r,metric),itemStyle:{color:colorFor(r,S.scatter.colorBy)},_rid:r.run_id})),barWidth:24,itemStyle:{borderRadius:[4,4,0,0]}}]
+        series:[{type:"bar",data:orderedRuns.map(r=>({value:metricVal(r,metric),itemStyle:itemStyleFor(r,S.scatter.colorBy,"bar"),_rid:r.run_id})),barWidth:24,itemStyle:{borderRadius:[4,4,0,0]}}]
       },true);
       ch.off("click");
       ch.on("click",p=>{if(p.data&&p.data._rid)openInspect(p.data._rid,"scatter")});
@@ -869,7 +892,7 @@
       grid:{top:12,right:16,bottom:12,left:12,containLabel:true},
       xAxis:{type:"value",min:axisMin,...(isScore?{max:100}:{}),name:metricLabel(metric),nameLocation:"middle",nameGap:26,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
       yAxis:{type:"category",data:labels,axisTick:{show:false},axisLine:{show:false},axisLabel:{color:"#b8aea0",fontSize:10,fontWeight:600,width:240,overflow:"truncate"}},
-      series:[{type:"bar",data:values.map((value,idx)=>({value,itemStyle:{color:colorFor(chartRuns[chartRuns.length-1-idx],S.scatter.colorBy)},_rid:chartRuns[chartRuns.length-1-idx].run_id})),barWidth:14,itemStyle:{borderRadius:[0,4,4,0]}}]
+      series:[{type:"bar",data:values.map((value,idx)=>({value,itemStyle:itemStyleFor(chartRuns[chartRuns.length-1-idx],S.scatter.colorBy,"bar"),_rid:chartRuns[chartRuns.length-1-idx].run_id})),barWidth:14,itemStyle:{borderRadius:[0,4,4,0]}}]
     },true);
     ch.off("click");
     ch.on("click",p=>{if(p.data&&p.data._rid)openInspect(p.data._rid,"scatter")});
