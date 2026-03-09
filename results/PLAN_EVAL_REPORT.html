@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Plan Evaluation Report</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --paper: rgba(255,255,255,0.82);
+      --ink: #1f1b16;
+      --muted: #6d6459;
+      --line: rgba(31,27,22,0.1);
+      --hero-a: #20493a;
+      --hero-b: #b95f3b;
+      --strength: #1f6a53;
+      --warn: #b07a22;
+      --risk: #9b4336;
+      --chip: rgba(31,27,22,0.06);
+      --shadow: 0 18px 60px rgba(29, 23, 17, 0.12);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(185,95,59,0.18), transparent 34%),
+        radial-gradient(circle at top right, rgba(32,73,58,0.16), transparent 32%),
+        linear-gradient(180deg, #f8f4ed 0%, var(--bg) 100%);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(31,27,22,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(31,27,22,0.025) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+      opacity: 0.55;
+    }
+    .page { max-width: 1200px; margin: 0 auto; padding: 36px 28px 60px; position: relative; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.45fr 0.95fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-bottom: 22px;
+    }
+    .panel {
+      background: var(--paper);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.65);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero-copy { padding: 28px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(31,27,22,0.05);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h1, h2, h3 {
+      font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+    h1 { font-size: clamp(2.3rem, 3.8vw, 4.2rem); line-height: 0.95; max-width: 10ch; margin-bottom: 16px; }
+    .hero-copy p { font-size: 1.05rem; line-height: 1.6; color: var(--muted); margin: 0 0 18px; max-width: 62ch; }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip { padding: 10px 14px; border-radius: 999px; background: var(--chip); font-size: 0.92rem; }
+    .score-panel {
+      color: #fff;
+      padding: 28px;
+      background: linear-gradient(135deg, var(--hero-a), #16362c 55%, var(--hero-b));
+      position: relative;
+      overflow: hidden;
+    }
+    .score-panel::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -35% auto;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(255,255,255,0.22), rgba(255,255,255,0));
+      border-radius: 50%;
+    }
+    .score-kicker { text-transform: uppercase; font-size: 12px; letter-spacing: 0.14em; opacity: 0.74; margin-bottom: 12px; }
+    .score-value { font-size: clamp(3rem, 5vw, 5rem); line-height: 0.92; margin-bottom: 8px; }
+    .score-panel p { margin: 0 0 18px; color: rgba(255,255,255,0.78); line-height: 1.55; max-width: 28ch; }
+    .score-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .score-pill { padding: 12px 14px; border-radius: 18px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.12); }
+    .score-pill strong { display: block; font-size: 1.15rem; margin-bottom: 4px; }
+    .score-pill span { color: rgba(255,255,255,0.75); font-size: 0.92rem; }
+    .metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .metric { padding: 18px; }
+    .metric .label { color: var(--muted); font-size: 0.84rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .metric .value { font-size: 1.8rem; font-weight: 700; }
+    .metric .sub { margin-top: 8px; color: var(--muted); font-size: 0.94rem; line-height: 1.45; }
+    .story { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .story-card { padding: 22px; }
+    .story-card h2 { font-size: 1.45rem; margin-bottom: 10px; }
+    .story-card p, .story-card li { color: var(--muted); line-height: 1.6; }
+    .story-card ul { padding-left: 18px; margin: 12px 0 0; }
+    .story-card strong { color: var(--ink); }
+    .projection { border: 1px solid rgba(185,95,59,0.22); background: linear-gradient(180deg, rgba(185,95,59,0.08), rgba(255,255,255,0.7)); }
+    .grid-2 { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 22px; margin-bottom: 22px; }
+    .section { padding: 24px; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 18px; }
+    .section-head p { margin: 0; color: var(--muted); max-width: 48ch; line-height: 1.55; }
+    .mini-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .mini-card { padding: 18px; border-radius: 20px; background: rgba(255,255,255,0.55); border: 1px solid var(--line); }
+    .mini-card.strength { background: linear-gradient(180deg, rgba(31,106,83,0.08), rgba(255,255,255,0.6)); }
+    .mini-card.risk { background: linear-gradient(180deg, rgba(155,67,54,0.08), rgba(255,255,255,0.6)); }
+    .mini-kicker { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .mini-card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+    .mini-score { font-size: 2rem; font-weight: 700; margin-bottom: 6px; }
+    .mini-card p { margin: 0; color: var(--muted); line-height: 1.55; }
+    .area-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(160px, 1.8fr) auto; gap: 14px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+    .area-row:first-child { border-top: 0; padding-top: 0; }
+    .area-label { font-weight: 600; }
+    .area-bar { position: relative; height: 12px; border-radius: 999px; background: rgba(31,27,22,0.08); overflow: hidden; }
+    .area-bar span { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: linear-gradient(90deg, var(--strength), var(--hero-b)); }
+    .area-score { font-weight: 700; color: var(--muted); }
+    .gaps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .gap-card { padding: 18px; border-radius: 20px; border: 1px solid var(--line); background: rgba(255,255,255,0.68); }
+    .gap-card.critical { background: linear-gradient(180deg, rgba(155,67,54,0.16), rgba(255,255,255,0.78)); }
+    .gap-card.important { background: linear-gradient(180deg, rgba(176,122,34,0.12), rgba(255,255,255,0.78)); }
+    .gap-meta { text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+    .gap-card h3 { font-size: 1.16rem; margin-bottom: 10px; }
+    .gap-card p { margin: 0; color: var(--muted); line-height: 1.6; }
+    .note { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
+    .footer-copy { margin-top: 16px; color: var(--muted); line-height: 1.7; }
+    @media (max-width: 980px) {
+      .hero, .grid-2, .story { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .gaps, .mini-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .page { padding: 20px 16px 40px; }
+      .metrics { grid-template-columns: 1fr 1fr; }
+      .area-row { grid-template-columns: 1fr; gap: 8px; }
+      .score-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class='page'>
+    <section class='hero'>
+      <div class='panel hero-copy'>
+        <div class='eyebrow'>Plan Coverage Brief · Stakeholder View</div>
+        <h1>Strong scaffold, but the spec edge cases still matter.</h1>
+        <p>This is a structurally strong plan with high critical-path coverage and no completely unaddressed requirements, but it is not fully execution-ready yet. The biggest issue is not missing screens or architecture; it is that several product-defining behaviors are still specified at the principle level instead of the acceptance-criteria level.</p>
+        <div class='chip-row'>
+          <div class='chip'><strong>Proceed With Revision</strong></div>
+          <div class='chip'>Confidence: <strong>Moderate</strong></div>
+          <div class='chip'>No missing requirements: <strong>0</strong></div>
+          <div class='chip'>Partial requirements still open: <strong>35</strong></div>
+        </div>
+      </div>
+      <aside class='panel score-panel'>
+        <div class='score-kicker'>Overall Coverage</div>
+        <div class='score-value'>82.3%</div>
+        <p>Overall score = (64 × 1.0 + 35 × 0.5) / 99 × 100 = 82.3%</p>
+        <div class='score-grid'>
+          <div class='score-pill'><strong>96.7%</strong><span>Critical coverage</span></div>
+          <div class='score-pill'><strong>75.4%</strong><span>Important coverage</span></div>
+          <div class='score-pill'><strong>64</strong><span>Full requirements</span></div>
+          <div class='score-pill'><strong>35</strong><span>Partial requirements</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class='metrics'>
+      <article class='panel metric'><div class='label'>Critical</div><div class='value'>96.7%</div><div class='sub'>28 full · 2 partial</div></article>
+      <article class='panel metric'><div class='label'>Important</div><div class='value'>75.4%</div><div class='sub'>34 full · 33 partial</div></article>
+      <article class='panel metric'><div class='label'>Detail</div><div class='value'>100.0%</div><div class='sub'>2 full · 0 partial</div></article>
+      <article class='panel metric'><div class='label'>Full</div><div class='value'>64</div><div class='sub'>Requirements explicitly covered with concrete plan evidence.</div></article>
+      <article class='panel metric'><div class='label'>Partial</div><div class='value'>35</div><div class='sub'>Requirements touched, but still underspecified or only implied.</div></article>
+      <article class='panel metric'><div class='label'>Missing</div><div class='value'>0</div><div class='sub'>No requirements were entirely absent, which keeps the floor high.</div></article>
+    </section>
+
+    <section class='story'>
+      <article class='panel story-card'>
+        <h2>Submitted Plan</h2>
+        <p>The plan arrives with broad structural coverage across all 10 functional areas and no fully missing requirements. It already contains the major routes, persistence layers, benchmark runtime choices, and core user journeys.</p>
+        <ul>
+          <li><strong>64</strong> requirements score as fully covered.</li>
+          <li><strong>35</strong> requirements are present but still soft around edge-case behavior.</li>
+          <li><strong>0</strong> requirements score missing.</li>
+        </ul>
+      </article>
+      <article class='panel story-card'>
+        <h2>Audit Finding</h2>
+        <p>Most partials cluster in AI Voice, Persona &amp; Quality and in Concepts, Explore Similar &amp; Alchemy, where the plan names the features and contracts but often stops short of the exact behavioral bar from the supporting docs. A second cluster sits in persistence edge cases such as hidden Next support, re-add semantics, duplicate merge handling, and continuity across data-model upgrades.</p>
+        <ul>
+          <li>AI voice and discovery quality stay too principle-level in the submitted plan.</li>
+          <li>Concept/Alchemy details are present but not locked down to the supporting-doc standard.</li>
+          <li>A few data-lifecycle edge cases remain underspecified: hidden Next, re-add, duplicate merges, and upgrade continuity.</li>
+        </ul>
+      </article>
+      <article class='panel story-card projection'>
+        <h2>Next Revision Target</h2>
+        <p><strong>Projected score: 84.8%.</strong> This uplift is inferred from the current evaluation only: if the five highlighted top gaps were revised from partial to full, the plan would add 2.5 weighted points.</p>
+        <ul>
+          <li>Current: <strong>82.3%</strong></li>
+          <li>Projected after top-5 closure: <strong>84.8%</strong></li>
+          <li>Projection, not an observed rescoring of a revised plan.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class='grid-2'>
+      <article class='panel section'>
+        <div class='section-head'>
+          <div>
+            <h2>What The Plan Covers Well</h2>
+            <p>The plan is strongest in Benchmark Runtime &amp; Isolation, Ask Chat, Show Detail &amp; Relationship UX, and the core Collection Data &amp; Persistence model. It gives concrete architecture, persistence boundaries, exact auto-save/removal rules, the Ask structured-output contract, and a near-complete Show Detail section order with the major flows called out explicitly.</p>
+          </div>
+        </div>
+        <div class='mini-grid'><article class='mini-card strength'><div class='mini-kicker'>Strong Area</div><h3>Benchmark Runtime &amp; Isolation</h3><div class='mini-score'>94.1%</div><p>15 full, 2 partial, 0 missing</p></article><article class='mini-card strength'><div class='mini-kicker'>Strong Area</div><h3>Ask Chat</h3><div class='mini-score'>90.0%</div><p>8 full, 2 partial, 0 missing</p></article><article class='mini-card strength'><div class='mini-kicker'>Strong Area</div><h3>Show Detail &amp; Relationship UX</h3><div class='mini-score'>89.3%</div><p>11 full, 3 partial, 0 missing</p></article><article class='mini-card strength'><div class='mini-kicker'>Strong Area</div><h3>Person Detail</h3><div class='mini-score'>87.5%</div><p>3 full, 1 partial, 0 missing</p></article></div>
+        <div class='footer-copy'>
+          <strong>Why this matters:</strong> the app scaffold, data ownership model, and core interaction flows are already coherent enough that remediation can stay focused on specification fidelity instead of architecture churn.
+        </div>
+      </article>
+      <article class='panel section'>
+        <div class='section-head'>
+          <div>
+            <h2>Coverage By Functional Area</h2>
+            <p>Highest scores cluster around runtime/compliance and the core product journeys. The weakest scores are concentrated in AI quality specification and concept-driven discovery detail.</p>
+          </div>
+        </div>
+        <div class='area-row'><div class='area-label'>Benchmark Runtime &amp; Isolation</div><div class='area-bar'><span style='width:94.1%'></span></div><div class='area-score'>94.1%</div></div><div class='area-row'><div class='area-label'>Ask Chat</div><div class='area-bar'><span style='width:90.0%'></span></div><div class='area-score'>90.0%</div></div><div class='area-row'><div class='area-label'>Show Detail &amp; Relationship UX</div><div class='area-bar'><span style='width:89.3%'></span></div><div class='area-score'>89.3%</div></div><div class='area-row'><div class='area-label'>Person Detail</div><div class='area-bar'><span style='width:87.5%'></span></div><div class='area-score'>87.5%</div></div><div class='area-row'><div class='area-label'>Settings &amp; Export</div><div class='area-bar'><span style='width:87.5%'></span></div><div class='area-score'>87.5%</div></div><div class='area-row'><div class='area-label'>Collection Data &amp; Persistence</div><div class='area-bar'><span style='width:82.5%'></span></div><div class='area-score'>82.5%</div></div><div class='area-row'><div class='area-label'>Collection Home &amp; Search</div><div class='area-bar'><span style='width:77.8%'></span></div><div class='area-score'>77.8%</div></div><div class='area-row'><div class='area-label'>App Navigation &amp; Discover Shell</div><div class='area-bar'><span style='width:75.0%'></span></div><div class='area-score'>75.0%</div></div><div class='area-row'><div class='area-label'>Concepts, Explore Similar &amp; Alchemy</div><div class='area-bar'><span style='width:65.0%'></span></div><div class='area-score'>65.0%</div></div><div class='area-row'><div class='area-label'>AI Voice, Persona &amp; Quality</div><div class='area-bar'><span style='width:57.1%'></span></div><div class='area-score'>57.1%</div></div>
+      </article>
+    </section>
+
+    <section class='grid-2'>
+      <article class='panel section'>
+        <div class='section-head'>
+          <div>
+            <h2>What Is Still At Risk</h2>
+            <p>If this plan were executed as-is, the team would likely deliver a product that works end-to-end on the happy path but feels softer than the PRD in the places stakeholders will notice first. QA and product review would most likely flag generic or inconsistent AI behavior, underspecified concept-recommendation quality, and ambiguity around what happens to saved data during re-add, sync, or schema migration edge cases.</p>
+          </div>
+        </div>
+        <div class='mini-grid'><article class='mini-card risk'><div class='mini-kicker'>Risk Cluster</div><h3>AI Voice, Persona &amp; Quality</h3><div class='mini-score'>57.1%</div><p>1 full, 6 partial, 0 missing</p></article><article class='mini-card risk'><div class='mini-kicker'>Risk Cluster</div><h3>Concepts, Explore Similar &amp; Alchemy</h3><div class='mini-score'>65.0%</div><p>3 full, 7 partial, 0 missing</p></article><article class='mini-card risk'><div class='mini-kicker'>Risk Cluster</div><h3>App Navigation &amp; Discover Shell</h3><div class='mini-score'>75.0%</div><p>2 full, 2 partial, 0 missing</p></article><article class='mini-card risk'><div class='mini-kicker'>Risk Cluster</div><h3>Collection Home &amp; Search</h3><div class='mini-score'>77.8%</div><p>5 full, 4 partial, 0 missing</p></article></div>
+        <div class='note'>
+          <strong>Risk pattern:</strong> this plan usually misses by being too broad, not by ignoring the feature. That is why critical coverage stays high while stakeholder-visible polish and edge-case fidelity remain exposed.
+        </div>
+      </article>
+      <article class='panel section'>
+        <div class='section-head'>
+          <div>
+            <h2>Remediation Direction</h2>
+            <p>The remaining work is mostly specification hardening rather than architectural redesign. Tighten the plan by adding explicit acceptance criteria for AI tone, surface-specific context inputs, recommendation-quality gates, and CTA flows, then add concrete data-lifecycle rules for hidden statuses, re-add behavior, duplicate merges, and model-upgrade continuity so those edge cases are implemented intentionally instead of inferred during build-out.</p>
+          </div>
+        </div>
+        <ul>
+          <li>Runtime, isolation, and destructive-test boundaries are concrete.</li>
+          <li>Core library persistence rules and autosave semantics are explicitly planned.</li>
+          <li>Ask and Show Detail both have clear structural contracts and key user journeys.</li>
+          <li>AI voice and discovery quality stay too principle-level in the submitted plan.</li>
+          <li>A few data-lifecycle edge cases remain underspecified: hidden Next, re-add, duplicate merges, and upgrade continuity.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class='panel section'>
+      <div class='section-head'>
+        <div>
+          <h2>Top Gaps And Why They Matter</h2>
+          <p>The table in the markdown evaluation has 35 partial requirements. These five are the highest-leverage fixes because they either protect user data or define whether the app feels on-spec in stakeholder review.</p>
+        </div>
+      </div>
+      <div class='gaps'><article class='gap-card critical'><div class='gap-meta'>critical</div><h3>PRD-034 · Preserve saved libraries across data-model upgrades</h3><p>The plan includes versioning and migrations, but without an explicit continuity/backfill path a schema change could strand or drop user libraries.</p></article><article class='gap-card critical'><div class='gap-meta'>critical</div><h3>PRD-026 · Re-add preserves My Data and refreshes public data</h3><p>The plan covers merge behavior for saved shows, but it never explains how a removed show can be re-encountered without losing prior user overlay data.</p></article><article class='gap-card important'><div class='gap-meta'>important</div><h3>PRD-091 · Validate discovery with rubric and hard-fail integrity</h3><p>The plan references the quality bar, but without explicit gates the team could ship recommendations that feel okay in demos yet fail taste alignment or real-show integrity.</p></article><article class='gap-card important'><div class='gap-meta'>important</div><h3>PRD-033 · Sync libraries/settings consistently and merge duplicates</h3><p>The plan covers timestamps and persistence, but not explicit duplicate detection/merge flows, which risks silent data divergence across devices or sync events.</p></article><article class='gap-card important'><div class='gap-meta'>important</div><h3>PRD-085 · Keep one consistent AI persona across surfaces</h3><p>The plan uses shared AI infrastructure, but it does not turn cross-surface persona consistency into a concrete acceptance criterion, so the product voice could drift surface by surface.</p></article></div>
+      <div class='note'>
+        Source of truth: <code>results/PLAN_EVAL.md</code>. The projected uplift panel is an inference from the current markdown evaluation; no revised plan was provided in this run.
+      </div>
+    </section>
+  </main>
+</body>
+</html>
