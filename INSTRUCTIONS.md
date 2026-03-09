@@ -21,11 +21,12 @@ The user wants to audit a plan they already generated.
 
 - Open and follow `2-EVALUATE_PLAN.md` exactly.
 - This requires both the PRD (`docs/prd/`) and an existing `results/PLAN.md`.
-- Output: `results/PLAN_EVAL.md`
+- If `evaluator/requirements_catalog_v1.md` is missing, tell the user to run `python3 tools/fetch_evaluator.py` from the repo root, then retry.
+- Outputs: `results/PLAN_EVAL.md` and `results/PLAN_EVAL_REPORT.html`
 
-### 3. Create the Evaluation Report
+### 3. Re-render the Evaluation Report (Optional Fallback)
 
-The user wants to generate the visual HTML report from a completed evaluation.
+The user wants to regenerate the visual HTML report from an existing completed evaluation.
 
 - Open and follow `3-PLAN_EVAL_REPORT.md` exactly.
 - This requires an existing `results/PLAN_EVAL.md`.
