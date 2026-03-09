@@ -63,24 +63,24 @@
     "evaluation_duration_seconds": 774
   },
   "snapshot": {
-    "context_window_tokens": {
+    "pricing": {
       "source_url": null,
-      "value": null
+      "output_usd_per_mtok": null,
+      "cached_input_usd_per_mtok": null,
+      "input_usd_per_mtok": null
+    },
+    "context_window_tokens": {
+      "value": null,
+      "source_url": null
     },
     "frontier": {
+      "value": null,
       "note": null,
-      "source": "manual",
-      "value": null
-    },
-    "pricing": {
-      "input_usd_per_mtok": null,
-      "cached_input_usd_per_mtok": null,
-      "source_url": null,
-      "output_usd_per_mtok": null
+      "source": "manual"
     },
     "swe_bench_verified": {
-      "source_url": null,
-      "value": null
+      "value": null,
+      "source_url": null
     }
   },
   "observed": {
