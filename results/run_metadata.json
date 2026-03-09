@@ -1,0 +1,160 @@
+{
+  "schema_version": 2,
+  "run_id": "sonnet_4_6__cursor__medium__no_plan_mode",
+  "worktree_name": "sonnet_4_6__cursor__medium__no_plan_mode",
+  "branch_name": "benchmarks/sonnet_4_6__cursor__medium__no_plan_mode",
+  "captured_at": "2026-03-09T17:49:55.878509Z",
+  "paths": {
+    "run_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__cursor__medium__no_plan_mode",
+    "results_dir": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__cursor__medium__no_plan_mode/results"
+  },
+  "subject": {
+    "model_slug": "sonnet_4_6",
+    "model_name": "Sonnet 4.6",
+    "model_family": "Claude Sonnet",
+    "manufacturer": "Anthropic",
+    "tool_slug": "cursor",
+    "tool": "Cursor",
+    "effort_slug": "medium",
+    "effort": "Medium",
+    "variant_slug": "no_plan_mode",
+    "variant": "No Planning"
+  },
+  "grouping": {
+    "model_id": "sonnet_4_6",
+    "series_id": "sonnet_4_6__cursor__medium",
+    "case_id": "sonnet_4_6__cursor__medium__no_plan_mode",
+    "case_slug": "no_plan_mode",
+    "case_label": "No Planning",
+    "replicate_index": 1,
+    "baseline_case": true
+  },
+  "declared": {
+    "inference_profile_slug": "default",
+    "inference_profile": "Default",
+    "requested_context_window_tokens": null,
+    "planning_mode": false,
+    "prompt_profile_slug": "default_step1",
+    "prompt_profile": "Default Step 1",
+    "experiment_role": "baseline",
+    "experiment_tags": [
+      "no_plan_mode"
+    ],
+    "scenario": {
+      "slug": "no_plan_mode",
+      "label": "No Planning",
+      "description": null,
+      "hypothesis": null
+    },
+    "case_slug": null
+  },
+  "planning": {
+    "prompt_path": "1-START_HERE.md",
+    "prompt_git_sha": "05c0960de115b026112b47ddef66a8f95d0a004a",
+    "prompt_profile_slug": "default_step1",
+    "prompt_profile": "Default Step 1"
+  },
+  "evaluation": {
+    "evaluator_model": "gpt-5.4",
+    "evaluator_provider": "openai",
+    "prompt_path": "2-EVALUATE_PLAN.md",
+    "prompt_git_sha": "60a3b354091b7d60e72e882d67095e9846e13311",
+    "evaluation_session_path": "/Users/mmaher/.codex/sessions/2026/03/09/rollout-2026-03-09T10-41-10-019cd3b0-43bf-7d30-9ba2-422f6d3a004f.jsonl",
+    "evaluation_started_at": "2026-03-09T17:41:14.198Z",
+    "evaluation_ended_at": "2026-03-09T17:56:00.621Z",
+    "evaluation_duration_seconds": 886
+  },
+  "snapshot": {
+    "context_window_tokens": {
+      "source_url": null,
+      "value": null
+    },
+    "frontier": {
+      "note": null,
+      "source": "manual",
+      "value": null
+    },
+    "pricing": {
+      "input_usd_per_mtok": null,
+      "source_url": null,
+      "output_usd_per_mtok": null,
+      "cached_input_usd_per_mtok": null
+    },
+    "swe_bench_verified": {
+      "source_url": null,
+      "value": null
+    }
+  },
+  "observed": {
+    "plan_session": {
+      "source_tool": "codex_cli",
+      "session_path": "/Users/mmaher/.codex/sessions/2026/03/09/rollout-2026-03-09T10-41-10-019cd3b0-43bf-7d30-9ba2-422f6d3a004f.jsonl",
+      "started_at": "2026-03-09T17:41:14.198Z",
+      "ended_at": "2026-03-09T17:56:00.621Z",
+      "duration_seconds": 886,
+      "model": "gpt-5.4",
+      "provider": "openai",
+      "version": "0.112.0",
+      "collaboration_mode": "default",
+      "context_window_tokens": 258400,
+      "assistant_message_count": 17,
+      "user_message_count": 7,
+      "tool_call_count": 59,
+      "tool_calls_by_name": {
+        "exec_command": 44,
+        "send_input": 1,
+        "spawn_agent": 4,
+        "wait": 4,
+        "write_stdin": 6
+      },
+      "interrupted_count": 0,
+      "task_complete_count": 1,
+      "input_tokens": 2201885,
+      "cached_input_tokens": 2113536,
+      "output_tokens": 54449,
+      "estimated_cost_usd": null
+    },
+    "eval_session": {
+      "source_tool": "codex_cli",
+      "session_path": "/Users/mmaher/.codex/sessions/2026/03/09/rollout-2026-03-09T10-41-10-019cd3b0-43bf-7d30-9ba2-422f6d3a004f.jsonl",
+      "started_at": "2026-03-09T17:41:14.198Z",
+      "ended_at": "2026-03-09T17:56:00.621Z",
+      "duration_seconds": 886,
+      "model": "gpt-5.4",
+      "provider": "openai",
+      "version": "0.112.0",
+      "collaboration_mode": "default",
+      "context_window_tokens": 258400,
+      "assistant_message_count": 17,
+      "user_message_count": 7,
+      "tool_call_count": 59,
+      "tool_calls_by_name": {
+        "exec_command": 44,
+        "send_input": 1,
+        "spawn_agent": 4,
+        "wait": 4,
+        "write_stdin": 6
+      },
+      "interrupted_count": 0,
+      "task_complete_count": 1,
+      "input_tokens": 2201885,
+      "cached_input_tokens": 2113536,
+      "output_tokens": 54449,
+      "estimated_cost_usd": null
+    }
+  },
+  "outcome": {
+    "plan_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__cursor__medium__no_plan_mode/results/PLAN.md",
+    "plan_saved": true,
+    "plan_written_at": "2026-03-09T18:04:05.718037Z",
+    "plan_eval_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__cursor__medium__no_plan_mode/results/PLAN_EVAL.md",
+    "plan_eval_written_at": "2026-03-09T17:49:55.878509Z",
+    "plan_eval_report_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__cursor__medium__no_plan_mode/results/PLAN_EVAL_REPORT.html",
+    "plan_eval_report_generated": true,
+    "plan_eval_report_written_at": "2026-03-09T17:55:39.118505Z",
+    "plan_session_completed_at": "2026-03-09T17:56:00.621Z",
+    "save_blocked_by_mode": false,
+    "artifact_latency_seconds": 485,
+    "completion_state": "complete"
+  }
+}
