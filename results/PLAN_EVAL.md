@@ -150,134 +150,144 @@ Total: 99 requirements (30 critical, 67 important, 2 detail) across 10 functiona
 
 | PRD-ID | Requirement | Severity | Coverage | Evidence | Gap |
 | ------ | ----------- | -------- | -------- | -------- | --- |
-| PRD-001 | Use Next.js latest stable runtime | critical | full | Overview; §1 Initialize Project |  |
-| PRD-002 | Use Supabase official client libraries | critical | full | §1 Dependencies |  |
-| PRD-003 | Ship `.env.example` with required variables | critical | partial | §1 Environment Variables | The plan includes `.env.example` variables but does not mention the required short comments for each variable. |
-| PRD-004 | Ignore `.env*` secrets except example | important | missing | none | The plan never commits to a `.gitignore` rule that excludes `.env*` secrets while preserving `.env.example`. |
-| PRD-005 | Configure build through env without code edits | critical | full | §1 Environment Variables; §6 Auth & Identity Strategy |  |
-| PRD-006 | Keep secrets out of repo and server-only | critical | full | §1 Environment Variables; §6 Service Role Key |  |
-| PRD-007 | Provide app, test, reset command scripts | critical | full | §1 npm Scripts |  |
-| PRD-008 | Include repeatable schema evolution artifacts | critical | full | §2 Migration; §2 Test Reset Script |  |
-| PRD-009 | Use one stable namespace per build | critical | full | §6 Development |  |
-| PRD-010 | Isolate namespaces and scope destructive resets | critical | full | §2 Test Reset Script; §6 Development |  |
-| PRD-011 | Attach every user record to `user_id` | critical | full | §2 Database Schema |  |
-| PRD-012 | Partition persisted data by namespace and user | critical | full | §2 Database Schema |  |
-| PRD-013 | Support documented dev auth injection, prod-gated | important | partial | §6 Development | The plan documents header/default-user injection but does not state how that mechanism is disabled or gated outside dev/test. |
-| PRD-014 | Real OAuth later needs no schema redesign | important | full | §6 OAuth Migration Path |  |
-| PRD-015 | Keep backend as persisted source of truth | critical | full | §5 React Query Configuration |  |
-| PRD-016 | Make client cache safe to discard | critical | full | §5 React Query Configuration |  |
-| PRD-017 | Avoid Docker requirement for cloud-agent compatibility | important | partial | §2 Database Schema; §1 npm Scripts | The plan assumes Supabase tooling but never says Docker is optional or unnecessary for cloud-agent execution. |
-| PRD-018 | Overlay saved user data on every show appearance | critical | partial | §5 Merge Logic; §9 Home Page; §9 Find Page | The plan shows badges and merged detail views in several places but does not guarantee full My Data overlay on every show appearance, especially AI/search recommendation surfaces. |
-| PRD-019 | Support visible statuses plus hidden `Next` | important | partial | §4 Core Types; §9 Show Detail Page | The plan has visible status chips but it collapses interest into status values and never models the hidden `Next` state. |
-| PRD-020 | Map Interested/Excited chips to Later interest | critical | partial | §4 Core Types; §9 Show Detail Page | `Excited` and `Interested` are treated as primary statuses instead of chips that map to `Later` plus an interest level. |
-| PRD-021 | Support free-form multi-tag personal tag library | important | full | §9 Home Page; §9 Show Detail Page |  |
-| PRD-022 | Define collection membership by assigned status | critical | partial | §5 Implicit Save Defaults; §9 Home Page | Home excludes items without status, but the plan never makes status the single definition of collection membership and even allows note-only saves without status. |
-| PRD-023 | Save shows from status, interest, rating, tagging | critical | partial | §5 Implicit Save Defaults; §9 Show Detail Page | Status, rating, and tagging save paths are covered, but interest-triggered saves are folded into the wrong status model. |
-| PRD-024 | Default save to Later/Interested except rating-save Done | critical | partial | §5 Implicit Save Defaults | The plan gets rating-to-Done correct but turns tag saves into an `interested` status instead of the required `Later` plus `Interested` defaults. |
-| PRD-025 | Removing status deletes show and all My Data | critical | full | §7 DELETE /api/shows/[id]; §9 StatusChipGroup |  |
-| PRD-026 | Re-add preserves My Data and refreshes public data | critical | missing | none | Deleting the row on removal means the plan never preserves prior My Data for a later re-add or catalog refresh. |
-| PRD-027 | Track per-field My Data modification timestamps | critical | partial | §2 Database Schema; §5 Merge Logic | Several per-field timestamps exist, but the canonical interest timestamp and the full My Data timestamp set are not modeled. |
-| PRD-028 | Use timestamps for sorting, sync, freshness | important | partial | §5 Merge Logic; §5 React Query Configuration | Timestamps are used for merge and Scoop freshness, but not for the broader sorting, sync, and freshness behaviors the PRD calls for. |
-| PRD-029 | Persist Scoop only for saved shows, 4h freshness | critical | full | §7 POST /api/ai/scoop |  |
-| PRD-030 | Keep Ask and Alchemy state session-only | important | full | §7 AI Routes; §9 Find Page |  |
-| PRD-031 | Resolve AI recommendations to real selectable shows | critical | full | §7 POST /api/ai/recs; §9 Ask; §10 Recommendations |  |
-| PRD-032 | Show collection and rating tile indicators | important | full | §9 Home Page; §9 Find Page |  |
-| PRD-033 | Sync libraries/settings consistently and merge duplicates | important | partial | §5 Merge Logic; §7 Settings & Utility | Conflict-safe merges are mentioned, but duplicate detection and cross-device consistency behavior are not planned explicitly. |
-| PRD-034 | Preserve saved libraries across data-model upgrades | critical | partial | §2 app_metadata table; §13 Phase 1 | Schema versioning is implied, but the plan never describes upgrade behavior that guarantees existing libraries survive model changes intact. |
-| PRD-035 | Persist synced settings, local settings, UI state | important | partial | §2 user_settings and ui_state tables; §7 Settings & Utility | Some settings and UI state are persisted, but the exact local settings called out in the PRD such as `autoSearch` and `fontSize` are not covered. |
-| PRD-036 | Keep provider IDs persisted and detail fetches transient | important | partial | §8 TMDB Mapper | The plan keeps provider data transient but does not persist provider IDs as opaque stored data for saved shows. |
-| PRD-037 | Merge catalog fields safely and maintain timestamps | critical | full | §5 Merge Logic |  |
-| PRD-038 | Provide filters panel and main screen destinations | important | full | §9 Home Page; §9 Pages & Features |  |
-| PRD-039 | Keep Find/Discover in persistent primary navigation | important | partial | §9 Find Page | The plan defines a Find page but never specifies persistent primary navigation that keeps Find/Discover visible across the shell. |
-| PRD-040 | Keep Settings in persistent primary navigation | important | partial | §9 Settings Page | The plan defines a Settings page but never specifies persistent primary navigation that keeps Settings visible across the shell. |
-| PRD-041 | Offer Search, Ask, Alchemy discover modes | important | full | §9 Find Page |  |
-| PRD-042 | Show only library items matching active filters | important | full | §9 Home Page; §9 FilterSidebar |  |
-| PRD-043 | Group home into Active, Excited, Interested, Others | important | full | §9 Home Page |  |
-| PRD-044 | Support All, tag, genre, decade, score, media filters | important | partial | §9 Home Page; §9 FilterSidebar | Tag, genre, decade, and media filters are planned, but “All Shows” and community-score filtering are missing. |
-| PRD-045 | Render poster, title, and My Data badges | important | full | §9 Home Page; ShowCard |  |
-| PRD-046 | Provide empty-library and empty-filter states | detail | full | §13 Phase 7 |  |
-| PRD-047 | Search by title or keywords | important | full | §9 Find Page Search |  |
-| PRD-048 | Use poster grid with collection markers | important | full | §9 Find Page Search |  |
-| PRD-049 | Auto-open Search when setting is enabled | detail | missing | none | The plan never stores or honors an auto-open Search-on-launch setting. |
-| PRD-050 | Keep Search non-AI in tone | important | full | §9 Find Page Search; §8 AI Prompts |  |
-| PRD-051 | Preserve Show Detail narrative section order | important | partial | §9 Show Detail Page | The planned page is close, but it does not explicitly preserve the canonical narrative hierarchy from the detail experience spec. |
-| PRD-052 | Prioritize motion-rich header with graceful fallback | important | partial | §9 Show Detail Page; HeaderMedia | Backdrop/poster rendering is planned, but motion-prioritized trailer behavior with graceful fallback is not committed. |
-| PRD-053 | Surface year, runtime/seasons, and community score early | important | partial | §9 Show Detail Page; HeaderMedia | Year and runtime/seasons are early, but the plan never explicitly brings community score forward with them. |
-| PRD-054 | Place status/interest controls in toolbar | important | partial | §9 DetailToolbar | The toolbar placement is correct, but the control model is still status-based rather than a status-plus-interest relationship. |
-| PRD-055 | Auto-save unsaved tagged show as Later/Interested | critical | partial | §5 Implicit Save Defaults; §9 TagsSection | Tagging triggers an implicit save, but it saves as `interested` status instead of `Later` plus `Interested`. |
-| PRD-056 | Auto-save unsaved rated show as Done | critical | full | §5 Implicit Save Defaults; §9 RatingControl |  |
-| PRD-057 | Show overview early for fast scanning | important | full | §9 OverviewSection |  |
-| PRD-058 | Scoop shows correct states and progressive feedback | important | partial | §9 ScoopSection; §10 Scoop | Streaming and TTL are covered, but the required UI copy/state progression for no-scoop, cached-scoop, and open states is not. |
-| PRD-059 | Ask-about-show deep-link seeds Ask context | important | full | §9 AskCTA; §10 Ask |  |
-| PRD-060 | Include traditional recommendations strand | important | full | §9 RecommendationsStrand |  |
-| PRD-061 | Explore Similar uses CTA-first concept flow | important | partial | §9 ExploreSimilar | Concept results are planned, but the CTA-first flow of “Get Concepts” then “Explore Shows” is not spelled out. |
-| PRD-062 | Include streaming availability and person-linking credits | important | full | §9 ProvidersSection; §9 CastCrewSection |  |
-| PRD-063 | Gate seasons to TV and financials to movies | important | full | §9 SeasonsSection; §9 BudgetRevenueSection |  |
-| PRD-064 | Keep primary actions early and page not overwhelming | important | partial | §9 Show Detail Page; §14 Key Design Decisions | Primary actions are early, but the plan does not explicitly address the page-level busyness balance from the detail experience spec. |
-| PRD-065 | Provide conversational Ask chat interface | important | full | §9 Find Page Ask |  |
-| PRD-066 | Answer directly with confident, spoiler-safe recommendations | important | partial | §10 Ask | The plan says Ask is conversational, but it does not lock in direct-first, confident, spoiler-safe recommendation behavior. |
-| PRD-067 | Show horizontal mentioned-shows strip from chat | important | missing | none | The plan renders inline show pills in chat instead of the required horizontal mentioned-shows strip. |
-| PRD-068 | Open Detail from mentions or Search fallback | important | partial | §9 Find Page Ask | Mentioned shows open Detail, but the required Search fallback for unresolved mentions is not planned. |
-| PRD-069 | Show six random starter prompts with refresh | important | missing | none | No starter-prompt welcome state or refresh behavior is specified for Ask. |
-| PRD-070 | Summarize older turns while preserving voice | important | missing | none | The plan stores chat history in component state but never summarizes older turns to preserve context economically. |
-| PRD-071 | Seed Ask-about-show sessions with show handoff | important | full | §9 AskCTA; §10 Ask |  |
-| PRD-072 | Emit `commentary` plus exact `showList` contract | critical | missing | none | The plan uses custom `[[SHOW:id:title]]` tokens instead of the required structured `commentary` plus exact `showList` contract. |
-| PRD-073 | Retry malformed mention output once, then fallback | important | missing | none | No retry-once parser recovery path or fallback behavior is defined for malformed Ask mention output. |
-| PRD-074 | Redirect Ask back into TV/movie domain | important | partial | §8 AI Prompts; §10 Ask | The plan references the AI prompting guide, but it never explicitly enforces redirecting off-domain queries back into TV/movie territory. |
-| PRD-075 | Treat concepts as taste ingredients, not genres | important | full | §10 Concepts |  |
-| PRD-076 | Return bullet-only, 1-3 word, non-generic concepts | important | partial | §10 Concepts | The plan returns labeled concept objects with descriptions, which breaks the bullet-only, 1–3 word, no-explanation output contract. |
-| PRD-077 | Order concepts by strongest aha and varied axes | important | partial | §10 Concepts | The concept rules cite the source doc, but the plan never commits to strongest-first ordering or axis diversity. |
-| PRD-078 | Require concept selection and guide ingredient picking | important | partial | §9 Alchemy; §9 ExploreSimilar | Concept selection is present, but the user-guidance copy about choosing ingredients is missing. |
-| PRD-079 | Return exactly five Explore Similar recommendations | important | missing | none | The plan never fixes Explore Similar to the required five recommendations per round. |
-| PRD-080 | Support full Alchemy loop with chaining | important | partial | §9 Find Page Alchemy | The main loop exists, but the chaining step for continuing into another round is omitted. |
-| PRD-081 | Clear downstream results when inputs change | important | missing | none | The plan does not state that changing Alchemy inputs or concept selections clears downstream concepts/results. |
-| PRD-082 | Generate shared multi-show concepts with larger option pool | important | partial | §10 Concepts | Multi-show generation is covered generally, but the larger option pool requirement is not planned. |
-| PRD-083 | Cite selected concepts in concise recommendation reasons | important | partial | §10 Recommendations | Recommendations include rationales, but those rationales are not required to cite the selected concepts explicitly. |
-| PRD-084 | Deliver surprising but defensible taste-aligned recommendations | important | partial | §10 Recommendations; §10 Scoop | The plan mentions specificity, but it does not define the surprise-without-betrayal or taste-alignment quality bar for recs. |
-| PRD-085 | Keep one consistent AI persona across surfaces | important | full | §8 AI Prompts |  |
-| PRD-086 | Enforce shared AI guardrails across all surfaces | critical | partial | §8 AI Prompts; §10 AI Surface Details | The plan references the specs, but it does not establish one shared contract for spoiler safety, domain bounds, honesty, and actionability across all AI surfaces. |
-| PRD-087 | Make AI warm, joyful, and light in critique | important | partial | §8 AI Prompts | Warmth is present, but the full joy-forward and light-in-critique voice behavior is not explicitly preserved. |
-| PRD-088 | Structure Scoop as personal taste mini-review | important | partial | §10 Scoop | Scoop is personality-driven, but the plan does not require the full personal-taste mini-review structure and sections. |
-| PRD-089 | Keep Ask brisk and dialogue-like by default | important | partial | §10 Ask | Ask is conversational, but the plan does not specify the brisk default length and dialogue-like pacing from the voice spec. |
-| PRD-090 | Feed AI the right surface-specific context inputs | important | partial | §7 AI Routes; §10 AI Surface Details | Show context and concepts are passed through, but the plan never makes library/My Data and other surface-specific context inputs universal where required. |
-| PRD-091 | Validate discovery with rubric and hard-fail integrity | important | missing | none | There is no planned rubric-based validation or hard-fail integrity check for discovery outputs. |
-| PRD-092 | Show person gallery, name, and bio | important | partial | §9 Person Detail Page | Photo, name, and bio are covered, but the image gallery requirement is not. |
-| PRD-093 | Include ratings, genres, and projects-by-year analytics | important | partial | §9 PersonAnalytics | Ratings and genres are planned, but projects-by-year analytics are missing. |
-| PRD-094 | Group filmography by year | important | missing | none | Filmography is grouped by role instead of by year. |
-| PRD-095 | Open Show Detail from selected credit | important | full | §9 Filmography |  |
-| PRD-096 | Include font size and Search-on-launch settings | important | missing | none | The Settings plan omits both font-size and Search-on-launch settings. |
-| PRD-097 | Support username, model, and API-key settings safely | important | partial | §9 Settings Page | Model and API-key settings are present, but username sync and the full safe-handling expectations are not fully specified. |
-| PRD-098 | Export saved shows and My Data as zip | critical | full | §7 GET /api/export; §9 Settings Page |  |
-| PRD-099 | Encode export dates using ISO-8601 | important | missing | none | The export route is planned, but the ISO-8601 date-encoding requirement is not mentioned. |
+| PRD-001 | Use Next.js latest stable runtime | critical | full | `Overview` stack: `Next.js 15 (App Router, TypeScript)` |  |
+| PRD-002 | Use Supabase official client libraries | critical | full | `1.2 Supabase Client Setup` |  |
+| PRD-003 | Ship `.env.example` with required variables | critical | full | `1.1 Repository Setup` |  |
+| PRD-004 | Ignore `.env*` secrets except example | important | full | `1.1 Repository Setup` |  |
+| PRD-005 | Configure build through env without code edits | critical | full | `1.1 Repository Setup` |  |
+| PRD-006 | Keep secrets out of repo and server-only | critical | full | `1.1 Repository Setup`; `1.2 Supabase Client Setup` |  |
+| PRD-007 | Provide app, test, reset command scripts | critical | full | `1.4 Dev Scripts` |  |
+| PRD-008 | Include repeatable schema evolution artifacts | critical | full | `2.1 Migration Files` |  |
+| PRD-009 | Use one stable namespace per build | critical | full | `1.3 Identity & Namespace Injection (Benchmark-Friendly)` |  |
+| PRD-010 | Isolate namespaces and scope destructive resets | critical | full | `4.3 Test Reset`; `16.3 Test Isolation` |  |
+| PRD-011 | Attach every user record to `user_id` | critical | full | `2.1 Migration Files` (`user_id` column) |  |
+| PRD-012 | Partition persisted data by namespace and user | critical | full | `2.1 Migration Files`; `4.1 Show Repository` |  |
+| PRD-013 | Support documented dev auth injection, prod-gated | important | full | `1.3 Identity & Namespace Injection (Benchmark-Friendly)` |  |
+| PRD-014 | Real OAuth later needs no schema redesign | important | full | `1.3 Identity & Namespace Injection (Benchmark-Friendly)` |  |
+| PRD-015 | Keep backend as persisted source of truth | critical | full | `Overview`; `4.1 Show Repository` |  |
+| PRD-016 | Make client cache safe to discard | critical | partial | `15.1 Display Rule: User Data Always Wins`; `5.2 Rendering Strategy` | It makes the server authoritative, but it never explicitly states that clearing local storage or reinstalling the client is safe. |
+| PRD-017 | Avoid Docker requirement for cloud-agent compatibility | important | partial | `Overview` stack: `Supabase (hosted)` | Hosted Supabase avoids Docker by implication, but the plan never states that Docker is optional or unsupported for benchmark execution. |
+| PRD-018 | Overlay saved user data on every show appearance | critical | full | `15.1 Display Rule: User Data Always Wins` |  |
+| PRD-019 | Support visible statuses plus hidden `Next` | important | full | `2.1 Migration Files` (`my_status` includes `next`) |  |
+| PRD-020 | Map Interested/Excited chips to Later interest | critical | full | `8.3 Auto-Save Logic` |  |
+| PRD-021 | Support free-form multi-tag personal tag library | important | full | `8.2 MyTags.tsx`; `6.1 Filter Sidebar` |  |
+| PRD-022 | Define collection membership by assigned status | critical | full | `4.1 Show Repository` |  |
+| PRD-023 | Save shows from status, interest, rating, tagging | critical | full | `8.3 Auto-Save Logic` |  |
+| PRD-024 | Default save to Later/Interested except rating-save Done | critical | full | `8.3 Auto-Save Logic` |  |
+| PRD-025 | Removing status deletes show and all My Data | critical | full | `4.1 removeShow(showId)`; `8.4 Removal Confirmation` |  |
+| PRD-026 | Re-add preserves My Data and refreshes public data | critical | partial | `15.4 Re-adding the Same Show` | The plan promises re-add preservation, but `removeShow(showId)` deletes the row, so the retention path is internally inconsistent. |
+| PRD-027 | Track per-field My Data modification timestamps | critical | full | `15.3 All Timestamps` |  |
+| PRD-028 | Use timestamps for sorting, sync, freshness | important | partial | `15.3 All Timestamps`; `3.3 Merge Policy`; `14.1 API Route` | Timestamps are written and used for merge/freshness, but the plan does not explicitly cover sorting or duplicate-sync semantics. |
+| PRD-029 | Persist Scoop only for saved shows, 4h freshness | critical | full | `14.1 API Route` |  |
+| PRD-030 | Keep Ask and Alchemy state session-only | important | full | `9.3 API Route`; `10.2 API Routes` |  |
+| PRD-031 | Resolve AI recommendations to real selectable shows | critical | full | `15.5 AI Recommendations -> Real Shows` |  |
+| PRD-032 | Show collection and rating tile indicators | important | full | `15.2 Show Tile Indicators` |  |
+| PRD-033 | Sync libraries/settings consistently and merge duplicates | important | partial | `4.2 Settings Repository`; `3.3 Merge Policy` | It covers persisted settings and timestamped updates, but not duplicate detection or merge behavior for synced libraries across devices. |
+| PRD-034 | Preserve saved libraries across data-model upgrades | critical | full | `2.3 Data Continuity` |  |
+| PRD-035 | Persist synced settings, local settings, UI state | important | full | `13.1 Settings Page`; `6.1 Filter Sidebar`; `8.4 Removal Confirmation` |  |
+| PRD-036 | Keep provider IDs persisted and detail fetches transient | important | full | `2.1 Migration Files` (`provider_data`); `3.2 Show Mapper Rules` |  |
+| PRD-037 | Merge catalog fields safely and maintain timestamps | critical | full | `3.3 Merge Policy`; `15.1 Display Rule: User Data Always Wins` |  |
+| PRD-038 | Provide filters panel and main screen destinations | important | full | `5.1 Route Layout`; `6.1 Filter Sidebar` |  |
+| PRD-039 | Keep Find/Discover in persistent primary navigation | important | partial | `5.1 Route Layout` | The route exists, but the plan never specifies a persistent primary-navigation affordance that keeps Find/Discover available across the shell. |
+| PRD-040 | Keep Settings in persistent primary navigation | important | partial | `5.1 Route Layout` | The route exists, but the plan never specifies a persistent primary-navigation affordance that keeps Settings available across the shell. |
+| PRD-041 | Offer Search, Ask, Alchemy discover modes | important | full | `9.1 Chat UI (Search / Ask / Alchemy mode switcher)` |  |
+| PRD-042 | Show only library items matching active filters | important | full | `6.2 Collection Display` |  |
+| PRD-043 | Group home into Active, Excited, Interested, Others | important | full | `6.2 Collection Display` |  |
+| PRD-044 | Support All, tag, genre, decade, score, media filters | important | full | `6.1 Filter Sidebar` |  |
+| PRD-045 | Render poster, title, and My Data badges | important | full | `6.2 Collection Display`; `ShowTile.tsx` |  |
+| PRD-046 | Provide empty-library and empty-filter states | detail | full | `6.2 Collection Display` empty states |  |
+| PRD-047 | Search by title or keywords | important | full | `7.1 Search UI` |  |
+| PRD-048 | Use poster grid with collection markers | important | full | `7.1 Search UI`; `7.2 API` |  |
+| PRD-049 | Auto-open Search when setting is enabled | detail | missing | none | The setting exists, but the plan only says Search auto-focuses if enabled; it does not define the launch behavior that auto-opens Search. |
+| PRD-050 | Keep Search non-AI in tone | important | full | `7.1 Search UI`; `9.1 Chat UI` keeps Search separate from AI modes |  |
+| PRD-051 | Preserve Show Detail narrative section order | important | partial | `8.2 Section Components (in spec-defined narrative order)` | The components are ordered concretely, but the sequence does not preserve the exact narrative hierarchy from the detail-page spec. |
+| PRD-052 | Prioritize motion-rich header with graceful fallback | important | full | `8.2 DetailHeader.tsx` |  |
+| PRD-053 | Surface year, runtime/seasons, and community score early | important | full | `8.2 CoreFacts.tsx` |  |
+| PRD-054 | Place status/interest controls in toolbar | important | full | `8.2 StatusToolbar.tsx` |  |
+| PRD-055 | Auto-save unsaved tagged show as Later/Interested | critical | full | `8.3 Auto-Save Logic` |  |
+| PRD-056 | Auto-save unsaved rated show as Done | critical | full | `8.2 MyRating.tsx`; `8.3 Auto-Save Logic` |  |
+| PRD-057 | Show overview early for fast scanning | important | partial | `8.2 Overview.tsx` | Overview exists near the top, but it is still pushed behind multiple relationship controls instead of being explicitly prioritized for first-scan reading. |
+| PRD-058 | Scoop shows correct states and progressive feedback | important | full | `14.2 Scoop Client State Machine` |  |
+| PRD-059 | Ask-about-show deep-link seeds Ask context | important | full | `8.2 AskAboutShow.tsx`; `9.2 Ask Variants` |  |
+| PRD-060 | Include traditional recommendations strand | important | full | `8.2 RecommendationsStrand.tsx` |  |
+| PRD-061 | Explore Similar uses CTA-first concept flow | important | full | `11.1 Integration` |  |
+| PRD-062 | Include streaming availability and person-linking credits | important | full | `8.2 StreamingProviders.tsx`; `8.2 CastCrew.tsx` |  |
+| PRD-063 | Gate seasons to TV and financials to movies | important | full | `8.2 SeasonsSection.tsx`; `8.2 BudgetRevenue.tsx` |  |
+| PRD-064 | Keep primary actions early and page not overwhelming | important | partial | `8.2 Section Components`; `4. Busyness vs Power` is not otherwise expanded | Primary actions are early, but the plan does not spell out the decluttering strategy that keeps the page powerful without feeling busy. |
+| PRD-065 | Provide conversational Ask chat interface | important | full | `9.1 Chat UI` |  |
+| PRD-066 | Answer directly with confident, spoiler-safe recommendations | important | partial | `9.4 AI System Prompt Requirements` | The prompt covers spoiler safety and tone, but not the direct-answer-first behavior and confident recommendation posture. |
+| PRD-067 | Show horizontal mentioned-shows strip from chat | important | full | `9.1 MentionedShowsStrip.tsx` |  |
+| PRD-068 | Open Detail from mentions or Search fallback | important | full | `9.1 MentionedShowsStrip.tsx`; `9.3 API Route` |  |
+| PRD-069 | Show six random starter prompts with refresh | important | full | `9.1 StarterPrompts.tsx` |  |
+| PRD-070 | Summarize older turns while preserving voice | important | full | `9.3 API Route` |  |
+| PRD-071 | Seed Ask-about-show sessions with show handoff | important | full | `9.2 Ask Variants` |  |
+| PRD-072 | Emit `commentary` plus exact `showList` contract | critical | full | `9.3 API Route` structured output block |  |
+| PRD-073 | Retry malformed mention output once, then fallback | important | full | `9.3 API Route` fallback behavior |  |
+| PRD-074 | Redirect Ask back into TV/movie domain | important | full | `9.4 AI System Prompt Requirements` |  |
+| PRD-075 | Treat concepts as taste ingredients, not genres | important | partial | `10.2 API Routes`; `11.1 Integration` | The concepts flow is present, but the plan never explicitly frames concepts as taste ingredients rather than genre labels. |
+| PRD-076 | Return bullet-only, 1-3 word, non-generic concepts | important | full | `10.2 API Routes` |  |
+| PRD-077 | Order concepts by strongest aha and varied axes | important | partial | `10.2 API Routes` | The plan specifies shared, evocative concepts, but not strongest-first ordering or cross-axis variety. |
+| PRD-078 | Require concept selection and guide ingredient picking | important | partial | `10.1 Alchemy Flow UI`; `11.1 Integration` | Concept selection is required, but the ingredient-picking guidance and nudges are not specified. |
+| PRD-079 | Return exactly five Explore Similar recommendations | important | full | `11.1 Integration` |  |
+| PRD-080 | Support full Alchemy loop with chaining | important | full | `10.1 Alchemy Flow UI` |  |
+| PRD-081 | Clear downstream results when inputs change | important | partial | `10.1 Alchemy Flow UI` | It clears downstream results when shows change, but not when concept selections themselves change. |
+| PRD-082 | Generate shared multi-show concepts with larger option pool | important | partial | `10.2 API Routes` | Multi-show concepts are shared, but the plan does not explicitly provide a larger option pool than single-show generation. |
+| PRD-083 | Cite selected concepts in concise recommendation reasons | important | full | `10.2 API Routes` |  |
+| PRD-084 | Deliver surprising but defensible taste-aligned recommendations | important | partial | `10.2 API Routes` | Reasons cite concepts, but the surprise-without-betrayal quality bar is not captured as an acceptance criterion. |
+| PRD-085 | Keep one consistent AI persona across surfaces | important | partial | `9.4 AI System Prompt Requirements`; `14.1 API Route` | Ask and Scoop get compatible tones, but the plan does not explicitly define one shared persona across every AI surface. |
+| PRD-086 | Enforce shared AI guardrails across all surfaces | critical | partial | `9.4 AI System Prompt Requirements`; `14.1 API Route` | AI constraints appear in Ask and Scoop sections, but the plan does not define one shared guardrail contract enforced across all AI routes. |
+| PRD-087 | Make AI warm, joyful, and light in critique | important | partial | `9.4 AI System Prompt Requirements`; `14.1 API Route` | Warmth and honesty are implied, but the joy-forward, light-in-critique voice pillars are not explicitly carried across surfaces. |
+| PRD-088 | Structure Scoop as personal taste mini-review | important | full | `14.1 API Route` |  |
+| PRD-089 | Keep Ask brisk and dialogue-like by default | important | partial | `9.1 Chat UI`; `9.4 AI System Prompt Requirements` | Ask is conversational, but the brisk dialogue-first default response style is not specified. |
+| PRD-090 | Feed AI the right surface-specific context inputs | important | partial | `9.3 API Route`; `14.1 API Route` | Ask and Scoop inputs are spelled out, but the plan does not fully define surface-specific context inputs for every AI surface. |
+| PRD-091 | Validate discovery with rubric and hard-fail integrity | important | partial | `15.5 AI Recommendations -> Real Shows` | Real-show resolution is covered, but the broader quality rubric and hard-fail validation loop are not planned. |
+| PRD-092 | Show person gallery, name, and bio | important | full | `12.1 Person Page` |  |
+| PRD-093 | Include ratings, genres, and projects-by-year analytics | important | full | `12.1 Person Page` |  |
+| PRD-094 | Group filmography by year | important | full | `12.1 Person Page` |  |
+| PRD-095 | Open Show Detail from selected credit | important | full | `12.1 Person Page` |  |
+| PRD-096 | Include font size and Search-on-launch settings | important | full | `13.1 Settings Page` |  |
+| PRD-097 | Support username, model, and API-key settings safely | important | full | `13.1 Settings Page` |  |
+| PRD-098 | Export saved shows and My Data as zip | critical | full | `13.2 Data Export` |  |
+| PRD-099 | Encode export dates using ISO-8601 | important | full | `13.2 Data Export` |  |
 
 ### 3. Coverage Scores
 
-Critical:  (18 × 1.0 + 10 × 0.5) / 30 × 100 = 76.7%  (23.0 of 30 critical requirements)
-Important: (22 × 1.0 + 34 × 0.5) / 67 × 100 = 58.2%  (39.0 of 67 important requirements)
-Detail:    (1 × 1.0 + 0 × 0.5) / 2 × 100 = 50.0%  (1.0 of 2 detail requirements)
-Overall:   (41 × 1.0 + 44 × 0.5) / 99 × 100 = 63.6%  (63.0 of 99 total requirements)
+Overall score:
+
+(75 x 1.0 + 23 x 0.5) / 99 x 100 = 87.4%
+
+Critical:  (27 x 1.0 + 3 x 0.5) / 30 x 100 = 95.0%  (28.5 of 30 critical requirements)
+Important:  (47 x 1.0 + 20 x 0.5) / 67 x 100 = 85.1%  (57.0 of 67 important requirements)
+Detail:  (1 x 1.0 + 0 x 0.5) / 2 x 100 = 50.0%  (1.0 of 2 detail requirements)
+Overall:   87.4% (99 total requirements)
 
 ### 4. Top Gaps
 
-- PRD-020 | `critical` | Map Interested/Excited chips to Later interest: The plan turns interest chips into standalone statuses, which distorts collection semantics, default saves, filters, and any downstream persistence logic tied to `Later`.
-- PRD-026 | `critical` | Re-add preserves My Data and refreshes public data: The row-deletion approach means a user can lose prior tags, ratings, and Scoop history when they remove and later re-add a show, which is a direct durability regression.
-- PRD-072 | `critical` | Emit `commentary` plus exact `showList` contract: Ask UI integration depends on this exact machine-readable contract, so the custom token format would break mentioned-show rendering and deterministic resolution.
-- PRD-024 | `critical` | Default save to Later/Interested except rating-save Done: Because the implicit-save defaults are modeled incorrectly, common entry points like tagging produce the wrong relationship state and mis-shape the collection from first save onward.
-- PRD-086 | `critical` | Enforce shared AI guardrails across all surfaces: Without a single shared AI contract, Ask, Scoop, Alchemy, and Explore Similar are likely to drift on spoilers, domain limits, honesty, and actionability, creating QA-visible inconsistency.
+- PRD-026 | `critical` | Re-add preserves My Data and refreshes public data: If removal truly deletes the record, users can lose prior tags, ratings, status, and Scoop history when they later save the same show again, which breaks a core durability promise.
+- PRD-086 | `critical` | Enforce shared AI guardrails across all surfaces: Without one shared guardrail contract, Ask, Scoop, Alchemy, and Explore Similar can drift on spoiler safety, domain bounds, honesty, and actionable-output behavior.
+- PRD-016 | `critical` | Make client cache safe to discard: If cache disposal safety is not planned explicitly, clearing local client state may appear to corrupt user data or make benchmark resets unreliable.
+- PRD-090 | `important` | Feed AI the right surface-specific context inputs: If each AI surface is not fed the right context, discovery quality will feel inconsistent and taste alignment will vary unpredictably across Ask, Scoop, Explore Similar, and Alchemy.
+- PRD-077 | `important` | Order concepts by strongest aha and varied axes: Without ordering and variety rules, concept chips can become repetitive or low-signal, weakening both Explore Similar and Alchemy recommendation quality.
 
 ### 5. Coverage Narrative
 
 #### Overall Posture
-The plan is structurally sound as an implementation blueprint, but it is not yet spec-tight. It covers the infrastructure baseline, page inventory, and broad feature set well, yet it leaves several fundamental product semantics only partially aligned, especially around collection state modeling and AI behavior contracts.
+
+This is a strong implementation plan with notable semantic gaps rather than a weak or skeletal one. It is ready enough to guide substantial engineering work, but not yet precise enough to guarantee a benchmark-faithful rebuild without additional planning around durability and AI behavior contracts.
 
 #### Strength Clusters
-The strongest coverage clusters are Benchmark Runtime & Isolation, Collection Home & Search, and the page-level shell for Show Detail and export. Those sections are concrete about Next.js/Supabase setup, namespace and user partitioning, migrations, API routes, home/search scaffolding, and the core screen inventory.
+
+The plan is strongest in Benchmark Runtime & Isolation, Collection Data & Persistence, Collection Home & Search, and the main scaffolding for Show Detail and Ask Chat. Those areas are broken into concrete phases, routes, repository functions, and component-level tasks rather than being left as broad feature headings.
 
 #### Weakness Clusters
-The biggest gaps cluster in Ask Chat, Concepts/Explore Similar/Alchemy, AI Voice/Persona/Quality, and Settings & Export, with an additional cross-cutting weakness in Collection Data & Persistence. The pattern is consistent: the plan usually names the feature, but it often stops short of the exact behavioral contracts, counts, fallback rules, and canonical data semantics that the PRD freezes.
+
+The gaps cluster around two patterns. First, AI-specific behavioral contracts remain looser than the product spec in AI Voice, Persona & Quality and Concepts, Explore Similar & Alchemy. Second, a smaller number of lifecycle semantics are underspecified or internally inconsistent, especially around cache disposability, re-adding removed shows, and persistent shell/navigation expectations.
 
 #### Risk Assessment
-If executed as written, the first thing QA and stakeholders would notice is that the app feels broadly complete but behaves “off” in the highest-touch flows. Interest/status state would not match the product model, Ask would not emit the required mentioned-show contract or starter/summarization behaviors, and concept-driven discovery would feel thinner and less deterministic than the PRD requires.
+
+If this plan were executed as-is, the app would probably demo well at first pass: the routes, schema, collection flows, and major surfaces are all there. The first serious QA failures would appear in edge-behavior trust loops: a remove-then-re-add flow that cannot clearly preserve prior My Data, and AI surfaces that feel inconsistent because their shared guardrails and context contracts are not fully pinned down.
 
 #### Remediation Guidance
-The remaining work is mostly planning precision, not wholesale replanning. The plan needs a corrected canonical data model for status versus interest, explicit acceptance criteria for AI output contracts and fallbacks, exact UX/state rules for Ask and Explore Similar, and tighter settings/person-detail specifications so the implementation team is not left to infer benchmark-critical behavior.
+
+The remaining work is mostly specification-tightening, not architectural rethinking. The plan needs a short follow-up pass that locks the exact data lifecycle for deletion, re-add, and disposable client state; then a shared AI contract layer that defines persona, guardrails, context inputs, and quality validation across all AI routes; then a final acceptance-criteria pass for navigation persistence, launch behavior, detail-page hierarchy, and concept ranking rules.
+
