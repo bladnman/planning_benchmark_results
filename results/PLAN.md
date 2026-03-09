@@ -1,729 +1,855 @@
-# Implementation Plan — ShowCompanion
+# Implementation Plan
 
-## Overview
+## 1. Architecture Overview
 
-A personal TV + movie companion built with **Next.js** and **Supabase**. Users collect, organize, rate, and discover entertainment through a personal collection with AI-powered discovery features (Ask, Alchemy, Explore Similar, AI Scoop).
+**Stack:** Next.js (App Router, latest stable) + Supabase + TMDB API + AI provider (OpenAI-compatible)
 
----
+**Three-tier separation:**
+- **Client (React):** UI components, local state, optimistic updates
+- **Server (Next.js API routes / Server Actions):** Business logic, AI orchestration, external API calls, auth gating
+- **Persistence (Supabase):** PostgreSQL for user data, Row-Level Security for namespace/user isolation
 
-## Phase 1: Project Foundation & Infrastructure
-
-### 1.1 Project Scaffolding
-
-- Initialize Next.js (latest stable) with App Router, TypeScript, Tailwind CSS
-- Configure ESLint, Prettier, `tsconfig.json`
-- Create `.env.example` with all required variables:
-  - `NEXT_PUBLIC_SUPABASE_URL`
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-  - `SUPABASE_SERVICE_ROLE_KEY` (server-only)
-  - `CATALOG_API_KEY` (TMDB)
-  - `AI_API_KEY` (Anthropic/OpenAI)
-  - `AI_MODEL`
-  - `NAMESPACE_ID`
-  - `DEFAULT_USER_ID`
-- Add `.env*` (except `.env.example`) to `.gitignore`
-- Create npm scripts: `dev`, `test`, `test:reset`
-
-### 1.2 Supabase Schema & Migrations
-
-Create migration files for the following tables:
-
-**`shows`** — Primary entity storing catalog data + user overlay
-
-| Column | Type | Notes |
-|--------|------|-------|
-| `id` | `text` PK | Stable catalog ID |
-| `namespace_id` | `text` NOT NULL | Run isolation |
-| `user_id` | `text` NOT NULL | User scoping |
-| `title` | `text` NOT NULL | Display title |
-| `show_type` | `text` NOT NULL | "movie" \| "tv" \| "person" \| "unknown" |
-| `external_ids` | `jsonb` | External catalog IDs |
-| `overview` | `text` | Synopsis |
-| `genres` | `text[]` | Genre names |
-| `tagline` | `text` | |
-| `homepage` | `text` | |
-| `original_language` | `text` | |
-| `spoken_languages` | `text[]` | ISO 639-1 codes |
-| `languages` | `text[]` | |
-| `poster_url` | `text` | Full poster URL |
-| `backdrop_url` | `text` | Full backdrop URL |
-| `logo_url` | `text` | Best-rated logo URL |
-| `vote_average` | `double precision` | Community score |
-| `vote_count` | `integer` | |
-| `popularity` | `double precision` | |
-| `last_air_date` | `timestamptz` | |
-| `first_air_date` | `timestamptz` | |
-| `release_date` | `timestamptz` | |
-| `runtime` | `integer` | Movie runtime |
-| `budget` | `integer` | |
-| `revenue` | `integer` | |
-| `series_status` | `text` | TV series status |
-| `number_of_episodes` | `integer` | |
-| `number_of_seasons` | `integer` | |
-| `episode_run_time` | `integer[]` | |
-| `provider_data` | `jsonb` | Provider availability by region |
-| `my_tags` | `text[]` DEFAULT `'{}'` | User tags |
-| `my_tags_update_date` | `timestamptz` | |
-| `my_score` | `double precision` | User rating |
-| `my_score_update_date` | `timestamptz` | |
-| `my_status` | `text` | Active\|Later\|Wait\|Done\|Quit\|Next |
-| `my_status_update_date` | `timestamptz` | |
-| `my_interest` | `text` | Interested\|Excited |
-| `my_interest_update_date` | `timestamptz` | |
-| `ai_scoop` | `text` | AI-generated description |
-| `ai_scoop_update_date` | `timestamptz` | |
-| `details_update_date` | `timestamptz` | Last catalog refresh |
-| `creation_date` | `timestamptz` DEFAULT `now()` | |
-| `is_test` | `boolean` DEFAULT `false` | |
-
-- Composite unique constraint: `(id, namespace_id, user_id)`
-- Indexes on `(namespace_id, user_id)`, `(namespace_id, user_id, my_status)`, `(namespace_id, user_id, my_tags)`
-
-**`cloud_settings`** — Synced app settings
-
-| Column | Type | Notes |
-|--------|------|-------|
-| `id` | `text` PK DEFAULT `'globalSettings'` | |
-| `namespace_id` | `text` NOT NULL | |
-| `user_id` | `text` NOT NULL | |
-| `user_name` | `text` | Random on first launch |
-| `version` | `double precision` | Epoch seconds for conflict resolution |
-| `catalog_api_key` | `text` | |
-| `ai_api_key` | `text` | |
-| `ai_model` | `text` | |
-
-- Composite unique constraint: `(id, namespace_id, user_id)`
-
-**`app_metadata`** — Data model versioning
-
-| Column | Type | Notes |
-|--------|------|-------|
-| `id` | `serial` PK | |
-| `namespace_id` | `text` NOT NULL | |
-| `data_model_version` | `integer` DEFAULT `3` | |
-
-**Row-Level Security (RLS):**
-- Enable RLS on all tables
-- Policies filter by `namespace_id` header/claim and `user_id`
-- Anon key access limited to current namespace + user scope
-
-### 1.3 Identity & Namespace Isolation
-
-- Create a Supabase client wrapper that injects `namespace_id` and `user_id` into all queries
-- Dev identity injection: read `X-User-Id` header or fall back to `DEFAULT_USER_ID` env var
-- All data operations filter by `(namespace_id, user_id)` — two namespaces never collide
-- Document the identity model in README for future OAuth migration
-
-### 1.4 Test Infrastructure
-
-- Set up Jest + React Testing Library
-- `npm run test:reset` script: deletes all rows where `namespace_id` matches test namespace or `is_test = true`
-- Seed script for test fixtures (sample shows with various statuses)
-
-**Files created:**
-- `supabase/migrations/001_initial_schema.sql`
-- `src/lib/supabase/client.ts` (browser client with namespace/user injection)
-- `src/lib/supabase/server.ts` (server client with service role key)
-- `src/lib/supabase/types.ts` (generated types)
-- `scripts/reset-test-data.ts`
-- `.env.example`, `.gitignore`
+**Key architectural decisions:**
+- Server-side is source of truth; client caches are disposable (PRD rule 8.9)
+- All user-owned records partitioned by `(namespace_id, user_id)` (infra rider 4.1–4.3)
+- Dev identity injection via `X-User-Id` header + configurable `NAMESPACE_ID` env var
+- TMDB as the external catalog provider (external IDs, images, metadata)
+- AI calls server-side only (protects API keys, enables structured output parsing)
 
 ---
 
-## Phase 2: Data Layer & Catalog Integration
+## 2. Project Setup & Repo Structure
 
-### 2.1 Show Data Types & Validation
-
-- Define TypeScript types mirroring the storage schema:
-  - `Show`, `ShowType`, `MyStatusType`, `MyInterestType`, `ProviderData`, `CloudSettings`
-- Create Zod schemas for validation at system boundaries
-- Enum types: `ShowType = "movie" | "tv" | "person" | "unknown"`, `MyStatusType = "Active" | "Later" | "Wait" | "Done" | "Quit" | "Next"`, `MyInterestType = "Interested" | "Excited"`
-
-**Files:**
-- `src/types/show.ts`
-- `src/types/settings.ts`
-- `src/lib/validation/schemas.ts`
-
-### 2.2 TMDB Catalog Integration
-
-- Create TMDB API client (server-side only, API key never exposed to browser)
-- Endpoints to wrap:
-  - Search multi (movies + TV)
-  - Movie details (with credits, videos, recommendations, similar, watch providers, images)
-  - TV details (with credits, videos, recommendations, similar, watch providers, images, seasons)
-  - Person details (with combined credits)
-  - Trending / popular (for empty-state suggestions)
-- Map TMDB responses to `Show` type using field mapping rules from storage-schema spec
-- Genre ID → name mapping via TMDB genre lists (fetch once, cache)
-
-**Files:**
-- `src/lib/tmdb/client.ts`
-- `src/lib/tmdb/mappers.ts` (TMDB response → Show)
-- `src/lib/tmdb/types.ts` (TMDB-specific response types)
-- `src/app/api/catalog/search/route.ts`
-- `src/app/api/catalog/[mediaType]/[id]/route.ts`
-- `src/app/api/catalog/person/[id]/route.ts`
-
-### 2.3 Show Repository (CRUD)
-
-- Implement data access layer for `shows` table
-- Core operations:
-  - `getCollection(namespaceId, userId, filters?)` — Get all user's saved shows
-  - `getShow(namespaceId, userId, showId)` — Get single show
-  - `upsertShow(namespaceId, userId, show)` — Save/update with merge logic
-  - `removeShow(namespaceId, userId, showId)` — Clear all My Data fields (status, interest, tags, rating, scoop)
-  - `updateMyData(namespaceId, userId, showId, fields)` — Partial update of user overlay fields
-- Merge logic per spec:
-  - Non-my fields: `selectFirstNonEmpty(new, old)` — never overwrite with empty
-  - My fields: resolve by timestamp — keep whichever side has the more recent update date
-  - `creation_date` set only on first insert
-  - `details_update_date` set to now on every merge
-
-**Files:**
-- `src/lib/data/show-repository.ts`
-- `src/lib/data/merge.ts` (merge/overwrite logic)
-- `src/lib/data/settings-repository.ts`
-
-### 2.4 API Routes for Collection
-
-- `GET /api/collection` — List user's collection with optional filters (status, tags, genre, decade, score range, media type)
-- `POST /api/collection/[showId]` — Upsert show into collection
-- `PATCH /api/collection/[showId]` — Update My Data fields
-- `DELETE /api/collection/[showId]` — Remove from collection (clear My Data)
-- `GET /api/collection/tags` — List all user's unique tags
-
-All routes inject `namespace_id` and `user_id` from headers/env.
-
-**Files:**
-- `src/app/api/collection/route.ts`
-- `src/app/api/collection/[showId]/route.ts`
-- `src/app/api/collection/tags/route.ts`
-
----
-
-## Phase 3: Core UI Shell & Navigation
-
-### 3.1 App Layout
-
-- Top-level layout with sidebar/filters panel + main content area
-- Sidebar contains:
-  - "All Shows" (default filter)
-  - Tag-based filters (populated from user's tag library)
-  - Genre filters
-  - Decade filters
-  - Community score range filters
-  - Media-type toggle (All / Movies / TV)
-- Main content area renders active page
-- Responsive: sidebar collapses on mobile
-
-**Files:**
-- `src/app/layout.tsx` (root layout)
-- `src/components/layout/Sidebar.tsx`
-- `src/components/layout/FilterPanel.tsx`
-- `src/components/layout/MainContent.tsx`
-
-### 3.2 Navigation Structure
-
-Routes:
-- `/` — Home (collection view)
-- `/show/[mediaType]/[id]` — Show detail
-- `/person/[id]` — Person detail
-- `/find` — Find/Discover hub
-- `/find/search` — Search
-- `/find/ask` — Ask (AI chat)
-- `/find/alchemy` — Alchemy
-- `/settings` — Settings & Your Data
-
-### 3.3 Shared Components
-
-- `ShowTile` — Poster card with:
-  - Poster image (fallback to placeholder)
-  - In-collection indicator (when `my_status` exists)
-  - User rating indicator (when `my_score` exists)
-  - Click → Show detail
-- `ShowGrid` — Responsive grid of ShowTiles
-- `ShowStrip` — Horizontal scrollable row of ShowTiles (for recommendations, mentions)
-- `StatusChips` — Selectable status pills (Active/Later/Wait/Done/Quit)
-- `InterestChips` — Interested/Excited (shown when status is Later)
-- `RatingBar` — Interactive star/score input
-- `TagInput` — Tag chip editor with autocomplete from tag library
-- `ScoreBar` — Community score display (read-only)
-- `MediaTypeToggle` — All/Movies/TV segmented control
-- `EmptyState` — Contextual empty state with CTAs
-
-**Files:**
-- `src/components/show/ShowTile.tsx`
-- `src/components/show/ShowGrid.tsx`
-- `src/components/show/ShowStrip.tsx`
-- `src/components/show/StatusChips.tsx`
-- `src/components/show/InterestChips.tsx`
-- `src/components/show/RatingBar.tsx`
-- `src/components/show/TagInput.tsx`
-- `src/components/ui/ScoreBar.tsx`
-- `src/components/ui/MediaTypeToggle.tsx`
-- `src/components/ui/EmptyState.tsx`
-
----
-
-## Phase 4: Collection Home
-
-### 4.1 Home Page
-
-- Fetch user's collection grouped by status
-- Display groups in priority order:
-  1. **Active** — prominent, top of page
-  2. **Excited** — Later shows with interest=Excited
-  3. **Interested** — Later shows with interest=Interested
-  4. **Other** — collapsed section containing Wait, Quit, Done
-- Each group renders as a `ShowGrid` or `ShowStrip`
-- Media-type toggle filters across all groups
-- Sidebar tag/genre/decade/score filters apply across all groups
-- Empty state when no shows: prompt to Search or Ask
-
-### 4.2 Filter Logic
-
-- Client-side filtering from fetched collection for speed
-- Filter types:
-  - `all` — no filter
-  - `myTag` — shows containing specific tag
-  - `genre` — shows containing specific genre
-  - `decade` — shows released in specific decade
-  - `communityScore` — score range bracket
-  - `myStatus` — specific status filter
-- Persist `lastSelectedFilter` in localStorage
-- Media-type toggle is independent of sidebar filter
-
-**Files:**
-- `src/app/page.tsx` (Home)
-- `src/lib/filters/filter-logic.ts`
-- `src/hooks/useCollection.ts` (SWR/React Query hook)
-- `src/hooks/useFilters.ts`
-
----
-
-## Phase 5: Search & Catalog Browse
-
-### 5.1 Search Page
-
-- Text input for title/keyword search
-- Debounced search hitting `/api/catalog/search`
-- Results displayed in `ShowGrid`
-- Each tile shows in-collection indicator if show exists in user's collection
-- Clicking tile navigates to Show Detail
-- Optional: auto-open on launch if `autoSearch` setting enabled
-
-### 5.2 Search API
-
-- Server-side route calls TMDB search/multi
-- Maps results to `Show[]`
-- Cross-references with user's collection to set tile indicators
-- Returns enriched results
-
-**Files:**
-- `src/app/find/search/page.tsx`
-- `src/components/search/SearchInput.tsx`
-- `src/components/search/SearchResults.tsx`
-
----
-
-## Phase 6: Show Detail Page
-
-### 6.1 Detail Page Layout
-
-Sections in narrative order per detail page spec:
-
-1. **Header Media Carousel** — Backdrops, posters, logos, trailer thumbnails. Prioritize trailers when present. Graceful fallback to poster/backdrop.
-2. **Core Facts Row** — Year, runtime (movie) or seasons/episodes (TV), community score bar
-3. **My Tags** — Tag chips, editable inline
-4. **Overview + Scoop** — Overview text, then "Give me the scoop!" toggle
-5. **Ask About This Show CTA** — Button linking to Ask with show context seeded
-6. **Genres + Languages** — Genre chips, language list
-7. **Recommendations Strand** — Traditional TMDB recommendations in `ShowStrip`
-8. **Explore Similar** — Concept-based discovery (Get Concepts → select → Explore Shows)
-9. **Streaming Availability** — Provider logos by region from `provider_data`
-10. **Cast & Crew** — Scrollable cast strip → Person Detail links
-11. **Seasons** — TV only, season list with episode counts
-12. **Budget vs Revenue** — Movies only, formatted display
-
-### 6.2 My Relationship Controls (Toolbar)
-
-Sticky toolbar (not in scroll body) containing:
-- **Status chips**: Active / Later / Wait / Done / Quit
-  - Selecting a status on unsaved show → auto-save with that status
-  - Reselecting active status → confirmation dialog → removes from collection (clears all My Data)
-- **Interest chips**: Interested / Excited (visible only when status = Later)
-  - Selecting interest on unsaved show → saves as Later + chosen interest
-- **My Rating bar**: Interactive rating
-  - Rating unsaved show → auto-save as Done
-- **Tags**: Add/remove tags
-  - Adding tag to unsaved show → auto-save as Later + Interested
-
-### 6.3 AI Scoop Section
-
-- Toggle states: "Give me the scoop!" → "Generating…" (streaming) → "The Scoop" (expanded)
-- On toggle: call AI endpoint to generate scoop
-- Stream response progressively into UI
-- Freshness: regenerate if `ai_scoop_update_date` > 4 hours old
-- Persistence: only save to DB if show is in collection; otherwise ephemeral
-- Subsequent visits: show "Show the scoop" toggle if cached, "Give me the scoop!" if stale/missing
-
-### 6.4 Explore Similar Section
-
-- "Get Concepts" button → calls AI concepts endpoint for this show
-- Display concepts as selectable chips
-- User selects 1+ concepts (UI cap: 8)
-- "Explore Shows" button → calls AI recommendations endpoint with selected concepts
-- Display 5 recommendations with per-rec reasons
-- Selecting/deselecting concepts clears previous results
-
-### 6.5 Data Fetching
-
-- Fetch show details from TMDB (credits, videos, recommendations, similar, providers, images, seasons)
-- Fetch user's overlay from collection API
-- Merge for display
-
-**Files:**
-- `src/app/show/[mediaType]/[id]/page.tsx`
-- `src/components/detail/HeaderCarousel.tsx`
-- `src/components/detail/CoreFacts.tsx`
-- `src/components/detail/MyRelationshipToolbar.tsx`
-- `src/components/detail/OverviewScoop.tsx`
-- `src/components/detail/ExploreSimlar.tsx`
-- `src/components/detail/StreamingProviders.tsx`
-- `src/components/detail/CastCrew.tsx`
-- `src/components/detail/Seasons.tsx`
-- `src/components/detail/BudgetRevenue.tsx`
-- `src/hooks/useShowDetail.ts`
-
----
-
-## Phase 7: Person Detail Page
-
-### 7.1 Person Page Layout
-
-- **Image gallery**: Profile images
-- **Bio**: Biography text
-- **Analytics charts**: Ratings distribution, genre breakdown, projects-by-year timeline
-- **Filmography**: Grouped by year, showing poster tiles. Click → Show Detail
-- **Credit selection**: Filter by department (acting, directing, etc.)
-
-### 7.2 Data Fetching
-
-- Fetch person details + combined credits from TMDB
-- Compute analytics from credits data client-side
-
-**Files:**
-- `src/app/person/[id]/page.tsx`
-- `src/components/person/PersonHeader.tsx`
-- `src/components/person/PersonAnalytics.tsx`
-- `src/components/person/Filmography.tsx`
-
----
-
-## Phase 8: AI Infrastructure
-
-### 8.1 AI Client & Prompt Engine
-
-- Server-side AI client that supports configurable provider/model (from settings or env)
-- Prompt template system loading persona + surface-specific instructions
-- Shared context builder: assembles user library summary, current show context, conversation history
-- Streaming response support via Server-Sent Events or ReadableStream
-
-### 8.2 AI Persona Prompt
-
-- Single base persona prompt used across all surfaces (fun, chatty TV/movie nerd friend)
-- Surface-specific modifiers layered on top (Scoop structure, Ask conversational style, Concepts bullet format, Recommendations format)
-- Non-negotiable rules baked in: spoiler-safe, domain-scoped, opinionated honesty, real shows only
-
-### 8.3 Structured Output Parsing
-
-- Parse AI responses for structured data (show mentions, concept lists, recommendations)
-- Show mention format: `Title::externalId::mediaType`
-- Retry with stricter instructions on parse failure
-- Fallback to unstructured + Search handoff if parsing fails repeatedly
-
-**Files:**
-- `src/lib/ai/client.ts` (AI provider client, streaming support)
-- `src/lib/ai/prompts/base-persona.ts`
-- `src/lib/ai/prompts/scoop.ts`
-- `src/lib/ai/prompts/ask.ts`
-- `src/lib/ai/prompts/concepts.ts`
-- `src/lib/ai/prompts/recommendations.ts`
-- `src/lib/ai/context-builder.ts` (assembles user library + show context)
-- `src/lib/ai/parsers.ts` (structured output parsing)
-
----
-
-## Phase 9: AI Discovery Features
-
-### 9.1 Ask (AI Chat)
-
-- Chat UI with user/assistant message turns
-- Welcome view: 6 random starter prompts from curated set
-- User sends message → server streams AI response
-- Mentioned shows extracted from structured output → displayed in horizontal `ShowStrip` below assistant message
-- Mentioned show resolution: lookup by external ID in TMDB, accept if case-insensitive title matches. If not found, show non-interactive or handoff to search.
-- Context retention: include recent turns in prompt. After ~10 messages, summarize older turns into 1-2 sentences (preserving persona tone).
-- Variant: "Ask about this show" — seeds conversation with show context from Detail page
-
-**API Route:** `POST /api/ai/ask` (streaming)
-
-**Files:**
-- `src/app/find/ask/page.tsx`
-- `src/components/ask/ChatUI.tsx`
-- `src/components/ask/MessageBubble.tsx`
-- `src/components/ask/WelcomeView.tsx`
-- `src/components/ask/MentionedShows.tsx`
-- `src/app/api/ai/ask/route.ts`
-- `src/lib/ai/conversation-manager.ts` (history + summarization)
-
-### 9.2 Alchemy
-
-Flow:
-1. **Select starting shows** — User picks 2+ shows from collection or search
-2. **Conceptualize Shows** — Calls concept generation API with selected shows
-3. **Select concept catalysts** — Concepts displayed as selectable chips (max 8)
-4. **ALCHEMIZE!** — Calls recommendation API with selected concepts + input shows
-5. **Review recommendations** — 6 recs displayed with per-rec reasons tied to concepts
-6. **Chain** — Optionally add recs to input set and repeat from step 2
-
-- Selecting/deselecting concepts clears downstream results
-- Session-only: results and reasons not persisted
-
-**API Routes:**
-- `POST /api/ai/concepts` (concept generation)
-- `POST /api/ai/recommend` (concept-based recommendations)
-
-**Files:**
-- `src/app/find/alchemy/page.tsx`
-- `src/components/alchemy/ShowPicker.tsx`
-- `src/components/alchemy/ConceptChips.tsx`
-- `src/components/alchemy/AlchemyResults.tsx`
-- `src/app/api/ai/concepts/route.ts`
-- `src/app/api/ai/recommend/route.ts`
-
-### 9.3 Explore Similar (Detail Page)
-
-- Reuses the same concept + recommendation APIs as Alchemy
-- Single show input instead of multi-show
-- Returns 5 recs per round (vs 6 for Alchemy)
-- UI embedded in Show Detail page (Phase 6.4)
-
-### 9.4 AI Scoop Generation
-
-- Dedicated endpoint for scoop generation
-- Takes show context + user library for taste-awareness
-- Returns structured scoop: personal take, honest stack-up, Scoop centerpiece, fit/warnings, verdict
-- Streams progressively
-- ~150-350 words
-
-**API Route:** `POST /api/ai/scoop` (streaming)
-
-**Files:**
-- `src/app/api/ai/scoop/route.ts`
-
-### 9.5 AI Recommendation → Real Show Resolution
-
-- AI outputs `title + externalId + mediaType`
-- System calls TMDB lookup by external ID
-- Accepts match if case-insensitive title comparison passes
-- If found: show becomes interactive `ShowTile` with AI "reason" attached
-- If not found: displayed as non-interactive text, or handed off to Search
-
-**Files:**
-- `src/lib/ai/show-resolver.ts`
-
----
-
-## Phase 10: Settings & Data Management
-
-### 10.1 Settings Page
-
-Sections:
-- **App Settings**: Font size selector (XS/S/M/L/XL/XXL), Search on launch toggle
-- **User**: Username input (synced via `cloud_settings`)
-- **AI**: Provider API key input, model selection dropdown (synced)
-- **Integrations**: TMDB API key input (synced)
-- **Your Data**: Export/Backup button
-
-### 10.2 Export/Backup
-
-- Export generates `.zip` file containing:
-  - `collection.json` — All shows with My Data, ISO-8601 dates
-  - `settings.json` — Cloud settings
-- Downloaded to user's device
-- Import/Restore: not implemented in this version (noted as future extension)
-
-### 10.3 Local Settings Persistence
-
-- `autoSearch`, `fontSize`, `hideStatusRemovalConfirmation`, `statusRemovalCountKey`, `lastSelectedFilter` stored in localStorage
-- Read on app init, applied globally
-
-**Files:**
-- `src/app/settings/page.tsx`
-- `src/components/settings/AppSettings.tsx`
-- `src/components/settings/AISettings.tsx`
-- `src/components/settings/IntegrationSettings.tsx`
-- `src/components/settings/DataExport.tsx`
-- `src/lib/settings/local-settings.ts`
-- `src/app/api/settings/route.ts`
-- `src/app/api/export/route.ts`
-
----
-
-## Phase 11: Business Logic & Auto-Save Rules
-
-### 11.1 Auto-Save Triggers
-
-Implement centralized save logic that handles implicit saves:
-
-| Trigger | Result |
-|---------|--------|
-| Set status on unsaved show | Save with chosen status |
-| Set Interested/Excited on unsaved show | Save as Later + chosen interest |
-| Rate unsaved show | Save as Done + rating |
-| Add tag to unsaved show | Save as Later + Interested + tag |
-
-- All auto-saves fetch full show details from TMDB first, then upsert with merge logic
-- Each user field update sets its corresponding timestamp to `now()`
-
-### 11.2 Remove from Collection
-
-- Triggered by reselecting active status → confirmation dialog
-- Confirmation tracks `statusRemovalCountKey`; after threshold, option to suppress future confirmations
-- On confirm: clear `my_status`, `my_interest`, `my_tags`, `my_score`, `ai_scoop` (and their timestamps)
-- Show remains in DB with empty My Data (or deleted entirely — implementation choice)
-
-### 11.3 Re-Add After Removal
-
-- If show row still exists: preserve latest user data, merge conflicts by most recent timestamp per field
-- If show row deleted: create fresh
-
-### 11.4 Interest ↔ Status Coupling
-
-- Interest (Interested/Excited) only valid when status = Later
-- Changing status away from Later clears interest
-- Setting interest when no status → set status to Later
-
-**Files:**
-- `src/lib/data/auto-save.ts`
-- `src/lib/data/collection-actions.ts`
-
----
-
-## Phase 12: Find/Discover Hub
-
-### 12.1 Find Page
-
-- Hub page with three modes accessible via tabs/segments:
-  - **Search** — Text search (Phase 5)
-  - **Ask** — AI chat (Phase 9.1)
-  - **Alchemy** — Concept blending (Phase 9.2)
-- Default to Search tab
-- Each mode maintains its own state within the session
-
-**Files:**
-- `src/app/find/layout.tsx`
-- `src/components/find/FindTabs.tsx`
-
----
-
-## Phase 13: Polish & Cross-Cutting Concerns
-
-### 13.1 Responsive Design
-
-- Mobile-first layout
-- Sidebar collapses to drawer on mobile
-- Toolbar/status chips adapt to smaller screens
-- Image loading with blur placeholders and lazy loading
-
-### 13.2 Loading & Error States
-
-- Skeleton loaders for collection, detail page, search results
-- Error boundaries with retry actions
-- Optimistic updates for status/rating/tag changes
-- Toast notifications for save confirmations
-
-### 13.3 Font Size System
-
-- CSS custom properties driven by `fontSize` setting
-- Applied globally via root layout
-
-### 13.4 Accessibility
-
-- Semantic HTML, ARIA labels on interactive elements
-- Keyboard navigation for status chips, rating bar, concept chips
-- Focus management on page transitions
-
----
-
-## Phase 14: Testing
-
-### 14.1 Unit Tests
-
-- Merge logic (`selectFirstNonEmpty`, timestamp-based my-field resolution)
-- Filter logic (all filter types)
-- TMDB response mapping
-- AI structured output parsing
-- Auto-save trigger logic
-
-### 14.2 Integration Tests
-
-- Collection CRUD operations via API routes
-- Search → save flow
-- AI endpoint responses (mocked AI, real parsing)
-- Export generation
-
-### 14.3 E2E Smoke Tests
-
-- Build collection journey: search → save → verify on home
-- Rate-to-save: search → rate → verify as Done
-- Detail page: navigate → view all sections → set status → verify
-- Settings: update font size → verify applied
-
----
-
-## Build Order & Dependencies
+### 2.1 Initialize
 
 ```
-Phase 1  (Foundation)
-  ↓
-Phase 2  (Data Layer + TMDB)
-  ↓
-Phase 3  (UI Shell + Components)
-  ↓
-Phase 4  (Home) ←── Phase 11 (Business Logic, concurrent)
-  ↓
-Phase 5  (Search)
-  ↓
-Phase 6  (Show Detail)
-  ↓
-Phase 7  (Person Detail)
-  ↓
-Phase 8  (AI Infrastructure)
-  ↓
-Phase 9  (AI Features: Ask, Alchemy, Scoop, Explore Similar)
-  ↓
-Phase 10 (Settings & Export)
-  ↓
-Phase 12 (Find Hub, wires together Search + Ask + Alchemy)
-  ↓
-Phase 13 (Polish)
-  ↓
-Phase 14 (Testing)
+npx create-next-app@latest . --typescript --tailwind --app --src-dir
 ```
 
-Phases 4 and 11 can be developed concurrently. Phase 8 is prerequisite for all of Phase 9. Phase 12 is largely wiring that connects existing pages.
+### 2.2 Directory Layout
+
+```
+src/
+  app/                      # Next.js App Router pages
+    layout.tsx              # Root layout with providers
+    page.tsx                # Collection Home
+    find/
+      page.tsx              # Find/Discover hub (Search, Ask, Alchemy)
+    show/[id]/
+      page.tsx              # Show Detail
+    person/[id]/
+      page.tsx              # Person Detail
+    settings/
+      page.tsx              # Settings & Your Data
+    api/
+      shows/                # CRUD for user's shows
+      search/               # TMDB search proxy
+      show/[id]/            # TMDB detail fetch + merge
+      person/[id]/          # TMDB person fetch
+      ai/
+        scoop/              # AI Scoop generation
+        ask/                # Ask chat
+        concepts/           # Concept generation
+        recommendations/    # Concept-based recs
+      export/               # Data export
+      settings/             # Cloud settings CRUD
+  lib/
+    supabase/
+      client.ts             # Browser client (anon key)
+      server.ts             # Server client (service role, server-only)
+      migrations/           # SQL migration files
+    tmdb/
+      client.ts             # TMDB API client
+      mapper.ts             # External catalog → Show mapping
+      types.ts              # TMDB response types
+    ai/
+      client.ts             # AI provider client
+      prompts/              # All prompt templates
+        scoop.ts
+        ask.ts
+        concepts.ts
+        recommendations.ts
+        summarize.ts
+      parser.ts             # Structured output parsing (showList format)
+    merge.ts                # Show merge logic (selectFirstNonEmpty, timestamp resolution)
+    types.ts                # Shared TypeScript types (Show, Status, Interest, etc.)
+    constants.ts            # Status/interest enums, defaults, config
+    utils.ts                # Date formatting, helpers
+  components/
+    layout/
+      Sidebar.tsx           # Filter panel
+      TopNav.tsx            # Global nav (Find, Settings)
+      MediaTypeToggle.tsx   # All / Movies / TV
+    home/
+      StatusSection.tsx     # Grouped status sections
+      ShowTile.tsx          # Poster tile with badges
+    detail/
+      HeaderCarousel.tsx    # Backdrop/poster/trailer carousel
+      CoreFacts.tsx         # Year, runtime, community score
+      StatusToolbar.tsx     # Status/interest chips
+      RatingBar.tsx         # My Rating slider
+      TagPicker.tsx         # My Tags display + picker
+      Overview.tsx          # Overview text
+      ScoopSection.tsx      # Scoop toggle + streaming display
+      RecommendationsStrand.tsx
+      ExploreSimilar.tsx    # Get Concepts → select → Explore Shows
+      StreamingProviders.tsx
+      CastCrew.tsx
+      Seasons.tsx
+      BudgetRevenue.tsx
+    find/
+      ModeSwitcher.tsx      # Search / Ask / Alchemy tabs
+      SearchView.tsx        # Search input + results grid
+      AskView.tsx           # Chat UI
+      AlchemyView.tsx       # Multi-step alchemy flow
+    person/
+      PersonHeader.tsx
+      Analytics.tsx
+      Filmography.tsx
+    settings/
+      SettingsForm.tsx
+      ExportButton.tsx
+    shared/
+      ShowGrid.tsx          # Reusable poster grid
+      ShowStrip.tsx         # Horizontal scrollable show strip
+      ConceptChips.tsx      # Selectable concept chips
+      ConfirmDialog.tsx     # Removal confirmation
+      LoadingStream.tsx     # Streaming text display
+.env.example
+.gitignore
+supabase/migrations/
+```
+
+### 2.3 Environment Variables
+
+`.env.example`:
+```
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=         # Supabase project URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=    # Supabase anon/public key
+SUPABASE_SERVICE_ROLE_KEY=        # Server-only service role key
+
+# External catalog
+TMDB_API_KEY=                     # TMDB v3 API key
+
+# AI provider
+AI_API_KEY=                       # AI provider API key
+AI_MODEL=                         # AI model identifier (e.g. gpt-4o)
+AI_BASE_URL=                      # Optional: custom AI endpoint
+
+# Isolation
+NAMESPACE_ID=                     # Build/run namespace (required)
+DEFAULT_USER_ID=                  # Default dev user ID (optional, defaults to "default-user")
+```
 
 ---
 
-## Key Technical Decisions
+## 3. Database Schema & Migrations
 
-1. **Next.js App Router** — Server components for data fetching, client components for interactivity. API routes for all server-side operations.
-2. **Supabase JS Client** — Direct client calls from server components/API routes. Namespace + user filtering applied at the data access layer.
-3. **Streaming AI responses** — Use `ReadableStream` in API routes to stream AI responses to the client for progressive rendering (Scoop, Ask).
-4. **SWR or React Query** — Client-side data fetching with caching, revalidation, and optimistic updates for collection operations.
-5. **Tailwind CSS** — Utility-first styling. CSS custom properties for font size system.
-6. **No external state management library** — React context + hooks sufficient for app state (filters, settings, active show).
-7. **TMDB as catalog provider** — Fits all field mapping requirements. API key managed via env/settings.
-8. **AI provider agnostic** — Client supports configurable provider/model. Default to Anthropic Claude but architecture supports switching via settings.
+### 3.1 Migration 001: Core Schema
+
+```sql
+-- Enable UUID extension
+create extension if not exists "uuid-ossp";
+
+-- Shows table (user's collection)
+create table shows (
+  id text not null,
+  namespace_id text not null,
+  user_id text not null,
+
+  title text not null,
+  show_type text not null check (show_type in ('movie', 'tv', 'person', 'unknown')),
+  external_ids jsonb default null,
+
+  overview text,
+  genres text[] default '{}',
+  tagline text,
+  homepage text,
+  original_language text,
+  spoken_languages text[] default '{}',
+  languages text[] default '{}',
+
+  poster_url text,
+  backdrop_url text,
+  logo_url text,
+  network_logos text[] default '{}',
+
+  vote_average double precision,
+  vote_count integer,
+  popularity double precision,
+
+  last_air_date timestamptz,
+  first_air_date timestamptz,
+  release_date timestamptz,
+
+  runtime integer,
+  budget bigint,
+  revenue bigint,
+
+  series_status text,
+  number_of_episodes integer,
+  number_of_seasons integer,
+  episode_run_time integer[] default '{}',
+
+  -- User data
+  my_tags text[] default '{}',
+  my_tags_update_date timestamptz,
+  my_score double precision,
+  my_score_update_date timestamptz,
+  my_status text check (my_status in ('active', 'next', 'later', 'done', 'quit', 'wait')),
+  my_status_update_date timestamptz,
+  my_interest text check (my_interest in ('excited', 'interested')),
+  my_interest_update_date timestamptz,
+
+  -- AI data
+  ai_scoop text,
+  ai_scoop_update_date timestamptz,
+
+  -- Management
+  details_update_date timestamptz,
+  creation_date timestamptz default now(),
+  is_test boolean default false,
+
+  -- Providers
+  provider_data jsonb,
+
+  primary key (id, namespace_id, user_id)
+);
+
+-- Indexes for common queries
+create index idx_shows_namespace_user on shows(namespace_id, user_id);
+create index idx_shows_status on shows(namespace_id, user_id, my_status);
+create index idx_shows_type on shows(namespace_id, user_id, show_type);
+
+-- Cloud settings
+create table cloud_settings (
+  id text not null default 'globalSettings',
+  namespace_id text not null,
+  user_id text not null,
+  user_name text not null,
+  version double precision not null default 0,
+  catalog_api_key text,
+  ai_api_key text,
+  ai_model text not null default 'gpt-4o',
+
+  primary key (id, namespace_id, user_id)
+);
+
+-- App metadata
+create table app_metadata (
+  namespace_id text not null primary key,
+  data_model_version integer not null default 3
+);
+
+-- Row-Level Security
+alter table shows enable row level security;
+alter table cloud_settings enable row level security;
+
+-- RLS policies: namespace isolation via service role (server routes handle user_id filtering)
+create policy "Namespace isolation" on shows
+  for all using (namespace_id = current_setting('app.namespace_id', true));
+
+create policy "Namespace isolation" on cloud_settings
+  for all using (namespace_id = current_setting('app.namespace_id', true));
+```
+
+### 3.2 Migration 002: Test Data Reset Function
+
+```sql
+create or replace function reset_namespace_data(target_namespace text)
+returns void as $$
+begin
+  delete from shows where namespace_id = target_namespace;
+  delete from cloud_settings where namespace_id = target_namespace;
+  delete from app_metadata where namespace_id = target_namespace;
+end;
+$$ language plpgsql security definer;
+```
+
+---
+
+## 4. Identity & Middleware
+
+### 4.1 Auth Middleware
+
+Create middleware that:
+1. In development/test mode: reads `X-User-Id` header, falls back to `DEFAULT_USER_ID` env var, falls back to `"default-user"`
+2. Injects `namespace_id` from `NAMESPACE_ID` env var
+3. Attaches both to the request context (via headers forwarded to API routes)
+4. In production mode: would wire to real OAuth (schema doesn't change)
+
+```typescript
+// src/middleware.ts
+export function middleware(request: NextRequest) {
+  const userId = request.headers.get('x-user-id')
+    ?? process.env.DEFAULT_USER_ID
+    ?? 'default-user';
+  const namespaceId = process.env.NAMESPACE_ID;
+
+  if (!namespaceId) throw new Error('NAMESPACE_ID is required');
+
+  const headers = new Headers(request.headers);
+  headers.set('x-user-id', userId);
+  headers.set('x-namespace-id', namespaceId);
+
+  return NextResponse.next({ headers });
+}
+```
+
+### 4.2 Server Context Helper
+
+```typescript
+// src/lib/context.ts
+export function getRequestContext(headers: Headers) {
+  return {
+    userId: headers.get('x-user-id')!,
+    namespaceId: headers.get('x-namespace-id')!,
+  };
+}
+```
+
+---
+
+## 5. Data Layer Implementation
+
+### 5.1 Supabase Clients
+
+- **Browser client:** `createBrowserClient(NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)` — used only for real-time subscriptions if needed
+- **Server client:** `createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)` — used in API routes, sets `app.namespace_id` per request
+
+### 5.2 Show Repository (`src/lib/supabase/shows.ts`)
+
+CRUD operations scoped by `(namespace_id, user_id)`:
+
+- `getCollection(ctx)` — all shows for user, ordered by status sections
+- `getShow(ctx, showId)` — single show lookup
+- `upsertShow(ctx, show)` — insert or merge using merge rules
+- `removeShow(ctx, showId)` — delete + clear all My Data
+- `updateMyData(ctx, showId, fields)` — partial update for status/interest/tags/rating/scoop
+- `getShowsByTag(ctx, tag)` — filter by tag
+- `getShowsByFilter(ctx, filter)` — filter by genre/decade/score/status
+- `exportAllShows(ctx)` — full collection dump for backup
+
+### 5.3 Merge Logic (`src/lib/merge.ts`)
+
+Implements the merge/overwrite policy from storage-schema.md:
+
+```typescript
+function mergeShow(existing: Show, incoming: Partial<Show>): Show {
+  // Non-my fields: selectFirstNonEmpty(incoming, existing)
+  // My fields: resolve by timestamp (newer wins)
+  // Set detailsUpdateDate = now()
+  // Preserve creationDate from existing
+}
+
+function selectFirstNonEmpty<T>(newVal: T | null, oldVal: T | null): T | null {
+  if (newVal !== null && newVal !== undefined && newVal !== '' &&
+      !(Array.isArray(newVal) && newVal.length === 0)) {
+    return newVal;
+  }
+  return oldVal;
+}
+```
+
+### 5.4 Settings Repository (`src/lib/supabase/settings.ts`)
+
+- `getSettings(ctx)` — get or create default CloudSettings
+- `updateSettings(ctx, fields)` — partial update with version bump
+- Cloud settings sync uses `version` (epoch seconds) for conflict resolution
+
+---
+
+## 6. External Catalog Integration (TMDB)
+
+### 6.1 TMDB Client (`src/lib/tmdb/client.ts`)
+
+Server-side only. Wraps TMDB v3 API:
+
+- `searchMulti(query)` — search movies + TV
+- `getMovieDetails(id)` — full movie with credits, videos, recommendations, similar, providers, images
+- `getTVDetails(id)` — full TV with credits, videos, recommendations, similar, providers, images, seasons
+- `getPersonDetails(id)` — person with combined credits, images
+- `getProviders(type, id)` — streaming availability
+
+All calls append `?api_key=TMDB_API_KEY`.
+
+### 6.2 TMDB → Show Mapper (`src/lib/tmdb/mapper.ts`)
+
+Follows the field mapping rules from storage-schema.md:
+
+- Map `id` → `Show.id` (prefixed with media type to avoid collisions: `movie-123`, `tv-456`)
+- Title: movie `title` or TV `name` (fail if neither)
+- Show type: infer from response shape
+- Genres: map genre IDs → names using TMDB genre list
+- Images: construct full URLs from TMDB image paths (`https://image.tmdb.org/t/p/{size}{path}`)
+- Logo: pick best-rated English logo
+- Dates: parse TMDB date strings to ISO-8601
+- Provider data: transform TMDB watch/providers response to `ProviderData` shape (IDs only)
+
+### 6.3 Provider Name Resolution
+
+Maintain a small lookup of TMDB provider IDs → display names/logos (fetched once, cached server-side).
+
+---
+
+## 7. AI Integration
+
+### 7.1 AI Client (`src/lib/ai/client.ts`)
+
+OpenAI-compatible client (works with OpenAI, Anthropic via proxy, etc.):
+- Reads `AI_API_KEY`, `AI_MODEL`, `AI_BASE_URL` from env
+- Supports streaming responses (for Scoop, Ask)
+- Supports structured JSON output (for mentioned shows, concepts)
+
+### 7.2 Prompt Templates
+
+All prompts follow the behavioral contracts from `ai_prompting_context.md` and voice spec from `ai_voice_personality.md`.
+
+#### Scoop (`src/lib/ai/prompts/scoop.ts`)
+
+**System prompt:** Establishes the persona (fun chatty TV/movie nerd friend), spoiler-safe default, honest/opinionated voice. Instructs structured output: personal take, honest stack-up, The Scoop (emotional centerpiece), fit/warnings, verdict. 150–350 words.
+
+**User prompt:** Show title, year, overview, genres, community score, user's rating/status if saved.
+
+**Output:** Streaming text.
+
+#### Ask (`src/lib/ai/prompts/ask.ts`)
+
+**System prompt:** Same persona. Conversational, picks favorites, bulleted lists for multi-recs. Stays in TV/movies domain. Taste-aware: include user's library context.
+
+**Extended system prompt (Ask with mentions):** Same as above plus structured output requirement:
+```json
+{
+  "commentary": "user-facing response (no external IDs)",
+  "showList": "Title::externalId::mediaType;;Title2::externalId::mediaType"
+}
+```
+
+**User context injected:** User's library (titles + statuses + tags + ratings), current show context if "Ask about this show."
+
+**Conversation management:** Keep recent turns in messages array. After ~10 messages, summarize older turns into a 1–2 sentence summary that preserves persona tone.
+
+#### Concepts (`src/lib/ai/prompts/concepts.ts`)
+
+**System prompt:** Generate 8 concept ingredients. 1–3 words each, evocative, spoiler-free. No generic concepts. Bullet list only. For multi-show: shared commonalities across all inputs. Order by strength (best "aha" first). Cover diverse axes: structure, vibe, emotion, craft.
+
+**User prompt:** Show title(s), genres, overview(s).
+
+**Output:** Parsed bullet list → string array.
+
+#### Concept-Based Recommendations (`src/lib/ai/prompts/recommendations.ts`)
+
+**System prompt:** Recommend shows based on selected concepts. Each reason must name which concepts align. Bias recent but allow classics/hidden gems. Return title, external ID (TMDB ID), media type for catalog resolution.
+
+**Counts:** 5 for Explore Similar, 6 for Alchemy.
+
+**Output format:** JSON array of `{ title, externalId, mediaType, reason }`.
+
+#### Conversation Summarization (`src/lib/ai/prompts/summarize.ts`)
+
+Summarize older turns into 1–2 sentences preserving persona tone.
+
+### 7.3 Output Parser (`src/lib/ai/parser.ts`)
+
+- Parse `showList` string format: `Title::externalId::mediaType;;...`
+- Parse concept bullet lists → string arrays
+- Parse recommendation JSON → typed objects
+- Fallback: if parsing fails, retry once with stricter formatting, then fall back to unstructured commentary + Search handoff
+
+### 7.4 Show Resolution Pipeline
+
+When AI returns recommendations:
+1. Extract `externalId` and `mediaType` from structured output
+2. Call TMDB by ID: `getMovieDetails(id)` or `getTVDetails(id)`
+3. Verify title matches case-insensitively
+4. If match: map to Show object, attach AI reason as transient data
+5. If no match: mark as unresolved (show title as non-interactive or link to search)
+
+---
+
+## 8. API Routes
+
+### 8.1 Collection CRUD
+
+| Route | Method | Purpose |
+|---|---|---|
+| `/api/shows` | GET | Get user's collection (with optional filters) |
+| `/api/shows` | POST | Save/upsert a show (handles auto-save rules) |
+| `/api/shows/[id]` | GET | Get single show from collection |
+| `/api/shows/[id]` | PATCH | Update My Data fields |
+| `/api/shows/[id]` | DELETE | Remove from collection |
+| `/api/shows/[id]/tags` | PATCH | Add/remove tags |
+
+### 8.2 External Catalog
+
+| Route | Method | Purpose |
+|---|---|---|
+| `/api/search` | GET | Search TMDB (`?query=...&page=...`) |
+| `/api/show/[id]` | GET | Fetch TMDB details + merge with stored show if exists |
+| `/api/person/[id]` | GET | Fetch TMDB person details |
+
+### 8.3 AI
+
+| Route | Method | Purpose |
+|---|---|---|
+| `/api/ai/scoop` | POST | Generate Scoop (streaming response) |
+| `/api/ai/ask` | POST | Ask chat turn (streaming response with mentions) |
+| `/api/ai/concepts` | POST | Generate concepts for 1+ shows |
+| `/api/ai/recommendations` | POST | Get concept-based recommendations |
+
+### 8.4 Settings & Data
+
+| Route | Method | Purpose |
+|---|---|---|
+| `/api/settings` | GET/PATCH | Read/update cloud settings |
+| `/api/export` | GET | Export user data as JSON zip |
+| `/api/test/reset` | POST | Reset namespace data (dev/test only) |
+
+### 8.5 Auto-Save Business Logic (in POST `/api/shows`)
+
+Implement the saving triggers and defaults from PRD 5.2–5.3:
+
+```typescript
+function applySaveDefaults(show: Partial<Show>, trigger: 'status' | 'interest' | 'rating' | 'tag'): Partial<Show> {
+  if (trigger === 'rating' && !show.myStatus) {
+    show.myStatus = 'done';
+    show.myStatusUpdateDate = new Date().toISOString();
+  }
+  if (trigger === 'tag' && !show.myStatus) {
+    show.myStatus = 'later';
+    show.myInterest = 'interested';
+    show.myStatusUpdateDate = new Date().toISOString();
+    show.myInterestUpdateDate = new Date().toISOString();
+  }
+  if ((trigger === 'interest' || trigger === 'status') && !show.myStatus) {
+    show.myStatus = 'later';
+    show.myInterest = 'interested';
+    show.myStatusUpdateDate = new Date().toISOString();
+    show.myInterestUpdateDate = new Date().toISOString();
+  }
+  return show;
+}
+```
+
+---
+
+## 9. UI Implementation
+
+### 9.1 Collection Home (`/`)
+
+**Layout:**
+- Left sidebar: filter panel (All Shows, tag filters, genre/decade/score filters)
+- Top: media type toggle (All / Movies / TV)
+- Main: show tiles grouped by status sections
+
+**Status sections (in order):**
+1. **Active** — larger tiles, prominent placement
+2. **Excited** — Later + Excited interest
+3. **Interested** — Later + Interested interest
+4. **Other** — collapsible group containing Wait, Quit, Done
+
+**Show tiles:** Poster image + title + badges (in-collection dot, user rating if set).
+
+**Empty states:**
+- No collection: CTA to Search/Ask
+- Filter yields nothing: "No results found"
+
+**Data flow:** Fetch from `/api/shows` with filter params. Client-side grouping by status/interest.
+
+### 9.2 Find/Discover Hub (`/find`)
+
+**Mode switcher:** Tabs for Search | Ask | Alchemy
+
+#### Search Mode
+
+- Text input with debounced search
+- Calls `/api/search?query=...`
+- Results in poster grid
+- In-collection shows marked with badge
+- Tap opens `/show/[id]`
+- "Search on Launch" setting: if enabled, auto-open search on app load
+
+#### Ask Mode
+
+- Chat interface with user/assistant message bubbles
+- Welcome state: 6 random starter prompts (from a curated set of ~80), refresh button
+- User types message → POST `/api/ai/ask` with conversation history
+- Streaming response rendered progressively
+- Mentioned shows strip: horizontal scrollable row below the response, parsed from `showList`
+- Tap mentioned show → navigate to `/show/[id]`
+- After ~10 messages, older turns summarized automatically
+- "Ask About a Show" variant: seed conversation with show context when navigating from Detail
+
+#### Alchemy Mode
+
+Multi-step flow with clear step indicators:
+
+**Step 1 — Select Shows (2+):**
+- Search bar to find shows (library + global catalog)
+- Selected shows displayed as removable chips/cards
+- "Conceptualize Shows" button enabled at 2+
+
+**Step 2 — Select Concepts:**
+- POST `/api/ai/concepts` with selected shows
+- Display concept chips (selectable, max 8)
+- "ALCHEMIZE!" button enabled at 1+ selected
+
+**Step 3 — Results:**
+- POST `/api/ai/recommendations` with selected concepts
+- Display 6 recommendation cards with reasons
+- Each card tappable → `/show/[id]`
+- "More Alchemy!" button to chain (results become new inputs, back to step 1)
+
+**Backtracking:** Changing shows clears concepts/results. Changing concepts clears results.
+
+### 9.3 Show Detail (`/show/[id]`)
+
+Fetch from `/api/show/[id]` (merges TMDB details with stored user data).
+
+**Section order (matches detail_page_experience.md):**
+
+1. **Header carousel:** Backdrops, posters, logos. Trailer if available (inline playback). Fallback to poster/logo if no backdrops.
+
+2. **Core facts + community score:** Year, runtime (movies) or seasons/episodes (TV), community score bar.
+
+3. **Status toolbar (sticky/fixed):** Status chips — Active, Interested, Excited, Done, Quit, Wait. Selecting sets status (Interested/Excited set `Later + interest`). Reselecting active status triggers removal confirmation.
+
+4. **My Rating:** Slider/star bar. Rating an unsaved show auto-saves as Done.
+
+5. **My Tags:** Tag chips + "Add tag" picker. Adding tag to unsaved show auto-saves as Later + Interested.
+
+6. **Overview:** Text block, truncated with expand.
+
+7. **The Scoop:** Toggle button:
+   - No scoop: "Give me the scoop!"
+   - Cached scoop (< 4 hours): "Show the scoop"
+   - Open: displays scoop with "The Scoop" header
+   - Generation: streaming text display with "Generating..." state
+   - Freshness: re-generate after 4 hours on next request
+   - Persistence: only saved if show is in collection
+
+8. **"Ask about this show" CTA:** Navigates to Ask mode with show context.
+
+9. **Genres + languages.**
+
+10. **Recommendations strand:** Horizontal scrollable strip of similar/recommended shows from TMDB.
+
+11. **Explore Similar:**
+    - "Get Concepts" button → POST `/api/ai/concepts`
+    - Concept chips (selectable, same cap as Alchemy)
+    - "Explore Shows" button → POST `/api/ai/recommendations` (5 recs)
+    - Results as cards with reasons
+
+12. **Streaming providers:** Grouped by type (stream, rent, buy) with provider logos.
+
+13. **Cast & Crew:** Horizontal strips. Tap → `/person/[id]`.
+
+14. **Seasons (TV only):** Expandable season list with episode counts.
+
+15. **Budget vs Revenue (movies, when available).**
+
+### 9.4 Person Detail (`/person/[id]`)
+
+Fetch from `/api/person/[id]`.
+
+- **Header:** Image gallery, name, bio
+- **Analytics:** Simple charts (average ratings, top genres, projects-by-year) using lightweight charting (e.g., Recharts or CSS-based)
+- **Filmography:** Credits grouped by year. Tap credit → `/show/[id]`
+
+### 9.5 Settings (`/settings`)
+
+**App settings:**
+- Font size selector (XS through XXL)
+- Search on launch toggle
+
+**User:**
+- Username field (saved to CloudSettings)
+
+**AI:**
+- AI API key field (saved to CloudSettings, never committed)
+- AI model selector
+
+**Integrations:**
+- Catalog API key field (TMDB key override)
+
+**Your Data:**
+- "Export My Data" button → downloads `.zip` containing JSON backup (ISO-8601 dates)
+- Import/Restore: placeholder UI noting "coming soon" (PRD open question)
+
+### 9.6 Removal Confirmation Dialog
+
+When removing a show (reselecting active status):
+- Confirmation dialog: "Remove [Title] from your collection? This will clear all your data for this show."
+- "Don't ask again" checkbox after repeated removals
+- Tracks `hideStatusRemovalConfirmation` and `statusRemovalCountKey` in local state
+
+---
+
+## 10. Cross-Cutting Concerns
+
+### 10.1 User Data Overlay Rule
+
+Every component that renders a show must check if the user has a saved version and display the overlaid version (status, tags, rating, scoop). This applies to: search results, recommendations, mentioned shows, Alchemy results, Explore Similar results, recommendation strands.
+
+Implementation: after fetching any list of shows from TMDB or AI, batch-check the user's collection for matches by ID and merge user data onto the display objects.
+
+### 10.2 Streaming AI Responses
+
+Use Server-Sent Events (SSE) or the Vercel AI SDK (`ai` package) for streaming:
+- Scoop: stream text chunks to client, render progressively
+- Ask: stream commentary, parse `showList` from final structured output
+- Concepts and recommendations: non-streaming JSON responses (fast enough)
+
+### 10.3 Error Handling
+
+- TMDB failures: show graceful error states, allow retry
+- AI failures: retry once, then fall back (unstructured text + search handoff for mentions)
+- Supabase failures: error toast, no silent data loss
+- Invalid structured output from AI: retry with stricter prompt, then degrade gracefully
+
+### 10.4 Local UI State
+
+Stored in `localStorage` (disposable per infra rider 6.2):
+- `hideStatusRemovalConfirmation`
+- `statusRemovalCountKey`
+- `lastSelectedFilter`
+- `autoSearch`
+- `fontSize`
+
+### 10.5 Data Continuity (Migrations)
+
+- `app_metadata.data_model_version` tracks schema version
+- On startup, check version and run any needed migrations
+- Migrations are additive (add columns, transform data) — never destructive to user data
+
+---
+
+## 11. Build Order (Implementation Phases)
+
+### Phase 1: Foundation
+1. Project setup (Next.js, Tailwind, TypeScript, Supabase client)
+2. Environment variables + `.env.example`
+3. Database migrations (shows, cloud_settings, app_metadata tables)
+4. Middleware (namespace + user identity injection)
+5. Supabase server client with namespace scoping
+6. Shared types (Show, Status, Interest, Filter, etc.)
+
+### Phase 2: Data Layer
+7. Show repository (CRUD operations)
+8. Merge logic (selectFirstNonEmpty, timestamp resolution)
+9. Settings repository
+10. TMDB client (search, movie details, TV details, person details)
+11. TMDB → Show mapper
+
+### Phase 3: Core UI Shell
+12. Root layout with sidebar + top nav
+13. Collection Home page (status-grouped grid)
+14. Show tiles with badges
+15. Media type toggle
+16. Filter sidebar (All Shows, tags, genres, decades, scores)
+
+### Phase 4: Show Detail
+17. Detail page layout (all 15 sections)
+18. Status toolbar with save/remove logic
+19. Rating bar with auto-save-as-Done
+20. Tag picker with auto-save-as-Later
+21. Header carousel (images, poster fallback)
+22. Core facts, overview, genres, languages
+23. Streaming providers display
+24. Cast/crew strips
+25. Seasons (TV), Budget/Revenue (movies)
+26. Recommendations strand (TMDB similar/recommended)
+
+### Phase 5: AI Features
+27. AI client setup (OpenAI-compatible)
+28. Scoop generation + streaming display
+29. Scoop caching (4-hour freshness)
+30. Ask chat UI + streaming responses
+31. Ask mentioned shows parsing + strip display
+32. Ask conversation summarization (~10 message threshold)
+33. Concept generation (single-show + multi-show)
+34. Concept-based recommendations
+35. Show resolution pipeline (AI output → TMDB lookup → real Show)
+36. Explore Similar flow on Detail page
+
+### Phase 6: Discovery Features
+37. Search (Find → Search) with TMDB integration
+38. Ask (Find → Ask) with welcome state + starter prompts
+39. "Ask about this show" from Detail → Ask with context
+40. Alchemy multi-step flow (select → conceptualize → alchemize → chain)
+
+### Phase 7: Supporting Features
+41. Person Detail page (bio, analytics, filmography)
+42. Settings page (font size, search on launch, username, API keys)
+43. Export My Data (JSON zip download)
+44. Test data reset endpoint
+45. Removal confirmation dialog with "don't ask again"
+
+### Phase 8: Polish & Quality
+46. Empty states (no collection, no results, no concepts)
+47. Loading states and skeleton screens
+48. Error handling and retry logic
+49. User data overlay everywhere shows appear
+50. Responsive layout
+51. Accessibility basics (keyboard nav, ARIA labels, focus management)
+
+---
+
+## 12. Testing Strategy
+
+### 12.1 Unit Tests
+- Merge logic (selectFirstNonEmpty, timestamp resolution edge cases)
+- Auto-save defaults (rating→Done, tag→Later+Interested, etc.)
+- TMDB mapper (field mapping, type inference, logo selection)
+- AI output parser (showList format, concept bullets, recommendation JSON)
+- Filter logic (genre, decade, score, tag, media type)
+
+### 12.2 Integration Tests
+- API routes: CRUD operations with Supabase, namespace isolation verification
+- AI routes: mock AI responses, verify parsing + resolution pipeline
+- TMDB routes: mock TMDB responses, verify mapping + merge
+
+### 12.3 Namespace Isolation Test
+- Create data in namespace A
+- Verify namespace B cannot read it
+- Reset namespace A
+- Verify data is gone in A, B is unaffected
+
+### 12.4 Scripts
+- `npm run dev` — start Next.js dev server
+- `npm test` — run test suite
+- `npm run test:reset` — call reset endpoint to clear namespace test data
+- `npm run db:migrate` — apply Supabase migrations
+
+---
+
+## 13. Key Risks & Mitigations
+
+| Risk | Mitigation |
+|---|---|
+| AI structured output unreliable | Retry with stricter prompt; graceful degradation to unstructured text |
+| TMDB rate limits | Server-side caching of detail responses; debounced search |
+| Scoop freshness creates stale UX | 4-hour TTL with visual regeneration affordance |
+| Large collection performance | Paginate collection queries; virtual scrolling for long lists |
+| Show ID collisions (movie vs TV) | Prefix IDs with media type (`movie-123`, `tv-456`) |
+| Alchemy concept quality varies | Quality constraints in prompts; concept validation (reject generics) |
+
+---
+
+## 14. Compliance Checklist (Infra Rider)
+
+- [x] `.env.example` with all required variables
+- [x] `.gitignore` excludes `.env*` (except `.env.example`)
+- [x] Configurable without code edits
+- [x] `npm run dev`, `npm test`, `npm run test:reset` scripts
+- [x] SQL migrations for deterministic schema creation
+- [x] `namespace_id` on all persisted data
+- [x] `user_id` on all user-owned records
+- [x] Partition: `(namespace_id, user_id)`
+- [x] Dev identity injection (`X-User-Id` header + default)
+- [x] Schema supports real OAuth swap (just change identity source)
+- [x] Server-side source of truth; client cache is disposable
+- [x] Namespace-scoped test data reset without global teardown
+- [x] No Docker required
+- [x] Anon key for browser; service role key server-only
