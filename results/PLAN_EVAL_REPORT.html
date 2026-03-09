@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plan Coverage Report</title>
+  <style>
+    :root {
+      --bg: #f5efe6;
+      --bg-alt: #fffaf3;
+      --ink: #182126;
+      --muted: #5b6a72;
+      --line: rgba(24, 33, 38, 0.12);
+      --teal: #0e7c86;
+      --teal-soft: rgba(14, 124, 134, 0.14);
+      --rust: #bb5d3d;
+      --rust-soft: rgba(187, 93, 61, 0.14);
+      --gold: #c9962b;
+      --gold-soft: rgba(201, 150, 43, 0.16);
+      --green: #18794e;
+      --green-soft: rgba(24, 121, 78, 0.14);
+      --shadow: 0 18px 50px rgba(31, 40, 44, 0.10);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(14,124,134,0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(187,93,61,0.15), transparent 30%),
+        linear-gradient(180deg, #fbf6ef 0%, var(--bg) 52%, #f1e9df 100%);
+      font-family: Iowan Old Style, Palatino Linotype, Book Antiqua, Georgia, serif;
+    }
+    .page {
+      width: min(1200px, calc(100vw - 48px));
+      margin: 24px auto 48px;
+      display: grid;
+      gap: 22px;
+    }
+    .hero, .panel {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.65);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      overflow: hidden;
+      position: relative;
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 24px;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(130deg, transparent 0 58%, rgba(14,124,134,0.07) 58%, rgba(187,93,61,0.08) 100%);
+      pointer-events: none;
+    }
+    .eyebrow {
+      font-family: Avenir Next, Helvetica Neue, Arial, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 12px;
+      color: var(--teal);
+      margin-bottom: 10px;
+    }
+    h1, h2, h3, .metric-number, .mini-score {
+      font-family: Avenir Next, Helvetica Neue, Arial, sans-serif;
+      margin: 0;
+    }
+    h1 { font-size: clamp(34px, 5vw, 52px); line-height: 0.96; max-width: 10ch; }
+    .lede { font-size: 18px; line-height: 1.5; max-width: 62ch; color: #243038; margin-top: 14px; }
+    .hero-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
+    .stat { background: var(--bg-alt); border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
+    .stat .label { font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+    .metric-number { font-size: 34px; margin-top: 8px; }
+    .stat p { margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .scorecard { display: grid; align-content: space-between; gap: 18px; position: relative; z-index: 1; }
+    .donut-wrap { display: grid; justify-items: center; gap: 14px; padding: 10px 0; }
+    .donut {
+      width: 240px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: conic-gradient(var(--teal) 0 88.4%, rgba(24,33,38,0.10) 88.4% 100%);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+    .donut::before {
+      content: "";
+      width: 68%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: rgba(255,250,243,0.96);
+      border: 1px solid var(--line);
+      box-shadow: inset 0 0 30px rgba(24,33,38,0.06);
+    }
+    .donut-center { position: absolute; text-align: center; }
+    .donut-center .big { font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; font-size: 52px; font-weight: 700; line-height: 0.95; }
+    .donut-center .small { font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.14em; font-size: 11px; color: var(--muted); margin-top: 8px; }
+    .delta { text-align: center; color: var(--muted); font-size: 14px; }
+    .delta strong { color: var(--ink); font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; }
+    .panel { padding: 24px; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 18px; }
+    .section-head h2 { font-size: 24px; }
+    .section-head p { margin: 0; color: var(--muted); max-width: 62ch; line-height: 1.45; }
+    .severity-grid, .area-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .area-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .mini-card { background: var(--bg-alt); border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: grid; gap: 10px; }
+    .mini-card.risk { background: linear-gradient(180deg, rgba(255,250,243,0.94), rgba(187,93,61,0.06)); }
+    .mini-kicker { font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); }
+    .mini-card h3 { font-size: 18px; line-height: 1.1; }
+    .mini-score { font-size: 28px; }
+    .mini-card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .bar { height: 8px; background: rgba(24,33,38,0.10); border-radius: 999px; overflow: hidden; }
+    .bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--teal), #1f9cab); }
+    .arc-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 18px; align-items: start; }
+    .arc-visual { background: var(--bg-alt); border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
+    .arc-row { display: grid; grid-template-columns: 92px 1fr 64px; gap: 12px; align-items: center; margin-bottom: 14px; font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; }
+    .arc-row:last-child { margin-bottom: 0; }
+    .arc-label { font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+    .arc-bar { height: 14px; background: rgba(24,33,38,0.10); border-radius: 999px; overflow: hidden; }
+    .arc-fill.before { width: 77.8%; height: 100%; background: linear-gradient(90deg, var(--gold), #d7b35a); }
+    .arc-fill.after { width: 88.4%; height: 100%; background: linear-gradient(90deg, var(--rust), var(--teal)); }
+    .arc-note { color: var(--muted); font-size: 13px; line-height: 1.5; margin-top: 16px; }
+    .narrative { display: grid; gap: 16px; }
+    .narrative article { padding: 16px 18px; border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(14,124,134,0.04)); border: 1px solid var(--line); }
+    .narrative h3 { font-size: 16px; margin-bottom: 8px; }
+    .narrative p { margin: 0; line-height: 1.55; color: #2b3840; }
+    .gaps-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .gap-card { border-radius: 18px; padding: 18px; border: 1px solid var(--line); background: var(--bg-alt); }
+    .gap-card.severity-critical { background: linear-gradient(180deg, rgba(255,250,243,0.94), rgba(187,93,61,0.10)); }
+    .gap-card.severity-important { background: linear-gradient(180deg, rgba(255,250,243,0.94), rgba(201,150,43,0.10)); }
+    .gap-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; color: var(--muted); font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .gap-card h3 { font-size: 20px; margin-bottom: 10px; }
+    .gap-card p { margin: 0; line-height: 1.55; color: #2b3840; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; border: 1px solid transparent; }
+    .chip.critical { background: var(--rust-soft); color: #7d2f19; border-color: rgba(187,93,61,0.22); }
+    .chip.important { background: var(--gold-soft); color: #755107; border-color: rgba(201,150,43,0.24); }
+    .chip.detail { background: var(--teal-soft); color: #0a5b62; border-color: rgba(14,124,134,0.22); }
+    .unresolved { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 18px; }
+    .unresolved .summary { background: var(--bg-alt); border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
+    .summary p { margin: 0 0 14px; line-height: 1.55; color: #2b3840; }
+    .summary .metric-list { display: grid; gap: 10px; }
+    .summary .metric-line { display: flex; justify-content: space-between; gap: 12px; font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; }
+    .summary .metric-line span:last-child { font-weight: 700; }
+    .unresolved-list { background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(24,121,78,0.04)); border: 1px solid var(--line); border-radius: 18px; padding: 14px 18px; max-height: 520px; overflow: auto; }
+    .unresolved-list ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+    .unresolved-list li { display: grid; grid-template-columns: auto auto 1fr auto; gap: 10px; align-items: center; padding-bottom: 10px; border-bottom: 1px solid rgba(24,33,38,0.08); font-size: 14px; }
+    .unresolved-list li:last-child { border-bottom: 0; padding-bottom: 0; }
+    .req { color: #2b3840; line-height: 1.35; }
+    .coverage { font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; }
+    .coverage.partial { color: #8b6716; }
+    .coverage.missing { color: #962f16; }
+    footer { text-align: center; color: var(--muted); font-size: 12px; padding: 6px 0 0; }
+    @media (max-width: 980px) {
+      .hero, .arc-grid, .unresolved { grid-template-columns: 1fr; }
+      .severity-grid, .area-grid, .gaps-grid { grid-template-columns: 1fr 1fr; }
+      .hero-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 680px) {
+      .page { width: min(100vw - 24px, 1200px); margin: 12px auto 28px; }
+      .hero, .panel { padding: 18px; border-radius: 20px; }
+      .hero-grid, .severity-grid, .area-grid, .gaps-grid { grid-template-columns: 1fr; }
+      .unresolved-list li { grid-template-columns: 1fr; align-items: start; }
+      .donut { width: 200px; }
+      h1 { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Stakeholder Coverage Briefing</div>
+        <h1>Strong plan, but not fully spec-tight yet.</h1>
+        <p class="lede">The implementation plan lands at <strong>88.4% weighted coverage</strong> against 99 frozen requirements. Core architecture, persistence, library flows, and major screens are well covered. The remaining exposure is concentrated in benchmark runtime compliance, exact AI contracts, and experiential detail-page rules.</p>
+        <div class="hero-grid">
+          <div class="stat">
+            <div class="label">Concrete Coverage</div>
+            <div class="metric-number">77.8%</div>
+            <p>77 requirements are implementation-ready without inference.</p>
+          </div>
+          <div class="stat">
+            <div class="label">Open Exposure</div>
+            <div class="metric-number">22</div>
+            <p>21 partial and 1 missing requirements still need tightening.</p>
+          </div>
+          <div class="stat">
+            <div class="label">Critical Confidence</div>
+            <div class="metric-number">95.0%</div>
+            <p>Only three critical requirements are partial; none are fully missing.</p>
+          </div>
+          <div class="stat">
+            <div class="label">Readiness Call</div>
+            <div class="metric-number">Cautious</div>
+            <p>Execution can start, but the current plan should be tightened before teams rely on it as the final contract.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="scorecard">
+        <div class="donut-wrap">
+          <div class="donut">
+            <div class="donut-center">
+              <div class="big">88.4</div>
+              <div class="small">Overall Coverage</div>
+            </div>
+          </div>
+          <div class="delta"><strong>+10.6 pts</strong> from concrete-only coverage to weighted addressed coverage</div>
+        </div>
+        <div class="stat">
+          <div class="label">Source of Truth</div>
+          <p>This report is rendered from <code>PLAN_EVAL.md</code> only. No PRD reread or denominator changes were introduced during report generation.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <h2>Before / After Arc</h2>
+        <p>The submission includes one final plan artifact, not separate draft and revision snapshots. To preserve the required arc honestly, this briefing treats <strong>Before</strong> as fully explicit coverage and <strong>After</strong> as the benchmark’s weighted score once directional partials are credited.</p>
+      </div>
+      <div class="arc-grid">
+        <div class="arc-visual">
+          <div class="arc-row">
+            <div class="arc-label">Before</div>
+            <div class="arc-bar"><div class="arc-fill before"></div></div>
+            <div>77.8%</div>
+          </div>
+          <div class="arc-row">
+            <div class="arc-label">After</div>
+            <div class="arc-bar"><div class="arc-fill after"></div></div>
+            <div>88.4%</div>
+          </div>
+          <p class="arc-note">The delta comes from 21 requirements that are directionally addressed but not yet concrete enough to earn full credit. One additional important benchmark requirement is fully missing.</p>
+        </div>
+        <div class="narrative">
+          <article>
+            <h3>Overall Posture</h3>
+            <p>This is a structurally strong implementation plan with a small set of meaningful specification holes rather than a plan that misses the product. It covers the runtime choice, persistence model, core library behaviors, major surfaces, and testing strategy well enough to start execution, but several benchmark-operational details and AI behavior contracts are still under-specified.</p>
+          </article>
+          <article>
+            <h3>Risk Assessment</h3>
+            <p>If a team executed this plan as-is, they would likely produce a working product skeleton with solid data rules, but QA would quickly find spec drift in the AI-facing seams and some benchmark setup expectations. The first visible issues would probably be generic or poorly ordered concepts, Ask mention payloads that do not match the UI contract, and detail-page behavior that feels close to the original but not exact.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <h2>Score Shape</h2>
+        <p>Critical coverage is high. The score drag comes from a broad band of important requirements that are present but still under-specified.</p>
+      </div>
+      <div class="severity-grid">
+        <div class="mini-card">
+          <div class="mini-kicker">Critical</div>
+          <h3>Core contract safety</h3>
+          <div class="mini-score">95.0%</div>
+          <p>27 full, 3 partial, 0 missing</p>
+          <div class="bar"><span style="width:95.0%"></span></div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-kicker">Important</div>
+          <h3>Where ambiguity still lives</h3>
+          <div class="mini-score">85.1%</div>
+          <p>48 full, 18 partial, 1 missing</p>
+          <div class="bar"><span style="width:85.1%"></span></div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-kicker">Detail</div>
+          <h3>No misses on minor polish</h3>
+          <div class="mini-score">100.0%</div>
+          <p>Both detail-tier requirements are fully covered.</p>
+          <div class="bar"><span style="width:100.0%"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <h2>What’s Strong</h2>
+        <p>The strongest coverage is in Collection Data &amp; Persistence, App Navigation &amp; Discover Shell, Collection Home &amp; Search, Person Detail, and Settings &amp; Export. The plan is especially concrete where the product’s durable truth lives: namespace/user isolation, save semantics, overlay precedence, detail/search/home flows, and export basics.</p>
+      </div>
+      <div class="area-grid">
+    <div class="mini-card">
+      <div class="mini-kicker">Strong Area</div>
+      <h3>App Navigation &amp; Discover Shell</h3>
+      <div class="mini-score">100.0%</div>
+      <p>4 full, 0 partial, 0 missing</p>
+      <div class="bar"><span style="width:100.0%"></span></div>
+    </div>
+    
+    <div class="mini-card">
+      <div class="mini-kicker">Strong Area</div>
+      <h3>Person Detail</h3>
+      <div class="mini-score">100.0%</div>
+      <p>4 full, 0 partial, 0 missing</p>
+      <div class="bar"><span style="width:100.0%"></span></div>
+    </div>
+    
+    <div class="mini-card">
+      <div class="mini-kicker">Strong Area</div>
+      <h3>Settings &amp; Export</h3>
+      <div class="mini-score">100.0%</div>
+      <p>4 full, 0 partial, 0 missing</p>
+      <div class="bar"><span style="width:100.0%"></span></div>
+    </div>
+    
+    <div class="mini-card">
+      <div class="mini-kicker">Strong Area</div>
+      <h3>Collection Data &amp; Persistence</h3>
+      <div class="mini-score">95.0%</div>
+      <p>18 full, 2 partial, 0 missing</p>
+      <div class="bar"><span style="width:95.0%"></span></div>
+    </div>
+    </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <h2>What’s At Risk</h2>
+        <p>The gaps cluster in three places rather than being random. First, benchmark-execution specifics are softer than they should be, especially around official Supabase client use, env-secret ignore rules, dev-auth documentation, and Docker-optional cloud-agent guidance. Second, AI contracts have several partials: exact Ask wire output, conversation-summary voice preservation, concept-generation quality rules, and discovery-quality gating. Third, Show Detail has multiple experiential partials around exact hierarchy, header fallback behavior, Scoop states, and anti-overwhelm constraints.</p>
+      </div>
+      <div class="area-grid">
+    <div class="mini-card risk">
+      <div class="mini-kicker">At Risk</div>
+      <h3>Concepts, Explore Similar &amp; Alchemy</h3>
+      <div class="mini-score">75.0%</div>
+      <p>5 partial, 0 missing</p>
+      <div class="bar"><span style="width:75.0%"></span></div>
+    </div>
+    
+    <div class="mini-card risk">
+      <div class="mini-kicker">At Risk</div>
+      <h3>Show Detail &amp; Relationship UX</h3>
+      <div class="mini-score">82.1%</div>
+      <p>5 partial, 0 missing</p>
+      <div class="bar"><span style="width:82.1%"></span></div>
+    </div>
+    
+    <div class="mini-card risk">
+      <div class="mini-kicker">At Risk</div>
+      <h3>Benchmark Runtime &amp; Isolation</h3>
+      <div class="mini-score">85.3%</div>
+      <p>3 partial, 1 missing</p>
+      <div class="bar"><span style="width:85.3%"></span></div>
+    </div>
+    </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <h2>Top Gaps and Why They Matter</h2>
+        <p>The highest-risk holes are not random omissions. They sit directly on durability, AI UI contracts, and benchmark-run compliance.</p>
+      </div>
+      <div class="gaps-grid">
+    <article class="gap-card severity-critical">
+      <div class="gap-meta"><span class="chip critical">critical</span><span>PRD-034</span><span>Collection Data &amp; Persistence</span></div>
+      <h3>Preserve saved libraries across data-model upgrades</h3>
+      <p>Without an explicit upgrade-continuity plan, a schema change can silently drop or corrupt the user’s saved library, which cuts against one of the product’s core trust promises.</p>
+    </article>
+    
+    <article class="gap-card severity-critical">
+      <div class="gap-meta"><span class="chip critical">critical</span><span>PRD-072</span><span>Ask Chat</span></div>
+      <h3>Emit `commentary` plus exact `showList` contract</h3>
+      <p>If Ask does not emit the exact mentions payload the UI expects, the mentioned-shows rail becomes unreliable even when the chat text itself looks correct.</p>
+    </article>
+    
+    <article class="gap-card severity-critical">
+      <div class="gap-meta"><span class="chip critical">critical</span><span>PRD-002</span><span>Benchmark Runtime &amp; Isolation</span></div>
+      <h3>Use Supabase official client libraries</h3>
+      <p>Using unspecified Supabase clients risks auth, SSR, and session-handling drift in the exact runtime boundary the benchmark is testing.</p>
+    </article>
+    
+    <article class="gap-card severity-important">
+      <div class="gap-meta"><span class="chip important">important</span><span>PRD-017</span><span>Benchmark Runtime &amp; Isolation</span></div>
+      <h3>Avoid Docker requirement for cloud-agent compatibility</h3>
+      <p>If the build assumes Docker or a local-only stack, cloud agents can fail before product work is even exercised.</p>
+    </article>
+    
+    <article class="gap-card severity-important">
+      <div class="gap-meta"><span class="chip important">important</span><span>PRD-033</span><span>Collection Data &amp; Persistence</span></div>
+      <h3>Sync libraries/settings consistently and merge duplicates</h3>
+      <p>Cross-device or multi-session usage can produce duplicate or divergent records unless sync and merge behavior are specified beyond timestamp conflict resolution.</p>
+    </article>
+    </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <h2>Remaining Partial / Missing Requirements</h2>
+        <p>Stakeholders should not have to hunt for residual risk. This is the unresolved set after scoring the submitted plan.</p>
+      </div>
+      <div class="unresolved">
+        <div class="summary">
+          <p>The remaining work is mostly specification tightening, not a wholesale re-plan. Add explicit benchmark deliverables for runtime/tooling compliance, spell out the exact AI request/response contracts and quality bars, and sharpen the detail-page UX contract with exact hierarchy, header fallback, toolbar placement, and Scoop state behavior. Also add upgrade-continuity and sync-integrity acceptance criteria so data durability is protected across schema evolution and multi-device usage.</p>
+          <div class="metric-list">
+            <div class="metric-line"><span>Weighted overall score</span><span>88.4%</span></div>
+            <div class="metric-line"><span>Fully explicit requirements</span><span>77</span></div>
+            <div class="metric-line"><span>Partial requirements</span><span>21</span></div>
+            <div class="metric-line"><span>Missing requirements</span><span>1</span></div>
+            <div class="metric-line"><span>Unresolved criticals</span><span>3</span></div>
+          </div>
+        </div>
+        <div class="unresolved-list">
+          <ul>
+    <li>
+      <span class="chip critical">critical</span>
+      <strong>PRD-002</strong>
+      <span class="req">Use Supabase official client libraries</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip critical">critical</span>
+      <strong>PRD-034</strong>
+      <span class="req">Preserve saved libraries across data-model upgrades</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip critical">critical</span>
+      <strong>PRD-072</strong>
+      <span class="req">Emit `commentary` plus exact `showList` contract</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-017</strong>
+      <span class="req">Avoid Docker requirement for cloud-agent compatibility</span>
+      <span class="coverage missing">missing</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-004</strong>
+      <span class="req">Ignore `.env*` secrets except example</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-013</strong>
+      <span class="req">Support documented dev auth injection, prod-gated</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-033</strong>
+      <span class="req">Sync libraries/settings consistently and merge duplicates</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-045</strong>
+      <span class="req">Render poster, title, and My Data badges</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-047</strong>
+      <span class="req">Search by title or keywords</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-051</strong>
+      <span class="req">Preserve Show Detail narrative section order</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-052</strong>
+      <span class="req">Prioritize motion-rich header with graceful fallback</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-054</strong>
+      <span class="req">Place status/interest controls in toolbar</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-058</strong>
+      <span class="req">Scoop shows correct states and progressive feedback</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-064</strong>
+      <span class="req">Keep primary actions early and page not overwhelming</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-070</strong>
+      <span class="req">Summarize older turns while preserving voice</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-075</strong>
+      <span class="req">Treat concepts as taste ingredients, not genres</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-077</strong>
+      <span class="req">Order concepts by strongest aha and varied axes</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-078</strong>
+      <span class="req">Require concept selection and guide ingredient picking</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-082</strong>
+      <span class="req">Generate shared multi-show concepts with larger option pool</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-084</strong>
+      <span class="req">Deliver surprising but defensible taste-aligned recommendations</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-087</strong>
+      <span class="req">Make AI warm, joyful, and light in critique</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    
+    <li>
+      <span class="chip important">important</span>
+      <strong>PRD-091</strong>
+      <span class="req">Validate discovery with rubric and hard-fail integrity</span>
+      <span class="coverage partial">partial</span>
+    </li>
+    </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer>Generated from PLAN_EVAL.md on 2026-03-09.</footer>
+  </main>
+</body>
+</html>
