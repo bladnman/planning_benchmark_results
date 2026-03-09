@@ -28,9 +28,10 @@
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{min-height:100vh;color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.6;background:var(--bg);-webkit-font-smoothing:antialiased}
+    body.inspect-open{overflow:hidden}
     ::selection{background:rgba(212,168,67,0.28)}
     a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
-    button,select{font:inherit}
+    button,select{font:inherit;color:inherit}
 
     /* ─── TOPBAR ─── */
     .topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:rgba(15,15,14,0.85);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border)}
@@ -101,7 +102,8 @@
     .chart-host{width:100%;min-height:360px}
     .chart-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
     .chart-controls label{color:var(--ink-faint);font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase}
-    .chart-controls select{padding:5px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised);color:var(--ink);font:400 12px var(--font-body);cursor:pointer}
+    .chart-controls select,.chart-controls input{padding:5px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised);color:var(--ink);font:400 12px var(--font-body);cursor:pointer}
+    .chart-controls input{width:92px}
 
     /* ─── RANKING ─── */
     .rank-list{display:grid;gap:6px;margin-bottom:32px}
@@ -125,13 +127,15 @@
     /* ─── COMPARE ─── */
     .picker-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;-webkit-overflow-scrolling:touch}
     .picker-strip::-webkit-scrollbar{height:4px}.picker-strip::-webkit-scrollbar-track{background:var(--surface)}.picker-strip::-webkit-scrollbar-thumb{background:var(--ink-muted);border-radius:2px}
-    .picker-card{flex:0 0 auto;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);cursor:pointer;transition:all 0.2s;min-width:160px;max-width:220px}
+    .picker-card{flex:0 0 auto;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);color:var(--ink);cursor:pointer;transition:all 0.2s;min-width:160px;max-width:220px;text-align:left}
     .picker-card:hover{border-color:var(--border-strong)}
     .picker-card.sel-a{border-color:var(--gold);background:var(--gold-soft)}
     .picker-card.sel-b{border-color:var(--sage);background:var(--sage-soft)}
+    .picker-card.sel-multi{border-color:var(--gold);background:rgba(212,168,67,0.08);box-shadow:inset 0 0 0 1px rgba(212,168,67,0.18)}
     .picker-name{font-weight:600;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .picker-score{font-family:var(--font-mono);font-size:0.78rem;color:var(--ink-soft);margin-top:2px}
     .picker-tool{font-size:0.72rem;color:var(--ink-faint);margin-top:1px}
+    .select-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin:14px 0 18px}
     .compare-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
     .compare-col{padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg)}
     .compare-col.side-a{border-left:3px solid var(--gold)}
@@ -219,16 +223,29 @@
 
     /* ─── NAV HELPER ─── */
     .breadcrumb{color:var(--ink-faint);font-size:0.8rem;margin-bottom:16px}
-    .breadcrumb a{color:var(--gold)}
     .nav-row{display:flex;gap:8px;margin-bottom:24px}
+
+    /* ─── INSPECT MODAL ─── */
+    .inspect-modal{position:fixed;inset:0;z-index:120;display:none}
+    .inspect-modal.open{display:block}
+    .inspect-overlay{position:absolute;inset:0;background:rgba(5,5,5,0.72);backdrop-filter:blur(10px)}
+    .inspect-panel{position:relative;display:flex;flex-direction:column;width:min(1120px,calc(100vw - 32px));max-height:calc(100vh - 32px);margin:16px auto;background:var(--bg-warm);border:1px solid var(--border-strong);border-radius:26px;box-shadow:0 24px 80px rgba(0,0,0,0.45);overflow:hidden}
+    .inspect-modal-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid var(--border);background:rgba(20,19,17,0.96)}
+    .inspect-context{display:flex;flex-direction:column;gap:2px}
+    .inspect-context-kicker{color:var(--gold);font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase}
+    .inspect-context-title{color:var(--ink-soft);font-size:0.84rem}
+    .inspect-modal-actions{display:flex;align-items:center;gap:10px}
+    .inspect-close{width:38px;height:38px;border:1px solid var(--border-strong);border-radius:999px;background:transparent;color:var(--ink-soft);font-size:1.2rem;line-height:1;cursor:pointer;transition:all 0.2s}
+    .inspect-close:hover{border-color:var(--gold);color:var(--gold)}
+    .inspect-panel-body{overflow:auto;padding:28px 24px 32px}
 
     /* ─── ANIMATIONS ─── */
     @keyframes fade-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
     .anim{opacity:0;animation:fade-up 0.4s var(--ease-out) forwards}
 
     /* ─── RESPONSIVE ─── */
-    @media(max-width:900px){.topbar{padding:0 12px}.screen-inner{padding:20px 12px 60px}.card-grid,.inspect-grid,.compare-cols{grid-template-columns:1fr}.inspect-stats{grid-template-columns:repeat(2,1fr)}.rank-card{grid-template-columns:28px 1fr auto;gap:10px;padding:12px 14px}.rank-bar-track,.rank-mini{display:none}.topbar-meta{display:none}.sel-panel{flex-direction:column;align-items:stretch}}
-    @media(max-width:600px){.tab-btn{padding:5px 10px;font-size:11px}.stat-strip{grid-template-columns:1fr 1fr}.filter-bar{padding:6px 12px}}
+    @media(max-width:900px){.topbar{padding:0 12px}.screen-inner{padding:20px 12px 60px}.card-grid,.inspect-grid,.compare-cols,.select-grid{grid-template-columns:1fr}.inspect-stats{grid-template-columns:repeat(2,1fr)}.rank-card{grid-template-columns:28px 1fr auto;gap:10px;padding:12px 14px}.rank-bar-track,.rank-mini{display:none}.topbar-meta{display:none}.sel-panel{flex-direction:column;align-items:stretch}.inspect-panel{width:calc(100vw - 16px);max-height:calc(100vh - 16px);margin:8px}.inspect-panel-body{padding:20px 14px 24px}}
+    @media(max-width:600px){.tab-btn{padding:5px 10px;font-size:11px}.stat-strip{grid-template-columns:1fr 1fr}.filter-bar{padding:6px 12px}.inspect-modal-header{padding:14px}.inspect-modal-actions{gap:8px}}
   </style>
 </head>
 <body>
@@ -247,9 +264,24 @@
   <section class="screen" id="scr-compare"><div class="screen-inner" id="compareContent"></div></section>
   <section class="screen" id="scr-trends"><div class="screen-inner" id="trendsContent"></div></section>
   <section class="screen" id="scr-explore"><div class="screen-inner" id="exploreContent"></div></section>
-  <section class="screen" id="scr-inspect"><div class="screen-inner" id="inspectContent"></div></section>
 
   <div class="sel-panel" id="selPanel"></div>
+  <div class="inspect-modal" id="inspectModal" aria-hidden="true">
+    <div class="inspect-overlay" data-inspect-close></div>
+    <div class="inspect-panel" role="dialog" aria-modal="true" aria-labelledby="inspectContextTitle">
+      <div class="inspect-modal-header">
+        <div class="inspect-context">
+          <div class="inspect-context-kicker">Inspect Run</div>
+          <div class="inspect-context-title" id="inspectContextTitle">Execution detail</div>
+        </div>
+        <div class="inspect-modal-actions">
+          <button class="btn" id="inspectBackBtn" type="button">Back</button>
+          <button class="inspect-close" id="inspectCloseBtn" type="button" aria-label="Close inspect">×</button>
+        </div>
+      </div>
+      <div class="inspect-panel-body" id="inspectContent"></div>
+    </div>
+  </div>
 
   <script src="./data.js"></script>
   <script>
@@ -264,19 +296,18 @@
     dataset:null,
     filters:{tool:null,model_family:null,effort:null,planning_mode:null,taxonomy:null,role:null},
     explore:{sort:"scores.overall",dir:"desc",checked:[]},
-    scatter:{xAxis:"planning_runtime_seconds",yAxis:"scores.overall",colorBy:"tool",selA:null,selB:null},
+    scatter:{plotType:"hbar",metric:"scores.overall",sortBy:"scores.overall",colorBy:"tool",selected:[],axisMin:null,xMetric:"planning_runtime_seconds",yMetric:"scores.overall",xMin:null,yMin:null},
     compare:{a:null,b:null},
-    trends:{metric:"scores.overall",groupBy:"tool"},
-    inspect:{level:null,id:null,reqFilters:{area:"all",severity:"all",coverage:"all"}},
+    trends:{metric:"scores.overall",groupBy:"tool",chartType:"line"},
+    inspect:{level:null,id:null,origin:"overview",open:false,reqFilters:{area:"all",severity:"all",coverage:"all"}},
   };
   const charts={};
   const SCREENS=[
     {id:"overview",label:"Overview"},
-    {id:"scatter",label:"Scatter"},
+    {id:"scatter",label:"Select & See"},
     {id:"compare",label:"Compare"},
     {id:"trends",label:"Trends"},
     {id:"explore",label:"Explore"},
-    {id:"inspect",label:"Inspect"},
   ];
   const TOOL_COLORS={"Codex CLI":"#6b9e7a","Claude Code":"#d4a843"};
   const FAMILY_COLORS={"GPT-5":"#6b9e7a","Claude Opus":"#d4a843","Claude Sonnet":"#c47a5a"};
@@ -303,8 +334,15 @@
     if(by==="planning_mode")return PLAN_COLORS[run.planning_mode]||"#7a8fa6";
     return"#d4a843";
   }
-  function runLabel(r){return r?`${r.model_name} · ${r.tool}${r.planning_mode===false?" · No Plan":""}`:"";}
-  function shortLabel(r){return r?`${r.model_name}${r.planning_mode===false?" (no plan)":""}`:"";}
+  function planningLabel(v){return v===true?"Plan Mode":v===false?"No Plan":"Default / Unspecified";}
+  function planningShort(v){return v===true?"(plan)":v===false?"(no plan)":"(default)";}
+  function runLabel(r){return r?`${r.model_name} · ${r.tool} · ${planningLabel(r.planning_mode)}`:"";}
+  function shortLabel(r){return r?`${r.model_name} ${planningShort(r.planning_mode)}`:"";}
+  function chartLabel(r,multiline){
+    if(!r)return"";
+    const tail=`${r.tool} · ${r.effort||"Std"} · ${planningLabel(r.planning_mode)}`;
+    return multiline?`${r.model_name}\n${tail}`:`${r.model_name} · ${tail}`;
+  }
 
   /* ════════════════════════════════════════════
      DATA
@@ -348,6 +386,73 @@
     const map={"scores.overall":"Overall Score","scores.critical":"Critical Score","scores.important":"Important Score","scores.detail":"Detail Score","planning_runtime_seconds":"Runtime (seconds)","plan_tool_call_count":"Tool Call Count","summary.total_requirements":"Total Requirements","summary.coverage_counts.full":"Full Coverage Count"};
     return map[key]||key;
   }
+  function metricDisplay(r,key){
+    const v=metricVal(r,key);
+    if(key==="planning_runtime_seconds")return fmtD(v);
+    if(key==="plan_tool_call_count")return String(v||0);
+    if(key.startsWith("scores."))return fmtS(v);
+    return String(v);
+  }
+  function titleCase(v){return String(v||"").replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase())}
+  function screenLabel(id){return SCREENS.find(s=>s.id===id)?.label||titleCase(id)}
+  function defaultReqFilters(){return{area:"all",severity:"all",coverage:"all"}}
+  function sortScatterRuns(runs){
+    const key=S.scatter.sortBy||S.scatter.metric;
+    const asc=key==="planning_runtime_seconds"||key==="plan_tool_call_count";
+    return runs.sort((a,b)=>{
+      const va=metricVal(a,key),vb=metricVal(b,key);
+      return asc?va-vb:vb-va;
+    });
+  }
+  function scatterSelectedRuns(){
+    return S.scatter.selected.map(id=>allRuns().find(r=>r.run_id===id)).filter(Boolean);
+  }
+  function parseAxisInput(v){
+    if(v==null||v==="")return null;
+    const n=Number(v);
+    return Number.isFinite(n)?n:null;
+  }
+  function suggestedAxisMin(values,isScore){
+    if(!values.length)return 0;
+    const min=Math.min(...values);
+    const max=Math.max(...values);
+    const spread=max-min;
+    if(isScore){
+      if(spread<=25&&min>=50)return Math.max(0,Math.floor((min-5)/5)*5);
+      return 0;
+    }
+    if(min<=0)return 0;
+    if(spread===0)return Math.max(0,Math.floor(min*0.9));
+    return Math.max(0,Math.floor((min-spread*0.15)*10)/10);
+  }
+  function resolvedAxisMin(values,isScore,override){
+    return override==null?suggestedAxisMin(values,isScore):override;
+  }
+  function sortExploreRuns(runs){
+    return runs.sort((a,b)=>{
+      const va=get(a,S.explore.sort)??0,vb=get(b,S.explore.sort)??0;
+      const d=S.explore.dir==="desc"?-1:1;
+      return typeof va==="number"||typeof vb==="number"?(Number(va)-Number(vb))*d:String(va).localeCompare(String(vb))*d;
+    });
+  }
+  function getInspectContextRuns(){
+    if(S.inspect.origin==="compare"){
+      const picks=[S.compare.a,S.compare.b].filter(Boolean).map(id=>allRuns().find(r=>r.run_id===id)).filter(Boolean);
+      if(picks.length)return picks;
+    }
+    if(S.inspect.origin==="trends"){
+      return filtered().slice().sort((a,b)=>new Date(a.captured_at||0)-new Date(b.captured_at||0));
+    }
+    if(S.inspect.origin==="explore"){
+      return sortExploreRuns(filtered().slice());
+    }
+    if(S.inspect.origin==="scatter"){
+      const picks=scatterSelectedRuns().filter(r=>filtered().some(x=>x.run_id===r.run_id));
+      return picks.length?picks:sortScatterRuns(filtered().slice());
+    }
+    return filtered().slice().sort((a,b)=>(get(b,"scores.overall")||0)-(get(a,"scores.overall")||0));
+  }
+  function inspectOriginLabel(){return screenLabel(S.inspect.origin||S.screen||"overview")}
 
   /* ════════════════════════════════════════════
      CHART MANAGER
@@ -373,6 +478,7 @@
     bar.querySelectorAll(".tab-btn").forEach(b=>b.addEventListener("click",()=>go(b.dataset.s)));
   }
   function go(id){
+    closeInspect({silent:true});
     disposeScreen(S.screen);
     document.querySelectorAll(".screen").forEach(s=>{s.classList.remove("active","visible")});
     S.screen=id;renderTabs();
@@ -389,9 +495,25 @@
     else if(id==="compare")renderCompare();
     else if(id==="trends")renderTrends();
     else if(id==="explore")renderExplore();
-    else if(id==="inspect")renderInspect();
   }
-  function goInspect(runId){S.inspect={level:"runs",id:runId,reqFilters:{area:"all",severity:"all",coverage:"all"}};go("inspect")}
+  function openInspect(runId,origin){
+    const nextOrigin=origin||S.inspect.origin||S.screen;
+    const changed=S.inspect.id!==runId||S.inspect.origin!==nextOrigin;
+    S.inspect.level="runs";
+    S.inspect.id=runId;
+    S.inspect.origin=nextOrigin;
+    S.inspect.open=true;
+    if(changed)S.inspect.reqFilters=defaultReqFilters();
+    renderInspect();
+  }
+  function closeInspect(opts){
+    const silent=!!(opts&&opts.silent);
+    S.inspect.open=false;
+    const modal=document.getElementById("inspectModal");
+    if(modal){modal.classList.remove("open");modal.setAttribute("aria-hidden","true")}
+    document.body.classList.remove("inspect-open");
+    if(!silent)updateSelPanel();
+  }
 
   /* ════════════════════════════════════════════
      FILTER BAR
@@ -403,7 +525,7 @@
     const planModes=[...new Set(runs.map(r=>String(r.planning_mode)))].sort();
     const bar=document.getElementById("filterBar");
     const opt=(arr,sel,fmt)=>arr.map(v=>`<option value="${esc(v)}"${sel===v?" selected":""}>${esc(fmt?fmt(v):v)}</option>`).join("");
-    const fmtPM=v=>v==="true"?"Planning On":v==="false"?"Planning Off":"Unspecified";
+    const fmtPM=v=>v==="true"?"Plan Mode":v==="false"?"No Plan":"Default / Unspecified";
     const activeCount=Object.values(S.filters).filter(v=>v!==null).length;
     bar.innerHTML=`
       <label style="color:var(--ink-faint);font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase">Filters</label>
@@ -425,29 +547,15 @@
     tog.className="filter-toggle"+(activeCount?" has-filters":"");
     tog.textContent=activeCount?`Filters (${activeCount})`:"Filters";
   }
-  function onFilterChange(){renderFilterBar();renderScreen(S.screen);updateSelPanel()}
+  function onFilterChange(){renderFilterBar();renderScreen(S.screen);if(S.inspect.open)renderInspect();updateSelPanel()}
 
   /* ════════════════════════════════════════════
      SELECTION PANEL (bottom bar for scatter/explore)
   ════════════════════════════════════════════ */
   function updateSelPanel(){
     const panel=document.getElementById("selPanel");
-    const a=S.scatter.selA?allRuns().find(r=>r.run_id===S.scatter.selA):null;
-    const b=S.scatter.selB?allRuns().find(r=>r.run_id===S.scatter.selB):null;
-    if(!a&&!b){panel.classList.remove("open");panel.innerHTML="";return}
-    panel.classList.add("open");
-    const deltaHtml=a&&b?`<span class="sel-delta" style="color:${Number(get(a,"scores.overall"))>=Number(get(b,"scores.overall"))?"var(--sage)":"var(--terra)"}">${((get(a,"scores.overall")||0)-(get(b,"scores.overall")||0)>0?"+":"")}${((get(a,"scores.overall")||0)-(get(b,"scores.overall")||0)).toFixed(1)}pts</span>`:`<span style="color:var(--ink-faint);font-size:0.82rem">Click another dot to compare</span>`;
-    panel.innerHTML=`
-      ${a?`<div class="sel-chip a"><div><div class="sel-chip-name">${esc(runLabel(a))}</div><div class="sel-chip-score">${fmtS(get(a,"scores.overall"))}</div></div></div>`:""}
-      ${deltaHtml}
-      ${b?`<div class="sel-chip b"><div><div class="sel-chip-name">${esc(runLabel(b))}</div><div class="sel-chip-score">${fmtS(get(b,"scores.overall"))}</div></div></div>`:""}
-      <div class="sel-actions">
-        ${a&&b?`<button class="btn btn-primary" id="selCompare">Open in Compare</button>`:""}
-        <button class="btn" id="selClear">Clear</button>
-      </div>
-    `;
-    panel.querySelector("#selClear")?.addEventListener("click",()=>{S.scatter.selA=null;S.scatter.selB=null;updateSelPanel();if(S.screen==="scatter")renderScatter()});
-    panel.querySelector("#selCompare")?.addEventListener("click",()=>{S.compare.a=S.scatter.selA;S.compare.b=S.scatter.selB;go("compare")});
+    panel.classList.remove("open");
+    panel.innerHTML="";
   }
 
   /* ════════════════════════════════════════════
@@ -480,7 +588,7 @@
     html+=`<div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px;margin-bottom:32px" class="anim" style="animation-delay:0.15s">
       <div class="card" style="margin-bottom:0"><div class="card-label"><span class="card-label-dot" style="background:var(--gold)"></span>Score vs Runtime</div>
         <div class="chart-host" id="ov_scatter" style="min-height:320px"></div>
-        <div style="color:var(--ink-faint);font-size:0.76rem;margin-top:8px">Click a dot to inspect. Open Scatter tab for advanced controls.</div>
+        <div style="color:var(--ink-faint);font-size:0.76rem;margin-top:8px">Click a dot to inspect. Open Select &amp; See for pinned multi-run bar comparisons.</div>
       </div>
       <div>
         <div class="section-label">Rankings</div>
@@ -489,7 +597,7 @@
           return`<div class="rank-card${i===0?" leader":""}" data-rid="${esc(r.run_id)}">
             <div class="rank-pos">${i+1}</div>
             <div class="rank-body">
-              <div class="rank-name">${esc(r.model_name)}${r.planning_mode===false?` <span style="color:var(--ink-faint);font-weight:400;font-size:0.8em">No Plan</span>`:""}</div>
+              <div class="rank-name">${esc(r.model_name)} <span style="color:var(--ink-faint);font-weight:400;font-size:0.8em">${esc(planningLabel(r.planning_mode))}</span></div>
               <div class="rank-meta"><span><span class="meta-dot" style="background:${toolCol(r.tool)}"></span>${esc(r.tool)}</span><span>${esc(r.effort||"Std")}</span><span>${fmtD(r.planning_runtime_seconds)}</span></div>
               <div class="rank-mini"><span>Crit ${fmtS(get(r,"scores.critical"))}</span><span>Imp ${fmtS(get(r,"scores.important"))}</span></div>
             </div>
@@ -503,7 +611,7 @@
     const codexAvg=codexR.length?codexR.reduce((s,r)=>s+Number(get(r,"scores.overall")||0),0)/codexR.length:0;
     const claudeAvg=claudeR.length?claudeR.reduce((s,r)=>s+Number(get(r,"scores.overall")||0),0)/claudeR.length:0;
     const tdelta=codexAvg-claudeAvg;
-    const planWith=runs.find(r=>r.series_id==="opus_4_6__claude_code__high"&&r.planning_mode!==false);
+    const planWith=runs.find(r=>r.series_id==="opus_4_6__claude_code__high"&&r.planning_mode===true);
     const planWithout=runs.find(r=>r.series_id==="opus_4_6__claude_code__high"&&r.planning_mode===false);
     const pdelta=planWith&&planWithout?Number(get(planWith,"scores.overall")||0)-Number(get(planWithout,"scores.overall")||0):null;
 
@@ -532,7 +640,7 @@
     html+=`<div class="card"><div class="card-label"><span class="card-label-dot" style="background:var(--ink-faint)"></span>Data Sufficiency</div>
       <div style="font-weight:600;margin-bottom:10px">What can this dataset answer?</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        ${suffItem(tools.size>1?"suggestive":"insufficient","Tool effect on quality",tools.size>1?"Multiple tools, but not yet paired with same model+effort.":"Only one tool in view.")}
+        ${suffItem(tools.length>1?"suggestive":"insufficient","Tool effect on quality",tools.length>1?"Multiple tools, but not yet paired with same model+effort.":"Only one tool in view.")}
         ${suffItem(hasPlanPair?"answerable":"insufficient","Planning mode effect",hasPlanPair?"Controlled pair exists (Opus 4.6 ± planning).":"No paired planning comparison in view.")}
         ${suffItem(runs.length>=3?"answerable":"suggestive","Which model plans best?",runs.length+" setups. Rankings visible but confounded by tool/effort.")}
         ${suffItem("insufficient","Result stability","No repeated executions yet. Every result is a single run.")}
@@ -544,7 +652,7 @@
     // Animate bars
     requestAnimationFrame(()=>{host.querySelectorAll("[data-w]").forEach(el=>{setTimeout(()=>el.style.width=el.dataset.w+"%",80)})});
     // Attach click
-    host.querySelectorAll("[data-rid]").forEach(el=>el.addEventListener("click",()=>goInspect(el.dataset.rid)));
+    host.querySelectorAll("[data-rid]").forEach(el=>el.addEventListener("click",()=>openInspect(el.dataset.rid,"overview")));
     // Charts
     renderOvScatter(runs);
     renderOvSeverity(runs);
@@ -569,7 +677,7 @@
       yAxis:{type:"value",min:60,max:100,name:"Overall %",nameLocation:"middle",nameGap:36,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:"{value}%"},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
       series:[{type:"scatter",data:runs.map(r=>[Number(r.planning_runtime_seconds||0),Number(get(r,"scores.overall")||0)]),symbolSize:r=>Math.max(10,Math.min(22,(r[1]/100)*20)),itemStyle:{color:p=>toolCol(runs[p.dataIndex]?.tool),borderColor:"rgba(0,0,0,0.3)",borderWidth:1},emphasis:{itemStyle:{borderColor:"var(--gold)",borderWidth:3}},label:{show:runs.length<=8,position:"right",color:"#9a9084",fontFamily:"DM Sans",fontSize:11,formatter:p=>shortLabel(runs[p.dataIndex])}}]
     });
-    ch.off("click");ch.on("click",p=>{if(p.dataIndex!=null)goInspect(runs[p.dataIndex].run_id)});
+    ch.off("click");ch.on("click",p=>{if(p.dataIndex!=null)openInspect(runs[p.dataIndex].run_id,"overview")});
   }
   function renderOvSeverity(runs){
     const host=document.getElementById("ov_severity");if(!host||typeof echarts==="undefined")return;
@@ -596,90 +704,136 @@
   ════════════════════════════════════════════ */
   function renderScatter(){
     const host=document.getElementById("scatterContent");
-    const runs=filtered();
-    const yOpts=[["scores.overall","Overall Score"],["scores.critical","Critical Score"],["scores.important","Important Score"],["scores.detail","Detail Score"]];
-    const xOpts=[["planning_runtime_seconds","Runtime (sec)"],["plan_tool_call_count","Tool Call Count"],["scores.overall","Overall Score"],["scores.critical","Critical Score"],["summary.total_requirements","Total Requirements"],["summary.coverage_counts.full","Full Coverage Count"]];
+    const runs=sortScatterRuns(filtered().slice());
+    const metricOpts=[["scores.overall","Overall Score"],["scores.critical","Critical Score"],["scores.important","Important Score"],["scores.detail","Detail Score"],["planning_runtime_seconds","Runtime"],["plan_tool_call_count","Tool Calls"]];
+    const sortOpts=[["scores.overall","Overall"],["scores.critical","Critical"],["scores.important","Important"],["scores.detail","Detail"],["planning_runtime_seconds","Runtime"],["plan_tool_call_count","Tool Calls"]];
     const cOpts=[["tool","Tool"],["model_family","Model Family"],["effort","Effort"],["planning_mode","Planning Mode"]];
+    const plotOpts=[["hbar","Horizontal Bars"],["vbar","Vertical Bars"],["scatter","Scatter"]];
     const mkOpt=(arr,sel)=>arr.map(([v,l])=>`<option value="${v}"${sel===v?" selected":""}>${l}</option>`).join("");
+    const visibleIds=new Set(runs.map(r=>r.run_id));
+    S.scatter.selected=S.scatter.selected.filter(id=>visibleIds.has(id));
+    const selectedRuns=scatterSelectedRuns();
+    const fallbackCount=S.scatter.plotType==="scatter"?Math.min(20,runs.length):Math.min(8,runs.length);
+    const chartRuns=selectedRuns.length?selectedRuns:runs.slice(0,fallbackCount);
+    const compareReady=selectedRuns.length>=2;
 
     host.innerHTML=`
-      <div class="section-label">Scatter Plot Explorer</div>
+      <div class="section-label">Select & See</div>
+      <div style="color:var(--ink-soft);font-size:0.9rem;max-width:780px;margin-bottom:14px">Pick runs below to pin them into the chart. Switch plot type as needed, then tune the active axes for that specific chart. If nothing is selected, the chart falls back to the top visible runs for the current sort.</div>
       <div class="chart-controls">
-        <label>Y</label><select id="scY">${mkOpt(yOpts,S.scatter.yAxis)}</select>
-        <label>X</label><select id="scX">${mkOpt(xOpts,S.scatter.xAxis)}</select>
+        <label>Chart</label><select id="scPlot">${mkOpt(plotOpts,S.scatter.plotType)}</select>
+        ${S.scatter.plotType==="scatter"
+          ?`<label>X</label><select id="scXMetric">${mkOpt(metricOpts,S.scatter.xMetric)}</select>
+            <label>Y</label><select id="scYMetric">${mkOpt(metricOpts,S.scatter.yMetric)}</select>
+            <label>X Min</label><input id="scXMin" type="number" step="0.1" placeholder="Auto" value="${S.scatter.xMin??""}">
+            <label>Y Min</label><input id="scYMin" type="number" step="0.1" placeholder="Auto" value="${S.scatter.yMin??""}">`
+          :`<label>Metric</label><select id="scMetric">${mkOpt(metricOpts,S.scatter.metric)}</select>
+            <label>Axis Min</label><input id="scAxisMin" type="number" step="0.1" placeholder="Auto" value="${S.scatter.axisMin??""}">`
+        }
+        <label>Sort</label><select id="scSort">${mkOpt(sortOpts,S.scatter.sortBy)}</select>
         <label>Color</label><select id="scC">${mkOpt(cOpts,S.scatter.colorBy)}</select>
       </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+        <button class="btn${selectedRuns.length?" btn-primary":""}" id="scClear"${selectedRuns.length?"":" disabled"} type="button">Clear Selection</button>
+        <button class="btn" id="scCompare"${compareReady?"":" disabled"} type="button">Compare First Two</button>
+        <span style="color:var(--ink-faint);font-size:0.8rem">${selectedRuns.length?`${selectedRuns.length} selected`:`Showing top ${chartRuns.length} visible runs`}</span>
+      </div>
+      <div class="select-grid">
+        ${runs.map(r=>{
+          const selected=S.scatter.selected.includes(r.run_id);
+          return`<button class="picker-card${selected?" sel-multi":""}" data-sid="${esc(r.run_id)}" type="button">
+            <div class="picker-name">${esc(shortLabel(r))}</div>
+            <div class="picker-score">${S.scatter.plotType==="scatter"?`${metricLabel(S.scatter.yMetric)}: ${metricDisplay(r,S.scatter.yMetric)} · ${metricLabel(S.scatter.xMetric)}: ${metricDisplay(r,S.scatter.xMetric)}`:`${metricLabel(S.scatter.metric)}: ${metricDisplay(r,S.scatter.metric)}`}</div>
+            <div class="picker-tool"><span class="meta-dot" style="background:${toolCol(r.tool)};display:inline-block"></span>${esc(r.tool)} · ${esc(r.effort||"Std")} · ${fmtD(r.planning_runtime_seconds)}</div>
+          </button>`;
+        }).join("")}
+      </div>
       <div class="card" style="padding:16px"><div class="chart-host" id="sc_main" style="min-height:460px"></div></div>
-      <div style="color:var(--ink-faint);font-size:0.78rem;margin-top:8px">Click a dot to select. Click a second dot to compare. Click empty space to clear. ${runs.length} runs visible.</div>
+      <div style="color:var(--ink-faint);font-size:0.78rem;margin-top:8px">Click any card to add or remove it from the chart. Click a bar or point to inspect that run. Leave axis min blank for auto-tightening, or set an explicit floor when you want a stricter zoom.</div>
     `;
-    ["scY","scX","scC"].forEach(id=>{
-      host.querySelector("#"+id)?.addEventListener("change",e=>{
-        if(id==="scY")S.scatter.yAxis=e.target.value;
-        if(id==="scX")S.scatter.xAxis=e.target.value;
-        if(id==="scC")S.scatter.colorBy=e.target.value;
-        buildScatterChart(runs);
-      });
+    host.querySelector("#scPlot")?.addEventListener("change",e=>{S.scatter.plotType=e.target.value;renderScatter()});
+    host.querySelector("#scMetric")?.addEventListener("change",e=>{S.scatter.metric=e.target.value;renderScatter()});
+    host.querySelector("#scXMetric")?.addEventListener("change",e=>{S.scatter.xMetric=e.target.value;renderScatter()});
+    host.querySelector("#scYMetric")?.addEventListener("change",e=>{S.scatter.yMetric=e.target.value;renderScatter()});
+    host.querySelector("#scSort")?.addEventListener("change",e=>{S.scatter.sortBy=e.target.value;renderScatter()});
+    host.querySelector("#scC")?.addEventListener("change",e=>{S.scatter.colorBy=e.target.value;buildScatterChart()});
+    host.querySelector("#scAxisMin")?.addEventListener("input",e=>{S.scatter.axisMin=parseAxisInput(e.target.value);buildScatterChart()});
+    host.querySelector("#scXMin")?.addEventListener("input",e=>{S.scatter.xMin=parseAxisInput(e.target.value);buildScatterChart()});
+    host.querySelector("#scYMin")?.addEventListener("input",e=>{S.scatter.yMin=parseAxisInput(e.target.value);buildScatterChart()});
+    host.querySelectorAll("[data-sid]").forEach(el=>el.addEventListener("click",()=>{
+      const rid=el.dataset.sid;
+      if(S.scatter.selected.includes(rid))S.scatter.selected=S.scatter.selected.filter(id=>id!==rid);
+      else S.scatter.selected.push(rid);
+      renderScatter();
+    }));
+    host.querySelector("#scClear")?.addEventListener("click",()=>{S.scatter.selected=[];renderScatter()});
+    host.querySelector("#scCompare")?.addEventListener("click",()=>{
+      const picks=scatterSelectedRuns();
+      if(picks.length>=2){S.compare.a=picks[0].run_id;S.compare.b=picks[1].run_id;go("compare")}
     });
-    buildScatterChart(runs);
+    buildScatterChart();
   }
-  function buildScatterChart(runs){
+  function buildScatterChart(){
     const host=document.getElementById("sc_main");if(!host||typeof echarts==="undefined")return;
     const ch=getChart("scatter_main",host);
-    const xKey=S.scatter.xAxis,yKey=S.scatter.yAxis,cBy=S.scatter.colorBy;
-    // Group by color
-    const groups=new Map();
-    runs.forEach((r,i)=>{
-      const gk=cBy==="tool"?r.tool:cBy==="model_family"?r.model_family:cBy==="effort"?r.effort:cBy==="planning_mode"?String(r.planning_mode):"all";
-      if(!groups.has(gk))groups.set(gk,[]);
-      groups.get(gk).push({run:r,idx:i,x:metricVal(r,xKey),y:metricVal(r,yKey)});
-    });
-    const yIsScore=yKey.startsWith("scores.");
-    const xIsScore=xKey.startsWith("scores.");
-    const series=[];
-    const allColors=["#d4a843","#6b9e7a","#c47a5a","#7a8fa6","#9b7ec8"];
-    let ci=0;
-    groups.forEach((items,gk)=>{
-      const col=colorFor(items[0].run,cBy)||allColors[ci%allColors.length];
-      series.push({
-        name:gk==="null"?"Unspecified":gk==="true"?"Plan On":gk==="false"?"Plan Off":gk,
-        type:"scatter",
-        data:items.map(d=>{
-          const isSelA=d.run.run_id===S.scatter.selA;
-          const isSelB=d.run.run_id===S.scatter.selB;
-          return{value:[d.x,d.y],itemStyle:isSelA?{borderColor:"#d4a843",borderWidth:3,shadowBlur:8,shadowColor:"rgba(212,168,67,0.4)"}:isSelB?{borderColor:"#6b9e7a",borderWidth:3,shadowBlur:8,shadowColor:"rgba(107,158,122,0.4)"}:undefined,_rid:d.run.run_id}}),
-        symbolSize:d=>Math.max(12,Math.min(24,((d[1]||50)/100)*22)),
-        itemStyle:{color:col,borderColor:"rgba(0,0,0,0.25)",borderWidth:1},
-        emphasis:{itemStyle:{borderWidth:3}},
-        label:{show:runs.length<=10,position:"right",color:"#9a9084",fontFamily:"DM Sans",fontSize:10,formatter:p=>{const r=items[p.dataIndex]?.run;return r?shortLabel(r):""}},
-      });
-      ci++;
-    });
+    const runs=sortScatterRuns(filtered().slice());
+    const selectedRuns=scatterSelectedRuns().filter(r=>runs.some(x=>x.run_id===r.run_id));
+    const fallbackCount=S.scatter.plotType==="scatter"?Math.min(20,runs.length):Math.min(8,runs.length);
+    const chartRuns=(selectedRuns.length?selectedRuns:runs.slice(0,fallbackCount)).slice();
+    const metric=S.scatter.metric;
+    const isScore=metric.startsWith("scores.");
+    if(!chartRuns.length){
+      ch.clear();
+      return;
+    }
+    if(S.scatter.plotType==="scatter"){
+      const xMetric=S.scatter.xMetric;
+      const yMetric=S.scatter.yMetric;
+      const xVals=chartRuns.map(r=>metricVal(r,xMetric));
+      const yVals=chartRuns.map(r=>metricVal(r,yMetric));
+      const xIsScore=xMetric.startsWith("scores.");
+      const yIsScore=yMetric.startsWith("scores.");
+      const xMin=resolvedAxisMin(xVals,xIsScore,S.scatter.xMin);
+      const yMin=resolvedAxisMin(yVals,yIsScore,S.scatter.yMin);
+      ch.setOption({
+        backgroundColor:"transparent",animation:true,animationDuration:450,
+        tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},formatter:p=>{const r=chartRuns.find(x=>x.run_id===p.data._rid);return r?`<b>${esc(chartLabel(r))}</b><br>${metricLabel(yMetric)}: ${yIsScore?fmtS(metricVal(r,yMetric)):metricVal(r,yMetric)}<br>${metricLabel(xMetric)}: ${xIsScore?fmtS(metricVal(r,xMetric)):metricVal(r,xMetric)}`:""}},
+        grid:{top:18,right:20,bottom:36,left:20,containLabel:true},
+        xAxis:{type:"value",min:xMin,...(xIsScore?{max:100}:{}),name:metricLabel(xMetric),nameLocation:"middle",nameGap:28,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:xIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+        yAxis:{type:"value",min:yMin,...(yIsScore?{max:100}:{}),name:metricLabel(yMetric),nameLocation:"middle",nameGap:40,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:yIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+        series:[{type:"scatter",data:chartRuns.map(r=>({value:[metricVal(r,xMetric),metricVal(r,yMetric)],_rid:r.run_id})),symbolSize:p=>Math.max(12,Math.min(26,((p[1]||50)/100)*20)),itemStyle:{color:p=>colorFor(chartRuns.find(x=>x.run_id===p.data._rid),S.scatter.colorBy),borderColor:"rgba(0,0,0,0.3)",borderWidth:1},label:{show:chartRuns.length<=10,position:"right",color:"#b8aea0",fontSize:10,fontWeight:600,formatter:p=>chartLabel(chartRuns.find(x=>x.run_id===p.data._rid),true)}}]
+      },true);
+      ch.off("click");
+      ch.on("click",p=>{if(p.data&&p.data._rid)openInspect(p.data._rid,"scatter")});
+      return;
+    }
+    const labels=chartRuns.map(r=>chartLabel(r,S.scatter.plotType==="vbar")).reverse();
+    const values=chartRuns.map(r=>metricVal(r,metric)).reverse();
+    const axisMin=resolvedAxisMin(chartRuns.map(r=>metricVal(r,metric)),isScore,S.scatter.axisMin);
+    if(S.scatter.plotType==="vbar"){
+      const orderedRuns=chartRuns.slice();
+      ch.setOption({
+        backgroundColor:"transparent",animation:true,animationDuration:450,
+        tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},formatter:p=>{const r=orderedRuns[p.dataIndex];return r?`<b>${esc(chartLabel(r))}</b><br>${metricLabel(metric)}: ${isScore?fmtS(metricVal(r,metric)):metricVal(r,metric)}<br>Overall: ${fmtS(get(r,"scores.overall"))}<br>Runtime: ${fmtD(r.planning_runtime_seconds)}`:""}},
+        grid:{top:20,right:16,bottom:90,left:12,containLabel:true},
+        xAxis:{type:"category",data:orderedRuns.map(r=>chartLabel(r,true)),axisTick:{show:false},axisLine:{show:false},axisLabel:{color:"#b8aea0",fontSize:10,fontWeight:600,interval:0,rotate:0}},
+        yAxis:{type:"value",min:axisMin,...(isScore?{max:100}:{}),name:metricLabel(metric),nameLocation:"middle",nameGap:42,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+        series:[{type:"bar",data:orderedRuns.map(r=>({value:metricVal(r,metric),itemStyle:{color:colorFor(r,S.scatter.colorBy)},_rid:r.run_id})),barWidth:24,itemStyle:{borderRadius:[4,4,0,0]}}]
+      },true);
+      ch.off("click");
+      ch.on("click",p=>{if(p.data&&p.data._rid)openInspect(p.data._rid,"scatter")});
+      return;
+    }
     ch.setOption({
-      backgroundColor:"transparent",animation:true,animationDuration:500,
-      tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},
-        formatter:p=>{const rid=p.data._rid;const r=runs.find(x=>x.run_id===rid);return r?`<b>${esc(runLabel(r))}</b><br>${metricLabel(yKey)}: ${yIsScore?fmtS(p.value[1]):p.value[1]}<br>${metricLabel(xKey)}: ${xIsScore?fmtS(p.value[0]):p.value[0]}<br>Effort: ${r.effort||"?"}`:""}},
-      legend:{bottom:0,textStyle:{color:"#9a9084",fontSize:11}},
-      grid:{top:16,right:20,bottom:40,left:20,containLabel:true},
-      xAxis:{type:"value",name:metricLabel(xKey),nameLocation:"middle",nameGap:28,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:xIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
-      yAxis:{type:"value",name:metricLabel(yKey),nameLocation:"middle",nameGap:40,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:yIsScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false},...(yIsScore?{min:Math.max(0,Math.floor(Math.min(...runs.map(r=>metricVal(r,yKey)))/5)*5-5),max:100}:{})},
-      dataZoom:[{type:"inside",xAxisIndex:0},{type:"inside",yAxisIndex:0}],
-      series
+      backgroundColor:"transparent",animation:true,animationDuration:450,
+      tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},formatter:p=>{const r=chartRuns[chartRuns.length-1-p.dataIndex];return r?`<b>${esc(chartLabel(r))}</b><br>${metricLabel(metric)}: ${isScore?fmtS(metricVal(r,metric)):metricVal(r,metric)}<br>Overall: ${fmtS(get(r,"scores.overall"))}<br>Runtime: ${fmtD(r.planning_runtime_seconds)}`:""}},
+      grid:{top:12,right:16,bottom:12,left:12,containLabel:true},
+      xAxis:{type:"value",min:axisMin,...(isScore?{max:100}:{}),name:metricLabel(metric),nameLocation:"middle",nameGap:26,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+      yAxis:{type:"category",data:labels,axisTick:{show:false},axisLine:{show:false},axisLabel:{color:"#b8aea0",fontSize:10,fontWeight:600,width:240,overflow:"truncate"}},
+      series:[{type:"bar",data:values.map((value,idx)=>({value,itemStyle:{color:colorFor(chartRuns[chartRuns.length-1-idx],S.scatter.colorBy)},_rid:chartRuns[chartRuns.length-1-idx].run_id})),barWidth:14,itemStyle:{borderRadius:[0,4,4,0]}}]
     },true);
     ch.off("click");
-    ch.on("click",p=>{
-      if(!p.data||!p.data._rid)return;
-      const rid=p.data._rid;
-      if(S.scatter.selA===rid){S.scatter.selA=S.scatter.selB;S.scatter.selB=null;}
-      else if(S.scatter.selB===rid){S.scatter.selB=null;}
-      else if(!S.scatter.selA){S.scatter.selA=rid;}
-      else if(!S.scatter.selB){S.scatter.selB=rid;}
-      else{S.scatter.selA=rid;S.scatter.selB=null;}
-      updateSelPanel();
-      buildScatterChart(runs);
-    });
-    // Click on blank to clear
-    ch.getZr().off("click");
-    ch.getZr().on("click",e=>{if(!ch.containPixel("grid",e.offsetX!==undefined?[e.offsetX,e.offsetY]:[e.event.offsetX,e.event.offsetY]))return;if(!e.target){S.scatter.selA=null;S.scatter.selB=null;updateSelPanel();buildScatterChart(runs)}});
+    ch.on("click",p=>{if(p.data&&p.data._rid)openInspect(p.data._rid,"scatter")});
   }
 
   /* ════════════════════════════════════════════
@@ -692,7 +846,7 @@
     const b=S.compare.b?runs.find(r=>r.run_id===S.compare.b):null;
 
     // Presets
-    const planWith=runs.find(r=>r.series_id==="opus_4_6__claude_code__high"&&r.planning_mode!==false);
+    const planWith=runs.find(r=>r.series_id==="opus_4_6__claude_code__high"&&r.planning_mode===true);
     const planWithout=runs.find(r=>r.series_id==="opus_4_6__claude_code__high"&&r.planning_mode===false);
     const presets=[];
     if(planWith&&planWithout)presets.push({label:"Planning Mode Pair",a:planWith.run_id,b:planWithout.run_id,badge:"controlled"});
@@ -709,7 +863,7 @@
     runs.forEach(r=>{
       const isSA=r.run_id===S.compare.a,isSB=r.run_id===S.compare.b;
       html+=`<div class="picker-card${isSA?" sel-a":""}${isSB?" sel-b":""}" data-cid="${esc(r.run_id)}">
-        <div class="picker-name">${esc(r.model_name)}${r.planning_mode===false?" (no plan)":""}</div>
+        <div class="picker-name">${esc(shortLabel(r))}</div>
         <div class="picker-score">${fmtS(get(r,"scores.overall"))}</div>
         <div class="picker-tool"><span class="meta-dot" style="background:${toolCol(r.tool)};display:inline-block"></span> ${esc(r.tool)} · ${esc(r.effort||"Std")}</div>
       </div>`;
@@ -732,6 +886,7 @@
     }));
     // Preset clicks
     host.querySelectorAll("[data-pa]").forEach(el=>el.addEventListener("click",()=>{S.compare.a=el.dataset.pa;S.compare.b=el.dataset.pb;renderCompare()}));
+    host.querySelectorAll("[data-crid]").forEach(el=>el.addEventListener("click",()=>openInspect(el.dataset.crid,"compare")));
     // Init radar if present
     initCompareRadar(a,b);
   }
@@ -794,7 +949,7 @@
   function compCol(r,cls){
     const o=Number(get(r,"scores.overall")||0);
     return`<div class="compare-col ${cls}" style="cursor:pointer" data-crid="${esc(r.run_id)}">
-      <div class="compare-col-name">${esc(r.model_name)}${r.planning_mode===false?" (No Plan)":""}</div>
+      <div class="compare-col-name">${esc(shortLabel(r))}</div>
       <div class="compare-col-meta">${esc(r.tool)} · ${esc(r.effort||"Std")} · ${fmtD(r.planning_runtime_seconds)}</div>
       <div class="compare-col-score" style="color:${scCol(o)}">${fmtS(o)}</div>
       ${["critical","important","detail"].map(t=>`<div class="compare-row"><span class="lbl">${t.charAt(0).toUpperCase()+t.slice(1)}</span><span class="val">${fmtS(get(r,"scores."+t))}</span></div>`).join("")}
@@ -816,8 +971,6 @@
         {name:shortLabel(b),value:comp.areas.map(n=>comp.areasB.find(x=>x.name===n)?.score||0),areaStyle:{color:"rgba(107,158,122,0.12)"},lineStyle:{color:"#6b9e7a",width:2},itemStyle:{color:"#6b9e7a"},symbolSize:5}
       ]}]
     });
-    // Click compare cols to inspect
-    document.querySelectorAll("[data-crid]").forEach(el=>el.addEventListener("click",()=>goInspect(el.dataset.crid)));
   }
 
   /* ════════════════════════════════════════════
@@ -833,27 +986,58 @@
       <div class="chart-controls">
         <label>Metric</label><select id="trM">${mOpts.map(([v,l])=>`<option value="${v}"${S.trends.metric===v?" selected":""}>${l}</option>`).join("")}</select>
         <label>Group</label><select id="trG">${gOpts.map(([v,l])=>`<option value="${v}"${S.trends.groupBy===v?" selected":""}>${l}</option>`).join("")}</select>
+        <label>View</label><select id="trV"><option value="line"${S.trends.chartType==="line"?" selected":""}>Line</option><option value="bar"${S.trends.chartType==="bar"?" selected":""}>Bar</option></select>
       </div>
       <div class="card" style="padding:16px"><div class="chart-host" id="tr_main" style="min-height:400px"></div></div>
-      ${runs.length<6?`<div style="color:var(--ink-faint);font-size:0.78rem;margin-top:8px">Time trends become more meaningful with 10+ runs. Currently ${runs.length} visible.</div>`:""}
+      <div style="color:var(--ink-faint);font-size:0.78rem;margin-top:8px">${S.trends.chartType==="bar"?(S.trends.groupBy==="none"?"Bar view ranks visible runs by the selected metric.":"Bar view shows group averages for the selected metric."):(runs.length<6?`Time trends become more meaningful with 10+ runs. Currently ${runs.length} visible.`:"Click a point to inspect that run.")}</div>
     `;
     host.querySelector("#trM")?.addEventListener("change",e=>{S.trends.metric=e.target.value;buildTrendsChart(runs)});
     host.querySelector("#trG")?.addEventListener("change",e=>{S.trends.groupBy=e.target.value;buildTrendsChart(runs)});
+    host.querySelector("#trV")?.addEventListener("change",e=>{S.trends.chartType=e.target.value;renderTrends()});
     buildTrendsChart(runs);
   }
   function buildTrendsChart(runs){
     const host=document.getElementById("tr_main");if(!host||typeof echarts==="undefined")return;
     const ch=getChart("trends_main",host);
-    const mk=S.trends.metric,gb=S.trends.groupBy;
+    const mk=S.trends.metric,gb=S.trends.groupBy,view=S.trends.chartType;
     const isScore=mk.startsWith("scores.");
-    if(gb==="none"){
+    if(view==="bar"){
+      if(gb==="none"){
+        const entries=runs.map(r=>({run:r,label:`${shortLabel(r)} · ${fmtDate(r.captured_at)}`,value:metricVal(r,mk)})).sort((a,b)=>b.value-a.value);
+        ch.setOption({
+          backgroundColor:"transparent",
+          tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},formatter:p=>{const item=entries[p.dataIndex];return item?`<b>${esc(runLabel(item.run))}</b><br>${metricLabel(mk)}: ${isScore?fmtS(item.value):item.value}<br>${fmtDT(item.run.captured_at)}`:""}},
+          grid:{top:10,right:12,bottom:12,left:12,containLabel:true},
+          xAxis:{type:"value",...(isScore?{min:0,max:100}:{}),axisLabel:{color:"#6b6158",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+          yAxis:{type:"category",data:entries.map(x=>x.label).reverse(),axisTick:{show:false},axisLine:{show:false},axisLabel:{color:"#9a9084",fontSize:10,width:180,overflow:"truncate"}},
+          series:[{type:"bar",data:entries.map(x=>x.value).reverse(),barWidth:12,itemStyle:{color:"#d4a843",borderRadius:[0,4,4,0]}}]
+        },true);
+        ch.off("click");
+        ch.on("click",p=>{if(p.dataIndex!=null){const item=entries[entries.length-1-p.dataIndex];if(item)openInspect(item.run.run_id,"trends")}});
+        return;
+      }
+      const groups=new Map();
+      runs.forEach(r=>{const k=gb==="tool"?r.tool:gb==="model_family"?r.model_family:r.effort||"?";if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r)});
+      const entries=[...groups.entries()].map(([label,gRuns])=>({label,value:gRuns.reduce((sum,r)=>sum+metricVal(r,mk),0)/gRuns.length,count:gRuns.length})).sort((a,b)=>b.value-a.value);
       ch.setOption({
-        backgroundColor:"transparent",animation:true,
-        tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},formatter:p=>{const r=runs[p.dataIndex];return`<b>${esc(runLabel(r))}</b><br>${metricLabel(mk)}: ${isScore?fmtS(p.value[1]):p.value[1]}<br>${fmtDT(r.captured_at)}`}},
+        backgroundColor:"transparent",
+        tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},formatter:p=>{const item=entries[entries.length-1-p.dataIndex];return item?`<b>${esc(item.label)}</b><br>Average ${metricLabel(mk)}: ${isScore?fmtS(item.value):item.value.toFixed(1)}<br>${item.count} run${item.count===1?"":"s"}`:""}},
+        grid:{top:10,right:12,bottom:12,left:12,containLabel:true},
+        xAxis:{type:"value",...(isScore?{min:0,max:100}:{}),axisLabel:{color:"#6b6158",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
+        yAxis:{type:"category",data:entries.map(x=>x.label).reverse(),axisTick:{show:false},axisLine:{show:false},axisLabel:{color:"#9a9084",fontSize:10}},
+        series:[{type:"bar",data:entries.map(x=>x.value).reverse(),barWidth:14,itemStyle:{color:"#7a8fa6",borderRadius:[0,4,4,0]}}]
+      },true);
+      ch.off("click");
+      return;
+    }
+      if(gb==="none"){
+        ch.setOption({
+          backgroundColor:"transparent",animation:true,
+        tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},formatter:p=>{const r=runs.find(x=>x.run_id===p.data._rid);return r?`<b>${esc(runLabel(r))}</b><br>${metricLabel(mk)}: ${isScore?fmtS(p.value[1]):p.value[1]}<br>${fmtDT(r.captured_at)}`:""}},
         grid:{top:16,right:20,bottom:32,left:20,containLabel:true},
         xAxis:{type:"time",axisLabel:{color:"#6b6158",fontSize:10},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
         yAxis:{type:"value",...(isScore?{min:50,max:100}:{}),axisLabel:{color:"#6b6158",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
-        series:[{type:"scatter",data:runs.map(r=>[new Date(r.captured_at).getTime(),metricVal(r,mk)]),symbolSize:14,itemStyle:{color:p=>toolCol(runs[p.dataIndex]?.tool),borderColor:"rgba(0,0,0,0.3)",borderWidth:1},label:{show:runs.length<=8,position:"top",color:"#9a9084",fontSize:10,formatter:p=>shortLabel(runs[p.dataIndex])}}]
+        series:[{type:"scatter",data:runs.map(r=>({value:[new Date(r.captured_at).getTime(),metricVal(r,mk)],_rid:r.run_id})),symbolSize:14,itemStyle:{color:p=>toolCol(runs.find(x=>x.run_id===p.data._rid)?.tool),borderColor:"rgba(0,0,0,0.3)",borderWidth:1},label:{show:runs.length<=8,position:"top",color:"#9a9084",fontSize:10,formatter:p=>shortLabel(runs.find(x=>x.run_id===p.data._rid))}}]
       },true);
     } else {
       const groups=new Map();
@@ -863,11 +1047,11 @@
       const series=[];
       groups.forEach((gRuns,gk)=>{
         const col=colors[ci%colors.length];ci++;
-        series.push({name:gk,type:gRuns.length>1?"line":"scatter",data:gRuns.map(r=>[new Date(r.captured_at).getTime(),metricVal(r,mk)]),symbolSize:12,itemStyle:{color:col},lineStyle:{color:col,width:2},smooth:true});
+        series.push({name:gk,type:gRuns.length>1?"line":"scatter",data:gRuns.map(r=>({value:[new Date(r.captured_at).getTime(),metricVal(r,mk)],_rid:r.run_id})),symbolSize:12,itemStyle:{color:col},lineStyle:{color:col,width:2},smooth:true});
       });
       ch.setOption({
         backgroundColor:"transparent",animation:true,
-        tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12}},
+        tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},formatter:p=>{const r=runs.find(x=>x.run_id===p.data._rid);return r?`<b>${esc(runLabel(r))}</b><br>${metricLabel(mk)}: ${isScore?fmtS(p.value[1]):p.value[1]}<br>${fmtDT(r.captured_at)}`:""}},
         legend:{bottom:0,textStyle:{color:"#9a9084",fontSize:11}},
         grid:{top:16,right:20,bottom:40,left:20,containLabel:true},
         xAxis:{type:"time",axisLabel:{color:"#6b6158",fontSize:10},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
@@ -875,7 +1059,7 @@
         series
       },true);
     }
-    ch.off("click");ch.on("click",p=>{if(p.dataIndex!=null){const r=runs[p.dataIndex];if(r)goInspect(r.run_id)}});
+    ch.off("click");ch.on("click",p=>{if(p.data&&p.data._rid)openInspect(p.data._rid,"trends")});
   }
 
   /* ════════════════════════════════════════════
@@ -883,13 +1067,7 @@
   ════════════════════════════════════════════ */
   function renderExplore(){
     const host=document.getElementById("exploreContent");
-    let runs=filtered();
-    // Sort
-    runs.sort((a,b)=>{
-      const va=get(a,S.explore.sort)??0,vb=get(b,S.explore.sort)??0;
-      const d=S.explore.dir==="desc"?-1:1;
-      return typeof va==="number"||typeof vb==="number"?(Number(va)-Number(vb))*d:String(va).localeCompare(String(vb))*d;
-    });
+    let runs=sortExploreRuns(filtered().slice());
     const si=k=>S.explore.sort===k?(S.explore.dir==="desc"?" ↓":" ↑"):"";
     const sc=k=>S.explore.sort===k?" sorted":"";
     const checked=S.explore.checked;
@@ -913,7 +1091,7 @@
         const o=Number(get(r,"scores.overall")||0);
         return`<tr class="${checked.includes(r.run_id)?"sel":""}">
           <td><input type="checkbox" class="chk" data-chk="${esc(r.run_id)}" ${checked.includes(r.run_id)?"checked":""}></td>
-          <td><div class="cell-name">${esc(r.model_name)}</div><div class="cell-sub">${esc(r.manufacturer)}${r.planning_mode===false?" · No Planning":""}</div></td>
+          <td><div class="cell-name">${esc(r.model_name)}</div><div class="cell-sub">${esc(r.manufacturer)} · ${esc(planningLabel(r.planning_mode))}</div></td>
           <td><span class="meta-dot" style="background:${toolCol(r.tool)};display:inline-block"></span> ${esc(r.tool)}</td>
           <td style="color:var(--ink-soft)">${esc(r.effort||"Std")}</td>
           <td><span class="score-chip ${scCls(o)}">${fmtS(o)}</span><span class="spark"><span class="spark-fill" style="width:${o}%;background:${scCol(o)}"></span></span></td>
@@ -930,7 +1108,7 @@
     // Sort
     host.querySelectorAll("th[data-s]").forEach(th=>th.addEventListener("click",()=>{const k=th.dataset.s;if(S.explore.sort===k)S.explore.dir=S.explore.dir==="desc"?"asc":"desc";else{S.explore.sort=k;S.explore.dir=k.startsWith("scores.")?"desc":"asc"}renderExplore()}));
     // Row click (on non-checkbox cells)
-    host.querySelectorAll("table.ex tbody tr").forEach((tr,i)=>{tr.addEventListener("click",e=>{if(e.target.classList.contains("chk"))return;goInspect(runs[i].run_id)})});
+    host.querySelectorAll("table.ex tbody tr").forEach((tr,i)=>{tr.addEventListener("click",e=>{if(e.target.classList.contains("chk"))return;openInspect(runs[i].run_id,"explore")})});
     // Checkboxes
     host.querySelectorAll(".chk").forEach(chk=>chk.addEventListener("change",e=>{
       const rid=chk.dataset.chk;
@@ -948,17 +1126,24 @@
   ════════════════════════════════════════════ */
   function renderInspect(){
     const host=document.getElementById("inspectContent");
+    const modal=document.getElementById("inspectModal");
     const run=S.inspect.id?allRuns().find(r=>r.run_id===S.inspect.id):null;
-    if(!run){host.innerHTML=`<div class="inspect-empty"><h3>No selection</h3><p style="color:var(--ink-faint);max-width:380px;margin:0 auto;line-height:1.6">Click any execution in Overview, Scatter, Explore, or Compare to inspect its full detail.</p></div>`;return}
+    if(!run||!modal){closeInspect({silent:true});return}
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden","false");
+    document.body.classList.add("inspect-open");
+    S.inspect.open=true;
     const arts=run.artifacts||{};const o=Number(get(run,"scores.overall")||0);
     const observed=get(run,"metadata.observed.plan_session")||{};
-    const outcome=run.metadata?.outcome||{};
-    const allR=filtered().sort((a,b)=>(get(b,"scores.overall")||0)-(get(a,"scores.overall")||0));
-    const rank=allR.findIndex(r=>r.run_id===run.run_id)+1;
-    const rIdx=allR.findIndex(r=>r.run_id===run.run_id);
-    const prev=rIdx>0?allR[rIdx-1]:null,next=rIdx<allR.length-1?allR[rIdx+1]:null;
+    const allR=filtered().slice().sort((a,b)=>(get(b,"scores.overall")||0)-(get(a,"scores.overall")||0));
+    const globalRank=allR.findIndex(r=>r.run_id===run.run_id)+1;
+    const contextRuns=getInspectContextRuns();
+    const cIdx=contextRuns.findIndex(r=>r.run_id===run.run_id);
+    const prev=cIdx>0?contextRuns[cIdx-1]:null,next=cIdx>=0&&cIdx<contextRuns.length-1?contextRuns[cIdx+1]:null;
+    document.getElementById("inspectContextTitle").textContent=`Back to ${inspectOriginLabel()}`;
+    document.getElementById("inspectBackBtn").textContent=`Back to ${inspectOriginLabel()}`;
 
-    let h=`<div class="breadcrumb"><a href="#" data-goto="explore">Explore</a> › ${esc(runLabel(run))}</div>`;
+    let h=`<div class="breadcrumb">${esc(inspectOriginLabel())}${cIdx>=0?` · ${cIdx+1} of ${contextRuns.length}`:""} · ${esc(runLabel(run))}</div>`;
     if(prev||next){
       h+=`<div class="nav-row">`;
       if(prev)h+=`<button class="btn" data-nav="${esc(prev.run_id)}">← ${esc(shortLabel(prev))}</button>`;
@@ -966,8 +1151,8 @@
       h+=`</div>`;
     }
     h+=`<div class="inspect-hero"><div class="inspect-hero-top"><div>
-      <h2>${esc(run.model_name)}${run.planning_mode===false?" · No Planning":""}</h2>
-      <div class="inspect-hero-meta">${esc(run.manufacturer)} · ${esc(run.tool)} · ${esc(run.effort||"Std")} · ${esc(run.experiment_role||"baseline")}${rank?` · <b>Rank #${rank}</b> of ${allR.length}`:""}<br>${fmtDT(run.captured_at)} · Evaluator: ${esc(run.evaluator_model||"?")}</div>
+      <h2>${esc(run.model_name)} · ${esc(planningLabel(run.planning_mode))}</h2>
+      <div class="inspect-hero-meta">${esc(run.manufacturer)} · ${esc(run.tool)} · ${esc(run.effort||"Std")} · ${esc(run.experiment_role||"baseline")}${globalRank?` · <b>Rank #${globalRank}</b> of ${allR.length}`:""}<br>${fmtDT(run.captured_at)} · Evaluator: ${esc(run.evaluator_model||"?")}</div>
     </div><div class="inspect-links">
       ${arts.plan_url?`<a class="inspect-link" href="${esc(arts.plan_url)}" target="_blank">Plan</a>`:""}
       ${arts.plan_eval_url?`<a class="inspect-link" href="${esc(arts.plan_eval_url)}" target="_blank">Evaluation</a>`:""}
@@ -983,7 +1168,7 @@
     h+=`<div class="inspect-grid">
       <div class="inspect-card"><h4>Declared Scenario</h4>
         <div class="dl"><strong>Case:</strong> ${esc(run.case_label||"Default")} · ${esc(run.experiment_role||"baseline")}</div>
-        <div class="dl"><strong>Planning:</strong> ${run.planning_mode===true?"Enabled":run.planning_mode===false?"Disabled":"Unspecified"}</div>
+        <div class="dl"><strong>Planning:</strong> ${esc(planningLabel(run.planning_mode))}</div>
         <div class="dl"><strong>Prompt:</strong> ${esc(run.prompt_profile||"?")}</div>
         <div class="dl"><strong>Inference:</strong> ${esc(run.inference_profile||"Default")}</div>
         <div class="dl"><strong>Tags:</strong> ${safe(run.experiment_tags).join(", ")||"None"}</div>
@@ -1022,8 +1207,7 @@
 
     host.innerHTML=h;
     // Handlers
-    host.querySelectorAll("[data-goto]").forEach(el=>el.addEventListener("click",e=>{e.preventDefault();go(el.dataset.goto)}));
-    host.querySelectorAll("[data-nav]").forEach(el=>el.addEventListener("click",()=>{S.inspect.id=el.dataset.nav;S.inspect.reqFilters={area:"all",severity:"all",coverage:"all"};renderInspect()}));
+    host.querySelectorAll("[data-nav]").forEach(el=>el.addEventListener("click",()=>{S.inspect.id=el.dataset.nav;S.inspect.reqFilters=defaultReqFilters();renderInspect()}));
     ["rqA","rqS","rqC"].forEach(id=>{host.querySelector("#"+id)?.addEventListener("change",()=>{S.inspect.reqFilters.area=host.querySelector("#rqA")?.value||"all";S.inspect.reqFilters.severity=host.querySelector("#rqS")?.value||"all";S.inspect.reqFilters.coverage=host.querySelector("#rqC")?.value||"all";renderInspect()})});
   }
 
@@ -1037,6 +1221,10 @@
       document.getElementById("topMeta").textContent=fmtDT(d.generated_at);
       renderTabs();renderFilterBar();
       document.getElementById("filterToggle").addEventListener("click",()=>{const bar=document.getElementById("filterBar");bar.classList.toggle("collapsed")});
+      document.getElementById("inspectCloseBtn").addEventListener("click",()=>closeInspect());
+      document.getElementById("inspectBackBtn").addEventListener("click",()=>closeInspect());
+      document.querySelectorAll("[data-inspect-close]").forEach(el=>el.addEventListener("click",()=>closeInspect()));
+      document.addEventListener("keydown",e=>{if(e.key==="Escape"&&S.inspect.open)closeInspect()});
       renderOverview();
       requestAnimationFrame(()=>document.getElementById("scr-overview").classList.add("visible"));
       window.addEventListener("resize",resizeAll);
