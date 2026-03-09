@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1' />
+  <title>Plan Evaluation Report</title>
+  <style>
+    :root {
+      --bg: #efe7d9;
+      --panel: #fffaf2;
+      --panel-2: #f8f1e4;
+      --ink: #17231f;
+      --muted: #5f695f;
+      --line: rgba(23,35,31,0.12);
+      --good: #1d7d63;
+      --good-soft: rgba(29,125,99,0.14);
+      --warn: #c58b24;
+      --warn-soft: rgba(197,139,36,0.14);
+      --bad: #b14f36;
+      --bad-soft: rgba(177,79,54,0.14);
+      --accent: #8f4e24;
+      --shadow: 0 18px 40px rgba(68, 49, 29, 0.10);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(143,78,36,0.14), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(29,125,99,0.12), transparent 24%),
+        linear-gradient(180deg, #f6efe5 0%, var(--bg) 100%);
+    }
+    .wrap {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 36px 28px 56px;
+    }
+    .eyebrow {
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    h1, h2, h3 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    p { margin: 0; line-height: 1.55; color: var(--muted); }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,250,242,0.95));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      backdrop-filter: blur(6px);
+    }
+    .hero-copy h1 { font-size: 52px; line-height: 0.98; margin-bottom: 14px; max-width: 12ch; }
+    .hero-copy p { font-size: 17px; max-width: 56ch; }
+    .hero-grid { display: grid; grid-template-columns: 220px 1fr; gap: 22px; align-items: center; }
+    .score-ring {
+      width: 188px;
+      height: 188px;
+      border-radius: 50%;
+      background: conic-gradient(var(--good) 91.9%, rgba(23,35,31,0.08) 0);
+      display: grid;
+      place-items: center;
+      margin: 0 auto;
+    }
+    .score-core {
+      width: 138px;
+      height: 138px;
+      border-radius: 50%;
+      background: var(--panel);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border: 1px solid var(--line);
+    }
+    .score-core strong { font-size: 46px; font-family: Georgia, serif; line-height: 1; color: var(--ink); }
+    .score-core span { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-top: 6px; }
+    .metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .metric { background: var(--panel-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+    .metric strong { display: block; font-size: 28px; color: var(--ink); }
+    .metric span { color: var(--muted); font-size: 13px; }
+    .score-formula { margin-top: 12px; font-size: 13px; color: var(--muted); }
+    .arc { display: grid; grid-template-columns: 1fr 80px 1fr; gap: 18px; align-items: stretch; margin-bottom: 22px; }
+    .arc-card { background: linear-gradient(180deg, rgba(255,255,255,0.65), rgba(248,241,228,0.92)); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+    .arc-card h2 { font-size: 24px; margin-bottom: 10px; }
+    .arc-big { font-size: 38px; font-family: Georgia, serif; color: var(--ink); margin-bottom: 10px; }
+    .arc-arrow { display: grid; place-items: center; color: var(--accent); font-size: 36px; }
+    .arc-note { margin-top: 12px; font-size: 13px; color: var(--muted); }
+    .grid-2 { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 22px; margin-bottom: 22px; }
+    .section-title { font-size: 28px; margin-bottom: 14px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 16px; }
+    .chip { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 9px 14px; font-size: 13px; border: 1px solid var(--line); background: white; color: var(--ink); }
+    .chip.good { background: var(--good-soft); }
+    .chip.warn { background: var(--warn-soft); }
+    .bar-legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+    .legend-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 99px; margin-right: 6px; }
+    .area-list { display: grid; gap: 12px; }
+    .area-row { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) 72px; gap: 14px; align-items: center; }
+    .area-name { font-weight: 700; font-size: 15px; color: var(--ink); }
+    .area-counts { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .bar-shell { height: 14px; background: rgba(23,35,31,0.08); border-radius: 999px; overflow: hidden; display: flex; }
+    .bar-full { background: var(--good); }
+    .bar-partial { background: var(--warn); }
+    .bar-missing { background: var(--bad); }
+    .area-score { text-align: right; font-weight: 700; color: var(--ink); }
+    .narrative-block { display: grid; gap: 16px; }
+    .narrative-card { padding: 16px 0; border-top: 1px solid var(--line); }
+    .narrative-card:first-child { border-top: 0; padding-top: 0; }
+    .narrative-card h3 { font-size: 20px; margin-bottom: 8px; }
+    .risk-table-wrap { overflow: hidden; border-radius: 18px; border: 1px solid var(--line); background: rgba(255,255,255,0.64); }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); font-size: 13px; }
+    th { background: rgba(23,35,31,0.04); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; }
+    tr:last-child td { border-bottom: 0; }
+    .id-tag { display: inline-block; padding: 5px 9px; border-radius: 999px; background: rgba(23,35,31,0.08); font-weight: 700; font-size: 11px; letter-spacing: 0.04em; }
+    .sev, .cov { display: inline-block; padding: 5px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .sev.critical { background: var(--bad-soft); color: var(--bad); }
+    .sev.important { background: var(--warn-soft); color: #815800; }
+    .sev.detail { background: rgba(23,35,31,0.08); color: var(--muted); }
+    .cov.partial { background: var(--warn-soft); color: #815800; }
+    .cov.missing { background: var(--bad-soft); color: var(--bad); }
+    .gap-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+    .gap-card { background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(248,241,228,0.95)); border: 1px solid var(--line); border-radius: 20px; padding: 18px; box-shadow: var(--shadow); }
+    .gap-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .gap-card h3 { font-size: 20px; margin-bottom: 10px; min-height: 70px; }
+    .footer-note { margin-top: 18px; padding: 16px 18px; border-radius: 16px; background: rgba(29,125,99,0.08); border: 1px solid rgba(29,125,99,0.16); font-size: 13px; color: var(--ink); }
+    @media (max-width: 1080px) {
+      .hero, .grid-2, .arc { grid-template-columns: 1fr; }
+      .arc-arrow { transform: rotate(90deg); height: 36px; }
+      .gap-grid { grid-template-columns: 1fr 1fr; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    @media (max-width: 720px) {
+      .wrap { padding: 22px 16px 40px; }
+      .hero-copy h1 { font-size: 40px; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .gap-grid { grid-template-columns: 1fr; }
+      .area-row { grid-template-columns: 1fr; }
+      .area-score { text-align: left; }
+      th:nth-child(2), td:nth-child(2), th:nth-child(5), td:nth-child(5) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class='wrap'>
+    <section class='hero'>
+      <div class='panel hero-copy'>
+        <div class='eyebrow'>Stakeholder Briefing</div>
+        <h1>Strong structural coverage, softer AI and benchmark contracts.</h1>
+        <p>This is a strong implementation plan with a small number of material holes rather than a structurally weak plan. The architecture, data model, route surface, and core feature decomposition are all concrete, but a few benchmark-specific execution guarantees and AI-quality contracts are left softer than the PRD requires.</p>
+        <div class='footer-note'>Current read: the plan is implementation-ready across most core surfaces, but the remaining risk is concentrated in a few high-leverage contracts rather than in missing whole features.</div>
+      </div>
+      <div class='panel hero-grid'>
+        <div class='score-ring'>
+          <div class='score-core'>
+            <div>
+              <strong>91.9%</strong>
+              <span>Overall Coverage</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class='metrics'>
+            <div class='metric'><strong>83</strong><span>Full</span></div>
+            <div class='metric'><strong>16</strong><span>Partial</span></div>
+            <div class='metric'><strong>0</strong><span>Missing</span></div>
+            <div class='metric'><strong>99</strong><span>Total Requirements</span></div>
+            <div class='metric'><strong>96.7%</strong><span>Critical Tier</span></div>
+            <div class='metric'><strong>90.3%</strong><span>Important Tier</span></div>
+            <div class='metric'><strong>75.0%</strong><span>Detail Tier</span></div>
+            <div class='metric'><strong>16</strong><span>Still At Risk</span></div>
+          </div>
+          <div class='score-formula'>score = (83 × 1.0 + 16 × 0.5) / 99 × 100 = 91.9%</div>
+        </div>
+      </div>
+    </section>
+
+    <section class='arc'>
+      <article class='arc-card'>
+        <div class='eyebrow'>Before</div>
+        <h2>Raw plan entered audit</h2>
+        <div class='arc-big'>99 requirements</div>
+        <p>The submitted plan was a narrative implementation artifact, not a scored checklist. Every requirement still needed evidence and classification before stakeholders could trust readiness.</p>
+      </article>
+      <div class='arc-arrow'>→</div>
+      <article class='arc-card'>
+        <div class='eyebrow'>After</div>
+        <h2>Audited plan readiness</h2>
+        <div class='arc-big'>91.9% coverage</div>
+        <p>83 requirements are fully covered and 16 remain partial. The plan is broad, but the remaining issues are concentrated in AI quality contracts and benchmark execution specifics.</p>
+        <div class='arc-note'>This run does not include a separate revised-plan artifact. In this dashboard, “before” means the unscored submitted plan and “after” means the audited state recorded in <code>PLAN_EVAL.md</code>.</div>
+      </article>
+    </section>
+
+    <section class='grid-2'>
+      <article class='panel'>
+        <div class='eyebrow'>Coverage By Area</div>
+        <h2 class='section-title'>What is already strong</h2>
+        <p>The plan is strongest in Collection Data &amp; Persistence, App Navigation &amp; Discover Shell, Collection Home &amp; Search, Concepts, Explore Similar &amp; Alchemy, Person Detail, and Settings &amp; Export. Those areas are covered with concrete schema choices, route boundaries, component breakdowns, save-trigger logic, explicit recommendation counts, and export mechanics rather than vague implementation intent.</p>
+        <div class='chips'><span class='chip good'>App Navigation &amp; Discover Shell <strong>100.0%</strong></span><span class='chip good'>Person Detail <strong>100.0%</strong></span><span class='chip good'>Settings &amp; Export <strong>100.0%</strong></span><span class='chip good'>Ask Chat <strong>95.0%</strong></span></div>
+        <div class='bar-legend'>
+          <span><span class='legend-swatch' style='background:var(--good)'></span>Full</span>
+          <span><span class='legend-swatch' style='background:var(--warn)'></span>Partial</span>
+          <span><span class='legend-swatch' style='background:var(--bad)'></span>Missing</span>
+        </div>
+        <div class='area-list'>
+    <div class='area-row'>
+      <div class='area-meta'>
+        <div class='area-name'>App Navigation &amp; Discover Shell</div>
+        <div class='area-counts'>4 full · 0 partial · 0 missing</div>
+      </div>
+      <div class='bar-shell'>
+        <div class='bar-full' style='width:100.00%'></div>
+        <div class='bar-partial' style='width:0.00%'></div>
+        <div class='bar-missing' style='width:0.00%'></div>
+      </div>
+      <div class='area-score'>100.0%</div>
+    </div>
+    
+    <div class='area-row'>
+      <div class='area-meta'>
+        <div class='area-name'>Person Detail</div>
+        <div class='area-counts'>4 full · 0 partial · 0 missing</div>
+      </div>
+      <div class='bar-shell'>
+        <div class='bar-full' style='width:100.00%'></div>
+        <div class='bar-partial' style='width:0.00%'></div>
+        <div class='bar-missing' style='width:0.00%'></div>
+      </div>
+      <div class='area-score'>100.0%</div>
+    </div>
+    
+    <div class='area-row'>
+      <div class='area-meta'>
+        <div class='area-name'>Settings &amp; Export</div>
+        <div class='area-counts'>4 full · 0 partial · 0 missing</div>
+      </div>
+      <div class='bar-shell'>
+        <div class='bar-full' style='width:100.00%'></div>
+        <div class='bar-partial' style='width:0.00%'></div>
+        <div class='bar-missing' style='width:0.00%'></div>
+      </div>
+      <div class='area-score'>100.0%</div>
+    </div>
+    
+    <div class='area-row'>
+      <div class='area-meta'>
+        <div class='area-name'>Ask Chat</div>
+        <div class='area-counts'>9 full · 1 partial · 0 missing</div>
+      </div>
+      <div class='bar-shell'>
+        <div class='bar-full' style='width:90.00%'></div>
+        <div class='bar-partial' style='width:10.00%'></div>
+        <div class='bar-missing' style='width:0.00%'></div>
+      </div>
+      <div class='area-score'>95.0%</div>
+    </div>
+    
+    <div class='area-row'>
+      <div class='area-meta'>
+        <div class='area-name'>Collection Home &amp; Search</div>
+        <div class='area-counts'>8 full · 1 partial · 0 missing</div>
+      </div>
+      <div class='bar-shell'>
+        <div class='bar-full' style='width:88.89%'></div>
+        <div class='bar-partial' style='width:11.11%'></div>
+        <div class='bar-missing' style='width:0.00%'></div>
+      </div>
+      <div class='area-score'>94.4%</div>
+    </div>
+    
+    <div class='area-row'>
+      <div class='area-meta'>
+        <div class='area-name'>Show Detail &amp; Relationship UX</div>
+        <div class='area-counts'>12 full · 2 partial · 0 missing</div>
+      </div>
+      <div class='bar-shell'>
+        <div class='bar-full' style='width:85.71%'></div>
+        <div class='bar-partial' style='width:14.29%'></div>
+        <div class='bar-missing' style='width:0.00%'></div>
+      </div>
+      <div class='area-score'>92.9%</div>
+    </div>
+    
+    <div class='area-row'>
+      <div class='area-meta'>
+        <div class='area-name'>Benchmark Runtime &amp; Isolation</div>
+        <div class='area-counts'>14 full · 3 partial · 0 missing</div>
+      </div>
+      <div class='bar-shell'>
+        <div class='bar-full' style='width:82.35%'></div>
+        <div class='bar-partial' style='width:17.65%'></div>
+        <div class='bar-missing' style='width:0.00%'></div>
+      </div>
+      <div class='area-score'>91.2%</div>
+    </div>
+    
+    <div class='area-row'>
+      <div class='area-meta'>
+        <div class='area-name'>Collection Data &amp; Persistence</div>
+        <div class='area-counts'>16 full · 4 partial · 0 missing</div>
+      </div>
+      <div class='bar-shell'>
+        <div class='bar-full' style='width:80.00%'></div>
+        <div class='bar-partial' style='width:20.00%'></div>
+        <div class='bar-missing' style='width:0.00%'></div>
+      </div>
+      <div class='area-score'>90.0%</div>
+    </div>
+    
+    <div class='area-row'>
+      <div class='area-meta'>
+        <div class='area-name'>Concepts, Explore Similar &amp; Alchemy</div>
+        <div class='area-counts'>8 full · 2 partial · 0 missing</div>
+      </div>
+      <div class='bar-shell'>
+        <div class='bar-full' style='width:80.00%'></div>
+        <div class='bar-partial' style='width:20.00%'></div>
+        <div class='bar-missing' style='width:0.00%'></div>
+      </div>
+      <div class='area-score'>90.0%</div>
+    </div>
+    
+    <div class='area-row'>
+      <div class='area-meta'>
+        <div class='area-name'>AI Voice, Persona &amp; Quality</div>
+        <div class='area-counts'>4 full · 3 partial · 0 missing</div>
+      </div>
+      <div class='bar-shell'>
+        <div class='bar-full' style='width:57.14%'></div>
+        <div class='bar-partial' style='width:42.86%'></div>
+        <div class='bar-missing' style='width:0.00%'></div>
+      </div>
+      <div class='area-score'>78.6%</div>
+    </div>
+    </div>
+      </article>
+      <article class='panel'>
+        <div class='eyebrow'>Weakness Pattern</div>
+        <h2 class='section-title'>Where risk concentrates</h2>
+        <p>The weaker items are not random; they cluster in two patterns. One cluster is benchmark-operational rigor: cache-discard safety, Docker-free cloud-agent assumptions, and the edges of sync/settings persistence. The second cluster is product-quality contract fidelity: cross-surface AI guardrails, discovery-quality validation, the direct-answer Ask bar, and the exact Detail-page choreography.</p>
+        <div class='chips'><span class='chip warn'>AI Voice, Persona &amp; Quality <strong>78.6%</strong></span><span class='chip warn'>Collection Data &amp; Persistence <strong>90.0%</strong></span><span class='chip warn'>Concepts, Explore Similar &amp; Alchemy <strong>90.0%</strong></span><span class='chip warn'>Benchmark Runtime &amp; Isolation <strong>91.2%</strong></span></div>
+        <div class='narrative-block'>
+          <div class='narrative-card'>
+            <h3>Risk Assessment</h3>
+            <p>If this plan were executed as-is, the most likely failure mode is a technically functional app that misses a few benchmark and product-quality expectations in review. QA or stakeholders would probably notice that the Detail page flow feels differently ordered than specified and that the AI surfaces have mechanics and parsers, but not the full explicit quality bar that keeps them consistently on-brand under edge cases.</p>
+          </div>
+          <div class='narrative-card'>
+            <h3>Remediation Guidance</h3>
+            <p>The remaining work is mostly specification tightening, not architectural reinvention. The plan needs a clearer execution contract for cloud-agent compatibility and disposable client cache behavior, plus a firmer AI behavior contract that translates the PRD’s voice, guardrail, and quality-bar documents into explicit implementation and validation requirements. The Detail page section order should also be rewritten to match the supporting doc exactly so the UX choreography is unambiguous.</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class='panel' style='margin-bottom:22px;'>
+      <div class='eyebrow'>At-Risk Requirements</div>
+      <h2 class='section-title'>Partial requirements that still need planning work</h2>
+      <p>Nothing in this run scored as fully missing, but 16 requirements still land as partial. These are the places where stakeholders should expect ambiguity, fidelity drift, or review friction if execution starts without tightening the plan.</p>
+      <div class='risk-table-wrap' style='margin-top:16px;'>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Area</th>
+              <th>Severity</th>
+              <th>Status</th>
+              <th>Requirement</th>
+              <th>Why It Is Still At Risk</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+    <tr>
+      <td><span class='id-tag'>PRD-016</span></td>
+      <td>Benchmark Runtime &amp; Isolation</td>
+      <td><span class='sev critical'>critical</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Make client cache safe to discard</td>
+      <td>The plan keeps client state minimal and transient, but it never explicitly states that clearing browser storage is safe and non-lossy for user data.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-086</span></td>
+      <td>AI Voice, Persona &amp; Quality</td>
+      <td><span class='sev critical'>critical</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Enforce shared AI guardrails across all surfaces</td>
+      <td>Several shared prompt rules are present, but the full cross-surface guardrail contract is not carried through as an explicit non-negotiable implementation rule.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-004</span></td>
+      <td>Benchmark Runtime &amp; Isolation</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Ignore `.env*` secrets except example</td>
+      <td>The plan says .gitignore excludes .env* files, but it never explicitly states the required exception that keeps .env.example committed.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-017</span></td>
+      <td>Benchmark Runtime &amp; Isolation</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Avoid Docker requirement for cloud-agent compatibility</td>
+      <td>The stack supports hosted and local Supabase paths, but the plan never explicitly states that Docker is optional rather than required for benchmark execution.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-028</span></td>
+      <td>Collection Data &amp; Persistence</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Use timestamps for sorting, sync, freshness</td>
+      <td>Timestamps are used for merge freshness and Scoop caching, but no user-facing sorting behavior is tied to those timestamps.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-030</span></td>
+      <td>Collection Data &amp; Persistence</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Keep Ask and Alchemy state session-only</td>
+      <td>Ask and Alchemy are modeled as transient client state, but explicit reset/clear behavior when leaving those modes is not defined.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-033</span></td>
+      <td>Collection Data &amp; Persistence</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Sync libraries/settings consistently and merge duplicates</td>
+      <td>The plan covers per-field merge logic and settings storage, but it does not define duplicate detection or full cross-device library sync behavior.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-035</span></td>
+      <td>Collection Data &amp; Persistence</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Persist synced settings, local settings, UI state</td>
+      <td>Cloud settings are modeled, but concrete persistence for local settings and UI-state keys is not fully specified.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-051</span></td>
+      <td>Show Detail &amp; Relationship UX</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Preserve Show Detail narrative section order</td>
+      <td>The plan says it preserves the narrative hierarchy, but its enumerated Detail page order moves status and rating controls ahead of the specified tags/overview flow.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-064</span></td>
+      <td>Show Detail &amp; Relationship UX</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Keep primary actions early and page not overwhelming</td>
+      <td>The plan lists the Detail page sections, but it does not explain the layout strategy that keeps the page powerful without feeling overloaded.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-066</span></td>
+      <td>Ask Chat</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Answer directly with confident, spoiler-safe recommendations</td>
+      <td>Tone and spoiler safety are covered, but the direct-answer-first and confidently-picked recommendation bar is not explicitly encoded.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-082</span></td>
+      <td>Concepts, Explore Similar &amp; Alchemy</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Generate shared multi-show concepts with larger option pool</td>
+      <td>Multi-show concepts are shared across inputs, but the plan never specifies returning a larger concept pool for Alchemy than for single-show Explore Similar.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-084</span></td>
+      <td>Concepts, Explore Similar &amp; Alchemy</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Deliver surprising but defensible taste-aligned recommendations</td>
+      <td>Concept alignment is covered, but the plan does not explicitly encode the product requirement for surprising-but-defensible recommendations.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-087</span></td>
+      <td>AI Voice, Persona &amp; Quality</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Make AI warm, joyful, and light in critique</td>
+      <td>Warmth is specified, but the stronger joy-forward and light-even-in-critique voice constraints are only partially represented.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-091</span></td>
+      <td>AI Voice, Persona &amp; Quality</td>
+      <td><span class='sev important'>important</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Validate discovery with rubric and hard-fail integrity</td>
+      <td>The plan handles resolution and parser fallback mechanics, but it never defines rubric-based discovery validation or a hard-fail quality gate.</td>
+    </tr>
+    
+    <tr>
+      <td><span class='id-tag'>PRD-049</span></td>
+      <td>Collection Home &amp; Search</td>
+      <td><span class='sev detail'>detail</span></td>
+      <td><span class='cov partial'>partial</span></td>
+      <td>Auto-open Search when setting is enabled</td>
+      <td>The setting exists, but the launch/navigation behavior that automatically lands the user in Search is not actually described.</td>
+    </tr>
+    
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class='eyebrow'>Top Gap Briefing</div>
+      <h2 class='section-title'>The five gaps most likely to matter first</h2>
+      <div class='gap-grid'>
+    <article class='gap-card'>
+      <div class='gap-top'>
+        <span class='id-tag'>PRD-016</span>
+        <span class='sev critical'>critical</span>
+      </div>
+      <h3>Make client cache safe to discard</h3>
+      <p>This matters because the benchmark explicitly treats backend persistence as the source of truth; if cache-discard safety is left implicit, clearing browser state or reinstalling can still become a user-data loss bug.</p>
+    </article>
+    
+    <article class='gap-card'>
+      <div class='gap-top'>
+        <span class='id-tag'>PRD-086</span>
+        <span class='sev critical'>critical</span>
+      </div>
+      <h3>Enforce shared AI guardrails across all surfaces</h3>
+      <p>This matters because Ask, Scoop, Explore Similar, and Alchemy can all drift off-domain, lose spoiler safety, or become generic if the shared guardrails are not carried through as an implementation contract.</p>
+    </article>
+    
+    <article class='gap-card'>
+      <div class='gap-top'>
+        <span class='id-tag'>PRD-017</span>
+        <span class='sev important'>important</span>
+      </div>
+      <h3>Avoid Docker requirement for cloud-agent compatibility</h3>
+      <p>This matters because benchmark execution can fail before product behavior is even exercised if the runtime quietly assumes privileged local infrastructure.</p>
+    </article>
+    
+    <article class='gap-card'>
+      <div class='gap-top'>
+        <span class='id-tag'>PRD-091</span>
+        <span class='sev important'>important</span>
+      </div>
+      <h3>Validate discovery with rubric and hard-fail integrity</h3>
+      <p>This matters because technically parsable AI output can still be low-quality or off-brand unless the plan specifies how discovery quality is judged and when bad output is rejected.</p>
+    </article>
+    
+    <article class='gap-card'>
+      <div class='gap-top'>
+        <span class='id-tag'>PRD-051</span>
+        <span class='sev important'>important</span>
+      </div>
+      <h3>Preserve Show Detail narrative section order</h3>
+      <p>This matters because the Detail page is a deliberately curated experience; changing the choreography can make the page feel busier, slower to scan, and less aligned with the product’s intended emotional arc.</p>
+    </article>
+    </div>
+    </section>
+  </main>
+</body>
+</html>
