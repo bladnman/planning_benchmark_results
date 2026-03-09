@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<meta name='viewport' content='width=device-width, initial-scale=1' />
+<title>Plan Evaluation Report</title>
+<style>
+:root {
+  --bg: #f4efe7;
+  --paper: #fffdf8;
+  --ink: #172033;
+  --muted: #566179;
+  --line: rgba(23, 32, 51, 0.10);
+  --shadow: 0 20px 60px rgba(23, 32, 51, 0.12);
+  --green: #1f7a5a;
+  --green-soft: #ddf3ea;
+  --amber: #b8721f;
+  --amber-soft: #faecd7;
+  --red: #a03c35;
+  --red-soft: #f7ddd9;
+  --navy: #1c3762;
+  --navy-soft: #dce6f7;
+  --hero: linear-gradient(135deg, #fffaf0 0%, #f0f5ff 55%, #eaf7f2 100%);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(circle at top left, rgba(28,55,98,0.08), transparent 34%), radial-gradient(circle at top right, rgba(31,122,90,0.10), transparent 30%), var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 "Avenir Next", "Segoe UI", sans-serif;
+}
+.wrap { width: min(1200px, calc(100vw - 40px)); margin: 28px auto 40px; }
+.hero { background: var(--hero); border: 1px solid var(--line); border-radius: 28px; padding: 32px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.hero::after { content: ""; position: absolute; inset: auto -60px -60px auto; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(28,55,98,0.12), rgba(28,55,98,0)); }
+.eyebrow { letter-spacing: 0.12em; text-transform: uppercase; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+h1, h2, h3 { margin: 0; font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif; font-weight: 700; }
+h1 { font-size: clamp(34px, 5vw, 56px); line-height: 0.95; max-width: 8ch; }
+.hero-grid { display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 24px; align-items: end; position: relative; z-index: 1; }
+.hero-copy p { margin: 14px 0 0; max-width: 62ch; color: var(--muted); font-size: 18px; }
+.score-card { background: rgba(255,255,255,0.78); border: 1px solid rgba(23,32,51,0.10); border-radius: 22px; padding: 22px; backdrop-filter: blur(10px); justify-self: end; min-width: 320px; }
+.score-top { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.score-number { font-size: 64px; line-height: 0.9; font-weight: 800; letter-spacing: -0.04em; }
+.score-number small { font-size: 24px; color: var(--muted); }
+.badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; border: 1px solid transparent; }
+.badge.navy { background: var(--navy-soft); color: var(--navy); }
+.badge.green { background: var(--green-soft); color: var(--green); }
+.badge.amber { background: var(--amber-soft); color: var(--amber); }
+.section { margin-top: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.panel { background: var(--paper); border: 1px solid var(--line); border-radius: 24px; padding: 24px; box-shadow: var(--shadow); }
+.section-title { font-size: 26px; margin-bottom: 6px; }
+.section-intro { color: var(--muted); margin: 0 0 18px; }
+.metric-card { border: 1px solid var(--line); border-radius: 18px; padding: 18px; background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(244,239,231,0.6)); }
+.metric-label { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; }
+.metric-value { font-size: 38px; line-height: 1; margin-top: 10px; font-weight: 800; }
+.metric-meta { color: var(--muted); margin-top: 10px; }
+.mix-card { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 18px; }
+.mix-bar { display: flex; height: 18px; border-radius: 999px; overflow: hidden; background: #e9e3d8; }
+.mix-bar span.full { background: var(--green); width: 64.6465%; }
+.mix-bar span.partial { background: var(--amber); width: 34.3434%; }
+.mix-bar span.missing { background: var(--red); width: 1.0101%; }
+.mix-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; color: var(--muted); font-size: 14px; }
+.legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+.area-card { display: grid; grid-template-columns: 88px 1fr; gap: 14px; align-items: center; padding: 16px; border-radius: 18px; border: 1px solid var(--line); }
+.area-card.strong { background: linear-gradient(135deg, rgba(31,122,90,0.10), rgba(255,255,255,0.8)); }
+.area-card.risk { background: linear-gradient(135deg, rgba(184,114,31,0.10), rgba(255,255,255,0.8)); }
+.area-card h3 { font-size: 20px; margin-bottom: 4px; }
+.area-card p { margin: 0; color: var(--muted); }
+.area-score { font-size: 32px; font-weight: 800; line-height: 1; }
+.timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.step { border: 1px solid var(--line); border-radius: 20px; padding: 18px; background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(240,245,255,0.65)); min-height: 180px; }
+.step.pending { border-style: dashed; background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,236,215,0.55)); }
+.step-num { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.step h3 { font-size: 24px; margin-bottom: 10px; }
+.step p { margin: 0; color: var(--muted); }
+.gaps ul { margin: 0; padding-left: 18px; }
+.gaps li + li { margin-top: 10px; }
+.narrative-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.narrative-card { border: 1px solid var(--line); border-radius: 18px; padding: 18px; background: rgba(255,255,255,0.7); }
+.narrative-card h3 { font-size: 22px; margin-bottom: 10px; }
+.narrative-card p { margin: 0; color: var(--muted); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 12px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+.pill { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.sev-critical { background: var(--red-soft); color: var(--red); }
+.sev-important { background: var(--amber-soft); color: var(--amber); }
+.sev-detail { background: var(--navy-soft); color: var(--navy); }
+.cov-full { background: var(--green-soft); color: var(--green); }
+.cov-partial { background: var(--amber-soft); color: var(--amber); }
+.cov-missing { background: var(--red-soft); color: var(--red); }
+.footer-note { margin-top: 16px; color: var(--muted); font-size: 13px; }
+@media (max-width: 980px) {
+  .hero-grid, .grid-3, .grid-2, .timeline, .narrative-grid { grid-template-columns: 1fr; }
+  .score-card { justify-self: stretch; min-width: 0; }
+  .wrap { width: min(1200px, calc(100vw - 24px)); }
+}
+</style>
+</head>
+<body>
+  <div class='wrap'>
+    <section class='hero'>
+      <div class='eyebrow'>Stakeholder Briefing</div>
+      <div class='hero-grid'>
+        <div class='hero-copy'>
+          <h1>81.8% coverage</h1>
+          <p>This is a structurally strong implementation plan with meaningful specification gaps. The major product surfaces, persistence model, and AI feature architecture are present, but several cross-cutting contracts remain underspecified enough to create QA-visible drift from the PRD.</p>
+          <div class='badge-row'>
+            <span class='badge navy'>Readiness: Structurally sound, but not spec-tight</span>
+            <span class='badge green'>Confidence: Moderate</span>
+            <span class='badge amber'>64 full / 34 partial / 1 missing</span>
+          </div>
+        </div>
+        <aside class='score-card'>
+          <div class='score-top'>
+            <div>
+              <div class='eyebrow'>Overall Coverage</div>
+              <div class='score-number'>81.8<small>%</small></div>
+            </div>
+            <span class='badge amber'>Moderate confidence</span>
+          </div>
+          <div class='badge-row'>
+            <span class='badge green'>Critical 86.7%</span>
+            <span class='badge amber'>Important 80.6%</span>
+            <span class='badge navy'>Detail 50.0%</span>
+          </div>
+          <p class='footer-note'>Evaluation source: <code>results/PLAN_EVAL.md</code>. No revised plan was provided, so the post-revision score is still pending.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class='panel section'>
+      <h2 class='section-title'>Scoreboard</h2>
+      <p class='section-intro'>The submitted plan is broad and buildable, but the remaining exposure is concentrated in cross-cutting contracts rather than missing pages.</p>
+      <div class='grid-3'><article class='metric-card'><div class='metric-label'>Critical</div><div class='metric-value'>86.7%</div><div class='metric-meta'>26.0 of 30 scored</div></article><article class='metric-card'><div class='metric-label'>Important</div><div class='metric-value'>80.6%</div><div class='metric-meta'>54.0 of 67 scored</div></article><article class='metric-card'><div class='metric-label'>Detail</div><div class='metric-value'>50.0%</div><div class='metric-meta'>1.0 of 2 scored</div></article></div>
+      <div class='mix-card'>
+        <div class='eyebrow'>Coverage Mix</div>
+        <div class='mix-bar'><span class='full'></span><span class='partial'></span><span class='missing'></span></div>
+        <div class='mix-legend'>
+          <span><span class='legend-dot' style='background: var(--green)'></span>64 full</span>
+          <span><span class='legend-dot' style='background: var(--amber)'></span>34 partial</span>
+          <span><span class='legend-dot' style='background: var(--red)'></span>1 missing</span>
+        </div>
+      </div>
+    </section>
+
+    <section class='grid-2 section'>
+      <div class='panel'>
+        <h2 class='section-title'>What Is Strong</h2>
+        <p class='section-intro'>These areas are already close to implementation-ready.</p>
+        <article class='area-card strong'><div class='area-score'>100.0%</div><div><h3>Person Detail</h3><p>4 full, 0 partial, 0 missing</p></div></article><article class='area-card strong'><div class='area-score'>100.0%</div><div><h3>Settings &amp; Export</h3><p>4 full, 0 partial, 0 missing</p></div></article><article class='area-card strong'><div class='area-score'>96.4%</div><div><h3>Show Detail &amp; Relationship UX</h3><p>13 full, 1 partial, 0 missing</p></div></article>
+      </div>
+      <div class='panel'>
+        <h2 class='section-title'>What Is At Risk</h2>
+        <p class='section-intro'>These are the weakest coverage clusters in the current plan.</p>
+        <article class='area-card risk'><div class='area-score'>65.0%</div><div><h3>Concepts, Explore Similar &amp; Alchemy</h3><p>3 full, 7 partial, 0 missing</p></div></article><article class='area-card risk'><div class='area-score'>75.0%</div><div><h3>App Navigation &amp; Discover Shell</h3><p>2 full, 2 partial, 0 missing</p></div></article><article class='area-card risk'><div class='area-score'>77.8%</div><div><h3>Collection Home &amp; Search</h3><p>5 full, 4 partial, 0 missing</p></div></article><article class='area-card risk'><div class='area-score'>78.6%</div><div><h3>AI Voice, Persona &amp; Quality</h3><p>4 full, 3 partial, 0 missing</p></div></article>
+      </div>
+    </section>
+
+    <section class='panel section'>
+      <h2 class='section-title'>Before / After Arc</h2>
+      <p class='section-intro'>The evaluation makes the revision story explicit. This submission includes the initial plan only, so the after state is still a pending revision rather than a scored second draft.</p>
+      <div class='timeline'>
+        <article class='step'>
+          <div class='step-num'>Step 1</div>
+          <h3>Initial plan</h3>
+          <p>The submitted plan covers the full product surface area and lands at <strong>81.8%</strong> overall coverage, with especially strong detail on Show Detail, Person Detail, and export/settings behavior.</p>
+        </article>
+        <article class='step'>
+          <div class='step-num'>Step 2</div>
+          <h3>Gaps exposed</h3>
+          <p>The audit surfaced <strong>35 open items</strong>: 34 partial requirements and 1 missing requirement. The unresolved work clusters around data lifecycle, shell navigation persistence, and AI contract fidelity.</p>
+        </article>
+        <article class='step pending'>
+          <div class='step-num'>Step 3</div>
+          <h3>Revision still needed</h3>
+          <p>No revised plan was supplied yet, so the post-remediation score is not available. The next draft should close the top critical gaps before stakeholders treat this as execution-ready.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class='grid-2 section'>
+      <div class='panel gaps'>
+        <h2 class='section-title'>Top Gaps</h2>
+        <p class='section-intro'>These are the highest-impact issues left open in the current plan.</p>
+        <ul><li>PRD-034 | `critical` | Preserve saved libraries across data-model upgrades. This matters because the plan introduces version metadata but never defines the migration behavior that prevents libraries and My Data from being lost during schema evolution.</li><li>PRD-025 | `critical` | Removing status deletes show and all My Data. This matters because the plan leaves deletion versus empty-row retention open, which can make removal, re-add, and sync behavior diverge from the product’s core lifecycle contract.</li><li>PRD-018 | `critical` | Overlay saved user data on every show appearance. This matters because Search, Detail, and AI surfaces can show conflicting versions of the same title if overlay precedence is not universal.</li><li>PRD-026 | `critical` | Re-add preserves My Data and refreshes public data. This matters because a user who re-encounters a previously saved show could lose personal history or get only a partial refresh of public fields.</li><li>PRD-016 | `critical` | Make client cache safe to discard. This matters because reinstall or local-storage-clear scenarios can expose hidden data-loss assumptions even when backend persistence exists.</li></ul>
+      </div>
+      <div class='panel'>
+        <h2 class='section-title'>Narrative Readout</h2>
+        <p class='section-intro'>What stakeholders are most likely to notice if execution starts without a tighter revision pass.</p>
+        <div class='narrative-grid'>
+          <article class='narrative-card'><h3>Strength clusters</h3><p>The plan is strongest in Show Detail &amp; Relationship UX, Person Detail, and Settings &amp; Export, where the user-facing surfaces are broken down into concrete sections, flows, and files. It is also solid on the benchmark foundation: Next.js, Supabase, schema artifacts, namespace isolation, and test-reset mechanics are all planned in actionable terms.</p></article>
+          <article class='narrative-card'><h3>Weakness clusters</h3><p>The gaps cluster around cross-cutting data lifecycle rules and AI behavioral contracts rather than missing screens. Collection Data &amp; Persistence is the biggest concern area: overlay precedence, delete/re-add semantics, upgrade continuity, sync duplication handling, and cache-disposability remain softer than the PRD requires. A second cluster appears in AI planning, where Ask, concept generation, and discovery quality are built as features but not fully specified as strict output contracts.</p></article>
+          <article class='narrative-card'><h3>Risk assessment</h3><p>If this plan were executed as-is, the app would likely look complete but fail on consistency and edge semantics. The first issues a stakeholder or QA reviewer would notice are stale or conflicting My Data across surfaces, removal/re-add behavior that does not quite match the spec, migration risk around saved libraries, and AI outputs that feel plausible but do not reliably satisfy the exact Ask and concept-quality contracts.</p></article>
+          <article class='narrative-card'><h3>Remediation guidance</h3><p>The next planning pass should add a short cross-cutting contract section for data lifecycle and continuity: overlay precedence, authoritative storage, disposable caches, delete/re-add behavior, sync duplication, and upgrade migrations. The navigation shell needs a clearer statement about persistent primary-nav entry points. The AI sections also need acceptance-criteria-level detail, especially the exact Ask payload shape, starter-prompt refresh, voice-preserving summarization, concept quality rules, and the discovery validation rubric.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class='panel section'>
+      <h2 class='section-title'>Still Open After Review</h2>
+      <p class='section-intro'>The most material partial or missing requirements still left in the current plan.</p>
+      <table>
+        <thead>
+          <tr><th>PRD</th><th>Severity</th><th>Status</th><th>Requirement</th><th>What is still missing</th></tr>
+        </thead>
+        <tbody><tr><td>PRD-005</td><td><span class='pill sev-critical'>critical</span></td><td><span class='pill cov-partial'>partial</span></td><td>Configure build through env without code edits</td><td>The env interface is defined, but the plan never states that env values alone make the build runnable without source edits.</td></tr><tr><td>PRD-015</td><td><span class='pill sev-critical'>critical</span></td><td><span class='pill cov-partial'>partial</span></td><td>Keep backend as persisted source of truth</td><td>The backend persistence layer is present, but the plan does not state that it is the authoritative source of truth over client state.</td></tr><tr><td>PRD-016</td><td><span class='pill sev-critical'>critical</span></td><td><span class='pill cov-partial'>partial</span></td><td>Make client cache safe to discard</td><td>Client caching and local settings are planned, but disposable-cache and reinstall-safety guarantees are not explicit.</td></tr><tr><td>PRD-018</td><td><span class='pill sev-critical'>critical</span></td><td><span class='pill cov-partial'>partial</span></td><td>Overlay saved user data on every show appearance</td><td>Overlay behavior is planned on several surfaces, but not as an explicit everywhere-a-show-appears rule.</td></tr><tr><td>PRD-025</td><td><span class='pill sev-critical'>critical</span></td><td><span class='pill cov-partial'>partial</span></td><td>Removing status deletes show and all My Data</td><td>The plan clears My Data, but it leaves row deletion versus empty-row retention as an implementation choice.</td></tr><tr><td>PRD-026</td><td><span class='pill sev-critical'>critical</span></td><td><span class='pill cov-partial'>partial</span></td><td>Re-add preserves My Data and refreshes public data</td><td>Re-add behavior is touched, but preserving prior My Data after a delete path is not guaranteed.</td></tr><tr><td>PRD-034</td><td><span class='pill sev-critical'>critical</span></td><td><span class='pill cov-partial'>partial</span></td><td>Preserve saved libraries across data-model upgrades</td><td>`app_metadata` is planned, but no upgrade or migration strategy explains how saved libraries survive model changes.</td></tr><tr><td>PRD-072</td><td><span class='pill sev-critical'>critical</span></td><td><span class='pill cov-partial'>partial</span></td><td>Emit `commentary` plus exact `showList` contract</td><td>The mention string format is planned, but the exact `commentary` plus `showList` object contract is not.</td></tr><tr><td>PRD-017</td><td><span class='pill sev-important'>important</span></td><td><span class='pill cov-missing'>missing</span></td><td>Avoid Docker requirement for cloud-agent compatibility</td><td>No section states that Docker must remain optional or that hosted cloud-agent runs are a supported path.</td></tr><tr><td>PRD-013</td><td><span class='pill sev-important'>important</span></td><td><span class='pill cov-partial'>partial</span></td><td>Support documented dev auth injection, prod-gated</td><td>Dev identity injection is planned, but production gating and concrete benchmark-mode documentation are not.</td></tr></tbody>
+      </table>
+      <p class='footer-note'>This list is filtered to the most material open items for stakeholder review. Full row-level scoring remains in <code>results/PLAN_EVAL.md</code>.</p>
+    </section>
+  </div>
+</body>
+</html>
