@@ -50,7 +50,7 @@
   },
   "planning": {
     "prompt_path": "1-START_HERE.md",
-    "prompt_git_sha": "f2c8fd17f8538b82614fc5d4cf073c520360bf38",
+    "prompt_git_sha": "05c0960de115b026112b47ddef66a8f95d0a004a",
     "prompt_profile_slug": "default_step1",
     "prompt_profile": "Default Step 1"
   },
@@ -58,26 +58,26 @@
     "evaluator_model": "gpt-5.4",
     "evaluator_provider": "openai",
     "prompt_path": "2-EVALUATE_PLAN.md",
-    "prompt_git_sha": "ff336f1da5a131fab72b1ad200abe0bee4872850",
+    "prompt_git_sha": "60a3b354091b7d60e72e882d67095e9846e13311",
     "evaluation_session_path": "/Users/mmaher/.codex/sessions/2026/03/08/rollout-2026-03-08T18-04-22-019cd01f-aadc-7452-9760-9488535b1b7d.jsonl",
     "evaluation_started_at": "2026-03-09T01:04:23.107Z",
     "evaluation_ended_at": "2026-03-09T01:19:29.203Z",
     "evaluation_duration_seconds": 906
   },
   "snapshot": {
-    "pricing": {
-      "output_usd_per_mtok": null,
-      "source_url": null,
-      "cached_input_usd_per_mtok": null,
-      "input_usd_per_mtok": null
-    },
-    "context_window_tokens": {
-      "source_url": null,
-      "value": null
-    },
     "frontier": {
       "source": "manual",
       "note": null,
+      "value": null
+    },
+    "pricing": {
+      "cached_input_usd_per_mtok": null,
+      "source_url": null,
+      "input_usd_per_mtok": null,
+      "output_usd_per_mtok": null
+    },
+    "context_window_tokens": {
+      "source_url": null,
       "value": null
     },
     "swe_bench_verified": {
