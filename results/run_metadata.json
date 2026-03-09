@@ -64,8 +64,14 @@
   },
   "snapshot": {
     "context_window_tokens": {
+      "value": null,
+      "source_url": null
+    },
+    "pricing": {
       "source_url": null,
-      "value": null
+      "input_usd_per_mtok": null,
+      "cached_input_usd_per_mtok": null,
+      "output_usd_per_mtok": null
     },
     "frontier": {
       "value": null,
@@ -73,14 +79,8 @@
       "source": "manual"
     },
     "swe_bench_verified": {
-      "source_url": null,
-      "value": null
-    },
-    "pricing": {
-      "input_usd_per_mtok": null,
-      "output_usd_per_mtok": null,
-      "source_url": null,
-      "cached_input_usd_per_mtok": null
+      "value": null,
+      "source_url": null
     }
   },
   "observed": {
