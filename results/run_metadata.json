@@ -63,22 +63,22 @@
     "evaluation_duration_seconds": 659
   },
   "snapshot": {
-    "frontier": {
-      "source": "manual",
-      "note": null,
+    "swe_bench_verified": {
+      "source_url": null,
       "value": null
     },
     "pricing": {
-      "cached_input_usd_per_mtok": null,
-      "source_url": null,
       "input_usd_per_mtok": null,
+      "source_url": null,
+      "cached_input_usd_per_mtok": null,
       "output_usd_per_mtok": null
     },
-    "context_window_tokens": {
-      "source_url": null,
-      "value": null
+    "frontier": {
+      "note": null,
+      "value": null,
+      "source": "manual"
     },
-    "swe_bench_verified": {
+    "context_window_tokens": {
       "source_url": null,
       "value": null
     }
