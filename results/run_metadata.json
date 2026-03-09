@@ -63,15 +63,15 @@
     "evaluation_duration_seconds": 322
   },
   "snapshot": {
+    "pricing": {
+      "source_url": null,
+      "output_usd_per_mtok": null,
+      "cached_input_usd_per_mtok": null,
+      "input_usd_per_mtok": null
+    },
     "context_window_tokens": {
       "value": null,
       "source_url": null
-    },
-    "pricing": {
-      "source_url": null,
-      "input_usd_per_mtok": null,
-      "cached_input_usd_per_mtok": null,
-      "output_usd_per_mtok": null
     },
     "frontier": {
       "value": null,
