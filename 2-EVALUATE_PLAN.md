@@ -4,56 +4,61 @@ This evaluation step is not used until after an entire plan has been written.
 
 ## PRD Info
 
-The PRD is multiple files. All files are very important. You will find the PRD files in the `docs/prd/` folder. Start with `docs/prd/product_prd.md`, then read `docs/prd/infra_rider_prd.md`, then all files in `docs/prd/supporting_docs/`. For evaluation purposes, all PRD files must be ingested to fully understand the scope of the request itself.
+The PRD is multiple files. All files are very important. You will find the PRD files in the `docs/prd/` folder. Start with `docs/prd/product_prd.md`, then read `docs/prd/infra_rider_prd.md`, then read all files under `docs/prd/supporting_docs/` recursively, including `docs/prd/supporting_docs/technical_docs/`. For evaluation purposes, all PRD files must be ingested to fully understand the scope of the request itself.
+
+This benchmark version also has a frozen canonical requirement catalog at `evaluator/requirements_catalog_v1.md`. That catalog is the scoring denominator for this PRD version. It freezes requirement IDs, functional areas, labels, source citations, and severity tiers while staying outside `docs/prd/` so Step 1 does not see evaluator-only material.
+
+If `evaluator/requirements_catalog_v1.md` is missing, first attempt to run `python3 tools/fetch_evaluator.py` from the repo root yourself. If you cannot run shell commands or the fetch fails, stop and tell the user exactly to run `python3 tools/fetch_evaluator.py` from the repo root before retrying Step 2. Do not try to reconstruct the catalog yourself.
 
 ## Instructions
 
-Using the original PRD as the source of truth, audit the plan found in the `results/` folder for coverage and alignment. The plan is called `PLAN.md`.
+Using the canonical requirement catalog as the denominator and the original PRD as the semantic source of truth, audit the plan found in the `results/` folder for coverage and alignment. The plan is called `PLAN.md`.
 
-Your output MUST follow this exact structure, in this order:
+Before you write any files, create an internal checklist and complete it in this exact order:
+1. Read `evaluator/requirements_catalog_v1.md`.
+2. Read the PRD files to understand the semantics behind the catalog requirements.
+3. Read `results/PLAN.md`.
+4. Write the full markdown evaluation to `results/PLAN_EVAL.md`.
+5. Re-open or re-read the completed `results/PLAN_EVAL.md`.
+6. Generate the stakeholder report `results/PLAN_EVAL_REPORT.html` from that completed markdown evaluation.
+
+Do **not** skip or reorder these phases. Do **not** start the HTML report until `results/PLAN_EVAL.md` is complete.
+
+The markdown evaluation output MUST follow this exact structure, in this order:
 
 ### 1. Requirements Extraction
 
-Extract requirements from the PRD using a two-pass process. Both passes are mandatory.
+Do **not** perform a fresh requirement extraction for this benchmark version. The canonical requirement catalog already contains the approved denominator. Your job in this section is to reproduce that catalog exactly so the coverage table scores against the same requirement set every run.
 
 #### Pass 1: Identify Functional Areas
 
-Read through all PRD files and identify every distinct functional area. A functional area is a named grouping of related behavior — e.g., "Collection Management," "Search & Discovery," "AI Chat," "Data Persistence," "Settings & Configuration."
+Use the exact functional area taxonomy, in the exact order, from `evaluator/requirements_catalog_v1.md`:
 
-List each functional area with a short label. You should typically find 6–15 functional areas depending on PRD scope. These areas are organizational scaffolding — they structure your extraction but do not appear in the final scoring.
+1. Benchmark Runtime & Isolation
+2. Collection Data & Persistence
+3. App Navigation & Discover Shell
+4. Collection Home & Search
+5. Show Detail & Relationship UX
+6. Ask Chat
+7. Concepts, Explore Similar & Alchemy
+8. AI Voice, Persona & Quality
+9. Person Detail
+10. Settings & Export
+
+Do not create, rename, merge, split, or reorder areas.
 
 #### Pass 2: Extract Requirements Within Each Area
 
-For each functional area, walk through the PRD files and extract every requirement. Requirements are extracted bottom-up from the document, not top-down from your interpretation.
+Copy the requirements from `evaluator/requirements_catalog_v1.md` exactly.
 
-**What counts as one requirement:**
+The catalog is already the result of the benchmark's merge/split decisions. Preserve it exactly:
 
-Every requirement MUST be anchored to a specific, citable location in the PRD. For each requirement, you must be able to point to the file name, section heading, and the specific bullet point, sentence, or statement it came from.
-
-- One bullet point or distinct statement in the PRD = one requirement, unless it contains multiple independently testable behaviors, in which case split it.
-- If the same behavior is stated in multiple PRD locations, count it once and cite the primary location.
-- Sub-bullets that add independent, testable behavior beyond their parent are separate requirements. Sub-bullets that merely elaborate or give examples are not.
-- A requirement you cannot anchor to a specific PRD location does not exist. Do not extract it.
-
-**Merge rule:** If two PRD statements describe the same testable outcome from different angles, they are one requirement. Cite both locations but assign one ID.
-
-**Split rule:** If one PRD statement contains multiple behaviors that could independently pass or fail (e.g., "search supports shows and people with poster grid results"), split into separate requirements, each citing the same source statement.
-
-For each requirement, provide:
-- **ID**: Stable sequential ID (PRD-001, PRD-002, ...)
-- **Area**: The functional area from Pass 1
-- **Label**: Short description (8–12 words max)
-- **Source**: PRD file name and section heading (e.g., `show_detail.md > My Data Toolbar`)
-- **Severity**: Exactly one of:
-  - `critical` — The product does not function or ship without this. Core user workflows break. A stakeholder would reject the deliverable.
-  - `important` — The product works but is significantly degraded. Users notice and it materially hurts the experience or violates a stated constraint.
-  - `detail` — Fit-and-finish, edge cases, or polish. The product is usable without it, but the spec asked for it.
-
-**Severity calibration guidance:**
-- If the PRD uses language like "must", "required", "non-negotiable", or "breaks without" — that is almost certainly `critical`.
-- If the PRD describes a specific UX behavior, guardrail, or quality bar — that is typically `important`.
-- If the PRD specifies formatting, defaults, labels, or fallback copy — that is typically `detail`.
-- When in doubt between two tiers, choose the higher severity. It is better to over-weight a requirement than to under-weight it.
+- Preserve every requirement ID, area, label, source citation, severity tier, and ordering.
+- Do not add, remove, merge, split, rename, paraphrase, or renumber requirements.
+- Do not rewrite labels or source citations.
+- The final total line at the end of this section must match the catalog exactly.
+- Use the PRD files to understand what each catalog requirement means and how strictly to score the plan against it.
+- If you notice a discrepancy between the PRD and the catalog, do not change the denominator. Score against the catalog as written and note the discrepancy only if it materially affects your confidence in the evaluation.
 
 **Output format for this section:**
 
@@ -119,30 +124,79 @@ List the **top 5 gaps** (or fewer if there aren't 5), ranked by severity tier fi
 
 ### 5. Coverage Narrative
 
-Write 3–5 paragraphs that a human reader can use to understand the coverage posture without reading the table. This section must answer these questions:
+Write five short sub-sections that a human reader can use to understand the coverage posture without reading the table. Use these exact subheadings, in this exact order:
 
-1. **Overall posture**: In plain language, how ready is this plan? Is it a strong plan with minor gaps, a structurally sound plan with concerning holes, or a plan that misses fundamental requirements?
+#### Overall Posture
 
-2. **Strength clusters**: Where is the plan strongest? Which areas of the PRD are thoroughly and concretely covered? Name the functional areas (not just PRD-IDs) — e.g., "data persistence architecture," "search and catalog integration," "developer experience tooling."
+In plain language, how ready is this plan? Is it a strong plan with minor gaps, a structurally sound plan with concerning holes, or a plan that misses fundamental requirements?
 
-3. **Weakness clusters**: Where do gaps concentrate? Are the partial/missing items scattered randomly, or do they cluster around a specific functional area, a specific type of requirement (behavioral specs vs. architectural constraints vs. UX details), or a specific severity tier? Name the pattern.
+#### Strength Clusters
 
-4. **Risk assessment**: If this plan were executed as-is without addressing any gaps, what is the most likely failure mode? What would a user, stakeholder, or QA reviewer notice first? Be specific — name the scenario, not just the requirement.
+Where is the plan strongest? Which areas of the PRD are thoroughly and concretely covered? Name the functional areas, not just PRD-IDs.
 
-5. **Remediation guidance**: For the weakness clusters you identified, what category of work is needed — more detailed specification, architectural decisions, missing acceptance criteria, or entirely new plan sections? This is not a task list — it is guidance on what *kind* of planning work remains.
+#### Weakness Clusters
+
+Where do gaps concentrate? Are the partial/missing items scattered randomly, or do they cluster around a specific functional area, a specific type of requirement, or a specific severity tier? Name the pattern.
+
+#### Risk Assessment
+
+If this plan were executed as-is without addressing any gaps, what is the most likely failure mode? What would a user, stakeholder, or QA reviewer notice first? Be specific.
+
+#### Remediation Guidance
+
+For the weakness clusters you identified, what category of work is needed — more detailed specification, architectural decisions, missing acceptance criteria, or entirely new plan sections? This is not a task list; it is guidance on what kind of planning work remains.
+
+## Stakeholder Report
+
+After `results/PLAN_EVAL.md` is complete, generate a single-file HTML page at `results/PLAN_EVAL_REPORT.html`.
+
+Treat `results/PLAN_EVAL.md` as the fixed source of truth for requirements, scores, and gaps.
+
+During the report phase:
+- Do not reopen the PRD.
+- Do not recompute the denominator.
+- Do not reinterpret coverage from scratch.
+- Do not change requirement IDs, totals, or scores in the report.
+- If you revise `results/PLAN_EVAL.md` after starting the report, regenerate the report from the revised markdown.
+
+Audience: A product lead or VP who needs to understand in under 60 seconds — what does this plan cover well, where are the risks, and how confident should they be in this plan's readiness?
+The page must communicate ALL of the following:
+1. The overall coverage score — make it prominent and immediately legible.
+2. The before/after arc — show how coverage changed from the initial plan to the revised plan. This is the narrative spine: "we started here, we identified gaps, we improved to here."
+3. What's strong — which areas of the PRD are well-covered? Give stakeholders confidence about what IS handled.
+4. What's at risk — which requirements are still partial or missing after revision? Don't bury this. Stakeholders need to see the risks, not hunt for them.
+5. The top gaps and why they matter — not just that something is missing, but what breaks or degrades without it.
+
+Design guidance:
+- This should feel like a stakeholder-ready dashboard or briefing page, not a raw data dump.
+- You have full creative freedom on layout, visual style, chart types, color palette, typography, and how you organize the narrative. Make it yours.
+- Prioritize visual hierarchy — the most important information should hit first.
+- Think about how you'd want to present this in a meeting. What do you lead with? What's the flow?
+- No external dependencies (no CDN links). Everything self-contained.
+- Should look polished at 1200px wide (screenshot-ready for video).
+
+Do not just render the coverage table with colored rows and call it done. Tell the story.
 
 ## Hard Rules
 
 - Be honest. Do not inflate coverage. If something is only covered by implication or vague language, it is `partial`, not `full`.
-- Do not invent requirements that aren't in the PRD. Every requirement must have a citable source location.
+- `evaluator/requirements_catalog_v1.md` is the authoritative denominator for this benchmark version.
+- Do not invent requirements, delete requirements, or modify the catalog's IDs, areas, labels, sources, severity tiers, or ordering.
 - Do not skip requirements because they seem minor — include every requirement in the table and let the scoring formula do its job.
 - Use the exact table formats above. Do not add, remove, or rename columns.
 - Use exactly the words `full`, `partial`, or `missing` for Coverage — no other labels.
 - Use exactly the words `critical`, `important`, or `detail` for Severity — no other labels.
-- The anchor rule is binding. If you cannot cite a specific PRD file and section for a requirement, delete it from your list.
-- The merge and split rules are binding. Same testable outcome stated twice = one requirement. Multiple testable behaviors in one statement = multiple requirements.
+- Use the exact functional area names listed in Pass 1. Do not invent replacements or aliases.
+- Use the exact five Coverage Narrative subheadings listed above. Do not rename them or collapse them into freeform paragraphs.
+- The catalog rule is binding. If you disagree with the denominator, do not change it in the evaluation output.
 - The Coverage Narrative must not merely restate the table data. It must synthesize and interpret. Saying "6 items are partial" is restating; saying "the partial items cluster around AI behavioral contracts, suggesting the plan treats AI as an implementation detail rather than a specifiable surface" is interpreting.
+- Complete `results/PLAN_EVAL.md` before starting `results/PLAN_EVAL_REPORT.html`.
+- During report generation, `results/PLAN_EVAL.md` is the only scoring source of truth.
 
-## Output Location
+## Output Locations
 
-Write the full evaluation to: `results/PLAN_EVAL.md`
+Write the full human-readable evaluation to: `results/PLAN_EVAL.md`
+
+Do **not** append JSON, extra sections, or machine-readable blobs to this markdown file. The benchmark pipeline derives `results/PLAN_EVAL_DATA.json` deterministically from `results/PLAN_EVAL.md` after this step completes, so the markdown structure above must remain exact and parseable.
+
+After the markdown evaluation is complete, write the stakeholder-ready HTML report to: `results/PLAN_EVAL_REPORT.html`

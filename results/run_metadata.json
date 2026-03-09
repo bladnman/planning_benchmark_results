@@ -1,0 +1,160 @@
+{
+  "schema_version": 2,
+  "run_id": "opus_4_6__claude_code__high__plan_mode",
+  "worktree_name": "opus_4_6__claude_code__high__plan_mode",
+  "branch_name": "benchmarks/opus_4_6__claude_code__high__plan_mode",
+  "captured_at": "2026-03-09T01:15:44.039288Z",
+  "paths": {
+    "run_path": "/Users/mmaher/code/planning_benchmark_control/runs/opus_4_6__claude_code__high__plan_mode",
+    "results_dir": "/Users/mmaher/code/planning_benchmark_control/runs/opus_4_6__claude_code__high__plan_mode/results"
+  },
+  "subject": {
+    "model_slug": "opus_4_6",
+    "model_name": "Opus 4.6",
+    "model_family": "Claude Opus",
+    "manufacturer": "Anthropic",
+    "tool_slug": "claude_code",
+    "tool": "Claude Code",
+    "effort_slug": "high",
+    "effort": "High",
+    "variant_slug": "plan_mode",
+    "variant": "Plan Mode"
+  },
+  "grouping": {
+    "model_id": "opus_4_6",
+    "series_id": "opus_4_6__claude_code__high",
+    "case_id": "opus_4_6__claude_code__high__plan_mode",
+    "case_slug": "plan_mode",
+    "case_label": "Plan Mode",
+    "replicate_index": 1,
+    "baseline_case": true
+  },
+  "declared": {
+    "inference_profile_slug": "default",
+    "inference_profile": "Default",
+    "requested_context_window_tokens": null,
+    "planning_mode": true,
+    "prompt_profile_slug": "default_step1",
+    "prompt_profile": "Default Step 1",
+    "experiment_role": "baseline",
+    "experiment_tags": [
+      "plan_mode"
+    ],
+    "scenario": {
+      "slug": "plan_mode",
+      "label": "Plan Mode",
+      "description": null,
+      "hypothesis": null
+    },
+    "case_slug": null
+  },
+  "planning": {
+    "prompt_path": "1-START_HERE.md",
+    "prompt_git_sha": "f2c8fd17f8538b82614fc5d4cf073c520360bf38",
+    "prompt_profile_slug": "default_step1",
+    "prompt_profile": "Default Step 1"
+  },
+  "evaluation": {
+    "evaluator_model": "gpt-5.4",
+    "evaluator_provider": "openai",
+    "prompt_path": "2-EVALUATE_PLAN.md",
+    "prompt_git_sha": "ff336f1da5a131fab72b1ad200abe0bee4872850",
+    "evaluation_session_path": "/Users/mmaher/.codex/sessions/2026/03/08/rollout-2026-03-08T18-04-43-019cd01f-fd8f-70d2-bd5b-5c6278222ec5.jsonl",
+    "evaluation_started_at": "2026-03-09T01:04:44.307Z",
+    "evaluation_ended_at": "2026-03-09T01:17:01.446Z",
+    "evaluation_duration_seconds": 737
+  },
+  "snapshot": {
+    "context_window_tokens": {
+      "source_url": null,
+      "value": null
+    },
+    "swe_bench_verified": {
+      "source_url": null,
+      "value": null
+    },
+    "pricing": {
+      "cached_input_usd_per_mtok": null,
+      "output_usd_per_mtok": null,
+      "source_url": null,
+      "input_usd_per_mtok": null
+    },
+    "frontier": {
+      "note": null,
+      "value": null,
+      "source": "manual"
+    }
+  },
+  "observed": {
+    "plan_session": {
+      "source_tool": "claude_code",
+      "session_path": "/Users/mmaher/.claude/projects/-Users-mmaher-code-planning-benchmark-control-runs-opus-4-6--claude-code--high--plan-mode/bdc24d96-7b22-4fe9-bded-e3480f174b35.jsonl",
+      "started_at": "2026-03-08T23:06:24.089Z",
+      "ended_at": "2026-03-08T23:10:40.021Z",
+      "duration_seconds": 255,
+      "model": "claude-opus-4-6",
+      "provider": "Anthropic",
+      "version": "2.1.71",
+      "collaboration_mode": null,
+      "context_window_tokens": null,
+      "assistant_message_count": 5,
+      "user_message_count": 2,
+      "tool_call_count": 14,
+      "tool_calls_by_name": {
+        "Bash": 1,
+        "Glob": 1,
+        "Read": 11,
+        "Write": 1
+      },
+      "interrupted_count": 0,
+      "task_complete_count": 0,
+      "input_tokens": 75948,
+      "cached_input_tokens": 99479,
+      "output_tokens": 268,
+      "estimated_cost_usd": null
+    },
+    "eval_session": {
+      "source_tool": "codex_cli",
+      "session_path": "/Users/mmaher/.codex/sessions/2026/03/08/rollout-2026-03-08T18-04-43-019cd01f-fd8f-70d2-bd5b-5c6278222ec5.jsonl",
+      "started_at": "2026-03-09T01:04:44.307Z",
+      "ended_at": "2026-03-09T01:17:01.446Z",
+      "duration_seconds": 737,
+      "model": "gpt-5.4",
+      "provider": "openai",
+      "version": "0.112.0",
+      "collaboration_mode": "default",
+      "context_window_tokens": 258400,
+      "assistant_message_count": 14,
+      "user_message_count": 4,
+      "tool_call_count": 76,
+      "tool_calls_by_name": {
+        "close_agent": 1,
+        "exec_command": 35,
+        "spawn_agent": 1,
+        "update_plan": 4,
+        "wait": 2,
+        "write_stdin": 33
+      },
+      "interrupted_count": 0,
+      "task_complete_count": 1,
+      "input_tokens": 3367200,
+      "cached_input_tokens": 3300480,
+      "output_tokens": 50374,
+      "estimated_cost_usd": null
+    }
+  },
+  "outcome": {
+    "plan_path": "/Users/mmaher/code/planning_benchmark_control/runs/opus_4_6__claude_code__high__plan_mode/results/PLAN.md",
+    "plan_saved": true,
+    "plan_written_at": "2026-03-08T23:10:32.292032Z",
+    "plan_eval_path": "/Users/mmaher/code/planning_benchmark_control/runs/opus_4_6__claude_code__high__plan_mode/results/PLAN_EVAL.md",
+    "plan_eval_written_at": "2026-03-09T01:15:44.039288Z",
+    "plan_eval_report_path": "/Users/mmaher/code/planning_benchmark_control/runs/opus_4_6__claude_code__high__plan_mode/results/PLAN_EVAL_REPORT.html",
+    "plan_eval_report_generated": true,
+    "plan_eval_report_written_at": "2026-03-09T01:16:31.880294Z",
+    "plan_session_completed_at": "2026-03-08T23:10:40.021Z",
+    "save_blocked_by_mode": false,
+    "artifact_latency_seconds": 0,
+    "completion_state": "complete"
+  }
+}
