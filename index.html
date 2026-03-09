@@ -334,6 +334,13 @@
     if(t==="Gemini CLI")return "triangle";
     return "circle";
   }
+  function toolTag(t){
+    if(t==="Codex CLI")return "Codex";
+    if(t==="Claude Code")return "Claude";
+    if(t==="Cursor")return "Cursor";
+    if(t==="Gemini CLI")return "Gemini";
+    return t||"Tool";
+  }
   function colorFor(run,by){
     if(by==="tool")return TOOL_COLORS[run.tool]||"#7a8fa6";
     if(by==="model_family")return FAMILY_COLORS[run.model_family]||"#7a8fa6";
@@ -345,9 +352,13 @@
   function itemStyleFor(run,by,kind){
     const style={color:colorFor(run,by)};
     if(by==="family_tool"){
-      style.borderColor=toolCol(run.tool);
-      style.borderWidth=kind==="scatter"?4:3;
-      style.shadowBlur=kind==="scatter"?2:8;
+      if(kind==="scatter"){
+        style.borderColor=toolCol(run.tool);
+        style.borderWidth=4;
+        style.shadowBlur=2;
+      }else{
+        style.shadowBlur=8;
+      }
       style.shadowColor="rgba(0,0,0,0.18)";
     }else if(kind==="scatter"){
       style.borderColor="rgba(0,0,0,0.3)";
@@ -356,7 +367,7 @@
     return style;
   }
   function colorModeHelp(by){
-    if(by==="family_tool")return"Fill shows model family. Tool shows up as marker shape and accent outline.";
+    if(by==="family_tool")return"Bars use model-family fill plus tool name at the bar end. Scatter uses family fill plus tool shape.";
     if(by==="tool")return"Color shows tool.";
     if(by==="model_family")return"Color shows model family.";
     if(by==="effort")return"Color shows effort.";
@@ -879,20 +890,18 @@
     const labels=chartRuns.map(r=>chartLabel(r,S.scatter.plotType==="vbar")).reverse();
     const values=chartRuns.map(r=>metricVal(r,metric)).reverse();
     const axisMin=resolvedAxisMin(chartRuns.map(r=>metricVal(r,metric)),isScore,S.scatter.axisMin);
-    const axisMax=Math.max(...chartRuns.map(r=>metricVal(r,metric)));
-    const markerBase=axisMin+Math.max((axisMax-axisMin||1)*0.02,isScore?0.3:0.4);
     if(S.scatter.plotType==="vbar"){
       const orderedRuns=chartRuns.slice();
       ch.setOption({
         backgroundColor:"transparent",animation:true,animationDuration:450,
         tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},formatter:p=>{const r=orderedRuns[p.dataIndex];return r?`<b>${esc(chartLabel(r))}</b><br>${metricLabel(metric)}: ${isScore?fmtS(metricVal(r,metric)):metricVal(r,metric)}<br>Overall: ${fmtS(get(r,"scores.overall"))}<br>Runtime: ${fmtD(r.planning_runtime_seconds)}`:""}},
-        grid:{top:20,right:16,bottom:90,left:12,containLabel:true},
+        grid:{top:44,right:16,bottom:90,left:12,containLabel:true},
         xAxis:{type:"category",data:orderedRuns.map(r=>chartLabel(r,true)),axisTick:{show:false},axisLine:{show:false},axisLabel:{color:"#b8aea0",fontSize:10,fontWeight:600,interval:0,rotate:0}},
         yAxis:{type:"value",min:axisMin,...(isScore?{max:100}:{}),name:metricLabel(metric),nameLocation:"middle",nameGap:42,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
         series:[
           {type:"bar",data:orderedRuns.map(r=>({value:metricVal(r,metric),itemStyle:itemStyleFor(r,S.scatter.colorBy,"bar"),_rid:r.run_id})),barWidth:24,itemStyle:{borderRadius:[4,4,0,0]}},
           ...(S.scatter.colorBy==="family_tool"
-            ?[{type:"scatter",data:orderedRuns.map(r=>({value:[chartLabel(r,true),markerBase],_rid:r.run_id,itemStyle:{color:toolCol(r.tool)},symbol:toolSymbol(r.tool)})),symbol:(value,params)=>params?.data?.symbol||"circle",symbolSize:12,silent:true,z:6}]
+            ?[{type:"scatter",data:orderedRuns.map(r=>({value:[chartLabel(r,true),metricVal(r,metric)],_rid:r.run_id,label:{show:true,position:"top",distance:6,color:toolCol(r.tool),fontSize:10,fontWeight:700,formatter:toolTag(r.tool)}})),symbolSize:1,itemStyle:{opacity:0},silent:true,z:6}]
             :[])
         ]
       },true);
@@ -903,13 +912,13 @@
     ch.setOption({
       backgroundColor:"transparent",animation:true,animationDuration:450,
       tooltip:{trigger:"item",backgroundColor:"#1a1917",borderColor:"rgba(255,240,200,0.12)",textStyle:{color:"#e8e0d4",fontSize:12},formatter:p=>{const r=chartRuns[chartRuns.length-1-p.dataIndex];return r?`<b>${esc(chartLabel(r))}</b><br>${metricLabel(metric)}: ${isScore?fmtS(metricVal(r,metric)):metricVal(r,metric)}<br>Overall: ${fmtS(get(r,"scores.overall"))}<br>Runtime: ${fmtD(r.planning_runtime_seconds)}`:""}},
-      grid:{top:12,right:16,bottom:12,left:12,containLabel:true},
+      grid:{top:12,right:72,bottom:12,left:12,containLabel:true},
       xAxis:{type:"value",min:axisMin,...(isScore?{max:100}:{}),name:metricLabel(metric),nameLocation:"middle",nameGap:26,nameTextStyle:{color:"#6b6158",fontSize:11},axisLabel:{color:"#6b6158",fontFamily:"JetBrains Mono",fontSize:10,formatter:isScore?"{value}%":undefined},splitLine:{lineStyle:{color:"rgba(255,240,200,0.04)"}},axisLine:{show:false}},
       yAxis:{type:"category",data:labels,axisTick:{show:false},axisLine:{show:false},axisLabel:{color:"#b8aea0",fontSize:10,fontWeight:600,width:240,overflow:"truncate"}},
       series:[
         {type:"bar",data:values.map((value,idx)=>({value,itemStyle:itemStyleFor(chartRuns[chartRuns.length-1-idx],S.scatter.colorBy,"bar"),_rid:chartRuns[chartRuns.length-1-idx].run_id})),barWidth:14,itemStyle:{borderRadius:[0,4,4,0]}},
         ...(S.scatter.colorBy==="family_tool"
-          ?[{type:"scatter",data:chartRuns.map(r=>({value:[markerBase,chartLabel(r,false)],_rid:r.run_id,itemStyle:{color:toolCol(r.tool)},symbol:toolSymbol(r.tool)})).reverse(),symbol:(value,params)=>params?.data?.symbol||"circle",symbolSize:12,silent:true,z:6}]
+          ?[{type:"scatter",data:chartRuns.map(r=>({value:[metricVal(r,metric),chartLabel(r,false)],_rid:r.run_id,label:{show:true,position:"right",distance:8,color:toolCol(r.tool),fontSize:10,fontWeight:700,formatter:toolTag(r.tool)}})).reverse(),symbolSize:1,itemStyle:{opacity:0},silent:true,z:6}]
           :[])
       ]
     },true);
