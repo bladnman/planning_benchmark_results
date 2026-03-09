@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Plan Evaluation Report</title>
+  <style>
+    :root {
+      --bg: #f5efe3;
+      --ink: #18212b;
+      --muted: #5c6773;
+      --panel: rgba(255,255,255,0.72);
+      --line: rgba(24,33,43,0.12);
+      --deep: #143b52;
+      --teal: #1f6b67;
+      --green: #2f7d5b;
+      --amber: #c6822f;
+      --red: #9c3e31;
+      --cream: #fffaf1;
+      --shadow: 0 18px 50px rgba(22, 32, 46, 0.10);
+      --headline: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      --body: "Avenir Next", "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--body);
+      background:
+        radial-gradient(circle at top left, rgba(31,107,103,0.18), transparent 32%),
+        radial-gradient(circle at top right, rgba(156,62,49,0.16), transparent 26%),
+        linear-gradient(180deg, #f8f2e7 0%, #f1ebdf 100%);
+      min-height: 100vh;
+    }
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 56px;
+      position: relative;
+    }
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 18px 24px auto auto;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(20,59,82,0.12), transparent 70%);
+      pointer-events: none;
+      filter: blur(4px);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-bottom: 22px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      overflow: hidden;
+    }
+    .hero-main {
+      padding: 30px;
+      background:
+        linear-gradient(135deg, rgba(20,59,82,0.96), rgba(31,107,103,0.90)),
+        var(--deep);
+      color: #f8f4ed;
+      position: relative;
+    }
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      inset: auto -30px -30px auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.14), transparent 62%);
+    }
+    .eyebrow {
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-size: 12px;
+      opacity: 0.78;
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: var(--headline);
+      font-size: clamp(40px, 7vw, 76px);
+      line-height: 0.95;
+      margin: 0;
+    }
+    .hero-subtitle {
+      margin: 14px 0 18px;
+      max-width: 58ch;
+      font-size: 16px;
+      line-height: 1.55;
+      color: rgba(248,244,237,0.90);
+    }
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(4px);
+    }
+    .hero-notes {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .hero-note {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .hero-note .note-value {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .hero-note .note-label {
+      font-size: 12px;
+      line-height: 1.4;
+      opacity: 0.84;
+    }
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,250,241,0.92));
+    }
+    .score-card {
+      padding: 18px;
+      border-radius: 22px;
+      background: var(--cream);
+      border: 1px solid rgba(24,33,43,0.08);
+      animation: rise 0.6s ease both;
+    }
+    .score-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .score-value {
+      font-family: var(--headline);
+      font-size: 40px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .score-sub {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+    .arc {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 14px;
+      align-items: stretch;
+      padding: 18px;
+      margin-bottom: 22px;
+    }
+    .arc-card {
+      padding: 22px;
+      border-radius: 24px;
+      background: var(--cream);
+      border: 1px solid rgba(24,33,43,0.08);
+    }
+    .arc-step {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .arc-value {
+      font-family: var(--headline);
+      font-size: 42px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .arc-copy {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+    .arc-arrow {
+      align-self: center;
+      font-size: 28px;
+      color: rgba(20,59,82,0.45);
+      font-family: var(--headline);
+    }
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+    .section-panel { padding: 24px; }
+    h2, h3, h4, p { margin-top: 0; }
+    h2 {
+      font-family: var(--headline);
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+    h3 {
+      font-family: var(--headline);
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    .lead {
+      color: var(--muted);
+      line-height: 1.62;
+      font-size: 15px;
+    }
+    .mini-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0 0;
+    }
+    .mini-chip {
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(20,59,82,0.06);
+      border: 1px solid rgba(20,59,82,0.10);
+      font-size: 13px;
+    }
+    .area-list { display: grid; gap: 12px; }
+    .area-row {
+      display: grid;
+      grid-template-columns: 240px 1fr 82px;
+      gap: 16px;
+      align-items: center;
+      animation: rise 0.6s ease both;
+    }
+    .area-name { font-weight: 600; margin-bottom: 4px; }
+    .area-meta { font-size: 12px; color: var(--muted); }
+    .stack {
+      display: flex;
+      height: 16px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(24,33,43,0.08);
+    }
+    .seg-full { background: linear-gradient(90deg, #2f7d5b, #49a07b); }
+    .seg-partial { background: linear-gradient(90deg, #d28a32, #ebb15a); }
+    .seg-missing { background: linear-gradient(90deg, #9c3e31, #ce6656); }
+    .area-score { text-align: right; font-weight: 700; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: 1px solid transparent;
+    }
+    .badge-critical { background: rgba(156,62,49,0.10); color: var(--red); border-color: rgba(156,62,49,0.16); }
+    .badge-important { background: rgba(20,59,82,0.08); color: var(--deep); border-color: rgba(20,59,82,0.14); }
+    .badge-detail { background: rgba(92,103,115,0.10); color: var(--muted); border-color: rgba(92,103,115,0.14); }
+    .badge-partial { background: rgba(198,130,47,0.12); color: var(--amber); border-color: rgba(198,130,47,0.18); }
+    .badge-missing { background: rgba(156,62,49,0.12); color: var(--red); border-color: rgba(156,62,49,0.18); }
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .risk-card, .gap-card {
+      padding: 18px;
+      border-radius: 22px;
+      background: var(--cream);
+      border: 1px solid rgba(24,33,43,0.08);
+      animation: rise 0.6s ease both;
+    }
+    .risk-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .risk-id { font-weight: 700; }
+    .risk-card h4 { font-size: 17px; margin-bottom: 8px; }
+    .risk-card p, .gap-card p { color: var(--muted); line-height: 1.55; font-size: 14px; }
+    .gap-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .gap-kicker { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; }
+    .gap-card h3 { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 20px; margin-bottom: 8px; }
+    .gap-card h4 { font-size: 18px; line-height: 1.3; margin-bottom: 10px; }
+    .footer-panel { padding: 24px; }
+    .footer-copy { color: var(--muted); line-height: 1.65; max-width: 78ch; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 1100px) {
+      .hero, .grid-two, .gap-grid { grid-template-columns: 1fr; }
+      .arc { grid-template-columns: 1fr; }
+      .arc-arrow { display: none; }
+      .risk-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 760px) {
+      .page { padding: 22px 14px 40px; }
+      .hero-main, .section-panel, .footer-panel { padding: 20px; }
+      .score-grid { grid-template-columns: 1fr 1fr; padding: 14px; }
+      .hero-notes { grid-template-columns: 1fr; }
+      .area-row { grid-template-columns: 1fr; }
+      .area-score { text-align: left; }
+      .score-value { font-size: 34px; }
+      .hero-title { font-size: clamp(34px, 14vw, 58px); }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <article class="panel hero-main">
+        <div class="eyebrow">Stakeholder Briefing</div>
+        <h1 class="hero-title">93.43%</h1>
+        <div class="status-row">
+          <span class="status-pill">Strong plan, cross-cutting gaps</span>
+          <span class="status-pill">2 critical requirements are not fully covered.</span>
+        </div>
+        <p class="hero-subtitle">The plan is structurally strong and unusually detailed: it covers the full application surface, names concrete routes, tables, API contracts, and sequence of implementation. The remaining issues are real, but they are concentrated in cross-cutting behavioral guarantees and AI quality controls rather than core app scaffolding.</p>
+        <div class="hero-notes">
+          <div class="hero-note"><div class="note-value">11</div><div class="note-label">Requirements are only partially specified.</div></div>
+          <div class="hero-note"><div class="note-value">1</div><div class="note-label">Requirements are missing outright.</div></div>
+          <div class="hero-note"><div class="note-value">2</div><div class="note-label">Critical items still need plan changes.</div></div>
+        </div>
+      </article>
+      <aside class="panel score-grid">
+        
+    <div class="score-card" style="animation-delay:0.00s">
+      <div class="score-label">Overall</div>
+      <div class="score-value">93.43%</div>
+      <div class="score-sub">92.5 of 99 weighted requirements</div>
+    </div>
+    
+    <div class="score-card" style="animation-delay:0.08s">
+      <div class="score-label">Critical</div>
+      <div class="score-value">96.67%</div>
+      <div class="score-sub">29.0 of 30 critical requirements</div>
+    </div>
+    
+    <div class="score-card" style="animation-delay:0.16s">
+      <div class="score-label">Important</div>
+      <div class="score-value">91.79%</div>
+      <div class="score-sub">61.5 of 67 important requirements</div>
+    </div>
+    
+    <div class="score-card" style="animation-delay:0.24s">
+      <div class="score-label">Detail</div>
+      <div class="score-value">100.00%</div>
+      <div class="score-sub">2.0 of 2 detail requirements</div>
+    </div>
+    
+      </aside>
+    </section>
+
+    <section class="panel arc">
+      <div class="arc-card">
+        <div class="arc-step">Before Audit</div>
+        <div class="arc-value">98.99%</div>
+        <div class="arc-copy">The plan touches 98 of 99 requirements at least partially, so the breadth looks nearly complete at first glance.</div>
+      </div>
+      <div class="arc-arrow">→</div>
+      <div class="arc-card">
+        <div class="arc-step">Audit Finding</div>
+        <div class="arc-value">11+1</div>
+        <div class="arc-copy">Strict scoring exposed 11 partial requirements and 1 missing requirement, concentrated in cross-surface behavior and AI quality controls.</div>
+      </div>
+      <div class="arc-arrow">→</div>
+      <div class="arc-card">
+        <div class="arc-step">After Weighting</div>
+        <div class="arc-value">93.43%</div>
+        <div class="arc-copy">After discounting partial coverage, effective readiness lands at 93.43%. The plan is strong, but it is not yet airtight.</div>
+      </div>
+    </section>
+
+    <section class="grid-two">
+      <article class="panel section-panel">
+        <h2>Where It Is Strong</h2>
+        <p class="lead">The strongest coverage is in Benchmark Runtime &amp; Isolation, Show Detail &amp; Relationship UX, and the main application shell across Collection Home, Search, Person Detail, and Settings &amp; Export. The plan is also strong on the mechanics of Ask, Concepts, and Alchemy: it specifies routes, prompt builders, response contracts, and end-to-end data flow with enough concreteness to implement directly.</p>
+        <div class="mini-list">
+          <span class="mini-chip">App Navigation &amp; Discover Shell</span><span class="mini-chip">Collection Home &amp; Search</span><span class="mini-chip">Person Detail</span>
+        </div>
+      </article>
+      <article class="panel section-panel">
+        <h2>Where It Is Fragile</h2>
+        <p class="lead">The partial and missing items are not random. They cluster around cross-surface consistency rules and qualitative AI product contracts: full overlay semantics wherever shows appear, removal/re-add continuity, session-clearing behavior, sync/duplicate handling, and the quality bar for discovery outputs. In other words, the plan is better at page architecture than at the last 10% of product-behavior guarantees.</p>
+        <div class="mini-list">
+          <span class="mini-chip">Collection Data &amp; Persistence</span><span class="mini-chip">AI Voice, Persona &amp; Quality</span><span class="mini-chip">Concepts, Explore Similar &amp; Alchemy</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel section-panel" style="margin-bottom:22px;">
+      <h2>Coverage By Functional Area</h2>
+      <p class="lead">Green reflects fully covered requirements, amber reflects partial coverage, and red reflects missing coverage. Scores use the weighted audit formula from the markdown evaluation.</p>
+      <div class="area-list">
+    <div class="area-row" style="animation-delay:0.00s">
+      <div>
+        <div class="area-name">App Navigation &amp; Discover Shell</div>
+        <div class="area-meta">4 full · 0 partial · 0 missing</div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <span class="seg seg-full" style="width:100.00%"></span>
+        <span class="seg seg-partial" style="width:0.00%"></span>
+        <span class="seg seg-missing" style="width:0.00%"></span>
+      </div>
+      <div class="area-score">100.0%</div>
+    </div>
+    
+    <div class="area-row" style="animation-delay:0.06s">
+      <div>
+        <div class="area-name">Collection Home &amp; Search</div>
+        <div class="area-meta">9 full · 0 partial · 0 missing</div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <span class="seg seg-full" style="width:100.00%"></span>
+        <span class="seg seg-partial" style="width:0.00%"></span>
+        <span class="seg seg-missing" style="width:0.00%"></span>
+      </div>
+      <div class="area-score">100.0%</div>
+    </div>
+    
+    <div class="area-row" style="animation-delay:0.12s">
+      <div>
+        <div class="area-name">Person Detail</div>
+        <div class="area-meta">4 full · 0 partial · 0 missing</div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <span class="seg seg-full" style="width:100.00%"></span>
+        <span class="seg seg-partial" style="width:0.00%"></span>
+        <span class="seg seg-missing" style="width:0.00%"></span>
+      </div>
+      <div class="area-score">100.0%</div>
+    </div>
+    
+    <div class="area-row" style="animation-delay:0.18s">
+      <div>
+        <div class="area-name">Settings &amp; Export</div>
+        <div class="area-meta">4 full · 0 partial · 0 missing</div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <span class="seg seg-full" style="width:100.00%"></span>
+        <span class="seg seg-partial" style="width:0.00%"></span>
+        <span class="seg seg-missing" style="width:0.00%"></span>
+      </div>
+      <div class="area-score">100.0%</div>
+    </div>
+    
+    <div class="area-row" style="animation-delay:0.24s">
+      <div>
+        <div class="area-name">Benchmark Runtime &amp; Isolation</div>
+        <div class="area-meta">16 full · 1 partial · 0 missing</div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <span class="seg seg-full" style="width:94.12%"></span>
+        <span class="seg seg-partial" style="width:5.88%"></span>
+        <span class="seg seg-missing" style="width:0.00%"></span>
+      </div>
+      <div class="area-score">97.1%</div>
+    </div>
+    
+    <div class="area-row" style="animation-delay:0.30s">
+      <div>
+        <div class="area-name">Show Detail &amp; Relationship UX</div>
+        <div class="area-meta">13 full · 1 partial · 0 missing</div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <span class="seg seg-full" style="width:92.86%"></span>
+        <span class="seg seg-partial" style="width:7.14%"></span>
+        <span class="seg seg-missing" style="width:0.00%"></span>
+      </div>
+      <div class="area-score">96.4%</div>
+    </div>
+    
+    <div class="area-row" style="animation-delay:0.36s">
+      <div>
+        <div class="area-name">Ask Chat</div>
+        <div class="area-meta">9 full · 1 partial · 0 missing</div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <span class="seg seg-full" style="width:90.00%"></span>
+        <span class="seg seg-partial" style="width:10.00%"></span>
+        <span class="seg seg-missing" style="width:0.00%"></span>
+      </div>
+      <div class="area-score">95.0%</div>
+    </div>
+    
+    <div class="area-row" style="animation-delay:0.42s">
+      <div>
+        <div class="area-name">Concepts, Explore Similar &amp; Alchemy</div>
+        <div class="area-meta">8 full · 2 partial · 0 missing</div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <span class="seg seg-full" style="width:80.00%"></span>
+        <span class="seg seg-partial" style="width:20.00%"></span>
+        <span class="seg seg-missing" style="width:0.00%"></span>
+      </div>
+      <div class="area-score">90.0%</div>
+    </div>
+    
+    <div class="area-row" style="animation-delay:0.48s">
+      <div>
+        <div class="area-name">AI Voice, Persona &amp; Quality</div>
+        <div class="area-meta">6 full · 0 partial · 1 missing</div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <span class="seg seg-full" style="width:85.71%"></span>
+        <span class="seg seg-partial" style="width:0.00%"></span>
+        <span class="seg seg-missing" style="width:14.29%"></span>
+      </div>
+      <div class="area-score">85.7%</div>
+    </div>
+    
+    <div class="area-row" style="animation-delay:0.54s">
+      <div>
+        <div class="area-name">Collection Data &amp; Persistence</div>
+        <div class="area-meta">14 full · 6 partial · 0 missing</div>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <span class="seg seg-full" style="width:70.00%"></span>
+        <span class="seg seg-partial" style="width:30.00%"></span>
+        <span class="seg seg-missing" style="width:0.00%"></span>
+      </div>
+      <div class="area-score">85.0%</div>
+    </div>
+    </div>
+    </section>
+
+    <section class="gap-grid">
+      
+    <article class="gap-card" style="animation-delay:0.00s">
+      <div class="gap-kicker">Top Gap 1</div>
+      <h3>PRD-018 <span class="badge badge-critical">critical</span></h3>
+      <h4>Overlay saved user data on every show appearance</h4>
+      <p>This gap matters because search, AI mentions, and recommendations can show a title without the user&#x27;s real status/rating/tag context, making discovery surfaces feel inconsistent and untrustworthy.</p>
+    </article>
+    
+    <article class="gap-card" style="animation-delay:0.05s">
+      <div class="gap-kicker">Top Gap 2</div>
+      <h3>PRD-026 <span class="badge badge-critical">critical</span></h3>
+      <h4>Re-add preserves My Data and refreshes public data</h4>
+      <p>This gap matters because the current delete-first plan can permanently discard the user&#x27;s prior relationship data, so removing and later re-adding a show risks losing curation work.</p>
+    </article>
+    
+    <article class="gap-card" style="animation-delay:0.10s">
+      <div class="gap-kicker">Top Gap 3</div>
+      <h3>PRD-091 <span class="badge badge-important">important</span></h3>
+      <h4>Validate discovery with rubric and hard-fail integrity</h4>
+      <p>This gap matters because the app&#x27;s differentiator is taste-aware AI, and without explicit validation criteria the implementation can ship outputs that are formally parseable but off-brand or low-integrity.</p>
+    </article>
+    
+    <article class="gap-card" style="animation-delay:0.15s">
+      <div class="gap-kicker">Top Gap 4</div>
+      <h3>PRD-033 <span class="badge badge-important">important</span></h3>
+      <h4>Sync libraries/settings consistently and merge duplicates</h4>
+      <p>This gap matters because cross-device or repeated-save flows can drift into inconsistent settings or duplicate library state unless merge behavior is defined beyond per-row show timestamps.</p>
+    </article>
+    
+    <article class="gap-card" style="animation-delay:0.20s">
+      <div class="gap-kicker">Top Gap 5</div>
+      <h3>PRD-084 <span class="badge badge-important">important</span></h3>
+      <h4>Deliver surprising but defensible taste-aligned recommendations</h4>
+      <p>This gap matters because the recommendation engine could collapse into safe, obvious picks, which weakens the product&#x27;s core promise of discovery that feels insightful rather than generic.</p>
+    </article>
+    
+    </section>
+
+    <section class="grid-two">
+      <article class="panel section-panel">
+        <h2>Risk Assessment</h2>
+        <p class="lead">If executed as-is, the app would likely look complete and mostly work, but QA and early users would notice subtle trust breaks first: saved shows would not always carry the same personal state across discovery surfaces, removing and later re-adding a show could lose prior curation, and AI recommendations could be mechanically valid while drifting toward generic or insufficiently defended picks.</p>
+      </article>
+      <article class="panel section-panel">
+        <h2>Remediation Guidance</h2>
+        <p class="lead">The plan needs a small number of high-leverage additions: explicit cross-surface overlay rules for all show render paths, a defined re-add/tombstone strategy or alternate removal model, explicit session reset semantics for Ask and Alchemy, sync and duplicate-resolution rules for libraries and settings, and a rubric-backed discovery validation section with hard-fail checks for real-show integrity and on-brand recommendation quality.</p>
+      </article>
+    </section>
+
+    <section class="panel section-panel">
+      <h2>Remaining Partial Or Missing Requirements</h2>
+      <p class="lead">These are the requirements stakeholders would still be carrying forward as delivery risk if implementation started now.</p>
+      <div class="risk-grid">
+    <article class="risk-card" style="animation-delay:0.00s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-018</span>
+        <span class="badge badge-critical">critical</span>
+        <span class="badge badge-partial">partial</span>
+      </div>
+      <h4>Overlay saved user data on every show appearance</h4>
+      <p>The plan marks or resolves saved items, but it does not explicitly merge full status/tags/rating/Scoop overlays everywhere a show can appear.</p>
+    </article>
+    
+    <article class="risk-card" style="animation-delay:0.03s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-026</span>
+        <span class="badge badge-critical">critical</span>
+        <span class="badge badge-partial">partial</span>
+      </div>
+      <h4>Re-add preserves My Data and refreshes public data</h4>
+      <p>Hard-deleting the row clears My Data, but the plan never defines a strategy that would let a later re-add restore prior user data while refreshing catalog fields.</p>
+    </article>
+    
+    <article class="risk-card" style="animation-delay:0.06s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-091</span>
+        <span class="badge badge-important">important</span>
+        <span class="badge badge-missing">missing</span>
+      </div>
+      <h4>Validate discovery with rubric and hard-fail integrity</h4>
+      <p>The plan does not add any rubric-based discovery validation or hard-fail acceptance checks to prove outputs meet the quality bar and real-show integrity standard.</p>
+    </article>
+    
+    <article class="risk-card" style="animation-delay:0.09s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-004</span>
+        <span class="badge badge-important">important</span>
+        <span class="badge badge-partial">partial</span>
+      </div>
+      <h4>Ignore `.env*` secrets except example</h4>
+      <p>The ignore rules cover common `.env` files but do not clearly exclude `.env*` secrets generically while preserving only `.env.example`.</p>
+    </article>
+    
+    <article class="risk-card" style="animation-delay:0.12s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-028</span>
+        <span class="badge badge-important">important</span>
+        <span class="badge badge-partial">partial</span>
+      </div>
+      <h4>Use timestamps for sorting, sync, freshness</h4>
+      <p>Timestamps drive conflict resolution and Scoop freshness, but no timestamp-driven sorting behavior is planned.</p>
+    </article>
+    
+    <article class="risk-card" style="animation-delay:0.15s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-030</span>
+        <span class="badge badge-important">important</span>
+        <span class="badge badge-partial">partial</span>
+      </div>
+      <h4>Keep Ask and Alchemy state session-only</h4>
+      <p>The flows are described as session-retained, but the plan does not explicitly clear chat/history/results when the user leaves or resets those surfaces.</p>
+    </article>
+    
+    <article class="risk-card" style="animation-delay:0.18s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-032</span>
+        <span class="badge badge-important">important</span>
+        <span class="badge badge-partial">partial</span>
+      </div>
+      <h4>Show collection and rating tile indicators</h4>
+      <p>Tile badges are fully specified on Home, but Search and other discovery tiles only call out in-collection marking, not rating indicators.</p>
+    </article>
+    
+    <article class="risk-card" style="animation-delay:0.21s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-033</span>
+        <span class="badge badge-important">important</span>
+        <span class="badge badge-partial">partial</span>
+      </div>
+      <h4>Sync libraries/settings consistently and merge duplicates</h4>
+      <p>The plan covers per-field merge for shows but does not specify duplicate detection or end-to-end conflict handling for synced settings/library duplicates.</p>
+    </article>
+    
+    <article class="risk-card" style="animation-delay:0.24s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-064</span>
+        <span class="badge badge-important">important</span>
+        <span class="badge badge-partial">partial</span>
+      </div>
+      <h4>Keep primary actions early and page not overwhelming</h4>
+      <p>The section order is deliberate, but the plan does not turn the “powerful but not overwhelming” principle into concrete anti-clutter layout rules.</p>
+    </article>
+    
+    <article class="risk-card" style="animation-delay:0.27s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-074</span>
+        <span class="badge badge-important">important</span>
+        <span class="badge badge-partial">partial</span>
+      </div>
+      <h4>Redirect Ask back into TV/movie domain</h4>
+      <p>The prompt constrains Ask to TV/movies, but it does not describe the user-visible redirect or handoff behavior for out-of-domain requests.</p>
+    </article>
+    
+    <article class="risk-card" style="animation-delay:0.30s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-078</span>
+        <span class="badge badge-important">important</span>
+        <span class="badge badge-partial">partial</span>
+      </div>
+      <h4>Require concept selection and guide ingredient picking</h4>
+      <p>The plan requires concept selection, but it omits the guidance copy that helps users choose the “ingredients” they want more of.</p>
+    </article>
+    
+    <article class="risk-card" style="animation-delay:0.33s">
+      <div class="risk-head">
+        <span class="risk-id">PRD-084</span>
+        <span class="badge badge-important">important</span>
+        <span class="badge badge-partial">partial</span>
+      </div>
+      <h4>Deliver surprising but defensible taste-aligned recommendations</h4>
+      <p>The recommendation contract covers concept citation and real-title resolution, but it does not define the “surprising but defensible” quality bar.</p>
+    </article>
+    </div>
+    </section>
+  </main>
+</body>
+</html>

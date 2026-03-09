@@ -1,0 +1,158 @@
+{
+  "schema_version": 2,
+  "run_id": "opus_4_6__cursor__high__plan_mode",
+  "worktree_name": "opus_4_6__cursor__high__plan_mode",
+  "branch_name": "benchmarks/opus_4_6__cursor__high__plan_mode",
+  "captured_at": "2026-03-09T18:33:24.848458Z",
+  "paths": {
+    "run_path": "/Users/mmaher/code/planning_benchmark_control/runs/opus_4_6__cursor__high__plan_mode",
+    "results_dir": "/Users/mmaher/code/planning_benchmark_control/runs/opus_4_6__cursor__high__plan_mode/results"
+  },
+  "subject": {
+    "model_slug": "opus_4_6",
+    "model_name": "Opus 4.6",
+    "model_family": "Claude Opus",
+    "manufacturer": "Anthropic",
+    "tool_slug": "cursor",
+    "tool": "Cursor",
+    "effort_slug": "high",
+    "effort": "High",
+    "variant_slug": "plan_mode",
+    "variant": "Plan Mode"
+  },
+  "grouping": {
+    "model_id": "opus_4_6",
+    "series_id": "opus_4_6__cursor__high",
+    "case_id": "opus_4_6__cursor__high__plan_mode",
+    "case_slug": "plan_mode",
+    "case_label": "Plan Mode",
+    "replicate_index": 1,
+    "baseline_case": true
+  },
+  "declared": {
+    "inference_profile_slug": "default",
+    "inference_profile": "Default",
+    "requested_context_window_tokens": null,
+    "planning_mode": true,
+    "prompt_profile_slug": "default_step1",
+    "prompt_profile": "Default Step 1",
+    "experiment_role": "baseline",
+    "experiment_tags": [
+      "plan_mode"
+    ],
+    "scenario": {
+      "slug": "plan_mode",
+      "label": "Plan Mode",
+      "description": null,
+      "hypothesis": null
+    },
+    "case_slug": null
+  },
+  "planning": {
+    "prompt_path": "1-START_HERE.md",
+    "prompt_git_sha": "05c0960de115b026112b47ddef66a8f95d0a004a",
+    "prompt_profile_slug": "default_step1",
+    "prompt_profile": "Default Step 1"
+  },
+  "evaluation": {
+    "evaluator_model": "gpt-5.4",
+    "evaluator_provider": "openai",
+    "prompt_path": "2-EVALUATE_PLAN.md",
+    "prompt_git_sha": "60a3b354091b7d60e72e882d67095e9846e13311",
+    "evaluation_session_path": "/Users/mmaher/.codex/sessions/2026/03/09/rollout-2026-03-09T11-26-31-019cd3d9-ca78-7670-bda5-4b4b40f081bf.jsonl",
+    "evaluation_started_at": "2026-03-09T18:26:35.049Z",
+    "evaluation_ended_at": "2026-03-09T18:36:19.963Z",
+    "evaluation_duration_seconds": 584
+  },
+  "snapshot": {
+    "swe_bench_verified": {
+      "source_url": null,
+      "value": null
+    },
+    "pricing": {
+      "cached_input_usd_per_mtok": null,
+      "output_usd_per_mtok": null,
+      "input_usd_per_mtok": null,
+      "source_url": null
+    },
+    "context_window_tokens": {
+      "source_url": null,
+      "value": null
+    },
+    "frontier": {
+      "source": "manual",
+      "value": null,
+      "note": null
+    }
+  },
+  "observed": {
+    "plan_session": {
+      "source_tool": "codex_cli",
+      "session_path": "/Users/mmaher/.codex/sessions/2026/03/09/rollout-2026-03-09T11-26-31-019cd3d9-ca78-7670-bda5-4b4b40f081bf.jsonl",
+      "started_at": "2026-03-09T18:26:35.049Z",
+      "ended_at": "2026-03-09T18:36:19.963Z",
+      "duration_seconds": 584,
+      "model": "gpt-5.4",
+      "provider": "openai",
+      "version": "0.112.0",
+      "collaboration_mode": "default",
+      "context_window_tokens": 258400,
+      "assistant_message_count": 14,
+      "user_message_count": 4,
+      "tool_call_count": 53,
+      "tool_calls_by_name": {
+        "exec_command": 41,
+        "spawn_agent": 1,
+        "update_plan": 4,
+        "write_stdin": 7
+      },
+      "interrupted_count": 0,
+      "task_complete_count": 1,
+      "input_tokens": 1880706,
+      "cached_input_tokens": 1819136,
+      "output_tokens": 40223,
+      "estimated_cost_usd": null
+    },
+    "eval_session": {
+      "source_tool": "codex_cli",
+      "session_path": "/Users/mmaher/.codex/sessions/2026/03/09/rollout-2026-03-09T11-26-31-019cd3d9-ca78-7670-bda5-4b4b40f081bf.jsonl",
+      "started_at": "2026-03-09T18:26:35.049Z",
+      "ended_at": "2026-03-09T18:36:19.963Z",
+      "duration_seconds": 584,
+      "model": "gpt-5.4",
+      "provider": "openai",
+      "version": "0.112.0",
+      "collaboration_mode": "default",
+      "context_window_tokens": 258400,
+      "assistant_message_count": 14,
+      "user_message_count": 4,
+      "tool_call_count": 53,
+      "tool_calls_by_name": {
+        "exec_command": 41,
+        "spawn_agent": 1,
+        "update_plan": 4,
+        "write_stdin": 7
+      },
+      "interrupted_count": 0,
+      "task_complete_count": 1,
+      "input_tokens": 1880706,
+      "cached_input_tokens": 1819136,
+      "output_tokens": 40223,
+      "estimated_cost_usd": null
+    }
+  },
+  "outcome": {
+    "plan_path": "/Users/mmaher/code/planning_benchmark_control/runs/opus_4_6__cursor__high__plan_mode/results/PLAN.md",
+    "plan_saved": true,
+    "plan_written_at": "2026-03-09T18:26:04.516747Z",
+    "plan_eval_path": "/Users/mmaher/code/planning_benchmark_control/runs/opus_4_6__cursor__high__plan_mode/results/PLAN_EVAL.md",
+    "plan_eval_written_at": "2026-03-09T18:33:24.848458Z",
+    "plan_eval_report_path": "/Users/mmaher/code/planning_benchmark_control/runs/opus_4_6__cursor__high__plan_mode/results/PLAN_EVAL_REPORT.html",
+    "plan_eval_report_generated": true,
+    "plan_eval_report_written_at": "2026-03-09T18:35:56.586153Z",
+    "plan_session_completed_at": "2026-03-09T18:36:19.963Z",
+    "save_blocked_by_mode": false,
+    "artifact_latency_seconds": 0,
+    "completion_state": "complete"
+  }
+}
