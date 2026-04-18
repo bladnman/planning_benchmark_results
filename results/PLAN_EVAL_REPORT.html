@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Plan Evaluation Report</title>
+  <style>
+    :root {
+      --bg: #f5efe5;
+      --panel: rgba(255,255,255,0.82);
+      --panel-strong: #fffaf2;
+      --ink: #11202e;
+      --muted: #586575;
+      --line: rgba(17,32,46,0.12);
+      --accent: #e46b43;
+      --accent-2: #0f7c82;
+      --accent-3: #f0b24d;
+      --good: #18745c;
+      --warn: #b56a10;
+      --bad: #b44444;
+      --shadow: 0 20px 50px rgba(17,32,46,0.12);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      background:
+        radial-gradient(circle at top left, rgba(228,107,67,0.18), transparent 35%),
+        radial-gradient(circle at top right, rgba(15,124,130,0.18), transparent 30%),
+        linear-gradient(180deg, #faf4ea 0%, var(--bg) 55%, #efe7d9 100%);
+      color: var(--ink);
+    }
+    .shell { width: min(1200px, calc(100vw - 48px)); margin: 0 auto; padding: 36px 0 56px; }
+    .hero { display: grid; grid-template-columns: 1.35fr 0.95fr; gap: 24px; align-items: stretch; }
+    .card { background: var(--panel); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.55); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .hero-main { padding: 30px 32px; position: relative; overflow: hidden; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 999px; background: rgba(228,107,67,0.12); color: var(--accent); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; font-family: "Avenir Next", "Segoe UI", Arial, sans-serif; font-weight: 700; }
+    h1 { margin: 18px 0 10px; font-size: 56px; line-height: 0.96; letter-spacing: -0.04em; }
+    .subhead { font-size: 18px; line-height: 1.5; color: var(--muted); max-width: 58ch; }
+    .score-row { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+    .pill { background: var(--panel-strong); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; min-width: 140px; }
+    .pill .label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-family: "Avenir Next", "Segoe UI", Arial, sans-serif; font-weight: 700; }
+    .pill .value { margin-top: 8px; font-size: 28px; line-height: 1; font-weight: 700; font-family: "Avenir Next Condensed", "Avenir Next", "Segoe UI", Arial, sans-serif; }
+    .hero-side { padding: 28px; display: flex; flex-direction: column; justify-content: space-between; }
+    .hero-side h2 { margin: 0 0 14px; font-size: 23px; }
+    .hero-side p { margin: 0; color: var(--muted); line-height: 1.55; }
+    .storyline { margin-top: 14px; display: grid; gap: 12px; }
+    .story-step { padding: 16px 18px; border-radius: 18px; background: rgba(17,32,46,0.04); border: 1px solid rgba(17,32,46,0.08); }
+    .step-kicker { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-2); font-family: "Avenir Next", "Segoe UI", Arial, sans-serif; font-weight: 700; }
+    .step-title { margin-top: 8px; font-size: 20px; font-weight: 700; }
+    .step-copy { margin-top: 6px; color: var(--muted); line-height: 1.5; }
+    .note { margin-top: 16px; font-size: 13px; line-height: 1.5; color: var(--muted); }
+    .section { margin-top: 26px; }
+    .section-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 24px; }
+    .section-card { padding: 28px; }
+    .section-kicker { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-family: "Avenir Next", "Segoe UI", Arial, sans-serif; font-weight: 700; }
+    .section-card h3 { margin: 10px 0 14px; font-size: 30px; line-height: 1.05; }
+    .section-card p { margin: 0; color: var(--muted); line-height: 1.6; }
+    .mini-grid { margin-top: 22px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .mini-card { padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.72); border: 1px solid var(--line); }
+    .mini-kicker { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-2); font-family: "Avenir Next", "Segoe UI", Arial, sans-serif; font-weight: 700; }
+    .mini-title { margin-top: 8px; font-size: 18px; font-weight: 700; }
+    .mini-metric { margin-top: 8px; font-size: 34px; line-height: 1; font-family: "Avenir Next Condensed", "Avenir Next", "Segoe UI", Arial, sans-serif; color: var(--good); }
+    .mini-copy { margin-top: 8px; color: var(--muted); line-height: 1.45; font-size: 14px; }
+    .area-table { display: grid; gap: 12px; margin-top: 22px; }
+    .area-row { display: grid; grid-template-columns: 1.35fr 1fr 76px; gap: 14px; align-items: center; }
+    .area-name { font-weight: 700; }
+    .area-detail { margin-top: 4px; color: var(--muted); font-size: 14px; }
+    .bar { height: 12px; border-radius: 999px; background: rgba(17,32,46,0.08); overflow: hidden; }
+    .bar span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent-2), var(--accent)); }
+    .area-score { text-align: right; font-weight: 700; font-family: "Avenir Next", "Segoe UI", Arial, sans-serif; }
+    .risk-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 22px; }
+    .risk-card { padding: 18px; border-radius: 18px; background: rgba(255,250,242,0.9); border: 1px solid rgba(180,68,68,0.14); }
+    .risk-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 12px; }
+    .risk-area { font-size: 18px; font-weight: 700; }
+    .risk-score { color: var(--bad); font-weight: 700; font-family: "Avenir Next", "Segoe UI", Arial, sans-serif; }
+    .risk-card ul { margin: 0; padding-left: 18px; color: var(--muted); }
+    .risk-card li { margin: 0 0 12px; line-height: 1.45; }
+    .risk-card li:last-child { margin-bottom: 0; }
+    .risk-card span { color: var(--muted); font-size: 14px; }
+    .gap-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin-top: 20px; }
+    .gap-card { padding: 16px; border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,250,242,0.96)); border: 1px solid rgba(17,32,46,0.08); min-height: 210px; }
+    .gap-text { color: var(--ink); line-height: 1.55; font-size: 15px; }
+    .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .quote-box { padding: 22px; border-radius: 18px; background: rgba(255,255,255,0.68); border: 1px solid var(--line); }
+    .quote-box h4 { margin: 0 0 10px; font-size: 18px; }
+    .quote-box p { margin: 0; color: var(--muted); line-height: 1.6; }
+    @media (max-width: 980px) { .hero, .section-grid, .bottom-grid { grid-template-columns: 1fr; } .risk-grid { grid-template-columns: 1fr; } .gap-grid { grid-template-columns: 1fr 1fr; } h1 { font-size: 44px; } }
+    @media (max-width: 680px) { .shell { width: min(100vw - 28px, 1200px); padding-top: 20px; } .score-row, .mini-grid, .gap-grid { grid-template-columns: 1fr; display: grid; } .pill { min-width: 0; } .area-row { grid-template-columns: 1fr; } .area-score { text-align: left; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="eyebrow">Stakeholder Readout</div>
+        <h1>93.9% coverage</h1>
+        <p class="subhead">The revised plan is structurally strong and clears every critical requirement, but it still leaves a small cluster of shell-level and AI-contract details under-specified.</p>
+        <div class="score-row">
+          <div class="pill"><div class="label">Critical</div><div class="value">100.0%</div></div>
+          <div class="pill"><div class="label">Important</div><div class="value">91.8%</div></div>
+          <div class="pill"><div class="label">Detail</div><div class="value">75.0%</div></div>
+          <div class="pill"><div class="label">Coverage Mix</div><div class="value">87 full / 12 partial</div></div>
+        </div>
+      </div>
+      <div class="card hero-side">
+        <div>
+          <h2>The arc in one minute</h2>
+          <p>This is a strong, execution-ready plan with a small set of meaningful specification gaps. It covers the benchmark runtime, storage model, detail experience, AI flows, and delivery order concretely, but it is looser where the PRD expects shell-level UX guarantees and tighter AI behavior contracts.</p>
+          <div class="storyline">
+            <div class="story-step">
+              <div class="step-kicker">Start</div>
+              <div class="step-title">Broad draft coverage</div>
+              <div class="step-copy">The plan already spans all 10 functional areas and lands concrete implementation structure across runtime, data, detail UX, AI flows, person pages, and export.</div>
+            </div>
+            <div class="story-step">
+              <div class="step-kicker">Review</div>
+              <div class="step-title">12 requirements still partial</div>
+              <div class="step-copy">Gap review concentrates the remaining risk in persistent shell affordances, exact Search presentation, and AI behavior contracts that were referenced but not fully restated.</div>
+            </div>
+            <div class="story-step">
+              <div class="step-kicker">Now</div>
+              <div class="step-title">High readiness, low ambiguity tolerance</div>
+              <div class="step-copy">The scored plan lands at 93.9% overall with zero missing requirements and full critical coverage, so the remaining work is precision planning rather than replanning.</div>
+            </div>
+          </div>
+        </div>
+        <div class="note">This run includes one scored plan artifact. The arc below summarizes the draft, the evaluation findings, and the resulting readiness read from that single scored plan.</div>
+      </div>
+    </section>
+
+    <section class="section section-grid">
+      <div class="card section-card">
+        <div class="section-kicker">What's Strong</div>
+        <h3>Concrete where it matters most</h3>
+        <p>The plan is strongest in Benchmark Runtime &amp; Isolation, Collection Data &amp; Persistence, Show Detail &amp; Relationship UX, Person Detail, and Settings &amp; Export. Those areas have concrete sections, explicit feature decomposition, clear data contracts, and verification steps that make the intended implementation path easy to follow.</p>
+        <div class="mini-grid"><div class="mini-card">
+      <div class="mini-kicker">Strong Area</div>
+      <div class="mini-title">Person Detail</div>
+      <div class="mini-metric">100.0%</div>
+      <div class="mini-copy">4 full, 0 partial across 4 requirements</div>
+    </div>
+<div class="mini-card">
+      <div class="mini-kicker">Strong Area</div>
+      <div class="mini-title">Settings &amp; Export</div>
+      <div class="mini-metric">100.0%</div>
+      <div class="mini-copy">4 full, 0 partial across 4 requirements</div>
+    </div>
+<div class="mini-card">
+      <div class="mini-kicker">Strong Area</div>
+      <div class="mini-title">Show Detail &amp; Relationship UX</div>
+      <div class="mini-metric">100.0%</div>
+      <div class="mini-copy">14 full, 0 partial across 14 requirements</div>
+    </div>
+<div class="mini-card">
+      <div class="mini-kicker">Strong Area</div>
+      <div class="mini-title">Benchmark Runtime &amp; Isolation</div>
+      <div class="mini-metric">97.1%</div>
+      <div class="mini-copy">16 full, 1 partial across 17 requirements</div>
+    </div></div>
+      </div>
+      <div class="card section-card">
+        <div class="section-kicker">Coverage By Area</div>
+        <h3>Best-in-class detail pages, weaker shell and AI precision</h3>
+        <p>The denominator is frozen at 99 requirements. Weighted area scores below reflect the exact `full/partial/missing` calls in the markdown evaluation.</p>
+        <div class="area-table"><div class="area-row">
+      <div class="area-meta">
+        <div class="area-name">Person Detail</div>
+        <div class="area-detail">4 full · 0 partial · 0 missing</div>
+      </div>
+      <div class="bar"><span style="width:100.0%"></span></div>
+      <div class="area-score">100.0%</div>
+    </div>
+<div class="area-row">
+      <div class="area-meta">
+        <div class="area-name">Settings &amp; Export</div>
+        <div class="area-detail">4 full · 0 partial · 0 missing</div>
+      </div>
+      <div class="bar"><span style="width:100.0%"></span></div>
+      <div class="area-score">100.0%</div>
+    </div>
+<div class="area-row">
+      <div class="area-meta">
+        <div class="area-name">Show Detail &amp; Relationship UX</div>
+        <div class="area-detail">14 full · 0 partial · 0 missing</div>
+      </div>
+      <div class="bar"><span style="width:100.0%"></span></div>
+      <div class="area-score">100.0%</div>
+    </div>
+<div class="area-row">
+      <div class="area-meta">
+        <div class="area-name">Benchmark Runtime &amp; Isolation</div>
+        <div class="area-detail">16 full · 1 partial · 0 missing</div>
+      </div>
+      <div class="bar"><span style="width:97.1%"></span></div>
+      <div class="area-score">97.1%</div>
+    </div>
+<div class="area-row">
+      <div class="area-meta">
+        <div class="area-name">Ask Chat</div>
+        <div class="area-detail">9 full · 1 partial · 0 missing</div>
+      </div>
+      <div class="bar"><span style="width:95.0%"></span></div>
+      <div class="area-score">95.0%</div>
+    </div>
+<div class="area-row">
+      <div class="area-meta">
+        <div class="area-name">Collection Data &amp; Persistence</div>
+        <div class="area-detail">18 full · 2 partial · 0 missing</div>
+      </div>
+      <div class="bar"><span style="width:95.0%"></span></div>
+      <div class="area-score">95.0%</div>
+    </div>
+<div class="area-row">
+      <div class="area-meta">
+        <div class="area-name">Concepts, Explore Similar &amp; Alchemy</div>
+        <div class="area-detail">9 full · 1 partial · 0 missing</div>
+      </div>
+      <div class="bar"><span style="width:95.0%"></span></div>
+      <div class="area-score">95.0%</div>
+    </div>
+<div class="area-row">
+      <div class="area-meta">
+        <div class="area-name">Collection Home &amp; Search</div>
+        <div class="area-detail">7 full · 2 partial · 0 missing</div>
+      </div>
+      <div class="bar"><span style="width:88.9%"></span></div>
+      <div class="area-score">88.9%</div>
+    </div>
+<div class="area-row">
+      <div class="area-meta">
+        <div class="area-name">AI Voice, Persona &amp; Quality</div>
+        <div class="area-detail">4 full · 3 partial · 0 missing</div>
+      </div>
+      <div class="bar"><span style="width:78.6%"></span></div>
+      <div class="area-score">78.6%</div>
+    </div>
+<div class="area-row">
+      <div class="area-meta">
+        <div class="area-name">App Navigation &amp; Discover Shell</div>
+        <div class="area-detail">2 full · 2 partial · 0 missing</div>
+      </div>
+      <div class="bar"><span style="width:75.0%"></span></div>
+      <div class="area-score">75.0%</div>
+    </div></div>
+      </div>
+    </section>
+
+    <section class="section section-grid">
+      <div class="card section-card">
+        <div class="section-kicker">What's At Risk</div>
+        <h3>Residual gaps are clustered, not random</h3>
+        <p>The partial coverage clusters in two places. First, App Navigation &amp; Discover Shell and a slice of Collection Home &amp; Search are under-specified at the shell/presentation level: persistent nav affordances, explicit poster-grid wording, and named empty states are implied more than committed. Second, AI Voice, Persona &amp; Quality and one Ask requirement are weaker at the behavioral-contract layer: the plan references the supporting specs, but it does not always restate the surface-specific context inputs and response-shape requirements that determine whether the AI feels truly product-correct.</p>
+        <div class="risk-grid"><div class="risk-card">
+      <div class="risk-head">
+        <div class="risk-area">App Navigation &amp; Discover Shell</div>
+        <div class="risk-score">75.0%</div>
+      </div>
+      <ul><li><strong>PRD-039.</strong> Keep Find/Discover in persistent primary navigation<br><span>The plan defines the Find route, but it never explicitly commits to a persistent primary-nav entry for Find/Discover in the shared shell.</span></li><li><strong>PRD-040.</strong> Keep Settings in persistent primary navigation<br><span>The plan defines the Settings route, but it never explicitly commits to a persistent primary-nav entry for Settings in the shared shell.</span></li></ul>
+    </div>
+<div class="risk-card">
+      <div class="risk-head">
+        <div class="risk-area">AI Voice, Persona &amp; Quality</div>
+        <div class="risk-score">78.6%</div>
+      </div>
+      <ul><li><strong>PRD-087.</strong> Make AI warm, joyful, and light in critique<br><span>The plan captures warmth and joy, but it never explicitly carries the spec&#x27;s expectation that critique stays light rather than harsh or snobby.</span></li><li><strong>PRD-089.</strong> Keep Ask brisk and dialogue-like by default<br><span>The plan covers Ask mechanics, but it does not explicitly preserve the voice spec&#x27;s brisk, dialogue-first default response shape.</span></li><li><strong>PRD-090.</strong> Feed AI the right surface-specific context inputs<br><span>The plan references the AI specs, but it never concretely spells out the per-surface context assembly that makes outputs taste-aware rather than merely on-brand.</span></li></ul>
+    </div>
+<div class="risk-card">
+      <div class="risk-head">
+        <div class="risk-area">Collection Home &amp; Search</div>
+        <div class="risk-score">88.9%</div>
+      </div>
+      <ul><li><strong>PRD-046.</strong> Provide empty-library and empty-filter states<br><span>The hardening step mentions empty states generically, but it does not explicitly cover both the empty-library prompt and the empty-filter no-results state.</span></li><li><strong>PRD-048.</strong> Use poster grid with collection markers<br><span>The plan implies poster-based search results, but it never explicitly states that Search is a poster grid with collection markers.</span></li></ul>
+    </div>
+<div class="risk-card">
+      <div class="risk-head">
+        <div class="risk-area">Collection Data &amp; Persistence</div>
+        <div class="risk-score">95.0%</div>
+      </div>
+      <ul><li><strong>PRD-028.</strong> Use timestamps for sorting, sync, freshness<br><span>The plan uses timestamps for sync conflicts and Scoop freshness, but it never assigns them an explicit sorting role.</span></li><li><strong>PRD-036.</strong> Keep provider IDs persisted and detail fetches transient<br><span>The plan stores `provider_data`, but it does not state the IDs-only persistence rule or explicitly fence detailed catalog payloads off as transient.</span></li></ul>
+    </div></div>
+      </div>
+      <div class="card section-card">
+        <div class="section-kicker">Likely Failure Mode</div>
+        <h3>The app would mostly work, but feel slightly off-spec</h3>
+        <p>If this plan were executed as-is, the first QA or stakeholder concern would likely not be a missing major feature. It would be a build that mostly works but feels slightly off-spec: Find or Settings could be less persistent than intended, Search could lose some of its exact presentation polish, and the AI could behave competently without consistently sounding brisk, grounded, and taste-aware in the specific ways the PRD requires.</p>
+        <div class="quote-box" style="margin-top:22px;">
+          <h4>What stakeholders would notice first</h4>
+          <p>Not a catastrophic omission. The first friction would be experiential drift: shell affordances that are less persistent than promised, Search presentation that is less explicit than the product expects, and AI responses that are competent but not consistently brisk, grounded, and taste-aware.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section card section-card">
+      <div class="section-kicker">Top Gaps</div>
+      <h3>Five things still worth fixing before execution starts</h3>
+      <p>These are the highest-leverage partials left in the plan after review. They are not feature-sized misses; they are the contracts most likely to produce product drift if they stay vague.</p>
+      <div class="gap-grid"><div class="gap-card"><div class="gap-text">PRD-090 | `important` | Feed AI the right surface-specific context inputs — Without an explicit per-surface context contract, the AI surfaces can sound on-brand while still feeling untethered to saved taste data, selected concepts, or the current show context.</div></div>
+<div class="gap-card"><div class="gap-text">PRD-039 | `important` | Keep Find/Discover in persistent primary navigation — If Find is only present as a route and not a guaranteed shell affordance, one of the product&#x27;s core repeat-entry loops becomes easier to bury or regress.</div></div>
+<div class="gap-card"><div class="gap-text">PRD-040 | `important` | Keep Settings in persistent primary navigation — Burying Settings makes export, model/key configuration, and user-control flows harder to reach, which weakens data ownership and benchmark operability.</div></div>
+<div class="gap-card"><div class="gap-text">PRD-066 | `important` | Answer directly with confident, spoiler-safe recommendations — Ask can technically function but still fail the product bar if it responds in a rambling or overly indirect way that hides the recommendation.</div></div>
+<div class="gap-card"><div class="gap-text">PRD-036 | `important` | Keep provider IDs persisted and detail fetches transient — If persistence boundaries are vague, the schema can bloat with stale provider/detail payloads and become harder to migrate safely.</div></div></div>
+    </section>
+
+    <section class="section bottom-grid">
+      <div class="card section-card">
+        <div class="section-kicker">Readiness Read</div>
+        <h3>Confidence is high, but only if the team respects the spec edges</h3>
+        <div class="quote-box">
+          <h4>Overall posture</h4>
+          <p>This is a strong, execution-ready plan with a small set of meaningful specification gaps. It covers the benchmark runtime, storage model, detail experience, AI flows, and delivery order concretely, but it is looser where the PRD expects shell-level UX guarantees and tighter AI behavior contracts.</p>
+        </div>
+      </div>
+      <div class="card section-card">
+        <div class="section-kicker">How To Close It</div>
+        <h3>Small planning edits, not a rewrite</h3>
+        <div class="quote-box">
+          <h4>Remediation guidance</h4>
+          <p>The remaining work is mostly precision planning, not wholesale replanning. Add one explicit shell/navigation section that locks in persistent primary-nav affordances; tighten the Search section with exact presentation and empty-state commitments; and promote the AI behavioral contracts from referenced docs into explicit endpoint-level requirements for context assembly, default response shape, and critique tone. Those additions would close most of the residual risk without changing the overall structure of the plan.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
