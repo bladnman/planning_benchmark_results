@@ -66,23 +66,23 @@
   },
   "snapshot": {
     "pricing": {
-      "source_url": null,
       "output_usd_per_mtok": null,
       "cached_input_usd_per_mtok": null,
-      "input_usd_per_mtok": null
+      "input_usd_per_mtok": null,
+      "source_url": null
     },
     "context_window_tokens": {
       "value": null,
       "source_url": null
     },
-    "frontier": {
-      "value": null,
-      "note": null,
-      "source": "manual"
-    },
     "swe_bench_verified": {
       "value": null,
       "source_url": null
+    },
+    "frontier": {
+      "value": null,
+      "source": "manual",
+      "note": null
     }
   },
   "observed": {
@@ -91,28 +91,24 @@
       "session_path": "/Users/mmaher/.codex/sessions/2026/03/09/rollout-2026-03-09T10-41-10-019cd3b0-43bf-7d30-9ba2-422f6d3a004f.jsonl",
       "started_at": "2026-03-09T17:41:14.198Z",
       "ended_at": "2026-03-09T17:56:00.621Z",
-      "duration_seconds": 886,
+      "duration_seconds": null,
       "model": "gpt-5.4",
       "provider": "openai",
       "version": "0.112.0",
       "collaboration_mode": "default",
       "context_window_tokens": 258400,
-      "assistant_message_count": 17,
-      "user_message_count": 7,
-      "tool_call_count": 59,
-      "tool_calls_by_name": {
-        "exec_command": 44,
-        "send_input": 1,
-        "spawn_agent": 4,
-        "wait": 4,
-        "write_stdin": 6
-      },
-      "interrupted_count": 0,
-      "task_complete_count": 1,
-      "input_tokens": 2201885,
-      "cached_input_tokens": 2113536,
-      "output_tokens": 54449,
-      "estimated_cost_usd": null
+      "assistant_message_count": null,
+      "user_message_count": null,
+      "tool_call_count": null,
+      "tool_calls_by_name": {},
+      "interrupted_count": null,
+      "task_complete_count": null,
+      "input_tokens": null,
+      "cached_input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "trusted": false,
+      "untrusted_reason": "unscannable_subject_tool:cursor"
     },
     "eval_session": {
       "source_tool": "codex_cli",
@@ -140,7 +136,9 @@
       "input_tokens": 2201885,
       "cached_input_tokens": 2113536,
       "output_tokens": 54449,
-      "estimated_cost_usd": null
+      "estimated_cost_usd": null,
+      "trusted": true,
+      "untrusted_reason": null
     }
   },
   "outcome": {
