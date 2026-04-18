@@ -66,52 +66,49 @@
   },
   "snapshot": {
     "pricing": {
-      "source_url": null,
       "output_usd_per_mtok": null,
       "cached_input_usd_per_mtok": null,
-      "input_usd_per_mtok": null
+      "input_usd_per_mtok": null,
+      "source_url": null
     },
     "context_window_tokens": {
       "value": null,
       "source_url": null
     },
-    "frontier": {
-      "value": null,
-      "note": null,
-      "source": "manual"
-    },
     "swe_bench_verified": {
       "value": null,
       "source_url": null
+    },
+    "frontier": {
+      "value": null,
+      "source": "manual",
+      "note": null
     }
   },
   "observed": {
     "plan_session": {
-      "source_tool": "claude_code",
-      "session_path": "/Users/mmaher/.claude/projects/-Users-mmaher-code-planning-benchmark-control-runs-sonnet-4-6--claude-code--high--no-plan-mode/4d1fcb0b-ea15-48c3-912b-5bbd05350a74.jsonl",
-      "started_at": "2026-03-09T17:35:26.388Z",
-      "ended_at": "2026-03-09T17:40:21.065Z",
-      "duration_seconds": 294,
-      "model": "claude-sonnet-4-6",
-      "provider": "Anthropic",
-      "version": "2.1.71",
-      "collaboration_mode": null,
-      "context_window_tokens": null,
-      "assistant_message_count": 7,
-      "user_message_count": 1,
-      "tool_call_count": 13,
-      "tool_calls_by_name": {
-        "Bash": 1,
-        "Glob": 1,
-        "Read": 10,
-        "Write": 1
-      },
-      "interrupted_count": 0,
-      "task_complete_count": 0,
-      "input_tokens": 43663,
-      "cached_input_tokens": 185301,
-      "output_tokens": 8555,
-      "estimated_cost_usd": null
+      "source_tool": "codex_cli",
+      "session_path": "/Users/mmaher/.codex/sessions/2026/03/09/rollout-2026-03-09T10-40-46-019cd3af-e680-7711-9d94-65f3043a07c9.jsonl",
+      "started_at": "2026-03-09T17:40:57.623Z",
+      "ended_at": "2026-03-09T17:52:45.261Z",
+      "duration_seconds": null,
+      "model": "gpt-5.4",
+      "provider": "openai",
+      "version": "0.112.0",
+      "collaboration_mode": "default",
+      "context_window_tokens": 258400,
+      "assistant_message_count": null,
+      "user_message_count": null,
+      "tool_call_count": null,
+      "tool_calls_by_name": {},
+      "interrupted_count": null,
+      "task_complete_count": null,
+      "input_tokens": null,
+      "cached_input_tokens": null,
+      "output_tokens": null,
+      "estimated_cost_usd": null,
+      "trusted": false,
+      "untrusted_reason": "plan_source_mismatch:codex_cli_vs_claude_code"
     },
     "eval_session": {
       "source_tool": "codex_cli",
@@ -141,7 +138,9 @@
       "input_tokens": 2321625,
       "cached_input_tokens": 2249728,
       "output_tokens": 41899,
-      "estimated_cost_usd": null
+      "estimated_cost_usd": null,
+      "trusted": true,
+      "untrusted_reason": null
     }
   },
   "outcome": {
@@ -153,7 +152,7 @@
     "plan_eval_report_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode/results/PLAN_EVAL_REPORT.html",
     "plan_eval_report_generated": true,
     "plan_eval_report_written_at": "2026-03-09T17:52:12.248215Z",
-    "plan_session_completed_at": "2026-03-09T17:40:21.065Z",
+    "plan_session_completed_at": "2026-03-09T17:52:45.261Z",
     "save_blocked_by_mode": false,
     "artifact_latency_seconds": 0,
     "completion_state": "complete"
