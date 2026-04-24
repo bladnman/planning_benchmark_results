@@ -65,24 +65,24 @@
     "evaluation_duration_seconds": 390
   },
   "snapshot": {
-    "swe_bench_verified": {
-      "value": null,
-      "source_url": null
-    },
     "frontier": {
+      "value": null,
       "note": null,
-      "source": "manual",
-      "value": null
+      "source": "manual"
     },
     "pricing": {
       "source_url": null,
-      "cached_input_usd_per_mtok": null,
       "output_usd_per_mtok": null,
-      "input_usd_per_mtok": null
+      "input_usd_per_mtok": null,
+      "cached_input_usd_per_mtok": null
+    },
+    "swe_bench_verified": {
+      "source_url": null,
+      "value": null
     },
     "context_window_tokens": {
-      "value": null,
-      "source_url": null
+      "source_url": null,
+      "value": null
     }
   },
   "observed": {
