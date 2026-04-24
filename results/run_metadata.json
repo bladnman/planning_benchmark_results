@@ -67,22 +67,22 @@
   "snapshot": {
     "frontier": {
       "value": null,
-      "note": null,
-      "source": "manual"
-    },
-    "pricing": {
-      "source_url": null,
-      "output_usd_per_mtok": null,
-      "input_usd_per_mtok": null,
-      "cached_input_usd_per_mtok": null
-    },
-    "swe_bench_verified": {
-      "source_url": null,
-      "value": null
+      "source": "manual",
+      "note": null
     },
     "context_window_tokens": {
+      "value": null,
+      "source_url": null
+    },
+    "pricing": {
+      "output_usd_per_mtok": null,
       "source_url": null,
-      "value": null
+      "cached_input_usd_per_mtok": null,
+      "input_usd_per_mtok": null
+    },
+    "swe_bench_verified": {
+      "value": null,
+      "source_url": null
     }
   },
   "observed": {
