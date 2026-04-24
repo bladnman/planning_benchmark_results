@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plan Coverage Report</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18202a;
+      --muted: #667080;
+      --line: #d8dee8;
+      --panel: #ffffff;
+      --wash: #f4f7fb;
+      --navy: #17324d;
+      --blue: #2d6cdf;
+      --teal: #1b9aaa;
+      --green: #2f8f5b;
+      --amber: #c17b12;
+      --red: #b94545;
+      --shadow: 0 18px 44px rgba(23, 50, 77, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--wash);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 36px 28px 48px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) 360px;
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .briefing,
+    .score-card,
+    .panel,
+    .risk-table,
+    .timeline {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .briefing {
+      border-radius: 8px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 310px;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 44px;
+      line-height: 1.04;
+      letter-spacing: 0;
+      margin-bottom: 16px;
+      color: var(--navy);
+      max-width: 760px;
+    }
+
+    .lead {
+      color: #3c4654;
+      font-size: 17px;
+      max-width: 780px;
+      margin-bottom: 22px;
+    }
+
+    .headline-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfe;
+    }
+
+    .mini-stat strong {
+      display: block;
+      font-size: 24px;
+      line-height: 1;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .mini-stat span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .score-card {
+      border-radius: 8px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .score-ring {
+      --pct: 92.4%;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: conic-gradient(var(--blue) 0 var(--pct), #e5ebf3 var(--pct) 100%);
+      display: grid;
+      place-items: center;
+      margin-bottom: 20px;
+    }
+
+    .score-ring::before {
+      content: "";
+      width: 158px;
+      height: 158px;
+      border-radius: 50%;
+      background: #fff;
+      position: absolute;
+    }
+
+    .score-value {
+      position: relative;
+      z-index: 1;
+      font-size: 48px;
+      font-weight: 850;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .score-card h2 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: var(--navy);
+    }
+
+    .score-card p {
+      color: var(--muted);
+      margin-bottom: 0;
+      font-size: 14px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .panel {
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    h2 {
+      font-size: 22px;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+
+    h3 {
+      font-size: 15px;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .timeline {
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .step {
+      border-left: 4px solid var(--line);
+      padding: 4px 0 4px 14px;
+      min-height: 128px;
+    }
+
+    .step.active {
+      border-left-color: var(--blue);
+    }
+
+    .step.next {
+      border-left-color: var(--amber);
+    }
+
+    .step .label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      margin-bottom: 8px;
+    }
+
+    .step strong {
+      display: block;
+      font-size: 24px;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .step p {
+      margin-bottom: 0;
+      color: #46515f;
+      font-size: 14px;
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr) 58px;
+      gap: 12px;
+      align-items: center;
+      font-size: 13px;
+      color: #384454;
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      background: #e5ebf3;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--blue));
+      border-radius: inherit;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 750;
+      background: #eef6f0;
+      color: #226842;
+      border: 1px solid #cfe7d8;
+    }
+
+    .badge.warn {
+      background: #fff6e8;
+      color: #8a530a;
+      border-color: #f2d7a7;
+    }
+
+    .badge.danger {
+      background: #fff0f0;
+      color: #9a3333;
+      border-color: #efc7c7;
+    }
+
+    .gap-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .gap {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfe;
+    }
+
+    .gap-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 7px;
+    }
+
+    .gap-code {
+      font-weight: 850;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .gap p {
+      color: #46515f;
+      font-size: 14px;
+      margin-bottom: 0;
+    }
+
+    .risk-table {
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      font-size: 13px;
+    }
+
+    th {
+      background: #eef3fa;
+      color: var(--navy);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .id {
+      font-weight: 850;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .status {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+
+    .status.partial {
+      background: #fff6e8;
+      color: #8a530a;
+      border-color: #f2d7a7;
+    }
+
+    .status.missing {
+      background: #fff0f0;
+      color: #9a3333;
+      border-color: #efc7c7;
+    }
+
+    .severity-critical {
+      color: var(--red);
+      font-weight: 800;
+    }
+
+    .severity-important {
+      color: var(--amber);
+      font-weight: 800;
+    }
+
+    .callout {
+      background: #17324d;
+      color: #fff;
+      border-radius: 8px;
+      padding: 22px 24px;
+      margin-top: 24px;
+    }
+
+    .callout h2 {
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .callout p {
+      color: #dce8f6;
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        padding: 24px 16px 36px;
+      }
+
+      .hero,
+      .section-grid,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .headline-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bar-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      th,
+      td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero" aria-labelledby="title">
+      <div class="briefing">
+        <div>
+          <div class="eyebrow">Planning benchmark coverage</div>
+          <h1 id="title">Strong plan, with precision gaps around data lifecycle and AI discovery fidelity.</h1>
+          <p class="lead">The submitted implementation plan covers 91.5 weighted requirements out of 99. The major architecture and product surfaces are planned; the remaining risk sits in exact semantics, UI placement, and concept quality details.</p>
+        </div>
+        <div class="headline-grid">
+          <div class="mini-stat">
+            <strong>85</strong>
+            <span>full requirements</span>
+          </div>
+          <div class="mini-stat">
+            <strong>13</strong>
+            <span>partial requirements</span>
+          </div>
+          <div class="mini-stat">
+            <strong>1</strong>
+            <span>missing requirement</span>
+          </div>
+        </div>
+      </div>
+      <aside class="score-card" aria-label="Overall score">
+        <div class="score-ring" aria-hidden="true">
+          <div class="score-value">92.4%</div>
+        </div>
+        <h2>Overall Coverage</h2>
+        <p>Score = (85 full + 13 partial x 0.5) / 99</p>
+      </aside>
+    </section>
+
+    <section class="timeline" aria-labelledby="arc-title">
+      <h2 id="arc-title">Before / After Arc</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="label">Before audit</div>
+          <strong>Unscored plan</strong>
+          <p>The plan appeared broad and implementation-ready, but its requirement coverage had not been measured against the canonical 99-item denominator.</p>
+        </div>
+        <div class="step active">
+          <div class="label">After evaluation</div>
+          <strong>92.4% validated</strong>
+          <p>The audit confirms strong coverage, especially in infrastructure, persistence, Ask, AI persona, Person Detail, and export.</p>
+        </div>
+        <div class="step next">
+          <div class="label">Revision status</div>
+          <strong>No revised plan supplied</strong>
+          <p>Coverage remains at 92.4% in this run. Closing 13 partial and 1 missing item would move the next revision toward full readiness.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-grid" aria-label="Score breakdown and strengths">
+      <div class="panel">
+        <h2>Coverage By Severity</h2>
+        <div class="bar-list">
+          <div class="bar-row">
+            <strong>Critical</strong>
+            <div class="bar"><span style="width: 96.7%"></span></div>
+            <span>96.7%</span>
+          </div>
+          <div class="bar-row">
+            <strong>Important</strong>
+            <div class="bar"><span style="width: 90.3%"></span></div>
+            <span>90.3%</span>
+          </div>
+          <div class="bar-row">
+            <strong>Detail</strong>
+            <div class="bar"><span style="width: 100%"></span></div>
+            <span>100%</span>
+          </div>
+        </div>
+        <div class="badge-row" aria-label="Severity totals">
+          <span class="badge">29.0 / 30 critical</span>
+          <span class="badge">60.5 / 67 important</span>
+          <span class="badge">2.0 / 2 detail</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Strong Areas</h2>
+        <p>The plan is most complete where implementation risk is highest: runtime setup, Supabase persistence, namespace/user isolation, server-side source of truth, AI contracts, recommendation resolution, export, and test strategy.</p>
+        <div class="badge-row">
+          <span class="badge">Benchmark Runtime</span>
+          <span class="badge">Navigation Shell</span>
+          <span class="badge">Ask Chat</span>
+          <span class="badge">AI Persona</span>
+          <span class="badge">Person Detail</span>
+          <span class="badge">Settings & Export</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-grid" aria-label="Functional area scores and top gaps">
+      <div class="panel">
+        <h2>Functional Area Readiness</h2>
+        <div class="bar-list">
+          <div class="bar-row"><strong>Benchmark Runtime</strong><div class="bar"><span style="width: 100%"></span></div><span>100%</span></div>
+          <div class="bar-row"><strong>Collection Data</strong><div class="bar"><span style="width: 90%"></span></div><span>90%</span></div>
+          <div class="bar-row"><strong>Navigation Shell</strong><div class="bar"><span style="width: 100%"></span></div><span>100%</span></div>
+          <div class="bar-row"><strong>Home & Search</strong><div class="bar"><span style="width: 88.9%"></span></div><span>88.9%</span></div>
+          <div class="bar-row"><strong>Show Detail UX</strong><div class="bar"><span style="width: 89.3%"></span></div><span>89.3%</span></div>
+          <div class="bar-row"><strong>Ask Chat</strong><div class="bar"><span style="width: 95%"></span></div><span>95%</span></div>
+          <div class="bar-row"><strong>Concept Discovery</strong><div class="bar"><span style="width: 75%"></span></div><span>75%</span></div>
+          <div class="bar-row"><strong>AI Quality</strong><div class="bar"><span style="width: 100%"></span></div><span>100%</span></div>
+          <div class="bar-row"><strong>Person Detail</strong><div class="bar"><span style="width: 100%"></span></div><span>100%</span></div>
+          <div class="bar-row"><strong>Settings & Export</strong><div class="bar"><span style="width: 100%"></span></div><span>100%</span></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Top Gaps</h2>
+        <ul class="gap-list">
+          <li class="gap">
+            <div class="gap-top"><span class="gap-code">PRD-034</span><span class="badge danger">critical</span></div>
+            <h3>Preserve saved libraries across data-model upgrades</h3>
+            <p>Migrations are present, but the plan does not explicitly protect existing saved libraries and My Data during upgrades.</p>
+          </li>
+          <li class="gap">
+            <div class="gap-top"><span class="gap-code">PRD-025</span><span class="badge danger">critical</span></div>
+            <h3>Removal must delete the show and My Data</h3>
+            <p>The plan leaves deletion versus clearing ambiguous, which can create stale rows or inconsistent membership.</p>
+          </li>
+          <li class="gap">
+            <div class="gap-top"><span class="gap-code">PRD-033</span><span class="badge warn">important</span></div>
+            <h3>Merge duplicate library/settings records</h3>
+            <p>Timestamp merges are covered, but duplicate detection and transparent merging are not called out.</p>
+          </li>
+          <li class="gap">
+            <div class="gap-top"><span class="gap-code">PRD-054</span><span class="badge warn">important</span></div>
+            <h3>Status controls belong in the toolbar</h3>
+            <p>Near-the-top placement is not the same as the toolbar behavior required for low-friction saves.</p>
+          </li>
+          <li class="gap">
+            <div class="gap-top"><span class="gap-code">PRD-082</span><span class="badge warn">important</span></div>
+            <h3>Alchemy needs a larger concept pool</h3>
+            <p>Multi-show concepts are planned, but not the larger option pool that makes blended discovery feel rich.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="risk-table" aria-labelledby="risk-title">
+      <table>
+        <caption style="text-align:left; padding:20px 24px 8px; font-size:22px; font-weight:800; color:#17324d;" id="risk-title">Requirements Still At Risk</caption>
+        <thead>
+          <tr>
+            <th>Requirement</th>
+            <th>Severity</th>
+            <th>Coverage</th>
+            <th>What is still lacking</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="id">PRD-025</span> Removing status deletes show and all My Data</td><td class="severity-critical">critical</td><td><span class="status partial">partial</span></td><td>Removal semantics are ambiguous between deleting the row and clearing fields.</td></tr>
+          <tr><td><span class="id">PRD-034</span> Preserve saved libraries across data-model upgrades</td><td class="severity-critical">critical</td><td><span class="status partial">partial</span></td><td>Upgrade migrations are not explicitly required to preserve saved user data.</td></tr>
+          <tr><td><span class="id">PRD-028</span> Use timestamps for sorting, sync, freshness</td><td class="severity-important">important</td><td><span class="status partial">partial</span></td><td>Sorting by modification timestamp is not explicitly planned.</td></tr>
+          <tr><td><span class="id">PRD-033</span> Sync libraries/settings consistently and merge duplicates</td><td class="severity-important">important</td><td><span class="status partial">partial</span></td><td>Duplicate detection and transparent merge behavior are missing.</td></tr>
+          <tr><td><span class="id">PRD-045</span> Render poster, title, and My Data badges</td><td class="severity-important">important</td><td><span class="status partial">partial</span></td><td>Collection Home tile rendering is not explicit enough.</td></tr>
+          <tr><td><span class="id">PRD-050</span> Keep Search non-AI in tone</td><td class="severity-important">important</td><td><span class="status partial">partial</span></td><td>Search is implemented as catalog search, but its non-AI tone is not stated.</td></tr>
+          <tr><td><span class="id">PRD-051</span> Preserve Show Detail narrative section order</td><td class="severity-important">important</td><td><span class="status partial">partial</span></td><td>The planned hierarchy differs from the detail spec's exact section order.</td></tr>
+          <tr><td><span class="id">PRD-054</span> Place status/interest controls in toolbar</td><td class="severity-important">important</td><td><span class="status partial">partial</span></td><td>The controls are near the top, but toolbar placement is not explicit.</td></tr>
+          <tr><td><span class="id">PRD-058</span> Scoop shows correct states and progressive feedback</td><td class="severity-important">important</td><td><span class="status partial">partial</span></td><td>Generation is covered; exact no-scoop, cached, open, and loading states are not.</td></tr>
+          <tr><td><span class="id">PRD-070</span> Summarize older turns while preserving voice</td><td class="severity-important">important</td><td><span class="status partial">partial</span></td><td>Summarization is covered, but persona-preserving summaries are not explicit.</td></tr>
+          <tr><td><span class="id">PRD-077</span> Order concepts by strongest aha and varied axes</td><td class="severity-important">important</td><td><span class="status partial">partial</span></td><td>Varied axes are covered; strongest-aha ordering is not.</td></tr>
+          <tr><td><span class="id">PRD-078</span> Require concept selection and guide ingredient picking</td><td class="severity-important">important</td><td><span class="status partial">partial</span></td><td>Selection is required, but ingredient-picking guidance is absent.</td></tr>
+          <tr><td><span class="id">PRD-082</span> Generate shared multi-show concepts with larger option pool</td><td class="severity-important">important</td><td><span class="status missing">missing</span></td><td>No larger multi-show concept pool is planned.</td></tr>
+          <tr><td><span class="id">PRD-084</span> Deliver surprising but defensible taste-aligned recommendations</td><td class="severity-important">important</td><td><span class="status partial">partial</span></td><td>Taste alignment is covered, but surprise-without-betrayal is not explicit.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="callout" aria-labelledby="recommendation-title">
+      <h2 id="recommendation-title">Readiness Recommendation</h2>
+      <p>Treat the current plan as implementation-ready after one targeted revision pass. The pass should add exact acceptance criteria for data removal, upgrade preservation, duplicate merges, toolbar control placement, Scoop UI states, Ask summary voice, and concept discovery quality.</p>
+    </section>
+  </main>
+</body>
+</html>
