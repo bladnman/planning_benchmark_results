@@ -1,25 +1,25 @@
 window.__DASHBOARD_DATA__ = {
   "schema_version": 2,
-  "generated_at": "2026-04-24T04:58:21.598344Z",
+  "generated_at": "2026-04-28T13:30:13.676957Z",
   "taxonomy_versions": [
     "shows_prd_v1"
   ],
   "summary": {
     "series_count": 14,
     "case_count": 20,
-    "run_count": 20,
+    "run_count": 21,
     "variant_series_count": 6,
-    "multi_run_case_count": 0,
-    "repeat_run_count": 0,
+    "multi_run_case_count": 1,
+    "repeat_run_count": 1,
     "report_ready_series_count": 14,
     "report_ready_case_count": 20,
-    "report_ready_run_count": 20,
+    "report_ready_run_count": 21,
     "comparable_case_count": 20,
-    "comparable_run_count": 20,
-    "catalog_available_run_count": 20,
-    "catalog_matched_run_count": 20,
-    "local_ingested_run_count": 2,
-    "published_preserved_run_count": 18
+    "comparable_run_count": 21,
+    "catalog_available_run_count": 21,
+    "catalog_matched_run_count": 21,
+    "local_ingested_run_count": 1,
+    "published_preserved_run_count": 20
   },
   "series": [
     {
@@ -51216,22 +51216,22 @@ window.__DASHBOARD_DATA__ = {
       "frontier": null,
       "case_count": 2,
       "variant_count": 1,
-      "run_count": 2,
-      "repeat_run_count": 0,
-      "report_generated_count": 2,
+      "run_count": 3,
+      "repeat_run_count": 1,
+      "report_generated_count": 3,
       "report_generated_all": true,
       "baseline_case_id": "sonnet_4_6__claude_code__high__plan_mode",
       "representative_case_id": "sonnet_4_6__claude_code__high__plan_mode",
       "representative_run_id": "sonnet_4_6__claude_code__high__plan_mode",
-      "latest_run_id": "sonnet_4_6__claude_code__high__no_plan_mode",
-      "latest_run_at": "2026-03-09T17:50:02.566437Z",
+      "latest_run_id": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+      "latest_run_at": "2026-04-28T13:17:29.724977Z",
       "score_range": {
         "overall_min": 87.4,
-        "overall_max": 92.42
+        "overall_max": 95.45
       },
       "runtime_range_seconds": {
         "min": 257,
-        "max": 257
+        "max": 53837
       },
       "scores": {
         "critical": 95.0,
@@ -55023,24 +55023,24 @@ window.__DASHBOARD_DATA__ = {
           "series_id": "sonnet_4_6__claude_code__high",
           "case_slug": "no_plan_mode",
           "case_label": "No Planning",
-          "baseline_case": true,
-          "experiment_role": "baseline",
+          "baseline_case": false,
+          "experiment_role": "replicate",
           "inference_profile": "Default",
           "requested_context_window_tokens": null,
           "planning_mode": false,
           "prompt_profile": "Default Step 1",
-          "evaluator_model": "gpt-5.4",
+          "evaluator_model": "gpt-5.5",
           "scenario": {
             "slug": "no_plan_mode",
             "label": "No Planning",
             "description": null,
             "hypothesis": null
           },
-          "planning_runtime_seconds": null,
+          "planning_runtime_seconds": 53837,
           "plan_saved": true,
           "plan_eval_report_generated": true,
           "save_blocked_by_mode": false,
-          "report_generated_count": 1,
+          "report_generated_count": 2,
           "report_generated_all": true,
           "supports_area_comparison": true,
           "taxonomy_version": "shows_prd_v1",
@@ -55061,22 +55061,22 @@ window.__DASHBOARD_DATA__ = {
           "requirement_catalog_version": "requirements_catalog_v1",
           "requirement_catalog_matches": true,
           "requirement_catalog_expected_total_requirements": 99,
-          "run_count": 1,
-          "primary_run_id": "sonnet_4_6__claude_code__high__no_plan_mode",
-          "latest_run_at": "2026-03-09T17:50:02.566437Z",
+          "run_count": 2,
+          "primary_run_id": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+          "latest_run_at": "2026-04-28T13:17:29.724977Z",
           "score_range": {
             "overall_min": 92.42,
-            "overall_max": 92.42
+            "overall_max": 95.45
           },
           "runtime_range_seconds": {
-            "min": null,
-            "max": null
+            "min": 53837,
+            "max": 53837
           },
           "scores": {
             "critical": 100.0,
-            "important": 88.81,
+            "important": 93.28,
             "detail": 100.0,
-            "overall": 92.42
+            "overall": 95.45
           },
           "summary": {
             "functional_area_count": 10,
@@ -55087,8 +55087,8 @@ window.__DASHBOARD_DATA__ = {
               "detail": 2
             },
             "coverage_counts": {
-              "full": 84,
-              "partial": 15,
+              "full": 90,
+              "partial": 9,
               "missing": 0
             }
           },
@@ -55105,21 +55105,21 @@ window.__DASHBOARD_DATA__ = {
             },
             {
               "name": "Collection Data & Persistence",
-              "score": 87.5,
+              "score": 95.0,
               "counts": {
                 "total": 20,
-                "full": 15,
-                "partial": 5,
+                "full": 18,
+                "partial": 2,
                 "missing": 0
               }
             },
             {
               "name": "App Navigation & Discover Shell",
-              "score": 75.0,
+              "score": 100.0,
               "counts": {
                 "total": 4,
-                "full": 2,
-                "partial": 2,
+                "full": 4,
+                "partial": 0,
                 "missing": 0
               }
             },
@@ -55145,11 +55145,11 @@ window.__DASHBOARD_DATA__ = {
             },
             {
               "name": "Ask Chat",
-              "score": 95.0,
+              "score": 90.0,
               "counts": {
                 "total": 10,
-                "full": 9,
-                "partial": 1,
+                "full": 8,
+                "partial": 2,
                 "missing": 0
               }
             },
@@ -55165,11 +55165,11 @@ window.__DASHBOARD_DATA__ = {
             },
             {
               "name": "AI Voice, Persona & Quality",
-              "score": 78.6,
+              "score": 92.9,
               "counts": {
                 "total": 7,
-                "full": 4,
-                "partial": 3,
+                "full": 6,
+                "partial": 1,
                 "missing": 0
               }
             },
@@ -55194,44 +55194,13 @@ window.__DASHBOARD_DATA__ = {
               }
             }
           ],
-          "top_gaps": [
-            {
-              "id": "PRD-033",
-              "severity": "important",
-              "label": "Sync libraries/settings consistently and merge duplicates",
-              "why": "This matters because multi-device users can end up with duplicate shows or divergent settings, which undermines trust in the collection as a durable source of truth."
-            },
-            {
-              "id": "PRD-091",
-              "severity": "important",
-              "label": "Validate discovery with rubric and hard-fail integrity",
-              "why": "This matters because AI outputs can look structurally valid while still drifting off-brand or failing real-show integrity unless the plan defines an explicit quality gate."
-            },
-            {
-              "id": "PRD-084",
-              "severity": "important",
-              "label": "Deliver surprising but defensible taste-aligned recommendations",
-              "why": "This matters because without that bar, Explore Similar and Alchemy can regress into safe, obvious recs and lose the product's main differentiator."
-            },
-            {
-              "id": "PRD-066",
-              "severity": "important",
-              "label": "Answer directly with confident, spoiler-safe recommendations",
-              "why": "This matters because Ask is one of the fastest discovery loops, and a tentative or overly verbose answer weakens perceived AI quality immediately."
-            },
-            {
-              "id": "PRD-039",
-              "severity": "important",
-              "label": "Keep Find/Discover in persistent primary navigation",
-              "why": "This matters because the app's core Search, Ask, and Alchemy surfaces become harder to reach repeatedly if the primary entry point is not explicitly persistent."
-            }
-          ],
+          "top_gaps": [],
           "narrative": {
-            "overall_posture": "This is a strong implementation plan with solid architectural coverage and well-specified core user flows. The remaining gaps are not foundational backend misses; they are mostly product-behavior contracts around navigation persistence, discovery quality bars, and a few persistence nuances that would affect polish, consistency, and parity with the PRD's intended feel.",
-            "strength_clusters": "The plan is strongest in Benchmark Runtime & Isolation, Collection Data & Persistence core mechanics, Show Detail & Relationship UX, Person Detail, and Settings & Export. It is especially concrete on namespace/user isolation, migration artifacts, auto-save rules, Scoop persistence, AI response contracts, detail-page sectioning, and export behavior.",
-            "weakness_clusters": "The partials cluster in three patterns. First, the Discover shell is structurally present but underspecified at the primary-navigation level. Second, AI quality requirements are planned as features and contracts, but not yet as acceptance bars: Ask directness, concept philosophy, recommendation surprise, and discovery QA are all lighter than the PRD. Third, persistence edge cases around sync duplicates, provider-data storage scope, and session-only Alchemy behavior are less explicit than the rest of the data model.",
-            "risk_assessment": "If this plan were executed as-is, the app would likely work end to end, but QA and stakeholders would notice that some of the product's differentiating behavior feels flatter or less intentional than the PRD describes. The first noticeable issues would be discovery quality drift, such as Ask answers that are conversational but not punchy enough, concept/recommendation flows that are aligned but not especially surprising, and AI behavior that lacks a clear pass/fail rubric. Secondary issues would show up in shell/navigation consistency and sync edge cases rather than in the main CRUD flows.",
-            "remediation_guidance": "The remaining work is mostly a specification pass, not an architectural rewrite. Tighten the plan with explicit acceptance criteria for persistent Find/Settings navigation, session lifecycle rules for Alchemy, free-form tag-library behavior, provider IDs-only persistence, sync duplicate handling, and the AI quality bar across Ask, Concepts, and recommendation surfaces. In practice, this means adding a thin layer of UX contract language and QA gates on top of an otherwise strong implementation plan."
+            "overall_posture": "This is a strong implementation plan with no critical misses. It covers the mandated Next.js/Supabase architecture, namespace/user isolation, schema shape, save semantics, detail and discovery flows, AI contracts, settings, export, and major testing concerns. The remaining issues are not structural blockers, but they are meaningful because they sit around polish-sensitive product contracts: sync integrity, detail-page storytelling, and AI quality assurance.",
+            "strength_clusters": "The plan is strongest in Benchmark Runtime & Isolation, Collection Data & Persistence, App Navigation & Discover Shell, Collection Home & Search, Person Detail, and Settings & Export. The infra rider is especially well covered: environment config, server-only secrets, Supabase persistence, namespace isolation, `user_id`, reset scripts, migrations, and no-Docker compatibility all have concrete implementation details. Core collection behavior is also well represented, including auto-save defaults, removal semantics, overlay rules, AI recommendation resolution, and data export.",
+            "weakness_clusters": "The partial items cluster around quality contracts rather than raw feature presence. The plan often names the correct component or API route, but misses the stricter acceptance language behind a few requirements: timestamp-based sorting, duplicate merge policy, exact detail-page narrative order, Ask directness, concept output shape, surprise-but-defensible recommendation quality, and rubric-based AI validation. These are the kinds of gaps that show up in QA and product review after the app technically works.",
+            "risk_assessment": "If executed as-is, the most likely failure mode is a product that is functionally complete but uneven in trust and taste. Users would probably see the app save, search, chat, recommend, and export correctly, but stakeholders may notice that discovery quality is not systematically validated, Ask can be charming without answering fast enough, and the detail page may feel busier or less intentional than the spec's narrative hierarchy. Cross-device users may also expose sync and duplicate handling gaps before single-user benchmark testing does.",
+            "remediation_guidance": "The remaining work is mostly specification tightening. Add explicit timestamp sorting behavior, duplicate merge rules, and settings conflict resolution. Restore or deliberately justify the detail-page narrative order against the supporting spec. Convert the AI quality bar into prompt contracts, acceptance criteria, and tests/golden scenarios, including Ask directness, concept formatting, surprise-without-betrayal, and rubric hard-fail handling for real-show integrity. These changes do not require a new architecture; they require sharper behavioral acceptance criteria inside the existing plan."
           },
           "requirements": [
             {
@@ -55241,7 +55210,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`Overview`; \"built on Next.js (latest stable)\"",
+              "evidence": "Technology Stack: \"Next.js (latest stable)\"; Phase 1.1 initializes Next.js App Router",
               "gap": null
             },
             {
@@ -55251,7 +55220,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 1.1 Repository Setup`; \"Install and configure Supabase client libraries\"",
+              "evidence": "Technology Stack: \"Supabase (hosted)\"; Phase 1.4 Supabase Client Setup",
               "gap": null
             },
             {
@@ -55261,7 +55230,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 3.1 Environment variable interface",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 1.1 Repository Setup` and `### 7.1 .env.example`",
+              "evidence": "Phase 1.2 Environment Variables lists `.env.example` with required vars and comments",
               "gap": null
             },
             {
@@ -55271,7 +55240,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 3.1 Environment variable interface",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 1.1 Repository Setup`; \".gitignore that excludes all .env* files except .env.example\"",
+              "evidence": "Phase 1.2 `.gitignore` additions exclude `.env`, `.env.local`, `.env.*.local`",
               "gap": null
             },
             {
@@ -55281,7 +55250,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 3.1 Environment variable interface",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 1.2 Environment Configuration`; \"The build MUST run by filling in .env\"",
+              "evidence": "Phase 1.2 env variables cover Supabase, namespace, catalog, AI, and app config",
               "gap": null
             },
             {
@@ -55291,7 +55260,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 3.1 Environment variable interface",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 1.1 Repository Setup`; \"server-only, never sent to client\"",
+              "evidence": "Phase 1.4 server client uses service role server-only; checklist says AI key never committed",
               "gap": null
             },
             {
@@ -55301,7 +55270,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 3.2 One-command developer experience",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 7.2 NPM Scripts`",
+              "evidence": "Phase 1.3 npm scripts includes `dev`, `test`, and `test:reset`",
               "gap": null
             },
             {
@@ -55311,7 +55280,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 3.3 Database evolution artifacts",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`Phase 2: Database Schema & Migrations` and `### 7.3 Database Migration Strategy`",
+              "evidence": "Phase 2 Migration Files and Phase 13.2 forward-only `supabase/migrations/`",
               "gap": null
             },
             {
@@ -55321,7 +55290,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 4.1 Build/run namespace (required)",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 1.3 Identity & Isolation Model`; \"Set once per build/run. Immutable during runtime.\"",
+              "evidence": "Architectural Decision 2: `namespace_id` stable per build/run via `NAMESPACE_ID`",
               "gap": null
             },
             {
@@ -55331,7 +55300,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 4.1 Build/run namespace (required)",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 2.4 Namespace Reset Script`; namespace-scoped deletes for `shows` and `cloud_settings`",
+              "evidence": "Identity model uses namespace predicates; Phase 15.2 reset deletes by namespace only",
               "gap": null
             },
             {
@@ -55341,7 +55310,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 4.2 User identity (required)",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 1.3 Identity & Isolation Model` and `### 2.1 shows Table`; `user_id` on persisted tables",
+              "evidence": "Shows, cloud_settings, and app_metadata tables include `user_id`; all queries use partition",
               "gap": null
             },
             {
@@ -55351,7 +55320,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 4.3 Relationship between namespace and user",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 1.3 Identity & Isolation Model`; \"effective data partition is always `(namespace_id, user_id)`\"",
+              "evidence": "Architectural Decision 2: all Supabase queries include `namespace_id` and `user_id`",
               "gap": null
             },
             {
@@ -55361,7 +55330,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 5.1 Auth is not required to be \"real\" in benchmark mode",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 1.3 Identity & Isolation Model` and `### 4.4 Authentication Middleware`",
+              "evidence": "Phase 3.2 accepts `X-User-Id` only in development/test and validates real auth in production",
               "gap": null
             },
             {
@@ -55371,7 +55340,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 5.2 Migration to real OAuth must be straightforward",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 7.5 Migration Path to Real OAuth`; \"No schema changes needed\"",
+              "evidence": "Phase 3.3 maps OAuth user id into existing `user_id` with no schema changes",
               "gap": null
             },
             {
@@ -55381,7 +55350,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 6.1 Source of truth",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 2.5 Local Settings & UI State`; \"user data lives in Supabase\"",
+              "evidence": "Architectural Decision 3: all user-owned data lives in Supabase",
               "gap": null
             },
             {
@@ -55391,7 +55360,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 6.2 Cache is disposable",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 2.5 Local Settings & UI State`; \"These are disposable; clearing them is safe\"",
+              "evidence": "Architectural Decision 3: clearing client cache never loses data",
               "gap": null
             },
             {
@@ -55401,7 +55370,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 7.4 Cloud Agent Compatibility`; \"No Docker required to run\"",
+              "evidence": "Technology Stack: Docker explicitly not required; hosted Supabase path",
               "gap": null
             },
             {
@@ -55411,7 +55380,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 4.1 Show (Movie or TV)",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### Display Rule: User's Version Takes Precedence`",
+              "evidence": "Phase 14.1 applies overlay in lists, search, AI recommendations, and person filmography",
               "gap": null
             },
             {
@@ -55421,7 +55390,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 4.2 Status System (\"My Status\")",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 2.1 shows Table`; `my_status` includes `\"next\"` while `### 6.4 Show Detail` only surfaces the visible chips",
+              "evidence": "Migration enum includes `next`; UI chips expose Active, Interested, Excited, Done, Wait, Quit",
               "gap": null
             },
             {
@@ -55431,7 +55400,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 4.2 Status System (\"My Status\")",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 3.2 Collection Business Logic` and `### 6.4 Show Detail`",
+              "evidence": "Phase 8.1 Status Toolbar maps Interested/Excited to `later` plus `myInterest`",
               "gap": null
             },
             {
@@ -55440,9 +55409,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Support free-form multi-tag personal tag library",
               "source": "product_prd.md > 4.4 Tags (User Lists)",
               "severity": "important",
-              "coverage": "partial",
-              "evidence": "`### 2.1 shows Table`; `my_tags text[]` and `### 6.4 Show Detail`; \"My Tags display + tag picker\"",
-              "gap": "Multi-tag support is planned, but free-form creation semantics and explicit tag-library behavior are not spelled out."
+              "coverage": "full",
+              "evidence": "`my_tags` array, TagPicker, and Filter Panel \"one entry per distinct tag\"",
+              "gap": null
             },
             {
               "id": "PRD-022",
@@ -55451,7 +55420,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 5.1 Collection Membership",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 3.2 Collection Business Logic` and `### 5.2 AI Scoop`; collection persistence is keyed off `my_status` being present",
+              "evidence": "CRUD and status removal model make persisted collection entries status-owned; DELETE removes item",
               "gap": null
             },
             {
@@ -55461,7 +55430,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 5.2 Saving Triggers",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 3.2 Collection Business Logic`; auto-save trigger table",
+              "evidence": "Phase 5.2 Auto-Save Rules covers rating, tag, and status/interest updates",
               "gap": null
             },
             {
@@ -55471,7 +55440,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 5.3 Default Values When Saving",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 3.2 Collection Business Logic`; default values block",
+              "evidence": "Phase 5.3 Default Values states Later/Interested, with rating exception Done",
               "gap": null
             },
             {
@@ -55481,7 +55450,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 5.4 Removing from Collection",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 3.2 Collection Business Logic`; \"clear show + all My Data\"",
+              "evidence": "Phase 14.2 StatusRemovalModal executes DELETE that clears all My Data server-side",
               "gap": null
             },
             {
@@ -55491,7 +55460,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 5.5 Re-adding the Same Show",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 3.2 Collection Business Logic`; \"Merge preserves latest My Data... + refreshes public metadata\"",
+              "evidence": "Phase 4.3 `mergeCatalogShow` preserves user fields and Phase 5.1 upsert merges fresh catalog data",
               "gap": null
             },
             {
@@ -55501,7 +55470,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 5.6 Timestamps",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 3.2 Collection Business Logic`; every My Data field updates its `*UpdateDate`",
+              "evidence": "Migration fields and Phase 5.4 set `*_update_date` for each PATCH route",
               "gap": null
             },
             {
@@ -55511,8 +55480,8 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 5.6 Timestamps",
               "severity": "important",
               "coverage": "partial",
-              "evidence": "`### 3.1 External Catalog Integration` and `### 3.2 Collection Business Logic`",
-              "gap": "The plan uses timestamps for merge conflict resolution and Scoop freshness, but it does not specify any sorting behavior driven by those timestamps."
+              "evidence": "Phase 4.3 uses timestamps for merge conflicts; Phase 8.2 uses `aiScoopUpdateDate` for 4h freshness",
+              "gap": "The plan does not specify timestamp-based sorting behavior for collection views or recent-update ordering."
             },
             {
               "id": "PRD-029",
@@ -55521,7 +55490,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 4.9 AI Scoop (\"The Scoop\")",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 5.2 AI Scoop`; freshness and persistence rules",
+              "evidence": "Phase 8.2 persists scoop only if in collection and regenerates after 4 hours",
               "gap": null
             },
             {
@@ -55530,9 +55499,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Keep Ask and Alchemy state session-only",
               "source": "product_prd.md > 5.7 AI Data Persistence",
               "severity": "important",
-              "coverage": "partial",
-              "evidence": "`### 5.1 Ask`; \"Session context is in-memory only\" and `### 6.3 Find/Discover Hub`; local React state for chat",
-              "gap": "Ask is explicitly session-only, but Alchemy is described as local UI state rather than explicitly non-persisted state cleared on leave/reset."
+              "coverage": "full",
+              "evidence": "Ask reset clears session; Alchemy changing inputs clears concepts/results with no persistence tables",
+              "gap": null
             },
             {
               "id": "PRD-031",
@@ -55541,7 +55510,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 5.8 AI Recommendations Map to Real Shows",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 5.7 AI Recommendation Resolution (Shared)`",
+              "evidence": "Phase 14.3 resolves by external ID and renders found items as tappable ShowTiles",
               "gap": null
             },
             {
@@ -55551,7 +55520,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 5.9 Tile Indicators",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.2 Collection Home` and `### Tile Indicators`",
+              "evidence": "Phase 7.2 Show Tile has in-collection and user rating badges",
               "gap": null
             },
             {
@@ -55561,8 +55530,8 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 5.10 Data Sync & Integrity",
               "severity": "important",
               "coverage": "partial",
-              "evidence": "`### 2.2 cloud_settings Table`; `version` for conflict resolution and `### 3.1 External Catalog Integration`; timestamp merge rules",
-              "gap": "The plan covers conflict resolution primitives, but it does not describe duplicate detection and transparent duplicate merging for synced libraries."
+              "evidence": "Supabase is source of truth; cloud_settings exists; merge logic uses timestamps for stored shows",
+              "gap": "Duplicate detection/transparent merge and explicit cross-device settings conflict policy are not planned."
             },
             {
               "id": "PRD-034",
@@ -55571,7 +55540,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 5.11 Data Continuity Across Versions",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### Data Continuity`; migration scripts preserve existing `my*` fields with data migrations when needed",
+              "evidence": "Phase 13 migration tracking uses additive, idempotent migrations and backfills",
               "gap": null
             },
             {
@@ -55581,7 +55550,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/technical_docs/storage-schema.md > Other persistent storage (key-value settings)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 2.2 cloud_settings Table` and `### 2.5 Local Settings & UI State`",
+              "evidence": "Phase 2.2 local settings and UI state; Phase 12.2 cloud_settings for user/API/model settings",
               "gap": null
             },
             {
@@ -55590,9 +55559,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Keep provider IDs persisted and detail fetches transient",
               "source": "supporting_docs/technical_docs/storage-schema.md > Show (movie or TV series)",
               "severity": "important",
-              "coverage": "partial",
-              "evidence": "`### 2.1 shows Table`; `provider_data jsonb` and `### 3.1 External Catalog Integration`; transient detail fetch list",
-              "gap": "The plan persists provider data and keeps detail fetches transient, but it never constrains persisted provider storage to provider IDs only."
+              "coverage": "full",
+              "evidence": "Migration stores `provider_data`; Phase 4.2 marks credits/seasons/videos/recs/similar/images transient",
+              "gap": null
             },
             {
               "id": "PRD-037",
@@ -55601,7 +55570,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/technical_docs/storage-schema.md > Merge / overwrite policy (important)",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 3.1 External Catalog Integration`; `selectFirstNonEmpty`, timestamp merge, and `details_update_date = now()`",
+              "evidence": "Phase 4.3 `mergeCatalogShow` uses `selectFirstNonEmpty`, timestamp user fields, `detailsUpdateDate`",
               "gap": null
             },
             {
@@ -55611,7 +55580,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 6. App Structure & Navigation",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.1 Application Layout`; filter panel plus routed main destinations",
+              "evidence": "Phase 6.2 Filter Panel plus routes for home, detail, find, person, and settings",
               "gap": null
             },
             {
@@ -55620,9 +55589,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Keep Find/Discover in persistent primary navigation",
               "source": "product_prd.md > 6. App Structure & Navigation",
               "severity": "important",
-              "coverage": "partial",
-              "evidence": "`### 6.1 Application Layout`; route `/find` is defined",
-              "gap": "The plan defines the destination, but it does not specify a persistent primary-navigation affordance for Find/Discover."
+              "coverage": "full",
+              "evidence": "Phase 6.3 Primary Navigation includes Find/Discover",
+              "gap": null
             },
             {
               "id": "PRD-040",
@@ -55630,9 +55599,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Keep Settings in persistent primary navigation",
               "source": "product_prd.md > 6. App Structure & Navigation",
               "severity": "important",
-              "coverage": "partial",
-              "evidence": "`### 6.1 Application Layout`; route `/settings` is defined",
-              "gap": "The plan defines the destination, but it does not specify a persistent primary-navigation affordance for Settings."
+              "coverage": "full",
+              "evidence": "Phase 6.3 Primary Navigation includes Settings",
+              "gap": null
             },
             {
               "id": "PRD-041",
@@ -55641,7 +55610,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 6. App Structure & Navigation",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.3 Find/Discover Hub`; mode switcher with Search, Ask, and Alchemy",
+              "evidence": "Phase 9.1 FindHub has Search, Ask, and Alchemy tabs",
               "gap": null
             },
             {
@@ -55651,7 +55620,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.1 Collection Home",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.2 Collection Home`; \"Shows matching current filter\"",
+              "evidence": "Phase 7.1 filter parameter reduces the show pool before grouping",
               "gap": null
             },
             {
@@ -55661,7 +55630,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.1 Collection Home",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.2 Collection Home`; grouped status sections in the required order",
+              "evidence": "Phase 7.1 Status Grouping lists Active, Excited, Interested, Other",
               "gap": null
             },
             {
@@ -55671,7 +55640,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 4.5 Filters (Ways to View the Collection)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 3.3 Filter & Grouping Logic`",
+              "evidence": "Phase 6.2 Filter Panel includes All, tags, genre, decade, community score, and media type",
               "gap": null
             },
             {
@@ -55681,7 +55650,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.1 Collection Home",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.2 Collection Home`; poster, title, in-collection badge, rating badge",
+              "evidence": "Phase 7.2 Show Tile includes poster image, title, collection badge, and rating badge",
               "gap": null
             },
             {
@@ -55691,7 +55660,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.1 Collection Home",
               "severity": "detail",
               "coverage": "full",
-              "evidence": "`### 6.2 Collection Home`; empty states for no library and no filter results",
+              "evidence": "Phase 7.3 Empty States covers no collection and no filtered results",
               "gap": null
             },
             {
@@ -55701,7 +55670,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 4.2 Catalog API` and `### 6.3 Search Mode`; search by `q` and \"Text input, live queries\"",
+              "evidence": "Phase 9.2 Search Mode text input calls catalog search query endpoint",
               "gap": null
             },
             {
@@ -55711,7 +55680,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.3 Search Mode`; poster grid and in-collection badge",
+              "evidence": "Phase 9.2 Search results are poster grid with in-collection indicator",
               "gap": null
             },
             {
@@ -55721,7 +55690,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
               "severity": "detail",
               "coverage": "full",
-              "evidence": "`### 6.3 Search Mode`; \"Can be auto-opened on launch (`autoSearch` setting)\"",
+              "evidence": "Phase 9.2 auto-opens/focuses Search when `autoSearch = true`",
               "gap": null
             },
             {
@@ -55731,7 +55700,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/ai_voice_personality.md > 1. Persona Summary",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### AI Voice Consistency`; \"Search has no AI voice\"",
+              "evidence": "Phase 9.2 Search is a catalog text input/grid, separate from AI routes",
               "gap": null
             },
             {
@@ -55740,9 +55709,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Preserve Show Detail narrative section order",
               "source": "supporting_docs/detail_page_experience.md > 3. Narrative Hierarchy (Section Intent)",
               "severity": "important",
-              "coverage": "full",
-              "evidence": "`### 6.4 Show Detail`; \"Section order per spec\"",
-              "gap": null
+              "coverage": "partial",
+              "evidence": "Phase 8 says it follows the narrative hierarchy and lists all sections",
+              "gap": "The listed order inserts status/rating before tags and overview, so it does not preserve the exact detail-page narrative order from the spec."
             },
             {
               "id": "PRD-052",
@@ -55751,7 +55720,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 3.1 Header Media",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.4 Show Detail`; trailer video plus poster/logo fallback",
+              "evidence": "Phase 8.1 Header Media Carousel uses backdrops/posters/logos/trailers with poster fallback",
               "gap": null
             },
             {
@@ -55761,7 +55730,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 3.2 Core Facts + Community Score",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.4 Show Detail`; core facts + community score in section 2",
+              "evidence": "Phase 8.1 Core Facts Row includes year, runtime/seasons/episodes, and score bar",
               "gap": null
             },
             {
@@ -55771,7 +55740,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.4 Show Detail`; \"Toolbar controls (sticky/prominent, not in scroll body)\"",
+              "evidence": "Phase 8.1 Status/Interest Toolbar is near top and not in scroll body",
               "gap": null
             },
             {
@@ -55781,7 +55750,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 3.2 Collection Business Logic` and `### 6.4 Show Detail`",
+              "evidence": "Phase 5.2 tag update auto-saves as `later` plus `interested`",
               "gap": null
             },
             {
@@ -55791,7 +55760,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 3.2 Collection Business Logic` and `### 6.4 Show Detail`",
+              "evidence": "Phase 5.2 rating update auto-saves as `done`",
               "gap": null
             },
             {
@@ -55801,7 +55770,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 2. First-15-Seconds Experience",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.4 Show Detail`; overview appears immediately after the relationship controls",
+              "evidence": "Phase 8.1 places Overview before AI discovery, providers, cast, seasons, and financials",
               "gap": null
             },
             {
@@ -55811,7 +55780,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 3.4 Overview + Scoop",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.2 AI Scoop` and `### 6.4 Show Detail`; copy states plus \"Generating...\" feedback",
+              "evidence": "Phase 8.2 defines no_scoop, cached_scoop, open, streaming, and Generating state",
               "gap": null
             },
             {
@@ -55821,7 +55790,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 3.5 Ask About This Show",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.1 Ask`; Ask About This Show variant and `### 6.4 Show Detail` CTA",
+              "evidence": "Phase 8.1 CTA navigates with `showId`; Phase 9.3 fetches show data and seeds context",
               "gap": null
             },
             {
@@ -55831,7 +55800,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 3.6 Traditional Recommendations Strand",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.4 Show Detail`; traditional recommendations strand",
+              "evidence": "Phase 8.1 includes Traditional Recommendations Strand",
               "gap": null
             },
             {
@@ -55841,7 +55810,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 3.7 Explore Similar (Concept Discovery)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.4 Show Detail`; \"Get Concepts\" -> select -> \"Explore Shows\"",
+              "evidence": "Phase 8.3 starts with Get Concepts, then select concepts, then Explore Shows",
               "gap": null
             },
             {
@@ -55851,7 +55820,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 3.8 Streaming Availability",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.4 Show Detail`; streaming availability and cast/crew links to `/person/[id]`",
+              "evidence": "Phase 8.1 includes Streaming Availability and Cast/Crew strands linking to Person Detail",
               "gap": null
             },
             {
@@ -55861,7 +55830,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/detail_page_experience.md > 5. Critical States",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.4 Show Detail`; \"Seasons (TV only)\" and \"Budget / Revenue (movies)\"",
+              "evidence": "Phase 8.1 includes Seasons Panel TV only and Budget vs Revenue for movies",
               "gap": null
             },
             {
@@ -55870,9 +55839,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Keep primary actions early and page not overwhelming",
               "source": "supporting_docs/detail_page_experience.md > 4. Busyness vs Power",
               "severity": "important",
-              "coverage": "partial",
-              "evidence": "`### 6.4 Show Detail`; sticky toolbar plus Scoop, Ask, and Explore Similar placed high on the page",
-              "gap": "The section order front-loads actions, but the plan never explicitly addresses clutter control or the \"powerful but not overwhelming\" design constraint."
+              "coverage": "full",
+              "evidence": "Phase 8.1 clusters status, rating, tags, scoop, Ask, and Explore before long-tail info",
+              "gap": null
             },
             {
               "id": "PRD-065",
@@ -55881,7 +55850,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.1 Ask (Chat)` and `### 6.3 Ask Mode`",
+              "evidence": "Phase 9.3 Ask Mode provides chat UI with user typing and streaming assistant turns",
               "gap": null
             },
             {
@@ -55891,8 +55860,8 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/discovery_quality_bar.md > 2.2 Ask / Explore Search Chat",
               "severity": "important",
               "coverage": "partial",
-              "evidence": "`### 5.1 Ask (Chat)`; \"fun, chatty, spoiler-safe, opinionated friend\"",
-              "gap": "The plan covers persona and spoiler safety, but it does not explicitly require direct answers in the first lines or confident recommendation formatting."
+              "evidence": "Phase 10.5 shared persona includes spoiler-safe and opinionated honesty; Ask prompt picks favorites confidently",
+              "gap": "The plan does not encode the direct-answer-within-first-lines acceptance bar for Ask responses."
             },
             {
               "id": "PRD-067",
@@ -55901,7 +55870,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.1 Ask`; \"Mentioned Shows\" strip and `### 6.3 Ask Mode`",
+              "evidence": "Phase 9.3 `MentionedShowsStrip` updates as shows are parsed",
               "gap": null
             },
             {
@@ -55910,9 +55879,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Open Detail from mentions or Search fallback",
               "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
               "severity": "important",
-              "coverage": "full",
-              "evidence": "`### 5.1 Ask` and `### 6.3 Ask Mode`; detail open or Search handoff if unresolved",
-              "gap": null
+              "coverage": "partial",
+              "evidence": "Phase 9.3 parses mentioned shows and falls back to commentary plus Search handoff on failure",
+              "gap": "The plan does not explicitly specify tapping a mentioned-show strip item opens Show Detail when resolution succeeds."
             },
             {
               "id": "PRD-069",
@@ -55921,7 +55890,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.1 Ask`; six random starter prompts with refresh",
+              "evidence": "Phase 9.3 welcome view has six random starter prompts and Refresh",
               "gap": null
             },
             {
@@ -55931,7 +55900,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/ai_prompting_context.md > 4. Conversation Summarization (Chat Surfaces)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.1 Ask`; \"summarize oldest N turns into 1-2 sentences using same AI persona/tone\"",
+              "evidence": "Phase 10.2 summarization endpoint condenses older turns into same persona",
               "gap": null
             },
             {
@@ -55941,7 +55910,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.1 Ask About This Show variant`",
+              "evidence": "Phase 9.3 `Ask About a Show` fetches show data and seeds system context",
               "gap": null
             },
             {
@@ -55951,7 +55920,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/ai_prompting_context.md > 3.2 Ask with Mentions (Structured \"Mentioned Shows\")",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 5.1 Ask`; output `{ commentary, showList }` and exact `Title::externalId::mediaType` format",
+              "evidence": "Phase 9.3 structured output uses `commentary` and exact `Title::externalId::mediaType;;...` format",
               "gap": null
             },
             {
@@ -55961,7 +55930,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/ai_prompting_context.md > 5. Guardrails & Fallbacks",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.1 Ask`; failure handling block",
+              "evidence": "Phase 9.3 invalid format retries once, then falls back to commentary plus Search handoff",
               "gap": null
             },
             {
@@ -55971,7 +55940,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/ai_prompting_context.md > 1. Shared Rules (All AI Surfaces)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.1 Ask`; \"Domain restriction: TV/movies only\"",
+              "evidence": "Phase 10.5 shared prompt rules include TV/movie domain restriction",
               "gap": null
             },
             {
@@ -55981,8 +55950,8 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/concept_system.md > 1. What a Concept Is (User Definition)",
               "severity": "important",
               "coverage": "partial",
-              "evidence": "`### 5.3 Concepts (Single Show)`; diverse axes like structure, tone, emotion, and craft",
-              "gap": "The plan covers concept quality, but it never explicitly frames concepts as taste ingredients rather than genre labels."
+              "evidence": "Phase 10.3 requires evocative concepts, varied axes, and no generic placeholders",
+              "gap": "The plan does not explicitly state that concepts are taste ingredients rather than genre labels or plot categories."
             },
             {
               "id": "PRD-076",
@@ -55990,9 +55959,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Return bullet-only, 1-3 word, non-generic concepts",
               "source": "supporting_docs/ai_prompting_context.md > 3.4 Concepts (Single-Show and Multi-Show)",
               "severity": "important",
-              "coverage": "full",
-              "evidence": "`### 5.3 Concepts (Single Show)`; bullet list only, 1-3 words, non-generic",
-              "gap": null
+              "coverage": "partial",
+              "evidence": "Phase 10.3 returns 1-3 word evocative concepts with no generic placeholders",
+              "gap": "The concept API output is specified as JSON string arrays, but the prompt/output contract does not preserve the bullet-only requirement."
             },
             {
               "id": "PRD-077",
@@ -56001,7 +55970,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/concept_system.md > 4. Generation Rules",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.3 Concepts (Single Show)`; \"Ordered by aha strength\" and diverse axes",
+              "evidence": "Phase 10.3 concepts are ordered by strength and varied across axes",
               "gap": null
             },
             {
@@ -56010,9 +55979,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Require concept selection and guide ingredient picking",
               "source": "supporting_docs/concept_system.md > 5. Selection UX Rules",
               "severity": "important",
-              "coverage": "partial",
-              "evidence": "`### 5.3 Concepts (Single Show)` and `### 6.4 Show Detail`; concept selection is required before exploring",
-              "gap": "The interaction flow is covered, but the UI guidance to help users \"pick the ingredients you want more of\" is missing."
+              "coverage": "full",
+              "evidence": "Phase 8.3 requires selecting 1+ concepts; Phase 8.1/8.3 use concept chips before recommendations",
+              "gap": null
             },
             {
               "id": "PRD-079",
@@ -56021,7 +55990,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/concept_system.md > 6. Concepts \u2192 Recommendations Contract",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.5 Explore Similar`; \"Output: 5 show recommendations\"",
+              "evidence": "Phase 8.3 returns five show objects; Phase 10.4 counts are five for explore",
               "gap": null
             },
             {
@@ -56031,7 +56000,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.4 Alchemy (Find \u2192 Alchemy)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.6 Alchemy`; chaining via \"More Alchemy!\"",
+              "evidence": "Phase 9.4 covers select shows, conceptualize, alchemize, and More Alchemy chaining",
               "gap": null
             },
             {
@@ -56041,7 +56010,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.4 Alchemy (Find \u2192 Alchemy)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.6 Alchemy`; changing input shows or concepts clears downstream results",
+              "evidence": "Phase 9.4 says changing selected shows or concepts clears downstream results",
               "gap": null
             },
             {
@@ -56051,7 +56020,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/concept_system.md > 8. Notes",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.4 Concepts (Multi-Show / Alchemy)`; larger pool representing shared commonality",
+              "evidence": "Phase 9.4 and Phase 10.3 use multi-show concepts with 8+ options",
               "gap": null
             },
             {
@@ -56061,7 +56030,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/concept_system.md > 6. Concepts \u2192 Recommendations Contract",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.5 Explore Similar`; reason cites selected concepts",
+              "evidence": "Phase 10.4 recommendation output includes reason; Phase 9.4 reasons reference selected concepts",
               "gap": null
             },
             {
@@ -56071,8 +56040,8 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/discovery_quality_bar.md > 1.2 Taste Alignment",
               "severity": "important",
               "coverage": "partial",
-              "evidence": "`### 5.5 Explore Similar`; concept-cited reasons and `### AI Voice Consistency`; taste-aware recommendations",
-              "gap": "The plan covers alignment and explanation, but it does not set the \"surprising but defensible\" recommendation bar that differentiates discovery quality."
+              "evidence": "Phase 10.4 grounds recommendations in concepts, source shows, and user library with reasons",
+              "gap": "The plan lacks an explicit quality bar for pleasantly unexpected but defensible recommendations."
             },
             {
               "id": "PRD-085",
@@ -56081,7 +56050,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/ai_voice_personality.md > 1. Persona Summary",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### AI Voice Consistency`; \"All AI surfaces use the same base persona\"",
+              "evidence": "Phase 10.5 imports one shared persona header from `base.ts` for every surface",
               "gap": null
             },
             {
@@ -56091,7 +56060,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/ai_prompting_context.md > 1. Shared Rules (All AI Surfaces)",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### Spoiler Safety` and `### 5.1 Ask`; shared spoiler-safety and TV/movie-domain guardrails",
+              "evidence": "Phase 10.5 shared rules cover spoiler safety, honesty, and TV/movie restriction",
               "gap": null
             },
             {
@@ -56100,9 +56069,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Make AI warm, joyful, and light in critique",
               "source": "supporting_docs/ai_voice_personality.md > 2. Non-Negotiable Voice Pillars",
               "severity": "important",
-              "coverage": "partial",
-              "evidence": "`### 5.1 Ask`; \"fun, chatty\" persona and `### AI Voice Consistency`; surface adaptations",
-              "gap": "The plan names a shared persona, but it does not explicitly lock in the warm, joy-forward, light-critique behavior described in the spec."
+              "coverage": "full",
+              "evidence": "Phase 10.5 uses a \"fun, chatty TV/movie nerd friend\" persona and opinionated honesty",
+              "gap": null
             },
             {
               "id": "PRD-088",
@@ -56111,7 +56080,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/ai_voice_personality.md > 4.1 Scoop (Show Detail \"The Scoop\")",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.2 AI Scoop`; personal take, stack-up, Scoop centerpiece, fit, and verdict",
+              "evidence": "Phase 10.1 Scoop includes personal take, stack-up, centerpiece, fit/warnings, and verdict",
               "gap": null
             },
             {
@@ -56120,9 +56089,9 @@ window.__DASHBOARD_DATA__ = {
               "label": "Keep Ask brisk and dialogue-like by default",
               "source": "supporting_docs/ai_voice_personality.md > 4.2 Ask (Find \u2192 Ask)",
               "severity": "important",
-              "coverage": "partial",
-              "evidence": "`### 5.1 Ask`; conversational chat contract",
-              "gap": "Conversational behavior is covered, but the plan does not specify the brisk default length or dialogue cadence expected by the voice spec."
+              "coverage": "full",
+              "evidence": "Phase 9.3 chat UI and Phase 10.5 surface prompt use friend-like dialogue",
+              "gap": null
             },
             {
               "id": "PRD-090",
@@ -56131,7 +56100,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/ai_prompting_context.md > 2. Shared Inputs (Typical)",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 5.1 Ask`, `### 5.2 AI Scoop`, `### 5.3 Concepts`, `### 5.5 Explore Similar`, and `### 5.6 Alchemy`",
+              "evidence": "Phase 10 routes pass show context, user library, selected concepts, source shows, and recent turns",
               "gap": null
             },
             {
@@ -56141,8 +56110,8 @@ window.__DASHBOARD_DATA__ = {
               "source": "supporting_docs/discovery_quality_bar.md > 4. Scoring Rubric (Quick)",
               "severity": "important",
               "coverage": "partial",
-              "evidence": "`### 8.1 Unit Tests` and `### 8.2 Integration Tests`; parser, concept quality, and resolution tests",
-              "gap": "The plan includes some verification, but it does not define the explicit discovery rubric or a hard-fail quality gate for integrity."
+              "evidence": "Phase 14.3 resolves AI recommendations to real catalog items and Phase 15.3 tests the parser",
+              "gap": "The plan does not include discovery-rubric validation, golden-set checks, or hard-fail scoring for AI output quality."
             },
             {
               "id": "PRD-092",
@@ -56151,7 +56120,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.6 Person Detail Page",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.5 Person Detail`; image gallery and bio block",
+              "evidence": "Phase 11 Person Detail includes profile image/gallery, name, and bio",
               "gap": null
             },
             {
@@ -56161,7 +56130,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.6 Person Detail Page",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.5 Person Detail`; analytics charts for average rating, top genres, and projects by year",
+              "evidence": "Phase 11 Analytics Charts include average ratings, top genres, and projects by year",
               "gap": null
             },
             {
@@ -56171,7 +56140,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.6 Person Detail Page",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.5 Person Detail`; \"Filmography \u2014 grouped by year\"",
+              "evidence": "Phase 11 Filmography groups credits by year descending",
               "gap": null
             },
             {
@@ -56181,7 +56150,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.6 Person Detail Page",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.5 Person Detail`; each filmography item opens `/show/[id]`",
+              "evidence": "Phase 11 filmography items are tappable ShowTiles opening Show Detail",
               "gap": null
             },
             {
@@ -56191,7 +56160,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.7 Settings & Your Data",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.6 Settings`; font size selector and Search-on-launch toggle",
+              "evidence": "Phase 12.1 includes font size and Search on launch local settings",
               "gap": null
             },
             {
@@ -56201,7 +56170,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.7 Settings & Your Data",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.6 Settings` and `### 2.2 cloud_settings Table`; username, model, AI key, and catalog key with \"must never be committed\" note",
+              "evidence": "Phase 12.2 includes username, AI key, AI model, catalog key, masking, env precedence, and no commits",
               "gap": null
             },
             {
@@ -56211,7 +56180,7 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.7 Settings & Your Data",
               "severity": "critical",
               "coverage": "full",
-              "evidence": "`### 6.6 Settings`; \"Export My Data\" plus `GET /api/export`",
+              "evidence": "Phase 12.3 `Export My Data` builds a ZIP with shows and My Data",
               "gap": null
             },
             {
@@ -56221,18 +56190,1374 @@ window.__DASHBOARD_DATA__ = {
               "source": "product_prd.md > 7.7 Settings & Your Data",
               "severity": "important",
               "coverage": "full",
-              "evidence": "`### 6.6 Settings` and `### Export Flow`; ISO-8601 dates",
+              "evidence": "Phase 12.3 states saved shows export dates are encoded ISO-8601",
               "gap": null
             }
           ],
           "artifacts": {
-            "plan_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/PLAN.md",
-            "plan_eval_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/PLAN_EVAL.md",
-            "plan_eval_data_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/PLAN_EVAL_DATA.json",
-            "plan_eval_report_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/PLAN_EVAL_REPORT.html",
-            "run_metadata_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/run_metadata.json"
+            "plan_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN.md",
+            "plan_eval_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL.md",
+            "plan_eval_data_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_DATA.json",
+            "plan_eval_report_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_REPORT.html",
+            "run_metadata_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/run_metadata.json"
           },
           "runs": [
+            {
+              "run_id": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+              "worktree_name": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+              "branch_name": "benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02",
+              "captured_at": "2026-04-28T13:17:29.724977Z",
+              "model_id": "sonnet_4_6",
+              "series_id": "sonnet_4_6__claude_code__high",
+              "case_id": "sonnet_4_6__claude_code__high__no_plan_mode",
+              "case_slug": "no_plan_mode",
+              "case_label": "No Planning",
+              "replicate_index": 2,
+              "baseline_case": false,
+              "model_name": "Sonnet 4.6",
+              "model_family": "Claude Sonnet",
+              "manufacturer": "Anthropic",
+              "tool": "Claude Code",
+              "tool_slug": "claude_code",
+              "effort": "High",
+              "effort_slug": "high",
+              "variant": "No Planning",
+              "frontier": null,
+              "evaluator_model": "gpt-5.5",
+              "inference_profile": "Default",
+              "inference_profile_slug": "default",
+              "requested_context_window_tokens": null,
+              "planning_mode": false,
+              "prompt_profile": "Default Step 1",
+              "prompt_profile_slug": "default_step1",
+              "experiment_role": "replicate",
+              "experiment_tags": [
+                "no_plan_mode"
+              ],
+              "scenario": {
+                "slug": "no_plan_mode",
+                "label": "No Planning",
+                "description": null,
+                "hypothesis": null
+              },
+              "planning_runtime_seconds": 53837,
+              "plan_tool_call_count": 50,
+              "plan_estimated_cost_usd": null,
+              "plan_input_tokens": 223271,
+              "plan_cached_input_tokens": 1914482,
+              "plan_output_tokens": 21747,
+              "plan_session_trusted": true,
+              "plan_session_untrusted_reason": null,
+              "plan_saved": true,
+              "plan_eval_report_generated": true,
+              "save_blocked_by_mode": false,
+              "supports_area_comparison": true,
+              "taxonomy_version": "shows_prd_v1",
+              "requirement_catalog": {
+                "available": true,
+                "version": "requirements_catalog_v1",
+                "path": "evaluator/requirements_catalog_v1.md",
+                "matches": true,
+                "expected_total_requirements": 99,
+                "expected_functional_area_count": 10,
+                "requirement_order_matches": true,
+                "area_order_matches": true,
+                "missing_ids": [],
+                "unexpected_ids": [],
+                "field_mismatches": []
+              },
+              "requirement_catalog_available": true,
+              "requirement_catalog_version": "requirements_catalog_v1",
+              "requirement_catalog_matches": true,
+              "requirement_catalog_expected_total_requirements": 99,
+              "scores": {
+                "critical": 100.0,
+                "important": 93.28,
+                "detail": 100.0,
+                "overall": 95.45
+              },
+              "summary": {
+                "functional_area_count": 10,
+                "total_requirements": 99,
+                "severity_counts": {
+                  "critical": 30,
+                  "important": 67,
+                  "detail": 2
+                },
+                "coverage_counts": {
+                  "full": 90,
+                  "partial": 9,
+                  "missing": 0
+                }
+              },
+              "area_scores": [
+                {
+                  "name": "Benchmark Runtime & Isolation",
+                  "score": 100.0,
+                  "counts": {
+                    "total": 17,
+                    "full": 17,
+                    "partial": 0,
+                    "missing": 0
+                  }
+                },
+                {
+                  "name": "Collection Data & Persistence",
+                  "score": 95.0,
+                  "counts": {
+                    "total": 20,
+                    "full": 18,
+                    "partial": 2,
+                    "missing": 0
+                  }
+                },
+                {
+                  "name": "App Navigation & Discover Shell",
+                  "score": 100.0,
+                  "counts": {
+                    "total": 4,
+                    "full": 4,
+                    "partial": 0,
+                    "missing": 0
+                  }
+                },
+                {
+                  "name": "Collection Home & Search",
+                  "score": 100.0,
+                  "counts": {
+                    "total": 9,
+                    "full": 9,
+                    "partial": 0,
+                    "missing": 0
+                  }
+                },
+                {
+                  "name": "Show Detail & Relationship UX",
+                  "score": 96.4,
+                  "counts": {
+                    "total": 14,
+                    "full": 13,
+                    "partial": 1,
+                    "missing": 0
+                  }
+                },
+                {
+                  "name": "Ask Chat",
+                  "score": 90.0,
+                  "counts": {
+                    "total": 10,
+                    "full": 8,
+                    "partial": 2,
+                    "missing": 0
+                  }
+                },
+                {
+                  "name": "Concepts, Explore Similar & Alchemy",
+                  "score": 85.0,
+                  "counts": {
+                    "total": 10,
+                    "full": 7,
+                    "partial": 3,
+                    "missing": 0
+                  }
+                },
+                {
+                  "name": "AI Voice, Persona & Quality",
+                  "score": 92.9,
+                  "counts": {
+                    "total": 7,
+                    "full": 6,
+                    "partial": 1,
+                    "missing": 0
+                  }
+                },
+                {
+                  "name": "Person Detail",
+                  "score": 100.0,
+                  "counts": {
+                    "total": 4,
+                    "full": 4,
+                    "partial": 0,
+                    "missing": 0
+                  }
+                },
+                {
+                  "name": "Settings & Export",
+                  "score": 100.0,
+                  "counts": {
+                    "total": 4,
+                    "full": 4,
+                    "partial": 0,
+                    "missing": 0
+                  }
+                }
+              ],
+              "top_gaps": [],
+              "narrative": {
+                "overall_posture": "This is a strong implementation plan with no critical misses. It covers the mandated Next.js/Supabase architecture, namespace/user isolation, schema shape, save semantics, detail and discovery flows, AI contracts, settings, export, and major testing concerns. The remaining issues are not structural blockers, but they are meaningful because they sit around polish-sensitive product contracts: sync integrity, detail-page storytelling, and AI quality assurance.",
+                "strength_clusters": "The plan is strongest in Benchmark Runtime & Isolation, Collection Data & Persistence, App Navigation & Discover Shell, Collection Home & Search, Person Detail, and Settings & Export. The infra rider is especially well covered: environment config, server-only secrets, Supabase persistence, namespace isolation, `user_id`, reset scripts, migrations, and no-Docker compatibility all have concrete implementation details. Core collection behavior is also well represented, including auto-save defaults, removal semantics, overlay rules, AI recommendation resolution, and data export.",
+                "weakness_clusters": "The partial items cluster around quality contracts rather than raw feature presence. The plan often names the correct component or API route, but misses the stricter acceptance language behind a few requirements: timestamp-based sorting, duplicate merge policy, exact detail-page narrative order, Ask directness, concept output shape, surprise-but-defensible recommendation quality, and rubric-based AI validation. These are the kinds of gaps that show up in QA and product review after the app technically works.",
+                "risk_assessment": "If executed as-is, the most likely failure mode is a product that is functionally complete but uneven in trust and taste. Users would probably see the app save, search, chat, recommend, and export correctly, but stakeholders may notice that discovery quality is not systematically validated, Ask can be charming without answering fast enough, and the detail page may feel busier or less intentional than the spec's narrative hierarchy. Cross-device users may also expose sync and duplicate handling gaps before single-user benchmark testing does.",
+                "remediation_guidance": "The remaining work is mostly specification tightening. Add explicit timestamp sorting behavior, duplicate merge rules, and settings conflict resolution. Restore or deliberately justify the detail-page narrative order against the supporting spec. Convert the AI quality bar into prompt contracts, acceptance criteria, and tests/golden scenarios, including Ask directness, concept formatting, surprise-without-betrayal, and rubric hard-fail handling for real-show integrity. These changes do not require a new architecture; they require sharper behavioral acceptance criteria inside the existing plan."
+              },
+              "requirements": [
+                {
+                  "id": "PRD-001",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Use Next.js latest stable runtime",
+                  "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Technology Stack: \"Next.js (latest stable)\"; Phase 1.1 initializes Next.js App Router",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-002",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Use Supabase official client libraries",
+                  "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Technology Stack: \"Supabase (hosted)\"; Phase 1.4 Supabase Client Setup",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-003",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Ship `.env.example` with required variables",
+                  "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 1.2 Environment Variables lists `.env.example` with required vars and comments",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-004",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Ignore `.env*` secrets except example",
+                  "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 1.2 `.gitignore` additions exclude `.env`, `.env.local`, `.env.*.local`",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-005",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Configure build through env without code edits",
+                  "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 1.2 env variables cover Supabase, namespace, catalog, AI, and app config",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-006",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Keep secrets out of repo and server-only",
+                  "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 1.4 server client uses service role server-only; checklist says AI key never committed",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-007",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Provide app, test, reset command scripts",
+                  "source": "infra_rider_prd.md > 3.2 One-command developer experience",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 1.3 npm scripts includes `dev`, `test`, and `test:reset`",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-008",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Include repeatable schema evolution artifacts",
+                  "source": "infra_rider_prd.md > 3.3 Database evolution artifacts",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 2 Migration Files and Phase 13.2 forward-only `supabase/migrations/`",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-009",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Use one stable namespace per build",
+                  "source": "infra_rider_prd.md > 4.1 Build/run namespace (required)",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Architectural Decision 2: `namespace_id` stable per build/run via `NAMESPACE_ID`",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-010",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Isolate namespaces and scope destructive resets",
+                  "source": "infra_rider_prd.md > 4.1 Build/run namespace (required)",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Identity model uses namespace predicates; Phase 15.2 reset deletes by namespace only",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-011",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Attach every user record to `user_id`",
+                  "source": "infra_rider_prd.md > 4.2 User identity (required)",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Shows, cloud_settings, and app_metadata tables include `user_id`; all queries use partition",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-012",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Partition persisted data by namespace and user",
+                  "source": "infra_rider_prd.md > 4.3 Relationship between namespace and user",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Architectural Decision 2: all Supabase queries include `namespace_id` and `user_id`",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-013",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Support documented dev auth injection, prod-gated",
+                  "source": "infra_rider_prd.md > 5.1 Auth is not required to be \"real\" in benchmark mode",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 3.2 accepts `X-User-Id` only in development/test and validates real auth in production",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-014",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Real OAuth later needs no schema redesign",
+                  "source": "infra_rider_prd.md > 5.2 Migration to real OAuth must be straightforward",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 3.3 maps OAuth user id into existing `user_id` with no schema changes",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-015",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Keep backend as persisted source of truth",
+                  "source": "infra_rider_prd.md > 6.1 Source of truth",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Architectural Decision 3: all user-owned data lives in Supabase",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-016",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Make client cache safe to discard",
+                  "source": "infra_rider_prd.md > 6.2 Cache is disposable",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Architectural Decision 3: clearing client cache never loses data",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-017",
+                  "area": "Benchmark Runtime & Isolation",
+                  "label": "Avoid Docker requirement for cloud-agent compatibility",
+                  "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Technology Stack: Docker explicitly not required; hosted Supabase path",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-018",
+                  "area": "Collection Data & Persistence",
+                  "label": "Overlay saved user data on every show appearance",
+                  "source": "product_prd.md > 4.1 Show (Movie or TV)",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 14.1 applies overlay in lists, search, AI recommendations, and person filmography",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-019",
+                  "area": "Collection Data & Persistence",
+                  "label": "Support visible statuses plus hidden `Next`",
+                  "source": "product_prd.md > 4.2 Status System (\"My Status\")",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Migration enum includes `next`; UI chips expose Active, Interested, Excited, Done, Wait, Quit",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-020",
+                  "area": "Collection Data & Persistence",
+                  "label": "Map Interested/Excited chips to Later interest",
+                  "source": "product_prd.md > 4.2 Status System (\"My Status\")",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 8.1 Status Toolbar maps Interested/Excited to `later` plus `myInterest`",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-021",
+                  "area": "Collection Data & Persistence",
+                  "label": "Support free-form multi-tag personal tag library",
+                  "source": "product_prd.md > 4.4 Tags (User Lists)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "`my_tags` array, TagPicker, and Filter Panel \"one entry per distinct tag\"",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-022",
+                  "area": "Collection Data & Persistence",
+                  "label": "Define collection membership by assigned status",
+                  "source": "product_prd.md > 5.1 Collection Membership",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "CRUD and status removal model make persisted collection entries status-owned; DELETE removes item",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-023",
+                  "area": "Collection Data & Persistence",
+                  "label": "Save shows from status, interest, rating, tagging",
+                  "source": "product_prd.md > 5.2 Saving Triggers",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 5.2 Auto-Save Rules covers rating, tag, and status/interest updates",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-024",
+                  "area": "Collection Data & Persistence",
+                  "label": "Default save to Later/Interested except rating-save Done",
+                  "source": "product_prd.md > 5.3 Default Values When Saving",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 5.3 Default Values states Later/Interested, with rating exception Done",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-025",
+                  "area": "Collection Data & Persistence",
+                  "label": "Removing status deletes show and all My Data",
+                  "source": "product_prd.md > 5.4 Removing from Collection",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 14.2 StatusRemovalModal executes DELETE that clears all My Data server-side",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-026",
+                  "area": "Collection Data & Persistence",
+                  "label": "Re-add preserves My Data and refreshes public data",
+                  "source": "product_prd.md > 5.5 Re-adding the Same Show",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 4.3 `mergeCatalogShow` preserves user fields and Phase 5.1 upsert merges fresh catalog data",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-027",
+                  "area": "Collection Data & Persistence",
+                  "label": "Track per-field My Data modification timestamps",
+                  "source": "product_prd.md > 5.6 Timestamps",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Migration fields and Phase 5.4 set `*_update_date` for each PATCH route",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-028",
+                  "area": "Collection Data & Persistence",
+                  "label": "Use timestamps for sorting, sync, freshness",
+                  "source": "product_prd.md > 5.6 Timestamps",
+                  "severity": "important",
+                  "coverage": "partial",
+                  "evidence": "Phase 4.3 uses timestamps for merge conflicts; Phase 8.2 uses `aiScoopUpdateDate` for 4h freshness",
+                  "gap": "The plan does not specify timestamp-based sorting behavior for collection views or recent-update ordering."
+                },
+                {
+                  "id": "PRD-029",
+                  "area": "Collection Data & Persistence",
+                  "label": "Persist Scoop only for saved shows, 4h freshness",
+                  "source": "product_prd.md > 4.9 AI Scoop (\"The Scoop\")",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 8.2 persists scoop only if in collection and regenerates after 4 hours",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-030",
+                  "area": "Collection Data & Persistence",
+                  "label": "Keep Ask and Alchemy state session-only",
+                  "source": "product_prd.md > 5.7 AI Data Persistence",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Ask reset clears session; Alchemy changing inputs clears concepts/results with no persistence tables",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-031",
+                  "area": "Collection Data & Persistence",
+                  "label": "Resolve AI recommendations to real selectable shows",
+                  "source": "product_prd.md > 5.8 AI Recommendations Map to Real Shows",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 14.3 resolves by external ID and renders found items as tappable ShowTiles",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-032",
+                  "area": "Collection Data & Persistence",
+                  "label": "Show collection and rating tile indicators",
+                  "source": "product_prd.md > 5.9 Tile Indicators",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 7.2 Show Tile has in-collection and user rating badges",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-033",
+                  "area": "Collection Data & Persistence",
+                  "label": "Sync libraries/settings consistently and merge duplicates",
+                  "source": "product_prd.md > 5.10 Data Sync & Integrity",
+                  "severity": "important",
+                  "coverage": "partial",
+                  "evidence": "Supabase is source of truth; cloud_settings exists; merge logic uses timestamps for stored shows",
+                  "gap": "Duplicate detection/transparent merge and explicit cross-device settings conflict policy are not planned."
+                },
+                {
+                  "id": "PRD-034",
+                  "area": "Collection Data & Persistence",
+                  "label": "Preserve saved libraries across data-model upgrades",
+                  "source": "product_prd.md > 5.11 Data Continuity Across Versions",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 13 migration tracking uses additive, idempotent migrations and backfills",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-035",
+                  "area": "Collection Data & Persistence",
+                  "label": "Persist synced settings, local settings, UI state",
+                  "source": "supporting_docs/technical_docs/storage-schema.md > Other persistent storage (key-value settings)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 2.2 local settings and UI state; Phase 12.2 cloud_settings for user/API/model settings",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-036",
+                  "area": "Collection Data & Persistence",
+                  "label": "Keep provider IDs persisted and detail fetches transient",
+                  "source": "supporting_docs/technical_docs/storage-schema.md > Show (movie or TV series)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Migration stores `provider_data`; Phase 4.2 marks credits/seasons/videos/recs/similar/images transient",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-037",
+                  "area": "Collection Data & Persistence",
+                  "label": "Merge catalog fields safely and maintain timestamps",
+                  "source": "supporting_docs/technical_docs/storage-schema.md > Merge / overwrite policy (important)",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 4.3 `mergeCatalogShow` uses `selectFirstNonEmpty`, timestamp user fields, `detailsUpdateDate`",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-038",
+                  "area": "App Navigation & Discover Shell",
+                  "label": "Provide filters panel and main screen destinations",
+                  "source": "product_prd.md > 6. App Structure & Navigation",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 6.2 Filter Panel plus routes for home, detail, find, person, and settings",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-039",
+                  "area": "App Navigation & Discover Shell",
+                  "label": "Keep Find/Discover in persistent primary navigation",
+                  "source": "product_prd.md > 6. App Structure & Navigation",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 6.3 Primary Navigation includes Find/Discover",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-040",
+                  "area": "App Navigation & Discover Shell",
+                  "label": "Keep Settings in persistent primary navigation",
+                  "source": "product_prd.md > 6. App Structure & Navigation",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 6.3 Primary Navigation includes Settings",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-041",
+                  "area": "App Navigation & Discover Shell",
+                  "label": "Offer Search, Ask, Alchemy discover modes",
+                  "source": "product_prd.md > 6. App Structure & Navigation",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.1 FindHub has Search, Ask, and Alchemy tabs",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-042",
+                  "area": "Collection Home & Search",
+                  "label": "Show only library items matching active filters",
+                  "source": "product_prd.md > 7.1 Collection Home",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 7.1 filter parameter reduces the show pool before grouping",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-043",
+                  "area": "Collection Home & Search",
+                  "label": "Group home into Active, Excited, Interested, Others",
+                  "source": "product_prd.md > 7.1 Collection Home",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 7.1 Status Grouping lists Active, Excited, Interested, Other",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-044",
+                  "area": "Collection Home & Search",
+                  "label": "Support All, tag, genre, decade, score, media filters",
+                  "source": "product_prd.md > 4.5 Filters (Ways to View the Collection)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 6.2 Filter Panel includes All, tags, genre, decade, community score, and media type",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-045",
+                  "area": "Collection Home & Search",
+                  "label": "Render poster, title, and My Data badges",
+                  "source": "product_prd.md > 7.1 Collection Home",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 7.2 Show Tile includes poster image, title, collection badge, and rating badge",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-046",
+                  "area": "Collection Home & Search",
+                  "label": "Provide empty-library and empty-filter states",
+                  "source": "product_prd.md > 7.1 Collection Home",
+                  "severity": "detail",
+                  "coverage": "full",
+                  "evidence": "Phase 7.3 Empty States covers no collection and no filtered results",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-047",
+                  "area": "Collection Home & Search",
+                  "label": "Search by title or keywords",
+                  "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.2 Search Mode text input calls catalog search query endpoint",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-048",
+                  "area": "Collection Home & Search",
+                  "label": "Use poster grid with collection markers",
+                  "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.2 Search results are poster grid with in-collection indicator",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-049",
+                  "area": "Collection Home & Search",
+                  "label": "Auto-open Search when setting is enabled",
+                  "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
+                  "severity": "detail",
+                  "coverage": "full",
+                  "evidence": "Phase 9.2 auto-opens/focuses Search when `autoSearch = true`",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-050",
+                  "area": "Collection Home & Search",
+                  "label": "Keep Search non-AI in tone",
+                  "source": "supporting_docs/ai_voice_personality.md > 1. Persona Summary",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.2 Search is a catalog text input/grid, separate from AI routes",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-051",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Preserve Show Detail narrative section order",
+                  "source": "supporting_docs/detail_page_experience.md > 3. Narrative Hierarchy (Section Intent)",
+                  "severity": "important",
+                  "coverage": "partial",
+                  "evidence": "Phase 8 says it follows the narrative hierarchy and lists all sections",
+                  "gap": "The listed order inserts status/rating before tags and overview, so it does not preserve the exact detail-page narrative order from the spec."
+                },
+                {
+                  "id": "PRD-052",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Prioritize motion-rich header with graceful fallback",
+                  "source": "supporting_docs/detail_page_experience.md > 3.1 Header Media",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.1 Header Media Carousel uses backdrops/posters/logos/trailers with poster fallback",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-053",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Surface year, runtime/seasons, and community score early",
+                  "source": "supporting_docs/detail_page_experience.md > 3.2 Core Facts + Community Score",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.1 Core Facts Row includes year, runtime/seasons/episodes, and score bar",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-054",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Place status/interest controls in toolbar",
+                  "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.1 Status/Interest Toolbar is near top and not in scroll body",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-055",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Auto-save unsaved tagged show as Later/Interested",
+                  "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 5.2 tag update auto-saves as `later` plus `interested`",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-056",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Auto-save unsaved rated show as Done",
+                  "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 5.2 rating update auto-saves as `done`",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-057",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Show overview early for fast scanning",
+                  "source": "supporting_docs/detail_page_experience.md > 2. First-15-Seconds Experience",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.1 places Overview before AI discovery, providers, cast, seasons, and financials",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-058",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Scoop shows correct states and progressive feedback",
+                  "source": "supporting_docs/detail_page_experience.md > 3.4 Overview + Scoop",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.2 defines no_scoop, cached_scoop, open, streaming, and Generating state",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-059",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Ask-about-show deep-link seeds Ask context",
+                  "source": "supporting_docs/detail_page_experience.md > 3.5 Ask About This Show",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.1 CTA navigates with `showId`; Phase 9.3 fetches show data and seeds context",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-060",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Include traditional recommendations strand",
+                  "source": "supporting_docs/detail_page_experience.md > 3.6 Traditional Recommendations Strand",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.1 includes Traditional Recommendations Strand",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-061",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Explore Similar uses CTA-first concept flow",
+                  "source": "supporting_docs/detail_page_experience.md > 3.7 Explore Similar (Concept Discovery)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.3 starts with Get Concepts, then select concepts, then Explore Shows",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-062",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Include streaming availability and person-linking credits",
+                  "source": "supporting_docs/detail_page_experience.md > 3.8 Streaming Availability",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.1 includes Streaming Availability and Cast/Crew strands linking to Person Detail",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-063",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Gate seasons to TV and financials to movies",
+                  "source": "supporting_docs/detail_page_experience.md > 5. Critical States",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.1 includes Seasons Panel TV only and Budget vs Revenue for movies",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-064",
+                  "area": "Show Detail & Relationship UX",
+                  "label": "Keep primary actions early and page not overwhelming",
+                  "source": "supporting_docs/detail_page_experience.md > 4. Busyness vs Power",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.1 clusters status, rating, tags, scoop, Ask, and Explore before long-tail info",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-065",
+                  "area": "Ask Chat",
+                  "label": "Provide conversational Ask chat interface",
+                  "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.3 Ask Mode provides chat UI with user typing and streaming assistant turns",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-066",
+                  "area": "Ask Chat",
+                  "label": "Answer directly with confident, spoiler-safe recommendations",
+                  "source": "supporting_docs/discovery_quality_bar.md > 2.2 Ask / Explore Search Chat",
+                  "severity": "important",
+                  "coverage": "partial",
+                  "evidence": "Phase 10.5 shared persona includes spoiler-safe and opinionated honesty; Ask prompt picks favorites confidently",
+                  "gap": "The plan does not encode the direct-answer-within-first-lines acceptance bar for Ask responses."
+                },
+                {
+                  "id": "PRD-067",
+                  "area": "Ask Chat",
+                  "label": "Show horizontal mentioned-shows strip from chat",
+                  "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.3 `MentionedShowsStrip` updates as shows are parsed",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-068",
+                  "area": "Ask Chat",
+                  "label": "Open Detail from mentions or Search fallback",
+                  "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+                  "severity": "important",
+                  "coverage": "partial",
+                  "evidence": "Phase 9.3 parses mentioned shows and falls back to commentary plus Search handoff on failure",
+                  "gap": "The plan does not explicitly specify tapping a mentioned-show strip item opens Show Detail when resolution succeeds."
+                },
+                {
+                  "id": "PRD-069",
+                  "area": "Ask Chat",
+                  "label": "Show six random starter prompts with refresh",
+                  "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.3 welcome view has six random starter prompts and Refresh",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-070",
+                  "area": "Ask Chat",
+                  "label": "Summarize older turns while preserving voice",
+                  "source": "supporting_docs/ai_prompting_context.md > 4. Conversation Summarization (Chat Surfaces)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 10.2 summarization endpoint condenses older turns into same persona",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-071",
+                  "area": "Ask Chat",
+                  "label": "Seed Ask-about-show sessions with show handoff",
+                  "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.3 `Ask About a Show` fetches show data and seeds system context",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-072",
+                  "area": "Ask Chat",
+                  "label": "Emit `commentary` plus exact `showList` contract",
+                  "source": "supporting_docs/ai_prompting_context.md > 3.2 Ask with Mentions (Structured \"Mentioned Shows\")",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 9.3 structured output uses `commentary` and exact `Title::externalId::mediaType;;...` format",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-073",
+                  "area": "Ask Chat",
+                  "label": "Retry malformed mention output once, then fallback",
+                  "source": "supporting_docs/ai_prompting_context.md > 5. Guardrails & Fallbacks",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.3 invalid format retries once, then falls back to commentary plus Search handoff",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-074",
+                  "area": "Ask Chat",
+                  "label": "Redirect Ask back into TV/movie domain",
+                  "source": "supporting_docs/ai_prompting_context.md > 1. Shared Rules (All AI Surfaces)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 10.5 shared prompt rules include TV/movie domain restriction",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-075",
+                  "area": "Concepts, Explore Similar & Alchemy",
+                  "label": "Treat concepts as taste ingredients, not genres",
+                  "source": "supporting_docs/concept_system.md > 1. What a Concept Is (User Definition)",
+                  "severity": "important",
+                  "coverage": "partial",
+                  "evidence": "Phase 10.3 requires evocative concepts, varied axes, and no generic placeholders",
+                  "gap": "The plan does not explicitly state that concepts are taste ingredients rather than genre labels or plot categories."
+                },
+                {
+                  "id": "PRD-076",
+                  "area": "Concepts, Explore Similar & Alchemy",
+                  "label": "Return bullet-only, 1-3 word, non-generic concepts",
+                  "source": "supporting_docs/ai_prompting_context.md > 3.4 Concepts (Single-Show and Multi-Show)",
+                  "severity": "important",
+                  "coverage": "partial",
+                  "evidence": "Phase 10.3 returns 1-3 word evocative concepts with no generic placeholders",
+                  "gap": "The concept API output is specified as JSON string arrays, but the prompt/output contract does not preserve the bullet-only requirement."
+                },
+                {
+                  "id": "PRD-077",
+                  "area": "Concepts, Explore Similar & Alchemy",
+                  "label": "Order concepts by strongest aha and varied axes",
+                  "source": "supporting_docs/concept_system.md > 4. Generation Rules",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 10.3 concepts are ordered by strength and varied across axes",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-078",
+                  "area": "Concepts, Explore Similar & Alchemy",
+                  "label": "Require concept selection and guide ingredient picking",
+                  "source": "supporting_docs/concept_system.md > 5. Selection UX Rules",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.3 requires selecting 1+ concepts; Phase 8.1/8.3 use concept chips before recommendations",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-079",
+                  "area": "Concepts, Explore Similar & Alchemy",
+                  "label": "Return exactly five Explore Similar recommendations",
+                  "source": "supporting_docs/concept_system.md > 6. Concepts \u2192 Recommendations Contract",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 8.3 returns five show objects; Phase 10.4 counts are five for explore",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-080",
+                  "area": "Concepts, Explore Similar & Alchemy",
+                  "label": "Support full Alchemy loop with chaining",
+                  "source": "product_prd.md > 7.4 Alchemy (Find \u2192 Alchemy)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.4 covers select shows, conceptualize, alchemize, and More Alchemy chaining",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-081",
+                  "area": "Concepts, Explore Similar & Alchemy",
+                  "label": "Clear downstream results when inputs change",
+                  "source": "product_prd.md > 7.4 Alchemy (Find \u2192 Alchemy)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.4 says changing selected shows or concepts clears downstream results",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-082",
+                  "area": "Concepts, Explore Similar & Alchemy",
+                  "label": "Generate shared multi-show concepts with larger option pool",
+                  "source": "supporting_docs/concept_system.md > 8. Notes",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.4 and Phase 10.3 use multi-show concepts with 8+ options",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-083",
+                  "area": "Concepts, Explore Similar & Alchemy",
+                  "label": "Cite selected concepts in concise recommendation reasons",
+                  "source": "supporting_docs/concept_system.md > 6. Concepts \u2192 Recommendations Contract",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 10.4 recommendation output includes reason; Phase 9.4 reasons reference selected concepts",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-084",
+                  "area": "Concepts, Explore Similar & Alchemy",
+                  "label": "Deliver surprising but defensible taste-aligned recommendations",
+                  "source": "supporting_docs/discovery_quality_bar.md > 1.2 Taste Alignment",
+                  "severity": "important",
+                  "coverage": "partial",
+                  "evidence": "Phase 10.4 grounds recommendations in concepts, source shows, and user library with reasons",
+                  "gap": "The plan lacks an explicit quality bar for pleasantly unexpected but defensible recommendations."
+                },
+                {
+                  "id": "PRD-085",
+                  "area": "AI Voice, Persona & Quality",
+                  "label": "Keep one consistent AI persona across surfaces",
+                  "source": "supporting_docs/ai_voice_personality.md > 1. Persona Summary",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 10.5 imports one shared persona header from `base.ts` for every surface",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-086",
+                  "area": "AI Voice, Persona & Quality",
+                  "label": "Enforce shared AI guardrails across all surfaces",
+                  "source": "supporting_docs/ai_prompting_context.md > 1. Shared Rules (All AI Surfaces)",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 10.5 shared rules cover spoiler safety, honesty, and TV/movie restriction",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-087",
+                  "area": "AI Voice, Persona & Quality",
+                  "label": "Make AI warm, joyful, and light in critique",
+                  "source": "supporting_docs/ai_voice_personality.md > 2. Non-Negotiable Voice Pillars",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 10.5 uses a \"fun, chatty TV/movie nerd friend\" persona and opinionated honesty",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-088",
+                  "area": "AI Voice, Persona & Quality",
+                  "label": "Structure Scoop as personal taste mini-review",
+                  "source": "supporting_docs/ai_voice_personality.md > 4.1 Scoop (Show Detail \"The Scoop\")",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 10.1 Scoop includes personal take, stack-up, centerpiece, fit/warnings, and verdict",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-089",
+                  "area": "AI Voice, Persona & Quality",
+                  "label": "Keep Ask brisk and dialogue-like by default",
+                  "source": "supporting_docs/ai_voice_personality.md > 4.2 Ask (Find \u2192 Ask)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 9.3 chat UI and Phase 10.5 surface prompt use friend-like dialogue",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-090",
+                  "area": "AI Voice, Persona & Quality",
+                  "label": "Feed AI the right surface-specific context inputs",
+                  "source": "supporting_docs/ai_prompting_context.md > 2. Shared Inputs (Typical)",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 10 routes pass show context, user library, selected concepts, source shows, and recent turns",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-091",
+                  "area": "AI Voice, Persona & Quality",
+                  "label": "Validate discovery with rubric and hard-fail integrity",
+                  "source": "supporting_docs/discovery_quality_bar.md > 4. Scoring Rubric (Quick)",
+                  "severity": "important",
+                  "coverage": "partial",
+                  "evidence": "Phase 14.3 resolves AI recommendations to real catalog items and Phase 15.3 tests the parser",
+                  "gap": "The plan does not include discovery-rubric validation, golden-set checks, or hard-fail scoring for AI output quality."
+                },
+                {
+                  "id": "PRD-092",
+                  "area": "Person Detail",
+                  "label": "Show person gallery, name, and bio",
+                  "source": "product_prd.md > 7.6 Person Detail Page",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 11 Person Detail includes profile image/gallery, name, and bio",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-093",
+                  "area": "Person Detail",
+                  "label": "Include ratings, genres, and projects-by-year analytics",
+                  "source": "product_prd.md > 7.6 Person Detail Page",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 11 Analytics Charts include average ratings, top genres, and projects by year",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-094",
+                  "area": "Person Detail",
+                  "label": "Group filmography by year",
+                  "source": "product_prd.md > 7.6 Person Detail Page",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 11 Filmography groups credits by year descending",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-095",
+                  "area": "Person Detail",
+                  "label": "Open Show Detail from selected credit",
+                  "source": "product_prd.md > 7.6 Person Detail Page",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 11 filmography items are tappable ShowTiles opening Show Detail",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-096",
+                  "area": "Settings & Export",
+                  "label": "Include font size and Search-on-launch settings",
+                  "source": "product_prd.md > 7.7 Settings & Your Data",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 12.1 includes font size and Search on launch local settings",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-097",
+                  "area": "Settings & Export",
+                  "label": "Support username, model, and API-key settings safely",
+                  "source": "product_prd.md > 7.7 Settings & Your Data",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 12.2 includes username, AI key, AI model, catalog key, masking, env precedence, and no commits",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-098",
+                  "area": "Settings & Export",
+                  "label": "Export saved shows and My Data as zip",
+                  "source": "product_prd.md > 7.7 Settings & Your Data",
+                  "severity": "critical",
+                  "coverage": "full",
+                  "evidence": "Phase 12.3 `Export My Data` builds a ZIP with shows and My Data",
+                  "gap": null
+                },
+                {
+                  "id": "PRD-099",
+                  "area": "Settings & Export",
+                  "label": "Encode export dates using ISO-8601",
+                  "source": "product_prd.md > 7.7 Settings & Your Data",
+                  "severity": "important",
+                  "coverage": "full",
+                  "evidence": "Phase 12.3 states saved shows export dates are encoded ISO-8601",
+                  "gap": null
+                }
+              ],
+              "metadata": {
+                "schema_version": 2,
+                "run_id": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+                "worktree_name": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+                "branch_name": "benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02",
+                "captured_at": "2026-04-28T13:17:29.724977Z",
+                "paths": {
+                  "run_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02",
+                  "results_dir": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results"
+                },
+                "subject": {
+                  "model_slug": "sonnet_4_6",
+                  "model_name": "Sonnet 4.6",
+                  "model_family": "Claude Sonnet",
+                  "manufacturer": "Anthropic",
+                  "tool_slug": "claude_code",
+                  "tool": "Claude Code",
+                  "effort_slug": "high",
+                  "effort": "High",
+                  "variant_slug": "no_plan_mode",
+                  "variant": "No Planning"
+                },
+                "grouping": {
+                  "model_id": "sonnet_4_6",
+                  "series_id": "sonnet_4_6__claude_code__high",
+                  "case_id": "sonnet_4_6__claude_code__high__no_plan_mode",
+                  "case_slug": "no_plan_mode",
+                  "case_label": "No Planning",
+                  "replicate_index": 2,
+                  "baseline_case": false
+                },
+                "declared": {
+                  "inference_profile_slug": "default",
+                  "inference_profile": "Default",
+                  "requested_context_window_tokens": null,
+                  "planning_mode": false,
+                  "prompt_profile_slug": "default_step1",
+                  "prompt_profile": "Default Step 1",
+                  "experiment_role": "replicate",
+                  "experiment_tags": [
+                    "no_plan_mode"
+                  ],
+                  "scenario": {
+                    "slug": "no_plan_mode",
+                    "label": "No Planning",
+                    "description": null,
+                    "hypothesis": null
+                  },
+                  "case_slug": null
+                },
+                "planning": {
+                  "prompt_path": "1-START_HERE.md",
+                  "prompt_git_sha": "05c0960de115b026112b47ddef66a8f95d0a004a",
+                  "prompt_profile_slug": "default_step1",
+                  "prompt_profile": "Default Step 1"
+                },
+                "evaluation": {
+                  "evaluator_model": "gpt-5.5",
+                  "evaluator_provider": "openai",
+                  "prompt_path": "2-EVALUATE_PLAN.md",
+                  "prompt_git_sha": "60a3b354091b7d60e72e882d67095e9846e13311",
+                  "evaluation_session_path": "/Users/mmaher/.codex/sessions/2026/04/28/rollout-2026-04-28T06-12-00-019dd437-d07f-7d01-90d6-b791300aa47a.jsonl",
+                  "evaluation_started_at": "2026-04-28T13:12:16.427Z",
+                  "evaluation_ended_at": "2026-04-28T13:20:21.350Z",
+                  "evaluation_duration_seconds": 484
+                },
+                "snapshot": {
+                  "context_window_tokens": {
+                    "value": null,
+                    "source_url": null
+                  },
+                  "pricing": {
+                    "source_url": null,
+                    "input_usd_per_mtok": null,
+                    "output_usd_per_mtok": null,
+                    "cached_input_usd_per_mtok": null
+                  },
+                  "swe_bench_verified": {
+                    "value": null,
+                    "source_url": null
+                  },
+                  "frontier": {
+                    "value": null,
+                    "source": "manual",
+                    "note": null
+                  }
+                },
+                "observed": {
+                  "plan_session": {
+                    "source_tool": "claude_code",
+                    "session_path": "/Users/mmaher/.claude/projects/-Users-mmaher-code-planning-benchmark-control/41be9fc6-efd4-447f-87d0-1ae1fbd04cc4.jsonl",
+                    "started_at": "2026-04-27T22:32:39.397Z",
+                    "ended_at": "2026-04-28T13:29:57.335Z",
+                    "duration_seconds": 53837,
+                    "model": "claude-opus-4-7",
+                    "provider": "Anthropic",
+                    "version": "2.1.119",
+                    "collaboration_mode": null,
+                    "context_window_tokens": null,
+                    "assistant_message_count": 39,
+                    "user_message_count": 8,
+                    "tool_call_count": 50,
+                    "tool_calls_by_name": {
+                      "Bash": 49,
+                      "ToolSearch": 1
+                    },
+                    "interrupted_count": 0,
+                    "task_complete_count": 0,
+                    "input_tokens": 223271,
+                    "cached_input_tokens": 1914482,
+                    "output_tokens": 21747,
+                    "estimated_cost_usd": null,
+                    "trusted": true,
+                    "untrusted_reason": null
+                  },
+                  "eval_session": {
+                    "source_tool": "codex_cli",
+                    "session_path": "/Users/mmaher/.codex/sessions/2026/04/28/rollout-2026-04-28T06-12-00-019dd437-d07f-7d01-90d6-b791300aa47a.jsonl",
+                    "started_at": "2026-04-28T13:12:16.427Z",
+                    "ended_at": "2026-04-28T13:20:21.350Z",
+                    "duration_seconds": 484,
+                    "model": "gpt-5.5",
+                    "provider": "openai",
+                    "version": "0.125.0",
+                    "collaboration_mode": "default",
+                    "context_window_tokens": 258400,
+                    "assistant_message_count": 12,
+                    "user_message_count": 3,
+                    "tool_call_count": 55,
+                    "tool_calls_by_name": {
+                      "exec_command": 49,
+                      "update_plan": 6
+                    },
+                    "interrupted_count": 0,
+                    "task_complete_count": 1,
+                    "input_tokens": 2515492,
+                    "cached_input_tokens": 2393216,
+                    "output_tokens": 32575,
+                    "estimated_cost_usd": null,
+                    "trusted": true,
+                    "untrusted_reason": null
+                  }
+                },
+                "outcome": {
+                  "plan_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN.md",
+                  "plan_saved": true,
+                  "plan_written_at": "2026-04-28T13:09:57.273629Z",
+                  "plan_eval_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL.md",
+                  "plan_eval_written_at": "2026-04-28T13:17:29.724977Z",
+                  "plan_eval_report_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_REPORT.html",
+                  "plan_eval_report_generated": true,
+                  "plan_eval_report_written_at": "2026-04-28T13:19:54.220790Z",
+                  "plan_session_completed_at": "2026-04-28T13:29:57.335Z",
+                  "save_blocked_by_mode": false,
+                  "artifact_latency_seconds": 0,
+                  "completion_state": "complete"
+                }
+              },
+              "artifacts": {
+                "plan_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN.md",
+                "plan_eval_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL.md",
+                "plan_eval_data_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_DATA.json",
+                "plan_eval_report_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_REPORT.html",
+                "run_metadata_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/run_metadata.json"
+              }
+            },
             {
               "run_id": "sonnet_4_6__claude_code__high__no_plan_mode",
               "worktree_name": "sonnet_4_6__claude_code__high__no_plan_mode",
@@ -113190,24 +114515,24 @@ window.__DASHBOARD_DATA__ = {
       "series_id": "sonnet_4_6__claude_code__high",
       "case_slug": "no_plan_mode",
       "case_label": "No Planning",
-      "baseline_case": true,
-      "experiment_role": "baseline",
+      "baseline_case": false,
+      "experiment_role": "replicate",
       "inference_profile": "Default",
       "requested_context_window_tokens": null,
       "planning_mode": false,
       "prompt_profile": "Default Step 1",
-      "evaluator_model": "gpt-5.4",
+      "evaluator_model": "gpt-5.5",
       "scenario": {
         "slug": "no_plan_mode",
         "label": "No Planning",
         "description": null,
         "hypothesis": null
       },
-      "planning_runtime_seconds": null,
+      "planning_runtime_seconds": 53837,
       "plan_saved": true,
       "plan_eval_report_generated": true,
       "save_blocked_by_mode": false,
-      "report_generated_count": 1,
+      "report_generated_count": 2,
       "report_generated_all": true,
       "supports_area_comparison": true,
       "taxonomy_version": "shows_prd_v1",
@@ -113228,22 +114553,22 @@ window.__DASHBOARD_DATA__ = {
       "requirement_catalog_version": "requirements_catalog_v1",
       "requirement_catalog_matches": true,
       "requirement_catalog_expected_total_requirements": 99,
-      "run_count": 1,
-      "primary_run_id": "sonnet_4_6__claude_code__high__no_plan_mode",
-      "latest_run_at": "2026-03-09T17:50:02.566437Z",
+      "run_count": 2,
+      "primary_run_id": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+      "latest_run_at": "2026-04-28T13:17:29.724977Z",
       "score_range": {
         "overall_min": 92.42,
-        "overall_max": 92.42
+        "overall_max": 95.45
       },
       "runtime_range_seconds": {
-        "min": null,
-        "max": null
+        "min": 53837,
+        "max": 53837
       },
       "scores": {
         "critical": 100.0,
-        "important": 88.81,
+        "important": 93.28,
         "detail": 100.0,
-        "overall": 92.42
+        "overall": 95.45
       },
       "summary": {
         "functional_area_count": 10,
@@ -113254,8 +114579,8 @@ window.__DASHBOARD_DATA__ = {
           "detail": 2
         },
         "coverage_counts": {
-          "full": 84,
-          "partial": 15,
+          "full": 90,
+          "partial": 9,
           "missing": 0
         }
       },
@@ -113272,21 +114597,21 @@ window.__DASHBOARD_DATA__ = {
         },
         {
           "name": "Collection Data & Persistence",
-          "score": 87.5,
+          "score": 95.0,
           "counts": {
             "total": 20,
-            "full": 15,
-            "partial": 5,
+            "full": 18,
+            "partial": 2,
             "missing": 0
           }
         },
         {
           "name": "App Navigation & Discover Shell",
-          "score": 75.0,
+          "score": 100.0,
           "counts": {
             "total": 4,
-            "full": 2,
-            "partial": 2,
+            "full": 4,
+            "partial": 0,
             "missing": 0
           }
         },
@@ -113312,11 +114637,11 @@ window.__DASHBOARD_DATA__ = {
         },
         {
           "name": "Ask Chat",
-          "score": 95.0,
+          "score": 90.0,
           "counts": {
             "total": 10,
-            "full": 9,
-            "partial": 1,
+            "full": 8,
+            "partial": 2,
             "missing": 0
           }
         },
@@ -113332,11 +114657,11 @@ window.__DASHBOARD_DATA__ = {
         },
         {
           "name": "AI Voice, Persona & Quality",
-          "score": 78.6,
+          "score": 92.9,
           "counts": {
             "total": 7,
-            "full": 4,
-            "partial": 3,
+            "full": 6,
+            "partial": 1,
             "missing": 0
           }
         },
@@ -113361,44 +114686,13 @@ window.__DASHBOARD_DATA__ = {
           }
         }
       ],
-      "top_gaps": [
-        {
-          "id": "PRD-033",
-          "severity": "important",
-          "label": "Sync libraries/settings consistently and merge duplicates",
-          "why": "This matters because multi-device users can end up with duplicate shows or divergent settings, which undermines trust in the collection as a durable source of truth."
-        },
-        {
-          "id": "PRD-091",
-          "severity": "important",
-          "label": "Validate discovery with rubric and hard-fail integrity",
-          "why": "This matters because AI outputs can look structurally valid while still drifting off-brand or failing real-show integrity unless the plan defines an explicit quality gate."
-        },
-        {
-          "id": "PRD-084",
-          "severity": "important",
-          "label": "Deliver surprising but defensible taste-aligned recommendations",
-          "why": "This matters because without that bar, Explore Similar and Alchemy can regress into safe, obvious recs and lose the product's main differentiator."
-        },
-        {
-          "id": "PRD-066",
-          "severity": "important",
-          "label": "Answer directly with confident, spoiler-safe recommendations",
-          "why": "This matters because Ask is one of the fastest discovery loops, and a tentative or overly verbose answer weakens perceived AI quality immediately."
-        },
-        {
-          "id": "PRD-039",
-          "severity": "important",
-          "label": "Keep Find/Discover in persistent primary navigation",
-          "why": "This matters because the app's core Search, Ask, and Alchemy surfaces become harder to reach repeatedly if the primary entry point is not explicitly persistent."
-        }
-      ],
+      "top_gaps": [],
       "narrative": {
-        "overall_posture": "This is a strong implementation plan with solid architectural coverage and well-specified core user flows. The remaining gaps are not foundational backend misses; they are mostly product-behavior contracts around navigation persistence, discovery quality bars, and a few persistence nuances that would affect polish, consistency, and parity with the PRD's intended feel.",
-        "strength_clusters": "The plan is strongest in Benchmark Runtime & Isolation, Collection Data & Persistence core mechanics, Show Detail & Relationship UX, Person Detail, and Settings & Export. It is especially concrete on namespace/user isolation, migration artifacts, auto-save rules, Scoop persistence, AI response contracts, detail-page sectioning, and export behavior.",
-        "weakness_clusters": "The partials cluster in three patterns. First, the Discover shell is structurally present but underspecified at the primary-navigation level. Second, AI quality requirements are planned as features and contracts, but not yet as acceptance bars: Ask directness, concept philosophy, recommendation surprise, and discovery QA are all lighter than the PRD. Third, persistence edge cases around sync duplicates, provider-data storage scope, and session-only Alchemy behavior are less explicit than the rest of the data model.",
-        "risk_assessment": "If this plan were executed as-is, the app would likely work end to end, but QA and stakeholders would notice that some of the product's differentiating behavior feels flatter or less intentional than the PRD describes. The first noticeable issues would be discovery quality drift, such as Ask answers that are conversational but not punchy enough, concept/recommendation flows that are aligned but not especially surprising, and AI behavior that lacks a clear pass/fail rubric. Secondary issues would show up in shell/navigation consistency and sync edge cases rather than in the main CRUD flows.",
-        "remediation_guidance": "The remaining work is mostly a specification pass, not an architectural rewrite. Tighten the plan with explicit acceptance criteria for persistent Find/Settings navigation, session lifecycle rules for Alchemy, free-form tag-library behavior, provider IDs-only persistence, sync duplicate handling, and the AI quality bar across Ask, Concepts, and recommendation surfaces. In practice, this means adding a thin layer of UX contract language and QA gates on top of an otherwise strong implementation plan."
+        "overall_posture": "This is a strong implementation plan with no critical misses. It covers the mandated Next.js/Supabase architecture, namespace/user isolation, schema shape, save semantics, detail and discovery flows, AI contracts, settings, export, and major testing concerns. The remaining issues are not structural blockers, but they are meaningful because they sit around polish-sensitive product contracts: sync integrity, detail-page storytelling, and AI quality assurance.",
+        "strength_clusters": "The plan is strongest in Benchmark Runtime & Isolation, Collection Data & Persistence, App Navigation & Discover Shell, Collection Home & Search, Person Detail, and Settings & Export. The infra rider is especially well covered: environment config, server-only secrets, Supabase persistence, namespace isolation, `user_id`, reset scripts, migrations, and no-Docker compatibility all have concrete implementation details. Core collection behavior is also well represented, including auto-save defaults, removal semantics, overlay rules, AI recommendation resolution, and data export.",
+        "weakness_clusters": "The partial items cluster around quality contracts rather than raw feature presence. The plan often names the correct component or API route, but misses the stricter acceptance language behind a few requirements: timestamp-based sorting, duplicate merge policy, exact detail-page narrative order, Ask directness, concept output shape, surprise-but-defensible recommendation quality, and rubric-based AI validation. These are the kinds of gaps that show up in QA and product review after the app technically works.",
+        "risk_assessment": "If executed as-is, the most likely failure mode is a product that is functionally complete but uneven in trust and taste. Users would probably see the app save, search, chat, recommend, and export correctly, but stakeholders may notice that discovery quality is not systematically validated, Ask can be charming without answering fast enough, and the detail page may feel busier or less intentional than the spec's narrative hierarchy. Cross-device users may also expose sync and duplicate handling gaps before single-user benchmark testing does.",
+        "remediation_guidance": "The remaining work is mostly specification tightening. Add explicit timestamp sorting behavior, duplicate merge rules, and settings conflict resolution. Restore or deliberately justify the detail-page narrative order against the supporting spec. Convert the AI quality bar into prompt contracts, acceptance criteria, and tests/golden scenarios, including Ask directness, concept formatting, surprise-without-betrayal, and rubric hard-fail handling for real-show integrity. These changes do not require a new architecture; they require sharper behavioral acceptance criteria inside the existing plan."
       },
       "requirements": [
         {
@@ -113408,7 +114702,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`Overview`; \"built on Next.js (latest stable)\"",
+          "evidence": "Technology Stack: \"Next.js (latest stable)\"; Phase 1.1 initializes Next.js App Router",
           "gap": null
         },
         {
@@ -113418,7 +114712,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 1.1 Repository Setup`; \"Install and configure Supabase client libraries\"",
+          "evidence": "Technology Stack: \"Supabase (hosted)\"; Phase 1.4 Supabase Client Setup",
           "gap": null
         },
         {
@@ -113428,7 +114722,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 3.1 Environment variable interface",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 1.1 Repository Setup` and `### 7.1 .env.example`",
+          "evidence": "Phase 1.2 Environment Variables lists `.env.example` with required vars and comments",
           "gap": null
         },
         {
@@ -113438,7 +114732,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 3.1 Environment variable interface",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 1.1 Repository Setup`; \".gitignore that excludes all .env* files except .env.example\"",
+          "evidence": "Phase 1.2 `.gitignore` additions exclude `.env`, `.env.local`, `.env.*.local`",
           "gap": null
         },
         {
@@ -113448,7 +114742,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 3.1 Environment variable interface",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 1.2 Environment Configuration`; \"The build MUST run by filling in .env\"",
+          "evidence": "Phase 1.2 env variables cover Supabase, namespace, catalog, AI, and app config",
           "gap": null
         },
         {
@@ -113458,7 +114752,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 3.1 Environment variable interface",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 1.1 Repository Setup`; \"server-only, never sent to client\"",
+          "evidence": "Phase 1.4 server client uses service role server-only; checklist says AI key never committed",
           "gap": null
         },
         {
@@ -113468,7 +114762,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 3.2 One-command developer experience",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 7.2 NPM Scripts`",
+          "evidence": "Phase 1.3 npm scripts includes `dev`, `test`, and `test:reset`",
           "gap": null
         },
         {
@@ -113478,7 +114772,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 3.3 Database evolution artifacts",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`Phase 2: Database Schema & Migrations` and `### 7.3 Database Migration Strategy`",
+          "evidence": "Phase 2 Migration Files and Phase 13.2 forward-only `supabase/migrations/`",
           "gap": null
         },
         {
@@ -113488,7 +114782,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 4.1 Build/run namespace (required)",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 1.3 Identity & Isolation Model`; \"Set once per build/run. Immutable during runtime.\"",
+          "evidence": "Architectural Decision 2: `namespace_id` stable per build/run via `NAMESPACE_ID`",
           "gap": null
         },
         {
@@ -113498,7 +114792,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 4.1 Build/run namespace (required)",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 2.4 Namespace Reset Script`; namespace-scoped deletes for `shows` and `cloud_settings`",
+          "evidence": "Identity model uses namespace predicates; Phase 15.2 reset deletes by namespace only",
           "gap": null
         },
         {
@@ -113508,7 +114802,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 4.2 User identity (required)",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 1.3 Identity & Isolation Model` and `### 2.1 shows Table`; `user_id` on persisted tables",
+          "evidence": "Shows, cloud_settings, and app_metadata tables include `user_id`; all queries use partition",
           "gap": null
         },
         {
@@ -113518,7 +114812,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 4.3 Relationship between namespace and user",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 1.3 Identity & Isolation Model`; \"effective data partition is always `(namespace_id, user_id)`\"",
+          "evidence": "Architectural Decision 2: all Supabase queries include `namespace_id` and `user_id`",
           "gap": null
         },
         {
@@ -113528,7 +114822,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 5.1 Auth is not required to be \"real\" in benchmark mode",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 1.3 Identity & Isolation Model` and `### 4.4 Authentication Middleware`",
+          "evidence": "Phase 3.2 accepts `X-User-Id` only in development/test and validates real auth in production",
           "gap": null
         },
         {
@@ -113538,7 +114832,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 5.2 Migration to real OAuth must be straightforward",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 7.5 Migration Path to Real OAuth`; \"No schema changes needed\"",
+          "evidence": "Phase 3.3 maps OAuth user id into existing `user_id` with no schema changes",
           "gap": null
         },
         {
@@ -113548,7 +114842,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 6.1 Source of truth",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 2.5 Local Settings & UI State`; \"user data lives in Supabase\"",
+          "evidence": "Architectural Decision 3: all user-owned data lives in Supabase",
           "gap": null
         },
         {
@@ -113558,7 +114852,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 6.2 Cache is disposable",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 2.5 Local Settings & UI State`; \"These are disposable; clearing them is safe\"",
+          "evidence": "Architectural Decision 3: clearing client cache never loses data",
           "gap": null
         },
         {
@@ -113568,7 +114862,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 7.4 Cloud Agent Compatibility`; \"No Docker required to run\"",
+          "evidence": "Technology Stack: Docker explicitly not required; hosted Supabase path",
           "gap": null
         },
         {
@@ -113578,7 +114872,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 4.1 Show (Movie or TV)",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### Display Rule: User's Version Takes Precedence`",
+          "evidence": "Phase 14.1 applies overlay in lists, search, AI recommendations, and person filmography",
           "gap": null
         },
         {
@@ -113588,7 +114882,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 4.2 Status System (\"My Status\")",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 2.1 shows Table`; `my_status` includes `\"next\"` while `### 6.4 Show Detail` only surfaces the visible chips",
+          "evidence": "Migration enum includes `next`; UI chips expose Active, Interested, Excited, Done, Wait, Quit",
           "gap": null
         },
         {
@@ -113598,7 +114892,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 4.2 Status System (\"My Status\")",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 3.2 Collection Business Logic` and `### 6.4 Show Detail`",
+          "evidence": "Phase 8.1 Status Toolbar maps Interested/Excited to `later` plus `myInterest`",
           "gap": null
         },
         {
@@ -113607,9 +114901,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Support free-form multi-tag personal tag library",
           "source": "product_prd.md > 4.4 Tags (User Lists)",
           "severity": "important",
-          "coverage": "partial",
-          "evidence": "`### 2.1 shows Table`; `my_tags text[]` and `### 6.4 Show Detail`; \"My Tags display + tag picker\"",
-          "gap": "Multi-tag support is planned, but free-form creation semantics and explicit tag-library behavior are not spelled out."
+          "coverage": "full",
+          "evidence": "`my_tags` array, TagPicker, and Filter Panel \"one entry per distinct tag\"",
+          "gap": null
         },
         {
           "id": "PRD-022",
@@ -113618,7 +114912,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 5.1 Collection Membership",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 3.2 Collection Business Logic` and `### 5.2 AI Scoop`; collection persistence is keyed off `my_status` being present",
+          "evidence": "CRUD and status removal model make persisted collection entries status-owned; DELETE removes item",
           "gap": null
         },
         {
@@ -113628,7 +114922,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 5.2 Saving Triggers",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 3.2 Collection Business Logic`; auto-save trigger table",
+          "evidence": "Phase 5.2 Auto-Save Rules covers rating, tag, and status/interest updates",
           "gap": null
         },
         {
@@ -113638,7 +114932,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 5.3 Default Values When Saving",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 3.2 Collection Business Logic`; default values block",
+          "evidence": "Phase 5.3 Default Values states Later/Interested, with rating exception Done",
           "gap": null
         },
         {
@@ -113648,7 +114942,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 5.4 Removing from Collection",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 3.2 Collection Business Logic`; \"clear show + all My Data\"",
+          "evidence": "Phase 14.2 StatusRemovalModal executes DELETE that clears all My Data server-side",
           "gap": null
         },
         {
@@ -113658,7 +114952,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 5.5 Re-adding the Same Show",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 3.2 Collection Business Logic`; \"Merge preserves latest My Data... + refreshes public metadata\"",
+          "evidence": "Phase 4.3 `mergeCatalogShow` preserves user fields and Phase 5.1 upsert merges fresh catalog data",
           "gap": null
         },
         {
@@ -113668,7 +114962,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 5.6 Timestamps",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 3.2 Collection Business Logic`; every My Data field updates its `*UpdateDate`",
+          "evidence": "Migration fields and Phase 5.4 set `*_update_date` for each PATCH route",
           "gap": null
         },
         {
@@ -113678,8 +114972,8 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 5.6 Timestamps",
           "severity": "important",
           "coverage": "partial",
-          "evidence": "`### 3.1 External Catalog Integration` and `### 3.2 Collection Business Logic`",
-          "gap": "The plan uses timestamps for merge conflict resolution and Scoop freshness, but it does not specify any sorting behavior driven by those timestamps."
+          "evidence": "Phase 4.3 uses timestamps for merge conflicts; Phase 8.2 uses `aiScoopUpdateDate` for 4h freshness",
+          "gap": "The plan does not specify timestamp-based sorting behavior for collection views or recent-update ordering."
         },
         {
           "id": "PRD-029",
@@ -113688,7 +114982,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 4.9 AI Scoop (\"The Scoop\")",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 5.2 AI Scoop`; freshness and persistence rules",
+          "evidence": "Phase 8.2 persists scoop only if in collection and regenerates after 4 hours",
           "gap": null
         },
         {
@@ -113697,9 +114991,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Keep Ask and Alchemy state session-only",
           "source": "product_prd.md > 5.7 AI Data Persistence",
           "severity": "important",
-          "coverage": "partial",
-          "evidence": "`### 5.1 Ask`; \"Session context is in-memory only\" and `### 6.3 Find/Discover Hub`; local React state for chat",
-          "gap": "Ask is explicitly session-only, but Alchemy is described as local UI state rather than explicitly non-persisted state cleared on leave/reset."
+          "coverage": "full",
+          "evidence": "Ask reset clears session; Alchemy changing inputs clears concepts/results with no persistence tables",
+          "gap": null
         },
         {
           "id": "PRD-031",
@@ -113708,7 +115002,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 5.8 AI Recommendations Map to Real Shows",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 5.7 AI Recommendation Resolution (Shared)`",
+          "evidence": "Phase 14.3 resolves by external ID and renders found items as tappable ShowTiles",
           "gap": null
         },
         {
@@ -113718,7 +115012,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 5.9 Tile Indicators",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.2 Collection Home` and `### Tile Indicators`",
+          "evidence": "Phase 7.2 Show Tile has in-collection and user rating badges",
           "gap": null
         },
         {
@@ -113728,8 +115022,8 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 5.10 Data Sync & Integrity",
           "severity": "important",
           "coverage": "partial",
-          "evidence": "`### 2.2 cloud_settings Table`; `version` for conflict resolution and `### 3.1 External Catalog Integration`; timestamp merge rules",
-          "gap": "The plan covers conflict resolution primitives, but it does not describe duplicate detection and transparent duplicate merging for synced libraries."
+          "evidence": "Supabase is source of truth; cloud_settings exists; merge logic uses timestamps for stored shows",
+          "gap": "Duplicate detection/transparent merge and explicit cross-device settings conflict policy are not planned."
         },
         {
           "id": "PRD-034",
@@ -113738,7 +115032,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 5.11 Data Continuity Across Versions",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### Data Continuity`; migration scripts preserve existing `my*` fields with data migrations when needed",
+          "evidence": "Phase 13 migration tracking uses additive, idempotent migrations and backfills",
           "gap": null
         },
         {
@@ -113748,7 +115042,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/technical_docs/storage-schema.md > Other persistent storage (key-value settings)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 2.2 cloud_settings Table` and `### 2.5 Local Settings & UI State`",
+          "evidence": "Phase 2.2 local settings and UI state; Phase 12.2 cloud_settings for user/API/model settings",
           "gap": null
         },
         {
@@ -113757,9 +115051,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Keep provider IDs persisted and detail fetches transient",
           "source": "supporting_docs/technical_docs/storage-schema.md > Show (movie or TV series)",
           "severity": "important",
-          "coverage": "partial",
-          "evidence": "`### 2.1 shows Table`; `provider_data jsonb` and `### 3.1 External Catalog Integration`; transient detail fetch list",
-          "gap": "The plan persists provider data and keeps detail fetches transient, but it never constrains persisted provider storage to provider IDs only."
+          "coverage": "full",
+          "evidence": "Migration stores `provider_data`; Phase 4.2 marks credits/seasons/videos/recs/similar/images transient",
+          "gap": null
         },
         {
           "id": "PRD-037",
@@ -113768,7 +115062,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/technical_docs/storage-schema.md > Merge / overwrite policy (important)",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 3.1 External Catalog Integration`; `selectFirstNonEmpty`, timestamp merge, and `details_update_date = now()`",
+          "evidence": "Phase 4.3 `mergeCatalogShow` uses `selectFirstNonEmpty`, timestamp user fields, `detailsUpdateDate`",
           "gap": null
         },
         {
@@ -113778,7 +115072,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 6. App Structure & Navigation",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.1 Application Layout`; filter panel plus routed main destinations",
+          "evidence": "Phase 6.2 Filter Panel plus routes for home, detail, find, person, and settings",
           "gap": null
         },
         {
@@ -113787,9 +115081,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Keep Find/Discover in persistent primary navigation",
           "source": "product_prd.md > 6. App Structure & Navigation",
           "severity": "important",
-          "coverage": "partial",
-          "evidence": "`### 6.1 Application Layout`; route `/find` is defined",
-          "gap": "The plan defines the destination, but it does not specify a persistent primary-navigation affordance for Find/Discover."
+          "coverage": "full",
+          "evidence": "Phase 6.3 Primary Navigation includes Find/Discover",
+          "gap": null
         },
         {
           "id": "PRD-040",
@@ -113797,9 +115091,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Keep Settings in persistent primary navigation",
           "source": "product_prd.md > 6. App Structure & Navigation",
           "severity": "important",
-          "coverage": "partial",
-          "evidence": "`### 6.1 Application Layout`; route `/settings` is defined",
-          "gap": "The plan defines the destination, but it does not specify a persistent primary-navigation affordance for Settings."
+          "coverage": "full",
+          "evidence": "Phase 6.3 Primary Navigation includes Settings",
+          "gap": null
         },
         {
           "id": "PRD-041",
@@ -113808,7 +115102,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 6. App Structure & Navigation",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.3 Find/Discover Hub`; mode switcher with Search, Ask, and Alchemy",
+          "evidence": "Phase 9.1 FindHub has Search, Ask, and Alchemy tabs",
           "gap": null
         },
         {
@@ -113818,7 +115112,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.1 Collection Home",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.2 Collection Home`; \"Shows matching current filter\"",
+          "evidence": "Phase 7.1 filter parameter reduces the show pool before grouping",
           "gap": null
         },
         {
@@ -113828,7 +115122,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.1 Collection Home",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.2 Collection Home`; grouped status sections in the required order",
+          "evidence": "Phase 7.1 Status Grouping lists Active, Excited, Interested, Other",
           "gap": null
         },
         {
@@ -113838,7 +115132,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 4.5 Filters (Ways to View the Collection)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 3.3 Filter & Grouping Logic`",
+          "evidence": "Phase 6.2 Filter Panel includes All, tags, genre, decade, community score, and media type",
           "gap": null
         },
         {
@@ -113848,7 +115142,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.1 Collection Home",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.2 Collection Home`; poster, title, in-collection badge, rating badge",
+          "evidence": "Phase 7.2 Show Tile includes poster image, title, collection badge, and rating badge",
           "gap": null
         },
         {
@@ -113858,7 +115152,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.1 Collection Home",
           "severity": "detail",
           "coverage": "full",
-          "evidence": "`### 6.2 Collection Home`; empty states for no library and no filter results",
+          "evidence": "Phase 7.3 Empty States covers no collection and no filtered results",
           "gap": null
         },
         {
@@ -113868,7 +115162,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 4.2 Catalog API` and `### 6.3 Search Mode`; search by `q` and \"Text input, live queries\"",
+          "evidence": "Phase 9.2 Search Mode text input calls catalog search query endpoint",
           "gap": null
         },
         {
@@ -113878,7 +115172,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.3 Search Mode`; poster grid and in-collection badge",
+          "evidence": "Phase 9.2 Search results are poster grid with in-collection indicator",
           "gap": null
         },
         {
@@ -113888,7 +115182,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
           "severity": "detail",
           "coverage": "full",
-          "evidence": "`### 6.3 Search Mode`; \"Can be auto-opened on launch (`autoSearch` setting)\"",
+          "evidence": "Phase 9.2 auto-opens/focuses Search when `autoSearch = true`",
           "gap": null
         },
         {
@@ -113898,7 +115192,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/ai_voice_personality.md > 1. Persona Summary",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### AI Voice Consistency`; \"Search has no AI voice\"",
+          "evidence": "Phase 9.2 Search is a catalog text input/grid, separate from AI routes",
           "gap": null
         },
         {
@@ -113907,9 +115201,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Preserve Show Detail narrative section order",
           "source": "supporting_docs/detail_page_experience.md > 3. Narrative Hierarchy (Section Intent)",
           "severity": "important",
-          "coverage": "full",
-          "evidence": "`### 6.4 Show Detail`; \"Section order per spec\"",
-          "gap": null
+          "coverage": "partial",
+          "evidence": "Phase 8 says it follows the narrative hierarchy and lists all sections",
+          "gap": "The listed order inserts status/rating before tags and overview, so it does not preserve the exact detail-page narrative order from the spec."
         },
         {
           "id": "PRD-052",
@@ -113918,7 +115212,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 3.1 Header Media",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.4 Show Detail`; trailer video plus poster/logo fallback",
+          "evidence": "Phase 8.1 Header Media Carousel uses backdrops/posters/logos/trailers with poster fallback",
           "gap": null
         },
         {
@@ -113928,7 +115222,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 3.2 Core Facts + Community Score",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.4 Show Detail`; core facts + community score in section 2",
+          "evidence": "Phase 8.1 Core Facts Row includes year, runtime/seasons/episodes, and score bar",
           "gap": null
         },
         {
@@ -113938,7 +115232,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.4 Show Detail`; \"Toolbar controls (sticky/prominent, not in scroll body)\"",
+          "evidence": "Phase 8.1 Status/Interest Toolbar is near top and not in scroll body",
           "gap": null
         },
         {
@@ -113948,7 +115242,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 3.2 Collection Business Logic` and `### 6.4 Show Detail`",
+          "evidence": "Phase 5.2 tag update auto-saves as `later` plus `interested`",
           "gap": null
         },
         {
@@ -113958,7 +115252,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 3.2 Collection Business Logic` and `### 6.4 Show Detail`",
+          "evidence": "Phase 5.2 rating update auto-saves as `done`",
           "gap": null
         },
         {
@@ -113968,7 +115262,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 2. First-15-Seconds Experience",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.4 Show Detail`; overview appears immediately after the relationship controls",
+          "evidence": "Phase 8.1 places Overview before AI discovery, providers, cast, seasons, and financials",
           "gap": null
         },
         {
@@ -113978,7 +115272,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 3.4 Overview + Scoop",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.2 AI Scoop` and `### 6.4 Show Detail`; copy states plus \"Generating...\" feedback",
+          "evidence": "Phase 8.2 defines no_scoop, cached_scoop, open, streaming, and Generating state",
           "gap": null
         },
         {
@@ -113988,7 +115282,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 3.5 Ask About This Show",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.1 Ask`; Ask About This Show variant and `### 6.4 Show Detail` CTA",
+          "evidence": "Phase 8.1 CTA navigates with `showId`; Phase 9.3 fetches show data and seeds context",
           "gap": null
         },
         {
@@ -113998,7 +115292,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 3.6 Traditional Recommendations Strand",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.4 Show Detail`; traditional recommendations strand",
+          "evidence": "Phase 8.1 includes Traditional Recommendations Strand",
           "gap": null
         },
         {
@@ -114008,7 +115302,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 3.7 Explore Similar (Concept Discovery)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.4 Show Detail`; \"Get Concepts\" -> select -> \"Explore Shows\"",
+          "evidence": "Phase 8.3 starts with Get Concepts, then select concepts, then Explore Shows",
           "gap": null
         },
         {
@@ -114018,7 +115312,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 3.8 Streaming Availability",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.4 Show Detail`; streaming availability and cast/crew links to `/person/[id]`",
+          "evidence": "Phase 8.1 includes Streaming Availability and Cast/Crew strands linking to Person Detail",
           "gap": null
         },
         {
@@ -114028,7 +115322,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/detail_page_experience.md > 5. Critical States",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.4 Show Detail`; \"Seasons (TV only)\" and \"Budget / Revenue (movies)\"",
+          "evidence": "Phase 8.1 includes Seasons Panel TV only and Budget vs Revenue for movies",
           "gap": null
         },
         {
@@ -114037,9 +115331,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Keep primary actions early and page not overwhelming",
           "source": "supporting_docs/detail_page_experience.md > 4. Busyness vs Power",
           "severity": "important",
-          "coverage": "partial",
-          "evidence": "`### 6.4 Show Detail`; sticky toolbar plus Scoop, Ask, and Explore Similar placed high on the page",
-          "gap": "The section order front-loads actions, but the plan never explicitly addresses clutter control or the \"powerful but not overwhelming\" design constraint."
+          "coverage": "full",
+          "evidence": "Phase 8.1 clusters status, rating, tags, scoop, Ask, and Explore before long-tail info",
+          "gap": null
         },
         {
           "id": "PRD-065",
@@ -114048,7 +115342,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.1 Ask (Chat)` and `### 6.3 Ask Mode`",
+          "evidence": "Phase 9.3 Ask Mode provides chat UI with user typing and streaming assistant turns",
           "gap": null
         },
         {
@@ -114058,8 +115352,8 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/discovery_quality_bar.md > 2.2 Ask / Explore Search Chat",
           "severity": "important",
           "coverage": "partial",
-          "evidence": "`### 5.1 Ask (Chat)`; \"fun, chatty, spoiler-safe, opinionated friend\"",
-          "gap": "The plan covers persona and spoiler safety, but it does not explicitly require direct answers in the first lines or confident recommendation formatting."
+          "evidence": "Phase 10.5 shared persona includes spoiler-safe and opinionated honesty; Ask prompt picks favorites confidently",
+          "gap": "The plan does not encode the direct-answer-within-first-lines acceptance bar for Ask responses."
         },
         {
           "id": "PRD-067",
@@ -114068,7 +115362,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.1 Ask`; \"Mentioned Shows\" strip and `### 6.3 Ask Mode`",
+          "evidence": "Phase 9.3 `MentionedShowsStrip` updates as shows are parsed",
           "gap": null
         },
         {
@@ -114077,9 +115371,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Open Detail from mentions or Search fallback",
           "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
           "severity": "important",
-          "coverage": "full",
-          "evidence": "`### 5.1 Ask` and `### 6.3 Ask Mode`; detail open or Search handoff if unresolved",
-          "gap": null
+          "coverage": "partial",
+          "evidence": "Phase 9.3 parses mentioned shows and falls back to commentary plus Search handoff on failure",
+          "gap": "The plan does not explicitly specify tapping a mentioned-show strip item opens Show Detail when resolution succeeds."
         },
         {
           "id": "PRD-069",
@@ -114088,7 +115382,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.1 Ask`; six random starter prompts with refresh",
+          "evidence": "Phase 9.3 welcome view has six random starter prompts and Refresh",
           "gap": null
         },
         {
@@ -114098,7 +115392,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/ai_prompting_context.md > 4. Conversation Summarization (Chat Surfaces)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.1 Ask`; \"summarize oldest N turns into 1-2 sentences using same AI persona/tone\"",
+          "evidence": "Phase 10.2 summarization endpoint condenses older turns into same persona",
           "gap": null
         },
         {
@@ -114108,7 +115402,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.1 Ask About This Show variant`",
+          "evidence": "Phase 9.3 `Ask About a Show` fetches show data and seeds system context",
           "gap": null
         },
         {
@@ -114118,7 +115412,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/ai_prompting_context.md > 3.2 Ask with Mentions (Structured \"Mentioned Shows\")",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 5.1 Ask`; output `{ commentary, showList }` and exact `Title::externalId::mediaType` format",
+          "evidence": "Phase 9.3 structured output uses `commentary` and exact `Title::externalId::mediaType;;...` format",
           "gap": null
         },
         {
@@ -114128,7 +115422,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/ai_prompting_context.md > 5. Guardrails & Fallbacks",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.1 Ask`; failure handling block",
+          "evidence": "Phase 9.3 invalid format retries once, then falls back to commentary plus Search handoff",
           "gap": null
         },
         {
@@ -114138,7 +115432,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/ai_prompting_context.md > 1. Shared Rules (All AI Surfaces)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.1 Ask`; \"Domain restriction: TV/movies only\"",
+          "evidence": "Phase 10.5 shared prompt rules include TV/movie domain restriction",
           "gap": null
         },
         {
@@ -114148,8 +115442,8 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/concept_system.md > 1. What a Concept Is (User Definition)",
           "severity": "important",
           "coverage": "partial",
-          "evidence": "`### 5.3 Concepts (Single Show)`; diverse axes like structure, tone, emotion, and craft",
-          "gap": "The plan covers concept quality, but it never explicitly frames concepts as taste ingredients rather than genre labels."
+          "evidence": "Phase 10.3 requires evocative concepts, varied axes, and no generic placeholders",
+          "gap": "The plan does not explicitly state that concepts are taste ingredients rather than genre labels or plot categories."
         },
         {
           "id": "PRD-076",
@@ -114157,9 +115451,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Return bullet-only, 1-3 word, non-generic concepts",
           "source": "supporting_docs/ai_prompting_context.md > 3.4 Concepts (Single-Show and Multi-Show)",
           "severity": "important",
-          "coverage": "full",
-          "evidence": "`### 5.3 Concepts (Single Show)`; bullet list only, 1-3 words, non-generic",
-          "gap": null
+          "coverage": "partial",
+          "evidence": "Phase 10.3 returns 1-3 word evocative concepts with no generic placeholders",
+          "gap": "The concept API output is specified as JSON string arrays, but the prompt/output contract does not preserve the bullet-only requirement."
         },
         {
           "id": "PRD-077",
@@ -114168,7 +115462,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/concept_system.md > 4. Generation Rules",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.3 Concepts (Single Show)`; \"Ordered by aha strength\" and diverse axes",
+          "evidence": "Phase 10.3 concepts are ordered by strength and varied across axes",
           "gap": null
         },
         {
@@ -114177,9 +115471,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Require concept selection and guide ingredient picking",
           "source": "supporting_docs/concept_system.md > 5. Selection UX Rules",
           "severity": "important",
-          "coverage": "partial",
-          "evidence": "`### 5.3 Concepts (Single Show)` and `### 6.4 Show Detail`; concept selection is required before exploring",
-          "gap": "The interaction flow is covered, but the UI guidance to help users \"pick the ingredients you want more of\" is missing."
+          "coverage": "full",
+          "evidence": "Phase 8.3 requires selecting 1+ concepts; Phase 8.1/8.3 use concept chips before recommendations",
+          "gap": null
         },
         {
           "id": "PRD-079",
@@ -114188,7 +115482,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/concept_system.md > 6. Concepts \u2192 Recommendations Contract",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.5 Explore Similar`; \"Output: 5 show recommendations\"",
+          "evidence": "Phase 8.3 returns five show objects; Phase 10.4 counts are five for explore",
           "gap": null
         },
         {
@@ -114198,7 +115492,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.4 Alchemy (Find \u2192 Alchemy)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.6 Alchemy`; chaining via \"More Alchemy!\"",
+          "evidence": "Phase 9.4 covers select shows, conceptualize, alchemize, and More Alchemy chaining",
           "gap": null
         },
         {
@@ -114208,7 +115502,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.4 Alchemy (Find \u2192 Alchemy)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.6 Alchemy`; changing input shows or concepts clears downstream results",
+          "evidence": "Phase 9.4 says changing selected shows or concepts clears downstream results",
           "gap": null
         },
         {
@@ -114218,7 +115512,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/concept_system.md > 8. Notes",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.4 Concepts (Multi-Show / Alchemy)`; larger pool representing shared commonality",
+          "evidence": "Phase 9.4 and Phase 10.3 use multi-show concepts with 8+ options",
           "gap": null
         },
         {
@@ -114228,7 +115522,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/concept_system.md > 6. Concepts \u2192 Recommendations Contract",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.5 Explore Similar`; reason cites selected concepts",
+          "evidence": "Phase 10.4 recommendation output includes reason; Phase 9.4 reasons reference selected concepts",
           "gap": null
         },
         {
@@ -114238,8 +115532,8 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/discovery_quality_bar.md > 1.2 Taste Alignment",
           "severity": "important",
           "coverage": "partial",
-          "evidence": "`### 5.5 Explore Similar`; concept-cited reasons and `### AI Voice Consistency`; taste-aware recommendations",
-          "gap": "The plan covers alignment and explanation, but it does not set the \"surprising but defensible\" recommendation bar that differentiates discovery quality."
+          "evidence": "Phase 10.4 grounds recommendations in concepts, source shows, and user library with reasons",
+          "gap": "The plan lacks an explicit quality bar for pleasantly unexpected but defensible recommendations."
         },
         {
           "id": "PRD-085",
@@ -114248,7 +115542,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/ai_voice_personality.md > 1. Persona Summary",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### AI Voice Consistency`; \"All AI surfaces use the same base persona\"",
+          "evidence": "Phase 10.5 imports one shared persona header from `base.ts` for every surface",
           "gap": null
         },
         {
@@ -114258,7 +115552,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/ai_prompting_context.md > 1. Shared Rules (All AI Surfaces)",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### Spoiler Safety` and `### 5.1 Ask`; shared spoiler-safety and TV/movie-domain guardrails",
+          "evidence": "Phase 10.5 shared rules cover spoiler safety, honesty, and TV/movie restriction",
           "gap": null
         },
         {
@@ -114267,9 +115561,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Make AI warm, joyful, and light in critique",
           "source": "supporting_docs/ai_voice_personality.md > 2. Non-Negotiable Voice Pillars",
           "severity": "important",
-          "coverage": "partial",
-          "evidence": "`### 5.1 Ask`; \"fun, chatty\" persona and `### AI Voice Consistency`; surface adaptations",
-          "gap": "The plan names a shared persona, but it does not explicitly lock in the warm, joy-forward, light-critique behavior described in the spec."
+          "coverage": "full",
+          "evidence": "Phase 10.5 uses a \"fun, chatty TV/movie nerd friend\" persona and opinionated honesty",
+          "gap": null
         },
         {
           "id": "PRD-088",
@@ -114278,7 +115572,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/ai_voice_personality.md > 4.1 Scoop (Show Detail \"The Scoop\")",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.2 AI Scoop`; personal take, stack-up, Scoop centerpiece, fit, and verdict",
+          "evidence": "Phase 10.1 Scoop includes personal take, stack-up, centerpiece, fit/warnings, and verdict",
           "gap": null
         },
         {
@@ -114287,9 +115581,9 @@ window.__DASHBOARD_DATA__ = {
           "label": "Keep Ask brisk and dialogue-like by default",
           "source": "supporting_docs/ai_voice_personality.md > 4.2 Ask (Find \u2192 Ask)",
           "severity": "important",
-          "coverage": "partial",
-          "evidence": "`### 5.1 Ask`; conversational chat contract",
-          "gap": "Conversational behavior is covered, but the plan does not specify the brisk default length or dialogue cadence expected by the voice spec."
+          "coverage": "full",
+          "evidence": "Phase 9.3 chat UI and Phase 10.5 surface prompt use friend-like dialogue",
+          "gap": null
         },
         {
           "id": "PRD-090",
@@ -114298,7 +115592,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/ai_prompting_context.md > 2. Shared Inputs (Typical)",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 5.1 Ask`, `### 5.2 AI Scoop`, `### 5.3 Concepts`, `### 5.5 Explore Similar`, and `### 5.6 Alchemy`",
+          "evidence": "Phase 10 routes pass show context, user library, selected concepts, source shows, and recent turns",
           "gap": null
         },
         {
@@ -114308,8 +115602,8 @@ window.__DASHBOARD_DATA__ = {
           "source": "supporting_docs/discovery_quality_bar.md > 4. Scoring Rubric (Quick)",
           "severity": "important",
           "coverage": "partial",
-          "evidence": "`### 8.1 Unit Tests` and `### 8.2 Integration Tests`; parser, concept quality, and resolution tests",
-          "gap": "The plan includes some verification, but it does not define the explicit discovery rubric or a hard-fail quality gate for integrity."
+          "evidence": "Phase 14.3 resolves AI recommendations to real catalog items and Phase 15.3 tests the parser",
+          "gap": "The plan does not include discovery-rubric validation, golden-set checks, or hard-fail scoring for AI output quality."
         },
         {
           "id": "PRD-092",
@@ -114318,7 +115612,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.6 Person Detail Page",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.5 Person Detail`; image gallery and bio block",
+          "evidence": "Phase 11 Person Detail includes profile image/gallery, name, and bio",
           "gap": null
         },
         {
@@ -114328,7 +115622,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.6 Person Detail Page",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.5 Person Detail`; analytics charts for average rating, top genres, and projects by year",
+          "evidence": "Phase 11 Analytics Charts include average ratings, top genres, and projects by year",
           "gap": null
         },
         {
@@ -114338,7 +115632,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.6 Person Detail Page",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.5 Person Detail`; \"Filmography \u2014 grouped by year\"",
+          "evidence": "Phase 11 Filmography groups credits by year descending",
           "gap": null
         },
         {
@@ -114348,7 +115642,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.6 Person Detail Page",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.5 Person Detail`; each filmography item opens `/show/[id]`",
+          "evidence": "Phase 11 filmography items are tappable ShowTiles opening Show Detail",
           "gap": null
         },
         {
@@ -114358,7 +115652,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.7 Settings & Your Data",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.6 Settings`; font size selector and Search-on-launch toggle",
+          "evidence": "Phase 12.1 includes font size and Search on launch local settings",
           "gap": null
         },
         {
@@ -114368,7 +115662,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.7 Settings & Your Data",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.6 Settings` and `### 2.2 cloud_settings Table`; username, model, AI key, and catalog key with \"must never be committed\" note",
+          "evidence": "Phase 12.2 includes username, AI key, AI model, catalog key, masking, env precedence, and no commits",
           "gap": null
         },
         {
@@ -114378,7 +115672,7 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.7 Settings & Your Data",
           "severity": "critical",
           "coverage": "full",
-          "evidence": "`### 6.6 Settings`; \"Export My Data\" plus `GET /api/export`",
+          "evidence": "Phase 12.3 `Export My Data` builds a ZIP with shows and My Data",
           "gap": null
         },
         {
@@ -114388,18 +115682,1374 @@ window.__DASHBOARD_DATA__ = {
           "source": "product_prd.md > 7.7 Settings & Your Data",
           "severity": "important",
           "coverage": "full",
-          "evidence": "`### 6.6 Settings` and `### Export Flow`; ISO-8601 dates",
+          "evidence": "Phase 12.3 states saved shows export dates are encoded ISO-8601",
           "gap": null
         }
       ],
       "artifacts": {
-        "plan_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/PLAN.md",
-        "plan_eval_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/PLAN_EVAL.md",
-        "plan_eval_data_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/PLAN_EVAL_DATA.json",
-        "plan_eval_report_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/PLAN_EVAL_REPORT.html",
-        "run_metadata_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/run_metadata.json"
+        "plan_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN.md",
+        "plan_eval_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL.md",
+        "plan_eval_data_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_DATA.json",
+        "plan_eval_report_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_REPORT.html",
+        "run_metadata_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/run_metadata.json"
       },
       "runs": [
+        {
+          "run_id": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+          "worktree_name": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+          "branch_name": "benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02",
+          "captured_at": "2026-04-28T13:17:29.724977Z",
+          "model_id": "sonnet_4_6",
+          "series_id": "sonnet_4_6__claude_code__high",
+          "case_id": "sonnet_4_6__claude_code__high__no_plan_mode",
+          "case_slug": "no_plan_mode",
+          "case_label": "No Planning",
+          "replicate_index": 2,
+          "baseline_case": false,
+          "model_name": "Sonnet 4.6",
+          "model_family": "Claude Sonnet",
+          "manufacturer": "Anthropic",
+          "tool": "Claude Code",
+          "tool_slug": "claude_code",
+          "effort": "High",
+          "effort_slug": "high",
+          "variant": "No Planning",
+          "frontier": null,
+          "evaluator_model": "gpt-5.5",
+          "inference_profile": "Default",
+          "inference_profile_slug": "default",
+          "requested_context_window_tokens": null,
+          "planning_mode": false,
+          "prompt_profile": "Default Step 1",
+          "prompt_profile_slug": "default_step1",
+          "experiment_role": "replicate",
+          "experiment_tags": [
+            "no_plan_mode"
+          ],
+          "scenario": {
+            "slug": "no_plan_mode",
+            "label": "No Planning",
+            "description": null,
+            "hypothesis": null
+          },
+          "planning_runtime_seconds": 53837,
+          "plan_tool_call_count": 50,
+          "plan_estimated_cost_usd": null,
+          "plan_input_tokens": 223271,
+          "plan_cached_input_tokens": 1914482,
+          "plan_output_tokens": 21747,
+          "plan_session_trusted": true,
+          "plan_session_untrusted_reason": null,
+          "plan_saved": true,
+          "plan_eval_report_generated": true,
+          "save_blocked_by_mode": false,
+          "supports_area_comparison": true,
+          "taxonomy_version": "shows_prd_v1",
+          "requirement_catalog": {
+            "available": true,
+            "version": "requirements_catalog_v1",
+            "path": "evaluator/requirements_catalog_v1.md",
+            "matches": true,
+            "expected_total_requirements": 99,
+            "expected_functional_area_count": 10,
+            "requirement_order_matches": true,
+            "area_order_matches": true,
+            "missing_ids": [],
+            "unexpected_ids": [],
+            "field_mismatches": []
+          },
+          "requirement_catalog_available": true,
+          "requirement_catalog_version": "requirements_catalog_v1",
+          "requirement_catalog_matches": true,
+          "requirement_catalog_expected_total_requirements": 99,
+          "scores": {
+            "critical": 100.0,
+            "important": 93.28,
+            "detail": 100.0,
+            "overall": 95.45
+          },
+          "summary": {
+            "functional_area_count": 10,
+            "total_requirements": 99,
+            "severity_counts": {
+              "critical": 30,
+              "important": 67,
+              "detail": 2
+            },
+            "coverage_counts": {
+              "full": 90,
+              "partial": 9,
+              "missing": 0
+            }
+          },
+          "area_scores": [
+            {
+              "name": "Benchmark Runtime & Isolation",
+              "score": 100.0,
+              "counts": {
+                "total": 17,
+                "full": 17,
+                "partial": 0,
+                "missing": 0
+              }
+            },
+            {
+              "name": "Collection Data & Persistence",
+              "score": 95.0,
+              "counts": {
+                "total": 20,
+                "full": 18,
+                "partial": 2,
+                "missing": 0
+              }
+            },
+            {
+              "name": "App Navigation & Discover Shell",
+              "score": 100.0,
+              "counts": {
+                "total": 4,
+                "full": 4,
+                "partial": 0,
+                "missing": 0
+              }
+            },
+            {
+              "name": "Collection Home & Search",
+              "score": 100.0,
+              "counts": {
+                "total": 9,
+                "full": 9,
+                "partial": 0,
+                "missing": 0
+              }
+            },
+            {
+              "name": "Show Detail & Relationship UX",
+              "score": 96.4,
+              "counts": {
+                "total": 14,
+                "full": 13,
+                "partial": 1,
+                "missing": 0
+              }
+            },
+            {
+              "name": "Ask Chat",
+              "score": 90.0,
+              "counts": {
+                "total": 10,
+                "full": 8,
+                "partial": 2,
+                "missing": 0
+              }
+            },
+            {
+              "name": "Concepts, Explore Similar & Alchemy",
+              "score": 85.0,
+              "counts": {
+                "total": 10,
+                "full": 7,
+                "partial": 3,
+                "missing": 0
+              }
+            },
+            {
+              "name": "AI Voice, Persona & Quality",
+              "score": 92.9,
+              "counts": {
+                "total": 7,
+                "full": 6,
+                "partial": 1,
+                "missing": 0
+              }
+            },
+            {
+              "name": "Person Detail",
+              "score": 100.0,
+              "counts": {
+                "total": 4,
+                "full": 4,
+                "partial": 0,
+                "missing": 0
+              }
+            },
+            {
+              "name": "Settings & Export",
+              "score": 100.0,
+              "counts": {
+                "total": 4,
+                "full": 4,
+                "partial": 0,
+                "missing": 0
+              }
+            }
+          ],
+          "top_gaps": [],
+          "narrative": {
+            "overall_posture": "This is a strong implementation plan with no critical misses. It covers the mandated Next.js/Supabase architecture, namespace/user isolation, schema shape, save semantics, detail and discovery flows, AI contracts, settings, export, and major testing concerns. The remaining issues are not structural blockers, but they are meaningful because they sit around polish-sensitive product contracts: sync integrity, detail-page storytelling, and AI quality assurance.",
+            "strength_clusters": "The plan is strongest in Benchmark Runtime & Isolation, Collection Data & Persistence, App Navigation & Discover Shell, Collection Home & Search, Person Detail, and Settings & Export. The infra rider is especially well covered: environment config, server-only secrets, Supabase persistence, namespace isolation, `user_id`, reset scripts, migrations, and no-Docker compatibility all have concrete implementation details. Core collection behavior is also well represented, including auto-save defaults, removal semantics, overlay rules, AI recommendation resolution, and data export.",
+            "weakness_clusters": "The partial items cluster around quality contracts rather than raw feature presence. The plan often names the correct component or API route, but misses the stricter acceptance language behind a few requirements: timestamp-based sorting, duplicate merge policy, exact detail-page narrative order, Ask directness, concept output shape, surprise-but-defensible recommendation quality, and rubric-based AI validation. These are the kinds of gaps that show up in QA and product review after the app technically works.",
+            "risk_assessment": "If executed as-is, the most likely failure mode is a product that is functionally complete but uneven in trust and taste. Users would probably see the app save, search, chat, recommend, and export correctly, but stakeholders may notice that discovery quality is not systematically validated, Ask can be charming without answering fast enough, and the detail page may feel busier or less intentional than the spec's narrative hierarchy. Cross-device users may also expose sync and duplicate handling gaps before single-user benchmark testing does.",
+            "remediation_guidance": "The remaining work is mostly specification tightening. Add explicit timestamp sorting behavior, duplicate merge rules, and settings conflict resolution. Restore or deliberately justify the detail-page narrative order against the supporting spec. Convert the AI quality bar into prompt contracts, acceptance criteria, and tests/golden scenarios, including Ask directness, concept formatting, surprise-without-betrayal, and rubric hard-fail handling for real-show integrity. These changes do not require a new architecture; they require sharper behavioral acceptance criteria inside the existing plan."
+          },
+          "requirements": [
+            {
+              "id": "PRD-001",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Use Next.js latest stable runtime",
+              "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Technology Stack: \"Next.js (latest stable)\"; Phase 1.1 initializes Next.js App Router",
+              "gap": null
+            },
+            {
+              "id": "PRD-002",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Use Supabase official client libraries",
+              "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Technology Stack: \"Supabase (hosted)\"; Phase 1.4 Supabase Client Setup",
+              "gap": null
+            },
+            {
+              "id": "PRD-003",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Ship `.env.example` with required variables",
+              "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 1.2 Environment Variables lists `.env.example` with required vars and comments",
+              "gap": null
+            },
+            {
+              "id": "PRD-004",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Ignore `.env*` secrets except example",
+              "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 1.2 `.gitignore` additions exclude `.env`, `.env.local`, `.env.*.local`",
+              "gap": null
+            },
+            {
+              "id": "PRD-005",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Configure build through env without code edits",
+              "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 1.2 env variables cover Supabase, namespace, catalog, AI, and app config",
+              "gap": null
+            },
+            {
+              "id": "PRD-006",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Keep secrets out of repo and server-only",
+              "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 1.4 server client uses service role server-only; checklist says AI key never committed",
+              "gap": null
+            },
+            {
+              "id": "PRD-007",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Provide app, test, reset command scripts",
+              "source": "infra_rider_prd.md > 3.2 One-command developer experience",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 1.3 npm scripts includes `dev`, `test`, and `test:reset`",
+              "gap": null
+            },
+            {
+              "id": "PRD-008",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Include repeatable schema evolution artifacts",
+              "source": "infra_rider_prd.md > 3.3 Database evolution artifacts",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 2 Migration Files and Phase 13.2 forward-only `supabase/migrations/`",
+              "gap": null
+            },
+            {
+              "id": "PRD-009",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Use one stable namespace per build",
+              "source": "infra_rider_prd.md > 4.1 Build/run namespace (required)",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Architectural Decision 2: `namespace_id` stable per build/run via `NAMESPACE_ID`",
+              "gap": null
+            },
+            {
+              "id": "PRD-010",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Isolate namespaces and scope destructive resets",
+              "source": "infra_rider_prd.md > 4.1 Build/run namespace (required)",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Identity model uses namespace predicates; Phase 15.2 reset deletes by namespace only",
+              "gap": null
+            },
+            {
+              "id": "PRD-011",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Attach every user record to `user_id`",
+              "source": "infra_rider_prd.md > 4.2 User identity (required)",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Shows, cloud_settings, and app_metadata tables include `user_id`; all queries use partition",
+              "gap": null
+            },
+            {
+              "id": "PRD-012",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Partition persisted data by namespace and user",
+              "source": "infra_rider_prd.md > 4.3 Relationship between namespace and user",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Architectural Decision 2: all Supabase queries include `namespace_id` and `user_id`",
+              "gap": null
+            },
+            {
+              "id": "PRD-013",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Support documented dev auth injection, prod-gated",
+              "source": "infra_rider_prd.md > 5.1 Auth is not required to be \"real\" in benchmark mode",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 3.2 accepts `X-User-Id` only in development/test and validates real auth in production",
+              "gap": null
+            },
+            {
+              "id": "PRD-014",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Real OAuth later needs no schema redesign",
+              "source": "infra_rider_prd.md > 5.2 Migration to real OAuth must be straightforward",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 3.3 maps OAuth user id into existing `user_id` with no schema changes",
+              "gap": null
+            },
+            {
+              "id": "PRD-015",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Keep backend as persisted source of truth",
+              "source": "infra_rider_prd.md > 6.1 Source of truth",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Architectural Decision 3: all user-owned data lives in Supabase",
+              "gap": null
+            },
+            {
+              "id": "PRD-016",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Make client cache safe to discard",
+              "source": "infra_rider_prd.md > 6.2 Cache is disposable",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Architectural Decision 3: clearing client cache never loses data",
+              "gap": null
+            },
+            {
+              "id": "PRD-017",
+              "area": "Benchmark Runtime & Isolation",
+              "label": "Avoid Docker requirement for cloud-agent compatibility",
+              "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Technology Stack: Docker explicitly not required; hosted Supabase path",
+              "gap": null
+            },
+            {
+              "id": "PRD-018",
+              "area": "Collection Data & Persistence",
+              "label": "Overlay saved user data on every show appearance",
+              "source": "product_prd.md > 4.1 Show (Movie or TV)",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 14.1 applies overlay in lists, search, AI recommendations, and person filmography",
+              "gap": null
+            },
+            {
+              "id": "PRD-019",
+              "area": "Collection Data & Persistence",
+              "label": "Support visible statuses plus hidden `Next`",
+              "source": "product_prd.md > 4.2 Status System (\"My Status\")",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Migration enum includes `next`; UI chips expose Active, Interested, Excited, Done, Wait, Quit",
+              "gap": null
+            },
+            {
+              "id": "PRD-020",
+              "area": "Collection Data & Persistence",
+              "label": "Map Interested/Excited chips to Later interest",
+              "source": "product_prd.md > 4.2 Status System (\"My Status\")",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 8.1 Status Toolbar maps Interested/Excited to `later` plus `myInterest`",
+              "gap": null
+            },
+            {
+              "id": "PRD-021",
+              "area": "Collection Data & Persistence",
+              "label": "Support free-form multi-tag personal tag library",
+              "source": "product_prd.md > 4.4 Tags (User Lists)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "`my_tags` array, TagPicker, and Filter Panel \"one entry per distinct tag\"",
+              "gap": null
+            },
+            {
+              "id": "PRD-022",
+              "area": "Collection Data & Persistence",
+              "label": "Define collection membership by assigned status",
+              "source": "product_prd.md > 5.1 Collection Membership",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "CRUD and status removal model make persisted collection entries status-owned; DELETE removes item",
+              "gap": null
+            },
+            {
+              "id": "PRD-023",
+              "area": "Collection Data & Persistence",
+              "label": "Save shows from status, interest, rating, tagging",
+              "source": "product_prd.md > 5.2 Saving Triggers",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 5.2 Auto-Save Rules covers rating, tag, and status/interest updates",
+              "gap": null
+            },
+            {
+              "id": "PRD-024",
+              "area": "Collection Data & Persistence",
+              "label": "Default save to Later/Interested except rating-save Done",
+              "source": "product_prd.md > 5.3 Default Values When Saving",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 5.3 Default Values states Later/Interested, with rating exception Done",
+              "gap": null
+            },
+            {
+              "id": "PRD-025",
+              "area": "Collection Data & Persistence",
+              "label": "Removing status deletes show and all My Data",
+              "source": "product_prd.md > 5.4 Removing from Collection",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 14.2 StatusRemovalModal executes DELETE that clears all My Data server-side",
+              "gap": null
+            },
+            {
+              "id": "PRD-026",
+              "area": "Collection Data & Persistence",
+              "label": "Re-add preserves My Data and refreshes public data",
+              "source": "product_prd.md > 5.5 Re-adding the Same Show",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 4.3 `mergeCatalogShow` preserves user fields and Phase 5.1 upsert merges fresh catalog data",
+              "gap": null
+            },
+            {
+              "id": "PRD-027",
+              "area": "Collection Data & Persistence",
+              "label": "Track per-field My Data modification timestamps",
+              "source": "product_prd.md > 5.6 Timestamps",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Migration fields and Phase 5.4 set `*_update_date` for each PATCH route",
+              "gap": null
+            },
+            {
+              "id": "PRD-028",
+              "area": "Collection Data & Persistence",
+              "label": "Use timestamps for sorting, sync, freshness",
+              "source": "product_prd.md > 5.6 Timestamps",
+              "severity": "important",
+              "coverage": "partial",
+              "evidence": "Phase 4.3 uses timestamps for merge conflicts; Phase 8.2 uses `aiScoopUpdateDate` for 4h freshness",
+              "gap": "The plan does not specify timestamp-based sorting behavior for collection views or recent-update ordering."
+            },
+            {
+              "id": "PRD-029",
+              "area": "Collection Data & Persistence",
+              "label": "Persist Scoop only for saved shows, 4h freshness",
+              "source": "product_prd.md > 4.9 AI Scoop (\"The Scoop\")",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 8.2 persists scoop only if in collection and regenerates after 4 hours",
+              "gap": null
+            },
+            {
+              "id": "PRD-030",
+              "area": "Collection Data & Persistence",
+              "label": "Keep Ask and Alchemy state session-only",
+              "source": "product_prd.md > 5.7 AI Data Persistence",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Ask reset clears session; Alchemy changing inputs clears concepts/results with no persistence tables",
+              "gap": null
+            },
+            {
+              "id": "PRD-031",
+              "area": "Collection Data & Persistence",
+              "label": "Resolve AI recommendations to real selectable shows",
+              "source": "product_prd.md > 5.8 AI Recommendations Map to Real Shows",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 14.3 resolves by external ID and renders found items as tappable ShowTiles",
+              "gap": null
+            },
+            {
+              "id": "PRD-032",
+              "area": "Collection Data & Persistence",
+              "label": "Show collection and rating tile indicators",
+              "source": "product_prd.md > 5.9 Tile Indicators",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 7.2 Show Tile has in-collection and user rating badges",
+              "gap": null
+            },
+            {
+              "id": "PRD-033",
+              "area": "Collection Data & Persistence",
+              "label": "Sync libraries/settings consistently and merge duplicates",
+              "source": "product_prd.md > 5.10 Data Sync & Integrity",
+              "severity": "important",
+              "coverage": "partial",
+              "evidence": "Supabase is source of truth; cloud_settings exists; merge logic uses timestamps for stored shows",
+              "gap": "Duplicate detection/transparent merge and explicit cross-device settings conflict policy are not planned."
+            },
+            {
+              "id": "PRD-034",
+              "area": "Collection Data & Persistence",
+              "label": "Preserve saved libraries across data-model upgrades",
+              "source": "product_prd.md > 5.11 Data Continuity Across Versions",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 13 migration tracking uses additive, idempotent migrations and backfills",
+              "gap": null
+            },
+            {
+              "id": "PRD-035",
+              "area": "Collection Data & Persistence",
+              "label": "Persist synced settings, local settings, UI state",
+              "source": "supporting_docs/technical_docs/storage-schema.md > Other persistent storage (key-value settings)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 2.2 local settings and UI state; Phase 12.2 cloud_settings for user/API/model settings",
+              "gap": null
+            },
+            {
+              "id": "PRD-036",
+              "area": "Collection Data & Persistence",
+              "label": "Keep provider IDs persisted and detail fetches transient",
+              "source": "supporting_docs/technical_docs/storage-schema.md > Show (movie or TV series)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Migration stores `provider_data`; Phase 4.2 marks credits/seasons/videos/recs/similar/images transient",
+              "gap": null
+            },
+            {
+              "id": "PRD-037",
+              "area": "Collection Data & Persistence",
+              "label": "Merge catalog fields safely and maintain timestamps",
+              "source": "supporting_docs/technical_docs/storage-schema.md > Merge / overwrite policy (important)",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 4.3 `mergeCatalogShow` uses `selectFirstNonEmpty`, timestamp user fields, `detailsUpdateDate`",
+              "gap": null
+            },
+            {
+              "id": "PRD-038",
+              "area": "App Navigation & Discover Shell",
+              "label": "Provide filters panel and main screen destinations",
+              "source": "product_prd.md > 6. App Structure & Navigation",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 6.2 Filter Panel plus routes for home, detail, find, person, and settings",
+              "gap": null
+            },
+            {
+              "id": "PRD-039",
+              "area": "App Navigation & Discover Shell",
+              "label": "Keep Find/Discover in persistent primary navigation",
+              "source": "product_prd.md > 6. App Structure & Navigation",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 6.3 Primary Navigation includes Find/Discover",
+              "gap": null
+            },
+            {
+              "id": "PRD-040",
+              "area": "App Navigation & Discover Shell",
+              "label": "Keep Settings in persistent primary navigation",
+              "source": "product_prd.md > 6. App Structure & Navigation",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 6.3 Primary Navigation includes Settings",
+              "gap": null
+            },
+            {
+              "id": "PRD-041",
+              "area": "App Navigation & Discover Shell",
+              "label": "Offer Search, Ask, Alchemy discover modes",
+              "source": "product_prd.md > 6. App Structure & Navigation",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.1 FindHub has Search, Ask, and Alchemy tabs",
+              "gap": null
+            },
+            {
+              "id": "PRD-042",
+              "area": "Collection Home & Search",
+              "label": "Show only library items matching active filters",
+              "source": "product_prd.md > 7.1 Collection Home",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 7.1 filter parameter reduces the show pool before grouping",
+              "gap": null
+            },
+            {
+              "id": "PRD-043",
+              "area": "Collection Home & Search",
+              "label": "Group home into Active, Excited, Interested, Others",
+              "source": "product_prd.md > 7.1 Collection Home",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 7.1 Status Grouping lists Active, Excited, Interested, Other",
+              "gap": null
+            },
+            {
+              "id": "PRD-044",
+              "area": "Collection Home & Search",
+              "label": "Support All, tag, genre, decade, score, media filters",
+              "source": "product_prd.md > 4.5 Filters (Ways to View the Collection)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 6.2 Filter Panel includes All, tags, genre, decade, community score, and media type",
+              "gap": null
+            },
+            {
+              "id": "PRD-045",
+              "area": "Collection Home & Search",
+              "label": "Render poster, title, and My Data badges",
+              "source": "product_prd.md > 7.1 Collection Home",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 7.2 Show Tile includes poster image, title, collection badge, and rating badge",
+              "gap": null
+            },
+            {
+              "id": "PRD-046",
+              "area": "Collection Home & Search",
+              "label": "Provide empty-library and empty-filter states",
+              "source": "product_prd.md > 7.1 Collection Home",
+              "severity": "detail",
+              "coverage": "full",
+              "evidence": "Phase 7.3 Empty States covers no collection and no filtered results",
+              "gap": null
+            },
+            {
+              "id": "PRD-047",
+              "area": "Collection Home & Search",
+              "label": "Search by title or keywords",
+              "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.2 Search Mode text input calls catalog search query endpoint",
+              "gap": null
+            },
+            {
+              "id": "PRD-048",
+              "area": "Collection Home & Search",
+              "label": "Use poster grid with collection markers",
+              "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.2 Search results are poster grid with in-collection indicator",
+              "gap": null
+            },
+            {
+              "id": "PRD-049",
+              "area": "Collection Home & Search",
+              "label": "Auto-open Search when setting is enabled",
+              "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
+              "severity": "detail",
+              "coverage": "full",
+              "evidence": "Phase 9.2 auto-opens/focuses Search when `autoSearch = true`",
+              "gap": null
+            },
+            {
+              "id": "PRD-050",
+              "area": "Collection Home & Search",
+              "label": "Keep Search non-AI in tone",
+              "source": "supporting_docs/ai_voice_personality.md > 1. Persona Summary",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.2 Search is a catalog text input/grid, separate from AI routes",
+              "gap": null
+            },
+            {
+              "id": "PRD-051",
+              "area": "Show Detail & Relationship UX",
+              "label": "Preserve Show Detail narrative section order",
+              "source": "supporting_docs/detail_page_experience.md > 3. Narrative Hierarchy (Section Intent)",
+              "severity": "important",
+              "coverage": "partial",
+              "evidence": "Phase 8 says it follows the narrative hierarchy and lists all sections",
+              "gap": "The listed order inserts status/rating before tags and overview, so it does not preserve the exact detail-page narrative order from the spec."
+            },
+            {
+              "id": "PRD-052",
+              "area": "Show Detail & Relationship UX",
+              "label": "Prioritize motion-rich header with graceful fallback",
+              "source": "supporting_docs/detail_page_experience.md > 3.1 Header Media",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.1 Header Media Carousel uses backdrops/posters/logos/trailers with poster fallback",
+              "gap": null
+            },
+            {
+              "id": "PRD-053",
+              "area": "Show Detail & Relationship UX",
+              "label": "Surface year, runtime/seasons, and community score early",
+              "source": "supporting_docs/detail_page_experience.md > 3.2 Core Facts + Community Score",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.1 Core Facts Row includes year, runtime/seasons/episodes, and score bar",
+              "gap": null
+            },
+            {
+              "id": "PRD-054",
+              "area": "Show Detail & Relationship UX",
+              "label": "Place status/interest controls in toolbar",
+              "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.1 Status/Interest Toolbar is near top and not in scroll body",
+              "gap": null
+            },
+            {
+              "id": "PRD-055",
+              "area": "Show Detail & Relationship UX",
+              "label": "Auto-save unsaved tagged show as Later/Interested",
+              "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 5.2 tag update auto-saves as `later` plus `interested`",
+              "gap": null
+            },
+            {
+              "id": "PRD-056",
+              "area": "Show Detail & Relationship UX",
+              "label": "Auto-save unsaved rated show as Done",
+              "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 5.2 rating update auto-saves as `done`",
+              "gap": null
+            },
+            {
+              "id": "PRD-057",
+              "area": "Show Detail & Relationship UX",
+              "label": "Show overview early for fast scanning",
+              "source": "supporting_docs/detail_page_experience.md > 2. First-15-Seconds Experience",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.1 places Overview before AI discovery, providers, cast, seasons, and financials",
+              "gap": null
+            },
+            {
+              "id": "PRD-058",
+              "area": "Show Detail & Relationship UX",
+              "label": "Scoop shows correct states and progressive feedback",
+              "source": "supporting_docs/detail_page_experience.md > 3.4 Overview + Scoop",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.2 defines no_scoop, cached_scoop, open, streaming, and Generating state",
+              "gap": null
+            },
+            {
+              "id": "PRD-059",
+              "area": "Show Detail & Relationship UX",
+              "label": "Ask-about-show deep-link seeds Ask context",
+              "source": "supporting_docs/detail_page_experience.md > 3.5 Ask About This Show",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.1 CTA navigates with `showId`; Phase 9.3 fetches show data and seeds context",
+              "gap": null
+            },
+            {
+              "id": "PRD-060",
+              "area": "Show Detail & Relationship UX",
+              "label": "Include traditional recommendations strand",
+              "source": "supporting_docs/detail_page_experience.md > 3.6 Traditional Recommendations Strand",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.1 includes Traditional Recommendations Strand",
+              "gap": null
+            },
+            {
+              "id": "PRD-061",
+              "area": "Show Detail & Relationship UX",
+              "label": "Explore Similar uses CTA-first concept flow",
+              "source": "supporting_docs/detail_page_experience.md > 3.7 Explore Similar (Concept Discovery)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.3 starts with Get Concepts, then select concepts, then Explore Shows",
+              "gap": null
+            },
+            {
+              "id": "PRD-062",
+              "area": "Show Detail & Relationship UX",
+              "label": "Include streaming availability and person-linking credits",
+              "source": "supporting_docs/detail_page_experience.md > 3.8 Streaming Availability",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.1 includes Streaming Availability and Cast/Crew strands linking to Person Detail",
+              "gap": null
+            },
+            {
+              "id": "PRD-063",
+              "area": "Show Detail & Relationship UX",
+              "label": "Gate seasons to TV and financials to movies",
+              "source": "supporting_docs/detail_page_experience.md > 5. Critical States",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.1 includes Seasons Panel TV only and Budget vs Revenue for movies",
+              "gap": null
+            },
+            {
+              "id": "PRD-064",
+              "area": "Show Detail & Relationship UX",
+              "label": "Keep primary actions early and page not overwhelming",
+              "source": "supporting_docs/detail_page_experience.md > 4. Busyness vs Power",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.1 clusters status, rating, tags, scoop, Ask, and Explore before long-tail info",
+              "gap": null
+            },
+            {
+              "id": "PRD-065",
+              "area": "Ask Chat",
+              "label": "Provide conversational Ask chat interface",
+              "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.3 Ask Mode provides chat UI with user typing and streaming assistant turns",
+              "gap": null
+            },
+            {
+              "id": "PRD-066",
+              "area": "Ask Chat",
+              "label": "Answer directly with confident, spoiler-safe recommendations",
+              "source": "supporting_docs/discovery_quality_bar.md > 2.2 Ask / Explore Search Chat",
+              "severity": "important",
+              "coverage": "partial",
+              "evidence": "Phase 10.5 shared persona includes spoiler-safe and opinionated honesty; Ask prompt picks favorites confidently",
+              "gap": "The plan does not encode the direct-answer-within-first-lines acceptance bar for Ask responses."
+            },
+            {
+              "id": "PRD-067",
+              "area": "Ask Chat",
+              "label": "Show horizontal mentioned-shows strip from chat",
+              "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.3 `MentionedShowsStrip` updates as shows are parsed",
+              "gap": null
+            },
+            {
+              "id": "PRD-068",
+              "area": "Ask Chat",
+              "label": "Open Detail from mentions or Search fallback",
+              "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+              "severity": "important",
+              "coverage": "partial",
+              "evidence": "Phase 9.3 parses mentioned shows and falls back to commentary plus Search handoff on failure",
+              "gap": "The plan does not explicitly specify tapping a mentioned-show strip item opens Show Detail when resolution succeeds."
+            },
+            {
+              "id": "PRD-069",
+              "area": "Ask Chat",
+              "label": "Show six random starter prompts with refresh",
+              "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.3 welcome view has six random starter prompts and Refresh",
+              "gap": null
+            },
+            {
+              "id": "PRD-070",
+              "area": "Ask Chat",
+              "label": "Summarize older turns while preserving voice",
+              "source": "supporting_docs/ai_prompting_context.md > 4. Conversation Summarization (Chat Surfaces)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 10.2 summarization endpoint condenses older turns into same persona",
+              "gap": null
+            },
+            {
+              "id": "PRD-071",
+              "area": "Ask Chat",
+              "label": "Seed Ask-about-show sessions with show handoff",
+              "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.3 `Ask About a Show` fetches show data and seeds system context",
+              "gap": null
+            },
+            {
+              "id": "PRD-072",
+              "area": "Ask Chat",
+              "label": "Emit `commentary` plus exact `showList` contract",
+              "source": "supporting_docs/ai_prompting_context.md > 3.2 Ask with Mentions (Structured \"Mentioned Shows\")",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 9.3 structured output uses `commentary` and exact `Title::externalId::mediaType;;...` format",
+              "gap": null
+            },
+            {
+              "id": "PRD-073",
+              "area": "Ask Chat",
+              "label": "Retry malformed mention output once, then fallback",
+              "source": "supporting_docs/ai_prompting_context.md > 5. Guardrails & Fallbacks",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.3 invalid format retries once, then falls back to commentary plus Search handoff",
+              "gap": null
+            },
+            {
+              "id": "PRD-074",
+              "area": "Ask Chat",
+              "label": "Redirect Ask back into TV/movie domain",
+              "source": "supporting_docs/ai_prompting_context.md > 1. Shared Rules (All AI Surfaces)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 10.5 shared prompt rules include TV/movie domain restriction",
+              "gap": null
+            },
+            {
+              "id": "PRD-075",
+              "area": "Concepts, Explore Similar & Alchemy",
+              "label": "Treat concepts as taste ingredients, not genres",
+              "source": "supporting_docs/concept_system.md > 1. What a Concept Is (User Definition)",
+              "severity": "important",
+              "coverage": "partial",
+              "evidence": "Phase 10.3 requires evocative concepts, varied axes, and no generic placeholders",
+              "gap": "The plan does not explicitly state that concepts are taste ingredients rather than genre labels or plot categories."
+            },
+            {
+              "id": "PRD-076",
+              "area": "Concepts, Explore Similar & Alchemy",
+              "label": "Return bullet-only, 1-3 word, non-generic concepts",
+              "source": "supporting_docs/ai_prompting_context.md > 3.4 Concepts (Single-Show and Multi-Show)",
+              "severity": "important",
+              "coverage": "partial",
+              "evidence": "Phase 10.3 returns 1-3 word evocative concepts with no generic placeholders",
+              "gap": "The concept API output is specified as JSON string arrays, but the prompt/output contract does not preserve the bullet-only requirement."
+            },
+            {
+              "id": "PRD-077",
+              "area": "Concepts, Explore Similar & Alchemy",
+              "label": "Order concepts by strongest aha and varied axes",
+              "source": "supporting_docs/concept_system.md > 4. Generation Rules",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 10.3 concepts are ordered by strength and varied across axes",
+              "gap": null
+            },
+            {
+              "id": "PRD-078",
+              "area": "Concepts, Explore Similar & Alchemy",
+              "label": "Require concept selection and guide ingredient picking",
+              "source": "supporting_docs/concept_system.md > 5. Selection UX Rules",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.3 requires selecting 1+ concepts; Phase 8.1/8.3 use concept chips before recommendations",
+              "gap": null
+            },
+            {
+              "id": "PRD-079",
+              "area": "Concepts, Explore Similar & Alchemy",
+              "label": "Return exactly five Explore Similar recommendations",
+              "source": "supporting_docs/concept_system.md > 6. Concepts \u2192 Recommendations Contract",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 8.3 returns five show objects; Phase 10.4 counts are five for explore",
+              "gap": null
+            },
+            {
+              "id": "PRD-080",
+              "area": "Concepts, Explore Similar & Alchemy",
+              "label": "Support full Alchemy loop with chaining",
+              "source": "product_prd.md > 7.4 Alchemy (Find \u2192 Alchemy)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.4 covers select shows, conceptualize, alchemize, and More Alchemy chaining",
+              "gap": null
+            },
+            {
+              "id": "PRD-081",
+              "area": "Concepts, Explore Similar & Alchemy",
+              "label": "Clear downstream results when inputs change",
+              "source": "product_prd.md > 7.4 Alchemy (Find \u2192 Alchemy)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.4 says changing selected shows or concepts clears downstream results",
+              "gap": null
+            },
+            {
+              "id": "PRD-082",
+              "area": "Concepts, Explore Similar & Alchemy",
+              "label": "Generate shared multi-show concepts with larger option pool",
+              "source": "supporting_docs/concept_system.md > 8. Notes",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.4 and Phase 10.3 use multi-show concepts with 8+ options",
+              "gap": null
+            },
+            {
+              "id": "PRD-083",
+              "area": "Concepts, Explore Similar & Alchemy",
+              "label": "Cite selected concepts in concise recommendation reasons",
+              "source": "supporting_docs/concept_system.md > 6. Concepts \u2192 Recommendations Contract",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 10.4 recommendation output includes reason; Phase 9.4 reasons reference selected concepts",
+              "gap": null
+            },
+            {
+              "id": "PRD-084",
+              "area": "Concepts, Explore Similar & Alchemy",
+              "label": "Deliver surprising but defensible taste-aligned recommendations",
+              "source": "supporting_docs/discovery_quality_bar.md > 1.2 Taste Alignment",
+              "severity": "important",
+              "coverage": "partial",
+              "evidence": "Phase 10.4 grounds recommendations in concepts, source shows, and user library with reasons",
+              "gap": "The plan lacks an explicit quality bar for pleasantly unexpected but defensible recommendations."
+            },
+            {
+              "id": "PRD-085",
+              "area": "AI Voice, Persona & Quality",
+              "label": "Keep one consistent AI persona across surfaces",
+              "source": "supporting_docs/ai_voice_personality.md > 1. Persona Summary",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 10.5 imports one shared persona header from `base.ts` for every surface",
+              "gap": null
+            },
+            {
+              "id": "PRD-086",
+              "area": "AI Voice, Persona & Quality",
+              "label": "Enforce shared AI guardrails across all surfaces",
+              "source": "supporting_docs/ai_prompting_context.md > 1. Shared Rules (All AI Surfaces)",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 10.5 shared rules cover spoiler safety, honesty, and TV/movie restriction",
+              "gap": null
+            },
+            {
+              "id": "PRD-087",
+              "area": "AI Voice, Persona & Quality",
+              "label": "Make AI warm, joyful, and light in critique",
+              "source": "supporting_docs/ai_voice_personality.md > 2. Non-Negotiable Voice Pillars",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 10.5 uses a \"fun, chatty TV/movie nerd friend\" persona and opinionated honesty",
+              "gap": null
+            },
+            {
+              "id": "PRD-088",
+              "area": "AI Voice, Persona & Quality",
+              "label": "Structure Scoop as personal taste mini-review",
+              "source": "supporting_docs/ai_voice_personality.md > 4.1 Scoop (Show Detail \"The Scoop\")",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 10.1 Scoop includes personal take, stack-up, centerpiece, fit/warnings, and verdict",
+              "gap": null
+            },
+            {
+              "id": "PRD-089",
+              "area": "AI Voice, Persona & Quality",
+              "label": "Keep Ask brisk and dialogue-like by default",
+              "source": "supporting_docs/ai_voice_personality.md > 4.2 Ask (Find \u2192 Ask)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 9.3 chat UI and Phase 10.5 surface prompt use friend-like dialogue",
+              "gap": null
+            },
+            {
+              "id": "PRD-090",
+              "area": "AI Voice, Persona & Quality",
+              "label": "Feed AI the right surface-specific context inputs",
+              "source": "supporting_docs/ai_prompting_context.md > 2. Shared Inputs (Typical)",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 10 routes pass show context, user library, selected concepts, source shows, and recent turns",
+              "gap": null
+            },
+            {
+              "id": "PRD-091",
+              "area": "AI Voice, Persona & Quality",
+              "label": "Validate discovery with rubric and hard-fail integrity",
+              "source": "supporting_docs/discovery_quality_bar.md > 4. Scoring Rubric (Quick)",
+              "severity": "important",
+              "coverage": "partial",
+              "evidence": "Phase 14.3 resolves AI recommendations to real catalog items and Phase 15.3 tests the parser",
+              "gap": "The plan does not include discovery-rubric validation, golden-set checks, or hard-fail scoring for AI output quality."
+            },
+            {
+              "id": "PRD-092",
+              "area": "Person Detail",
+              "label": "Show person gallery, name, and bio",
+              "source": "product_prd.md > 7.6 Person Detail Page",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 11 Person Detail includes profile image/gallery, name, and bio",
+              "gap": null
+            },
+            {
+              "id": "PRD-093",
+              "area": "Person Detail",
+              "label": "Include ratings, genres, and projects-by-year analytics",
+              "source": "product_prd.md > 7.6 Person Detail Page",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 11 Analytics Charts include average ratings, top genres, and projects by year",
+              "gap": null
+            },
+            {
+              "id": "PRD-094",
+              "area": "Person Detail",
+              "label": "Group filmography by year",
+              "source": "product_prd.md > 7.6 Person Detail Page",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 11 Filmography groups credits by year descending",
+              "gap": null
+            },
+            {
+              "id": "PRD-095",
+              "area": "Person Detail",
+              "label": "Open Show Detail from selected credit",
+              "source": "product_prd.md > 7.6 Person Detail Page",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 11 filmography items are tappable ShowTiles opening Show Detail",
+              "gap": null
+            },
+            {
+              "id": "PRD-096",
+              "area": "Settings & Export",
+              "label": "Include font size and Search-on-launch settings",
+              "source": "product_prd.md > 7.7 Settings & Your Data",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 12.1 includes font size and Search on launch local settings",
+              "gap": null
+            },
+            {
+              "id": "PRD-097",
+              "area": "Settings & Export",
+              "label": "Support username, model, and API-key settings safely",
+              "source": "product_prd.md > 7.7 Settings & Your Data",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 12.2 includes username, AI key, AI model, catalog key, masking, env precedence, and no commits",
+              "gap": null
+            },
+            {
+              "id": "PRD-098",
+              "area": "Settings & Export",
+              "label": "Export saved shows and My Data as zip",
+              "source": "product_prd.md > 7.7 Settings & Your Data",
+              "severity": "critical",
+              "coverage": "full",
+              "evidence": "Phase 12.3 `Export My Data` builds a ZIP with shows and My Data",
+              "gap": null
+            },
+            {
+              "id": "PRD-099",
+              "area": "Settings & Export",
+              "label": "Encode export dates using ISO-8601",
+              "source": "product_prd.md > 7.7 Settings & Your Data",
+              "severity": "important",
+              "coverage": "full",
+              "evidence": "Phase 12.3 states saved shows export dates are encoded ISO-8601",
+              "gap": null
+            }
+          ],
+          "metadata": {
+            "schema_version": 2,
+            "run_id": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+            "worktree_name": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+            "branch_name": "benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02",
+            "captured_at": "2026-04-28T13:17:29.724977Z",
+            "paths": {
+              "run_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02",
+              "results_dir": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results"
+            },
+            "subject": {
+              "model_slug": "sonnet_4_6",
+              "model_name": "Sonnet 4.6",
+              "model_family": "Claude Sonnet",
+              "manufacturer": "Anthropic",
+              "tool_slug": "claude_code",
+              "tool": "Claude Code",
+              "effort_slug": "high",
+              "effort": "High",
+              "variant_slug": "no_plan_mode",
+              "variant": "No Planning"
+            },
+            "grouping": {
+              "model_id": "sonnet_4_6",
+              "series_id": "sonnet_4_6__claude_code__high",
+              "case_id": "sonnet_4_6__claude_code__high__no_plan_mode",
+              "case_slug": "no_plan_mode",
+              "case_label": "No Planning",
+              "replicate_index": 2,
+              "baseline_case": false
+            },
+            "declared": {
+              "inference_profile_slug": "default",
+              "inference_profile": "Default",
+              "requested_context_window_tokens": null,
+              "planning_mode": false,
+              "prompt_profile_slug": "default_step1",
+              "prompt_profile": "Default Step 1",
+              "experiment_role": "replicate",
+              "experiment_tags": [
+                "no_plan_mode"
+              ],
+              "scenario": {
+                "slug": "no_plan_mode",
+                "label": "No Planning",
+                "description": null,
+                "hypothesis": null
+              },
+              "case_slug": null
+            },
+            "planning": {
+              "prompt_path": "1-START_HERE.md",
+              "prompt_git_sha": "05c0960de115b026112b47ddef66a8f95d0a004a",
+              "prompt_profile_slug": "default_step1",
+              "prompt_profile": "Default Step 1"
+            },
+            "evaluation": {
+              "evaluator_model": "gpt-5.5",
+              "evaluator_provider": "openai",
+              "prompt_path": "2-EVALUATE_PLAN.md",
+              "prompt_git_sha": "60a3b354091b7d60e72e882d67095e9846e13311",
+              "evaluation_session_path": "/Users/mmaher/.codex/sessions/2026/04/28/rollout-2026-04-28T06-12-00-019dd437-d07f-7d01-90d6-b791300aa47a.jsonl",
+              "evaluation_started_at": "2026-04-28T13:12:16.427Z",
+              "evaluation_ended_at": "2026-04-28T13:20:21.350Z",
+              "evaluation_duration_seconds": 484
+            },
+            "snapshot": {
+              "context_window_tokens": {
+                "value": null,
+                "source_url": null
+              },
+              "pricing": {
+                "source_url": null,
+                "input_usd_per_mtok": null,
+                "output_usd_per_mtok": null,
+                "cached_input_usd_per_mtok": null
+              },
+              "swe_bench_verified": {
+                "value": null,
+                "source_url": null
+              },
+              "frontier": {
+                "value": null,
+                "source": "manual",
+                "note": null
+              }
+            },
+            "observed": {
+              "plan_session": {
+                "source_tool": "claude_code",
+                "session_path": "/Users/mmaher/.claude/projects/-Users-mmaher-code-planning-benchmark-control/41be9fc6-efd4-447f-87d0-1ae1fbd04cc4.jsonl",
+                "started_at": "2026-04-27T22:32:39.397Z",
+                "ended_at": "2026-04-28T13:29:57.335Z",
+                "duration_seconds": 53837,
+                "model": "claude-opus-4-7",
+                "provider": "Anthropic",
+                "version": "2.1.119",
+                "collaboration_mode": null,
+                "context_window_tokens": null,
+                "assistant_message_count": 39,
+                "user_message_count": 8,
+                "tool_call_count": 50,
+                "tool_calls_by_name": {
+                  "Bash": 49,
+                  "ToolSearch": 1
+                },
+                "interrupted_count": 0,
+                "task_complete_count": 0,
+                "input_tokens": 223271,
+                "cached_input_tokens": 1914482,
+                "output_tokens": 21747,
+                "estimated_cost_usd": null,
+                "trusted": true,
+                "untrusted_reason": null
+              },
+              "eval_session": {
+                "source_tool": "codex_cli",
+                "session_path": "/Users/mmaher/.codex/sessions/2026/04/28/rollout-2026-04-28T06-12-00-019dd437-d07f-7d01-90d6-b791300aa47a.jsonl",
+                "started_at": "2026-04-28T13:12:16.427Z",
+                "ended_at": "2026-04-28T13:20:21.350Z",
+                "duration_seconds": 484,
+                "model": "gpt-5.5",
+                "provider": "openai",
+                "version": "0.125.0",
+                "collaboration_mode": "default",
+                "context_window_tokens": 258400,
+                "assistant_message_count": 12,
+                "user_message_count": 3,
+                "tool_call_count": 55,
+                "tool_calls_by_name": {
+                  "exec_command": 49,
+                  "update_plan": 6
+                },
+                "interrupted_count": 0,
+                "task_complete_count": 1,
+                "input_tokens": 2515492,
+                "cached_input_tokens": 2393216,
+                "output_tokens": 32575,
+                "estimated_cost_usd": null,
+                "trusted": true,
+                "untrusted_reason": null
+              }
+            },
+            "outcome": {
+              "plan_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN.md",
+              "plan_saved": true,
+              "plan_written_at": "2026-04-28T13:09:57.273629Z",
+              "plan_eval_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL.md",
+              "plan_eval_written_at": "2026-04-28T13:17:29.724977Z",
+              "plan_eval_report_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_REPORT.html",
+              "plan_eval_report_generated": true,
+              "plan_eval_report_written_at": "2026-04-28T13:19:54.220790Z",
+              "plan_session_completed_at": "2026-04-28T13:29:57.335Z",
+              "save_blocked_by_mode": false,
+              "artifact_latency_seconds": 0,
+              "completion_state": "complete"
+            }
+          },
+          "artifacts": {
+            "plan_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN.md",
+            "plan_eval_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL.md",
+            "plan_eval_data_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_DATA.json",
+            "plan_eval_report_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_REPORT.html",
+            "run_metadata_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/run_metadata.json"
+          }
+        },
         {
           "run_id": "sonnet_4_6__claude_code__high__no_plan_mode",
           "worktree_name": "sonnet_4_6__claude_code__high__no_plan_mode",
@@ -144468,6 +147118,1362 @@ window.__DASHBOARD_DATA__ = {
         "plan_eval_data_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/PLAN_EVAL_DATA.json",
         "plan_eval_report_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/PLAN_EVAL_REPORT.html",
         "run_metadata_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode/results/run_metadata.json"
+      }
+    },
+    {
+      "run_id": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+      "worktree_name": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+      "branch_name": "benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02",
+      "captured_at": "2026-04-28T13:17:29.724977Z",
+      "model_id": "sonnet_4_6",
+      "series_id": "sonnet_4_6__claude_code__high",
+      "case_id": "sonnet_4_6__claude_code__high__no_plan_mode",
+      "case_slug": "no_plan_mode",
+      "case_label": "No Planning",
+      "replicate_index": 2,
+      "baseline_case": false,
+      "model_name": "Sonnet 4.6",
+      "model_family": "Claude Sonnet",
+      "manufacturer": "Anthropic",
+      "tool": "Claude Code",
+      "tool_slug": "claude_code",
+      "effort": "High",
+      "effort_slug": "high",
+      "variant": "No Planning",
+      "frontier": null,
+      "evaluator_model": "gpt-5.5",
+      "inference_profile": "Default",
+      "inference_profile_slug": "default",
+      "requested_context_window_tokens": null,
+      "planning_mode": false,
+      "prompt_profile": "Default Step 1",
+      "prompt_profile_slug": "default_step1",
+      "experiment_role": "replicate",
+      "experiment_tags": [
+        "no_plan_mode"
+      ],
+      "scenario": {
+        "slug": "no_plan_mode",
+        "label": "No Planning",
+        "description": null,
+        "hypothesis": null
+      },
+      "planning_runtime_seconds": 53837,
+      "plan_tool_call_count": 50,
+      "plan_estimated_cost_usd": null,
+      "plan_input_tokens": 223271,
+      "plan_cached_input_tokens": 1914482,
+      "plan_output_tokens": 21747,
+      "plan_session_trusted": true,
+      "plan_session_untrusted_reason": null,
+      "plan_saved": true,
+      "plan_eval_report_generated": true,
+      "save_blocked_by_mode": false,
+      "supports_area_comparison": true,
+      "taxonomy_version": "shows_prd_v1",
+      "requirement_catalog": {
+        "available": true,
+        "version": "requirements_catalog_v1",
+        "path": "evaluator/requirements_catalog_v1.md",
+        "matches": true,
+        "expected_total_requirements": 99,
+        "expected_functional_area_count": 10,
+        "requirement_order_matches": true,
+        "area_order_matches": true,
+        "missing_ids": [],
+        "unexpected_ids": [],
+        "field_mismatches": []
+      },
+      "requirement_catalog_available": true,
+      "requirement_catalog_version": "requirements_catalog_v1",
+      "requirement_catalog_matches": true,
+      "requirement_catalog_expected_total_requirements": 99,
+      "scores": {
+        "critical": 100.0,
+        "important": 93.28,
+        "detail": 100.0,
+        "overall": 95.45
+      },
+      "summary": {
+        "functional_area_count": 10,
+        "total_requirements": 99,
+        "severity_counts": {
+          "critical": 30,
+          "important": 67,
+          "detail": 2
+        },
+        "coverage_counts": {
+          "full": 90,
+          "partial": 9,
+          "missing": 0
+        }
+      },
+      "area_scores": [
+        {
+          "name": "Benchmark Runtime & Isolation",
+          "score": 100.0,
+          "counts": {
+            "total": 17,
+            "full": 17,
+            "partial": 0,
+            "missing": 0
+          }
+        },
+        {
+          "name": "Collection Data & Persistence",
+          "score": 95.0,
+          "counts": {
+            "total": 20,
+            "full": 18,
+            "partial": 2,
+            "missing": 0
+          }
+        },
+        {
+          "name": "App Navigation & Discover Shell",
+          "score": 100.0,
+          "counts": {
+            "total": 4,
+            "full": 4,
+            "partial": 0,
+            "missing": 0
+          }
+        },
+        {
+          "name": "Collection Home & Search",
+          "score": 100.0,
+          "counts": {
+            "total": 9,
+            "full": 9,
+            "partial": 0,
+            "missing": 0
+          }
+        },
+        {
+          "name": "Show Detail & Relationship UX",
+          "score": 96.4,
+          "counts": {
+            "total": 14,
+            "full": 13,
+            "partial": 1,
+            "missing": 0
+          }
+        },
+        {
+          "name": "Ask Chat",
+          "score": 90.0,
+          "counts": {
+            "total": 10,
+            "full": 8,
+            "partial": 2,
+            "missing": 0
+          }
+        },
+        {
+          "name": "Concepts, Explore Similar & Alchemy",
+          "score": 85.0,
+          "counts": {
+            "total": 10,
+            "full": 7,
+            "partial": 3,
+            "missing": 0
+          }
+        },
+        {
+          "name": "AI Voice, Persona & Quality",
+          "score": 92.9,
+          "counts": {
+            "total": 7,
+            "full": 6,
+            "partial": 1,
+            "missing": 0
+          }
+        },
+        {
+          "name": "Person Detail",
+          "score": 100.0,
+          "counts": {
+            "total": 4,
+            "full": 4,
+            "partial": 0,
+            "missing": 0
+          }
+        },
+        {
+          "name": "Settings & Export",
+          "score": 100.0,
+          "counts": {
+            "total": 4,
+            "full": 4,
+            "partial": 0,
+            "missing": 0
+          }
+        }
+      ],
+      "top_gaps": [],
+      "narrative": {
+        "overall_posture": "This is a strong implementation plan with no critical misses. It covers the mandated Next.js/Supabase architecture, namespace/user isolation, schema shape, save semantics, detail and discovery flows, AI contracts, settings, export, and major testing concerns. The remaining issues are not structural blockers, but they are meaningful because they sit around polish-sensitive product contracts: sync integrity, detail-page storytelling, and AI quality assurance.",
+        "strength_clusters": "The plan is strongest in Benchmark Runtime & Isolation, Collection Data & Persistence, App Navigation & Discover Shell, Collection Home & Search, Person Detail, and Settings & Export. The infra rider is especially well covered: environment config, server-only secrets, Supabase persistence, namespace isolation, `user_id`, reset scripts, migrations, and no-Docker compatibility all have concrete implementation details. Core collection behavior is also well represented, including auto-save defaults, removal semantics, overlay rules, AI recommendation resolution, and data export.",
+        "weakness_clusters": "The partial items cluster around quality contracts rather than raw feature presence. The plan often names the correct component or API route, but misses the stricter acceptance language behind a few requirements: timestamp-based sorting, duplicate merge policy, exact detail-page narrative order, Ask directness, concept output shape, surprise-but-defensible recommendation quality, and rubric-based AI validation. These are the kinds of gaps that show up in QA and product review after the app technically works.",
+        "risk_assessment": "If executed as-is, the most likely failure mode is a product that is functionally complete but uneven in trust and taste. Users would probably see the app save, search, chat, recommend, and export correctly, but stakeholders may notice that discovery quality is not systematically validated, Ask can be charming without answering fast enough, and the detail page may feel busier or less intentional than the spec's narrative hierarchy. Cross-device users may also expose sync and duplicate handling gaps before single-user benchmark testing does.",
+        "remediation_guidance": "The remaining work is mostly specification tightening. Add explicit timestamp sorting behavior, duplicate merge rules, and settings conflict resolution. Restore or deliberately justify the detail-page narrative order against the supporting spec. Convert the AI quality bar into prompt contracts, acceptance criteria, and tests/golden scenarios, including Ask directness, concept formatting, surprise-without-betrayal, and rubric hard-fail handling for real-show integrity. These changes do not require a new architecture; they require sharper behavioral acceptance criteria inside the existing plan."
+      },
+      "requirements": [
+        {
+          "id": "PRD-001",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Use Next.js latest stable runtime",
+          "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Technology Stack: \"Next.js (latest stable)\"; Phase 1.1 initializes Next.js App Router",
+          "gap": null
+        },
+        {
+          "id": "PRD-002",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Use Supabase official client libraries",
+          "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Technology Stack: \"Supabase (hosted)\"; Phase 1.4 Supabase Client Setup",
+          "gap": null
+        },
+        {
+          "id": "PRD-003",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Ship `.env.example` with required variables",
+          "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 1.2 Environment Variables lists `.env.example` with required vars and comments",
+          "gap": null
+        },
+        {
+          "id": "PRD-004",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Ignore `.env*` secrets except example",
+          "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 1.2 `.gitignore` additions exclude `.env`, `.env.local`, `.env.*.local`",
+          "gap": null
+        },
+        {
+          "id": "PRD-005",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Configure build through env without code edits",
+          "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 1.2 env variables cover Supabase, namespace, catalog, AI, and app config",
+          "gap": null
+        },
+        {
+          "id": "PRD-006",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Keep secrets out of repo and server-only",
+          "source": "infra_rider_prd.md > 3.1 Environment variable interface",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 1.4 server client uses service role server-only; checklist says AI key never committed",
+          "gap": null
+        },
+        {
+          "id": "PRD-007",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Provide app, test, reset command scripts",
+          "source": "infra_rider_prd.md > 3.2 One-command developer experience",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 1.3 npm scripts includes `dev`, `test`, and `test:reset`",
+          "gap": null
+        },
+        {
+          "id": "PRD-008",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Include repeatable schema evolution artifacts",
+          "source": "infra_rider_prd.md > 3.3 Database evolution artifacts",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 2 Migration Files and Phase 13.2 forward-only `supabase/migrations/`",
+          "gap": null
+        },
+        {
+          "id": "PRD-009",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Use one stable namespace per build",
+          "source": "infra_rider_prd.md > 4.1 Build/run namespace (required)",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Architectural Decision 2: `namespace_id` stable per build/run via `NAMESPACE_ID`",
+          "gap": null
+        },
+        {
+          "id": "PRD-010",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Isolate namespaces and scope destructive resets",
+          "source": "infra_rider_prd.md > 4.1 Build/run namespace (required)",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Identity model uses namespace predicates; Phase 15.2 reset deletes by namespace only",
+          "gap": null
+        },
+        {
+          "id": "PRD-011",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Attach every user record to `user_id`",
+          "source": "infra_rider_prd.md > 4.2 User identity (required)",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Shows, cloud_settings, and app_metadata tables include `user_id`; all queries use partition",
+          "gap": null
+        },
+        {
+          "id": "PRD-012",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Partition persisted data by namespace and user",
+          "source": "infra_rider_prd.md > 4.3 Relationship between namespace and user",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Architectural Decision 2: all Supabase queries include `namespace_id` and `user_id`",
+          "gap": null
+        },
+        {
+          "id": "PRD-013",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Support documented dev auth injection, prod-gated",
+          "source": "infra_rider_prd.md > 5.1 Auth is not required to be \"real\" in benchmark mode",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 3.2 accepts `X-User-Id` only in development/test and validates real auth in production",
+          "gap": null
+        },
+        {
+          "id": "PRD-014",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Real OAuth later needs no schema redesign",
+          "source": "infra_rider_prd.md > 5.2 Migration to real OAuth must be straightforward",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 3.3 maps OAuth user id into existing `user_id` with no schema changes",
+          "gap": null
+        },
+        {
+          "id": "PRD-015",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Keep backend as persisted source of truth",
+          "source": "infra_rider_prd.md > 6.1 Source of truth",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Architectural Decision 3: all user-owned data lives in Supabase",
+          "gap": null
+        },
+        {
+          "id": "PRD-016",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Make client cache safe to discard",
+          "source": "infra_rider_prd.md > 6.2 Cache is disposable",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Architectural Decision 3: clearing client cache never loses data",
+          "gap": null
+        },
+        {
+          "id": "PRD-017",
+          "area": "Benchmark Runtime & Isolation",
+          "label": "Avoid Docker requirement for cloud-agent compatibility",
+          "source": "infra_rider_prd.md > 2. Benchmark Baseline (Current Round)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Technology Stack: Docker explicitly not required; hosted Supabase path",
+          "gap": null
+        },
+        {
+          "id": "PRD-018",
+          "area": "Collection Data & Persistence",
+          "label": "Overlay saved user data on every show appearance",
+          "source": "product_prd.md > 4.1 Show (Movie or TV)",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 14.1 applies overlay in lists, search, AI recommendations, and person filmography",
+          "gap": null
+        },
+        {
+          "id": "PRD-019",
+          "area": "Collection Data & Persistence",
+          "label": "Support visible statuses plus hidden `Next`",
+          "source": "product_prd.md > 4.2 Status System (\"My Status\")",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Migration enum includes `next`; UI chips expose Active, Interested, Excited, Done, Wait, Quit",
+          "gap": null
+        },
+        {
+          "id": "PRD-020",
+          "area": "Collection Data & Persistence",
+          "label": "Map Interested/Excited chips to Later interest",
+          "source": "product_prd.md > 4.2 Status System (\"My Status\")",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 8.1 Status Toolbar maps Interested/Excited to `later` plus `myInterest`",
+          "gap": null
+        },
+        {
+          "id": "PRD-021",
+          "area": "Collection Data & Persistence",
+          "label": "Support free-form multi-tag personal tag library",
+          "source": "product_prd.md > 4.4 Tags (User Lists)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "`my_tags` array, TagPicker, and Filter Panel \"one entry per distinct tag\"",
+          "gap": null
+        },
+        {
+          "id": "PRD-022",
+          "area": "Collection Data & Persistence",
+          "label": "Define collection membership by assigned status",
+          "source": "product_prd.md > 5.1 Collection Membership",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "CRUD and status removal model make persisted collection entries status-owned; DELETE removes item",
+          "gap": null
+        },
+        {
+          "id": "PRD-023",
+          "area": "Collection Data & Persistence",
+          "label": "Save shows from status, interest, rating, tagging",
+          "source": "product_prd.md > 5.2 Saving Triggers",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 5.2 Auto-Save Rules covers rating, tag, and status/interest updates",
+          "gap": null
+        },
+        {
+          "id": "PRD-024",
+          "area": "Collection Data & Persistence",
+          "label": "Default save to Later/Interested except rating-save Done",
+          "source": "product_prd.md > 5.3 Default Values When Saving",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 5.3 Default Values states Later/Interested, with rating exception Done",
+          "gap": null
+        },
+        {
+          "id": "PRD-025",
+          "area": "Collection Data & Persistence",
+          "label": "Removing status deletes show and all My Data",
+          "source": "product_prd.md > 5.4 Removing from Collection",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 14.2 StatusRemovalModal executes DELETE that clears all My Data server-side",
+          "gap": null
+        },
+        {
+          "id": "PRD-026",
+          "area": "Collection Data & Persistence",
+          "label": "Re-add preserves My Data and refreshes public data",
+          "source": "product_prd.md > 5.5 Re-adding the Same Show",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 4.3 `mergeCatalogShow` preserves user fields and Phase 5.1 upsert merges fresh catalog data",
+          "gap": null
+        },
+        {
+          "id": "PRD-027",
+          "area": "Collection Data & Persistence",
+          "label": "Track per-field My Data modification timestamps",
+          "source": "product_prd.md > 5.6 Timestamps",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Migration fields and Phase 5.4 set `*_update_date` for each PATCH route",
+          "gap": null
+        },
+        {
+          "id": "PRD-028",
+          "area": "Collection Data & Persistence",
+          "label": "Use timestamps for sorting, sync, freshness",
+          "source": "product_prd.md > 5.6 Timestamps",
+          "severity": "important",
+          "coverage": "partial",
+          "evidence": "Phase 4.3 uses timestamps for merge conflicts; Phase 8.2 uses `aiScoopUpdateDate` for 4h freshness",
+          "gap": "The plan does not specify timestamp-based sorting behavior for collection views or recent-update ordering."
+        },
+        {
+          "id": "PRD-029",
+          "area": "Collection Data & Persistence",
+          "label": "Persist Scoop only for saved shows, 4h freshness",
+          "source": "product_prd.md > 4.9 AI Scoop (\"The Scoop\")",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 8.2 persists scoop only if in collection and regenerates after 4 hours",
+          "gap": null
+        },
+        {
+          "id": "PRD-030",
+          "area": "Collection Data & Persistence",
+          "label": "Keep Ask and Alchemy state session-only",
+          "source": "product_prd.md > 5.7 AI Data Persistence",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Ask reset clears session; Alchemy changing inputs clears concepts/results with no persistence tables",
+          "gap": null
+        },
+        {
+          "id": "PRD-031",
+          "area": "Collection Data & Persistence",
+          "label": "Resolve AI recommendations to real selectable shows",
+          "source": "product_prd.md > 5.8 AI Recommendations Map to Real Shows",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 14.3 resolves by external ID and renders found items as tappable ShowTiles",
+          "gap": null
+        },
+        {
+          "id": "PRD-032",
+          "area": "Collection Data & Persistence",
+          "label": "Show collection and rating tile indicators",
+          "source": "product_prd.md > 5.9 Tile Indicators",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 7.2 Show Tile has in-collection and user rating badges",
+          "gap": null
+        },
+        {
+          "id": "PRD-033",
+          "area": "Collection Data & Persistence",
+          "label": "Sync libraries/settings consistently and merge duplicates",
+          "source": "product_prd.md > 5.10 Data Sync & Integrity",
+          "severity": "important",
+          "coverage": "partial",
+          "evidence": "Supabase is source of truth; cloud_settings exists; merge logic uses timestamps for stored shows",
+          "gap": "Duplicate detection/transparent merge and explicit cross-device settings conflict policy are not planned."
+        },
+        {
+          "id": "PRD-034",
+          "area": "Collection Data & Persistence",
+          "label": "Preserve saved libraries across data-model upgrades",
+          "source": "product_prd.md > 5.11 Data Continuity Across Versions",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 13 migration tracking uses additive, idempotent migrations and backfills",
+          "gap": null
+        },
+        {
+          "id": "PRD-035",
+          "area": "Collection Data & Persistence",
+          "label": "Persist synced settings, local settings, UI state",
+          "source": "supporting_docs/technical_docs/storage-schema.md > Other persistent storage (key-value settings)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 2.2 local settings and UI state; Phase 12.2 cloud_settings for user/API/model settings",
+          "gap": null
+        },
+        {
+          "id": "PRD-036",
+          "area": "Collection Data & Persistence",
+          "label": "Keep provider IDs persisted and detail fetches transient",
+          "source": "supporting_docs/technical_docs/storage-schema.md > Show (movie or TV series)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Migration stores `provider_data`; Phase 4.2 marks credits/seasons/videos/recs/similar/images transient",
+          "gap": null
+        },
+        {
+          "id": "PRD-037",
+          "area": "Collection Data & Persistence",
+          "label": "Merge catalog fields safely and maintain timestamps",
+          "source": "supporting_docs/technical_docs/storage-schema.md > Merge / overwrite policy (important)",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 4.3 `mergeCatalogShow` uses `selectFirstNonEmpty`, timestamp user fields, `detailsUpdateDate`",
+          "gap": null
+        },
+        {
+          "id": "PRD-038",
+          "area": "App Navigation & Discover Shell",
+          "label": "Provide filters panel and main screen destinations",
+          "source": "product_prd.md > 6. App Structure & Navigation",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 6.2 Filter Panel plus routes for home, detail, find, person, and settings",
+          "gap": null
+        },
+        {
+          "id": "PRD-039",
+          "area": "App Navigation & Discover Shell",
+          "label": "Keep Find/Discover in persistent primary navigation",
+          "source": "product_prd.md > 6. App Structure & Navigation",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 6.3 Primary Navigation includes Find/Discover",
+          "gap": null
+        },
+        {
+          "id": "PRD-040",
+          "area": "App Navigation & Discover Shell",
+          "label": "Keep Settings in persistent primary navigation",
+          "source": "product_prd.md > 6. App Structure & Navigation",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 6.3 Primary Navigation includes Settings",
+          "gap": null
+        },
+        {
+          "id": "PRD-041",
+          "area": "App Navigation & Discover Shell",
+          "label": "Offer Search, Ask, Alchemy discover modes",
+          "source": "product_prd.md > 6. App Structure & Navigation",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.1 FindHub has Search, Ask, and Alchemy tabs",
+          "gap": null
+        },
+        {
+          "id": "PRD-042",
+          "area": "Collection Home & Search",
+          "label": "Show only library items matching active filters",
+          "source": "product_prd.md > 7.1 Collection Home",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 7.1 filter parameter reduces the show pool before grouping",
+          "gap": null
+        },
+        {
+          "id": "PRD-043",
+          "area": "Collection Home & Search",
+          "label": "Group home into Active, Excited, Interested, Others",
+          "source": "product_prd.md > 7.1 Collection Home",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 7.1 Status Grouping lists Active, Excited, Interested, Other",
+          "gap": null
+        },
+        {
+          "id": "PRD-044",
+          "area": "Collection Home & Search",
+          "label": "Support All, tag, genre, decade, score, media filters",
+          "source": "product_prd.md > 4.5 Filters (Ways to View the Collection)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 6.2 Filter Panel includes All, tags, genre, decade, community score, and media type",
+          "gap": null
+        },
+        {
+          "id": "PRD-045",
+          "area": "Collection Home & Search",
+          "label": "Render poster, title, and My Data badges",
+          "source": "product_prd.md > 7.1 Collection Home",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 7.2 Show Tile includes poster image, title, collection badge, and rating badge",
+          "gap": null
+        },
+        {
+          "id": "PRD-046",
+          "area": "Collection Home & Search",
+          "label": "Provide empty-library and empty-filter states",
+          "source": "product_prd.md > 7.1 Collection Home",
+          "severity": "detail",
+          "coverage": "full",
+          "evidence": "Phase 7.3 Empty States covers no collection and no filtered results",
+          "gap": null
+        },
+        {
+          "id": "PRD-047",
+          "area": "Collection Home & Search",
+          "label": "Search by title or keywords",
+          "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.2 Search Mode text input calls catalog search query endpoint",
+          "gap": null
+        },
+        {
+          "id": "PRD-048",
+          "area": "Collection Home & Search",
+          "label": "Use poster grid with collection markers",
+          "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.2 Search results are poster grid with in-collection indicator",
+          "gap": null
+        },
+        {
+          "id": "PRD-049",
+          "area": "Collection Home & Search",
+          "label": "Auto-open Search when setting is enabled",
+          "source": "product_prd.md > 7.2 Search (Find \u2192 Search)",
+          "severity": "detail",
+          "coverage": "full",
+          "evidence": "Phase 9.2 auto-opens/focuses Search when `autoSearch = true`",
+          "gap": null
+        },
+        {
+          "id": "PRD-050",
+          "area": "Collection Home & Search",
+          "label": "Keep Search non-AI in tone",
+          "source": "supporting_docs/ai_voice_personality.md > 1. Persona Summary",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.2 Search is a catalog text input/grid, separate from AI routes",
+          "gap": null
+        },
+        {
+          "id": "PRD-051",
+          "area": "Show Detail & Relationship UX",
+          "label": "Preserve Show Detail narrative section order",
+          "source": "supporting_docs/detail_page_experience.md > 3. Narrative Hierarchy (Section Intent)",
+          "severity": "important",
+          "coverage": "partial",
+          "evidence": "Phase 8 says it follows the narrative hierarchy and lists all sections",
+          "gap": "The listed order inserts status/rating before tags and overview, so it does not preserve the exact detail-page narrative order from the spec."
+        },
+        {
+          "id": "PRD-052",
+          "area": "Show Detail & Relationship UX",
+          "label": "Prioritize motion-rich header with graceful fallback",
+          "source": "supporting_docs/detail_page_experience.md > 3.1 Header Media",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.1 Header Media Carousel uses backdrops/posters/logos/trailers with poster fallback",
+          "gap": null
+        },
+        {
+          "id": "PRD-053",
+          "area": "Show Detail & Relationship UX",
+          "label": "Surface year, runtime/seasons, and community score early",
+          "source": "supporting_docs/detail_page_experience.md > 3.2 Core Facts + Community Score",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.1 Core Facts Row includes year, runtime/seasons/episodes, and score bar",
+          "gap": null
+        },
+        {
+          "id": "PRD-054",
+          "area": "Show Detail & Relationship UX",
+          "label": "Place status/interest controls in toolbar",
+          "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.1 Status/Interest Toolbar is near top and not in scroll body",
+          "gap": null
+        },
+        {
+          "id": "PRD-055",
+          "area": "Show Detail & Relationship UX",
+          "label": "Auto-save unsaved tagged show as Later/Interested",
+          "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 5.2 tag update auto-saves as `later` plus `interested`",
+          "gap": null
+        },
+        {
+          "id": "PRD-056",
+          "area": "Show Detail & Relationship UX",
+          "label": "Auto-save unsaved rated show as Done",
+          "source": "supporting_docs/detail_page_experience.md > 3.3 My Relationship Controls",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 5.2 rating update auto-saves as `done`",
+          "gap": null
+        },
+        {
+          "id": "PRD-057",
+          "area": "Show Detail & Relationship UX",
+          "label": "Show overview early for fast scanning",
+          "source": "supporting_docs/detail_page_experience.md > 2. First-15-Seconds Experience",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.1 places Overview before AI discovery, providers, cast, seasons, and financials",
+          "gap": null
+        },
+        {
+          "id": "PRD-058",
+          "area": "Show Detail & Relationship UX",
+          "label": "Scoop shows correct states and progressive feedback",
+          "source": "supporting_docs/detail_page_experience.md > 3.4 Overview + Scoop",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.2 defines no_scoop, cached_scoop, open, streaming, and Generating state",
+          "gap": null
+        },
+        {
+          "id": "PRD-059",
+          "area": "Show Detail & Relationship UX",
+          "label": "Ask-about-show deep-link seeds Ask context",
+          "source": "supporting_docs/detail_page_experience.md > 3.5 Ask About This Show",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.1 CTA navigates with `showId`; Phase 9.3 fetches show data and seeds context",
+          "gap": null
+        },
+        {
+          "id": "PRD-060",
+          "area": "Show Detail & Relationship UX",
+          "label": "Include traditional recommendations strand",
+          "source": "supporting_docs/detail_page_experience.md > 3.6 Traditional Recommendations Strand",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.1 includes Traditional Recommendations Strand",
+          "gap": null
+        },
+        {
+          "id": "PRD-061",
+          "area": "Show Detail & Relationship UX",
+          "label": "Explore Similar uses CTA-first concept flow",
+          "source": "supporting_docs/detail_page_experience.md > 3.7 Explore Similar (Concept Discovery)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.3 starts with Get Concepts, then select concepts, then Explore Shows",
+          "gap": null
+        },
+        {
+          "id": "PRD-062",
+          "area": "Show Detail & Relationship UX",
+          "label": "Include streaming availability and person-linking credits",
+          "source": "supporting_docs/detail_page_experience.md > 3.8 Streaming Availability",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.1 includes Streaming Availability and Cast/Crew strands linking to Person Detail",
+          "gap": null
+        },
+        {
+          "id": "PRD-063",
+          "area": "Show Detail & Relationship UX",
+          "label": "Gate seasons to TV and financials to movies",
+          "source": "supporting_docs/detail_page_experience.md > 5. Critical States",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.1 includes Seasons Panel TV only and Budget vs Revenue for movies",
+          "gap": null
+        },
+        {
+          "id": "PRD-064",
+          "area": "Show Detail & Relationship UX",
+          "label": "Keep primary actions early and page not overwhelming",
+          "source": "supporting_docs/detail_page_experience.md > 4. Busyness vs Power",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.1 clusters status, rating, tags, scoop, Ask, and Explore before long-tail info",
+          "gap": null
+        },
+        {
+          "id": "PRD-065",
+          "area": "Ask Chat",
+          "label": "Provide conversational Ask chat interface",
+          "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.3 Ask Mode provides chat UI with user typing and streaming assistant turns",
+          "gap": null
+        },
+        {
+          "id": "PRD-066",
+          "area": "Ask Chat",
+          "label": "Answer directly with confident, spoiler-safe recommendations",
+          "source": "supporting_docs/discovery_quality_bar.md > 2.2 Ask / Explore Search Chat",
+          "severity": "important",
+          "coverage": "partial",
+          "evidence": "Phase 10.5 shared persona includes spoiler-safe and opinionated honesty; Ask prompt picks favorites confidently",
+          "gap": "The plan does not encode the direct-answer-within-first-lines acceptance bar for Ask responses."
+        },
+        {
+          "id": "PRD-067",
+          "area": "Ask Chat",
+          "label": "Show horizontal mentioned-shows strip from chat",
+          "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.3 `MentionedShowsStrip` updates as shows are parsed",
+          "gap": null
+        },
+        {
+          "id": "PRD-068",
+          "area": "Ask Chat",
+          "label": "Open Detail from mentions or Search fallback",
+          "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+          "severity": "important",
+          "coverage": "partial",
+          "evidence": "Phase 9.3 parses mentioned shows and falls back to commentary plus Search handoff on failure",
+          "gap": "The plan does not explicitly specify tapping a mentioned-show strip item opens Show Detail when resolution succeeds."
+        },
+        {
+          "id": "PRD-069",
+          "area": "Ask Chat",
+          "label": "Show six random starter prompts with refresh",
+          "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.3 welcome view has six random starter prompts and Refresh",
+          "gap": null
+        },
+        {
+          "id": "PRD-070",
+          "area": "Ask Chat",
+          "label": "Summarize older turns while preserving voice",
+          "source": "supporting_docs/ai_prompting_context.md > 4. Conversation Summarization (Chat Surfaces)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 10.2 summarization endpoint condenses older turns into same persona",
+          "gap": null
+        },
+        {
+          "id": "PRD-071",
+          "area": "Ask Chat",
+          "label": "Seed Ask-about-show sessions with show handoff",
+          "source": "product_prd.md > 7.3 Ask (Find \u2192 Ask)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.3 `Ask About a Show` fetches show data and seeds system context",
+          "gap": null
+        },
+        {
+          "id": "PRD-072",
+          "area": "Ask Chat",
+          "label": "Emit `commentary` plus exact `showList` contract",
+          "source": "supporting_docs/ai_prompting_context.md > 3.2 Ask with Mentions (Structured \"Mentioned Shows\")",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 9.3 structured output uses `commentary` and exact `Title::externalId::mediaType;;...` format",
+          "gap": null
+        },
+        {
+          "id": "PRD-073",
+          "area": "Ask Chat",
+          "label": "Retry malformed mention output once, then fallback",
+          "source": "supporting_docs/ai_prompting_context.md > 5. Guardrails & Fallbacks",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.3 invalid format retries once, then falls back to commentary plus Search handoff",
+          "gap": null
+        },
+        {
+          "id": "PRD-074",
+          "area": "Ask Chat",
+          "label": "Redirect Ask back into TV/movie domain",
+          "source": "supporting_docs/ai_prompting_context.md > 1. Shared Rules (All AI Surfaces)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 10.5 shared prompt rules include TV/movie domain restriction",
+          "gap": null
+        },
+        {
+          "id": "PRD-075",
+          "area": "Concepts, Explore Similar & Alchemy",
+          "label": "Treat concepts as taste ingredients, not genres",
+          "source": "supporting_docs/concept_system.md > 1. What a Concept Is (User Definition)",
+          "severity": "important",
+          "coverage": "partial",
+          "evidence": "Phase 10.3 requires evocative concepts, varied axes, and no generic placeholders",
+          "gap": "The plan does not explicitly state that concepts are taste ingredients rather than genre labels or plot categories."
+        },
+        {
+          "id": "PRD-076",
+          "area": "Concepts, Explore Similar & Alchemy",
+          "label": "Return bullet-only, 1-3 word, non-generic concepts",
+          "source": "supporting_docs/ai_prompting_context.md > 3.4 Concepts (Single-Show and Multi-Show)",
+          "severity": "important",
+          "coverage": "partial",
+          "evidence": "Phase 10.3 returns 1-3 word evocative concepts with no generic placeholders",
+          "gap": "The concept API output is specified as JSON string arrays, but the prompt/output contract does not preserve the bullet-only requirement."
+        },
+        {
+          "id": "PRD-077",
+          "area": "Concepts, Explore Similar & Alchemy",
+          "label": "Order concepts by strongest aha and varied axes",
+          "source": "supporting_docs/concept_system.md > 4. Generation Rules",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 10.3 concepts are ordered by strength and varied across axes",
+          "gap": null
+        },
+        {
+          "id": "PRD-078",
+          "area": "Concepts, Explore Similar & Alchemy",
+          "label": "Require concept selection and guide ingredient picking",
+          "source": "supporting_docs/concept_system.md > 5. Selection UX Rules",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.3 requires selecting 1+ concepts; Phase 8.1/8.3 use concept chips before recommendations",
+          "gap": null
+        },
+        {
+          "id": "PRD-079",
+          "area": "Concepts, Explore Similar & Alchemy",
+          "label": "Return exactly five Explore Similar recommendations",
+          "source": "supporting_docs/concept_system.md > 6. Concepts \u2192 Recommendations Contract",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 8.3 returns five show objects; Phase 10.4 counts are five for explore",
+          "gap": null
+        },
+        {
+          "id": "PRD-080",
+          "area": "Concepts, Explore Similar & Alchemy",
+          "label": "Support full Alchemy loop with chaining",
+          "source": "product_prd.md > 7.4 Alchemy (Find \u2192 Alchemy)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.4 covers select shows, conceptualize, alchemize, and More Alchemy chaining",
+          "gap": null
+        },
+        {
+          "id": "PRD-081",
+          "area": "Concepts, Explore Similar & Alchemy",
+          "label": "Clear downstream results when inputs change",
+          "source": "product_prd.md > 7.4 Alchemy (Find \u2192 Alchemy)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.4 says changing selected shows or concepts clears downstream results",
+          "gap": null
+        },
+        {
+          "id": "PRD-082",
+          "area": "Concepts, Explore Similar & Alchemy",
+          "label": "Generate shared multi-show concepts with larger option pool",
+          "source": "supporting_docs/concept_system.md > 8. Notes",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.4 and Phase 10.3 use multi-show concepts with 8+ options",
+          "gap": null
+        },
+        {
+          "id": "PRD-083",
+          "area": "Concepts, Explore Similar & Alchemy",
+          "label": "Cite selected concepts in concise recommendation reasons",
+          "source": "supporting_docs/concept_system.md > 6. Concepts \u2192 Recommendations Contract",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 10.4 recommendation output includes reason; Phase 9.4 reasons reference selected concepts",
+          "gap": null
+        },
+        {
+          "id": "PRD-084",
+          "area": "Concepts, Explore Similar & Alchemy",
+          "label": "Deliver surprising but defensible taste-aligned recommendations",
+          "source": "supporting_docs/discovery_quality_bar.md > 1.2 Taste Alignment",
+          "severity": "important",
+          "coverage": "partial",
+          "evidence": "Phase 10.4 grounds recommendations in concepts, source shows, and user library with reasons",
+          "gap": "The plan lacks an explicit quality bar for pleasantly unexpected but defensible recommendations."
+        },
+        {
+          "id": "PRD-085",
+          "area": "AI Voice, Persona & Quality",
+          "label": "Keep one consistent AI persona across surfaces",
+          "source": "supporting_docs/ai_voice_personality.md > 1. Persona Summary",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 10.5 imports one shared persona header from `base.ts` for every surface",
+          "gap": null
+        },
+        {
+          "id": "PRD-086",
+          "area": "AI Voice, Persona & Quality",
+          "label": "Enforce shared AI guardrails across all surfaces",
+          "source": "supporting_docs/ai_prompting_context.md > 1. Shared Rules (All AI Surfaces)",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 10.5 shared rules cover spoiler safety, honesty, and TV/movie restriction",
+          "gap": null
+        },
+        {
+          "id": "PRD-087",
+          "area": "AI Voice, Persona & Quality",
+          "label": "Make AI warm, joyful, and light in critique",
+          "source": "supporting_docs/ai_voice_personality.md > 2. Non-Negotiable Voice Pillars",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 10.5 uses a \"fun, chatty TV/movie nerd friend\" persona and opinionated honesty",
+          "gap": null
+        },
+        {
+          "id": "PRD-088",
+          "area": "AI Voice, Persona & Quality",
+          "label": "Structure Scoop as personal taste mini-review",
+          "source": "supporting_docs/ai_voice_personality.md > 4.1 Scoop (Show Detail \"The Scoop\")",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 10.1 Scoop includes personal take, stack-up, centerpiece, fit/warnings, and verdict",
+          "gap": null
+        },
+        {
+          "id": "PRD-089",
+          "area": "AI Voice, Persona & Quality",
+          "label": "Keep Ask brisk and dialogue-like by default",
+          "source": "supporting_docs/ai_voice_personality.md > 4.2 Ask (Find \u2192 Ask)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 9.3 chat UI and Phase 10.5 surface prompt use friend-like dialogue",
+          "gap": null
+        },
+        {
+          "id": "PRD-090",
+          "area": "AI Voice, Persona & Quality",
+          "label": "Feed AI the right surface-specific context inputs",
+          "source": "supporting_docs/ai_prompting_context.md > 2. Shared Inputs (Typical)",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 10 routes pass show context, user library, selected concepts, source shows, and recent turns",
+          "gap": null
+        },
+        {
+          "id": "PRD-091",
+          "area": "AI Voice, Persona & Quality",
+          "label": "Validate discovery with rubric and hard-fail integrity",
+          "source": "supporting_docs/discovery_quality_bar.md > 4. Scoring Rubric (Quick)",
+          "severity": "important",
+          "coverage": "partial",
+          "evidence": "Phase 14.3 resolves AI recommendations to real catalog items and Phase 15.3 tests the parser",
+          "gap": "The plan does not include discovery-rubric validation, golden-set checks, or hard-fail scoring for AI output quality."
+        },
+        {
+          "id": "PRD-092",
+          "area": "Person Detail",
+          "label": "Show person gallery, name, and bio",
+          "source": "product_prd.md > 7.6 Person Detail Page",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 11 Person Detail includes profile image/gallery, name, and bio",
+          "gap": null
+        },
+        {
+          "id": "PRD-093",
+          "area": "Person Detail",
+          "label": "Include ratings, genres, and projects-by-year analytics",
+          "source": "product_prd.md > 7.6 Person Detail Page",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 11 Analytics Charts include average ratings, top genres, and projects by year",
+          "gap": null
+        },
+        {
+          "id": "PRD-094",
+          "area": "Person Detail",
+          "label": "Group filmography by year",
+          "source": "product_prd.md > 7.6 Person Detail Page",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 11 Filmography groups credits by year descending",
+          "gap": null
+        },
+        {
+          "id": "PRD-095",
+          "area": "Person Detail",
+          "label": "Open Show Detail from selected credit",
+          "source": "product_prd.md > 7.6 Person Detail Page",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 11 filmography items are tappable ShowTiles opening Show Detail",
+          "gap": null
+        },
+        {
+          "id": "PRD-096",
+          "area": "Settings & Export",
+          "label": "Include font size and Search-on-launch settings",
+          "source": "product_prd.md > 7.7 Settings & Your Data",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 12.1 includes font size and Search on launch local settings",
+          "gap": null
+        },
+        {
+          "id": "PRD-097",
+          "area": "Settings & Export",
+          "label": "Support username, model, and API-key settings safely",
+          "source": "product_prd.md > 7.7 Settings & Your Data",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 12.2 includes username, AI key, AI model, catalog key, masking, env precedence, and no commits",
+          "gap": null
+        },
+        {
+          "id": "PRD-098",
+          "area": "Settings & Export",
+          "label": "Export saved shows and My Data as zip",
+          "source": "product_prd.md > 7.7 Settings & Your Data",
+          "severity": "critical",
+          "coverage": "full",
+          "evidence": "Phase 12.3 `Export My Data` builds a ZIP with shows and My Data",
+          "gap": null
+        },
+        {
+          "id": "PRD-099",
+          "area": "Settings & Export",
+          "label": "Encode export dates using ISO-8601",
+          "source": "product_prd.md > 7.7 Settings & Your Data",
+          "severity": "important",
+          "coverage": "full",
+          "evidence": "Phase 12.3 states saved shows export dates are encoded ISO-8601",
+          "gap": null
+        }
+      ],
+      "metadata": {
+        "schema_version": 2,
+        "run_id": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+        "worktree_name": "sonnet_4_6__claude_code__high__no_plan_mode__r02",
+        "branch_name": "benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02",
+        "captured_at": "2026-04-28T13:17:29.724977Z",
+        "paths": {
+          "run_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02",
+          "results_dir": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results"
+        },
+        "subject": {
+          "model_slug": "sonnet_4_6",
+          "model_name": "Sonnet 4.6",
+          "model_family": "Claude Sonnet",
+          "manufacturer": "Anthropic",
+          "tool_slug": "claude_code",
+          "tool": "Claude Code",
+          "effort_slug": "high",
+          "effort": "High",
+          "variant_slug": "no_plan_mode",
+          "variant": "No Planning"
+        },
+        "grouping": {
+          "model_id": "sonnet_4_6",
+          "series_id": "sonnet_4_6__claude_code__high",
+          "case_id": "sonnet_4_6__claude_code__high__no_plan_mode",
+          "case_slug": "no_plan_mode",
+          "case_label": "No Planning",
+          "replicate_index": 2,
+          "baseline_case": false
+        },
+        "declared": {
+          "inference_profile_slug": "default",
+          "inference_profile": "Default",
+          "requested_context_window_tokens": null,
+          "planning_mode": false,
+          "prompt_profile_slug": "default_step1",
+          "prompt_profile": "Default Step 1",
+          "experiment_role": "replicate",
+          "experiment_tags": [
+            "no_plan_mode"
+          ],
+          "scenario": {
+            "slug": "no_plan_mode",
+            "label": "No Planning",
+            "description": null,
+            "hypothesis": null
+          },
+          "case_slug": null
+        },
+        "planning": {
+          "prompt_path": "1-START_HERE.md",
+          "prompt_git_sha": "05c0960de115b026112b47ddef66a8f95d0a004a",
+          "prompt_profile_slug": "default_step1",
+          "prompt_profile": "Default Step 1"
+        },
+        "evaluation": {
+          "evaluator_model": "gpt-5.5",
+          "evaluator_provider": "openai",
+          "prompt_path": "2-EVALUATE_PLAN.md",
+          "prompt_git_sha": "60a3b354091b7d60e72e882d67095e9846e13311",
+          "evaluation_session_path": "/Users/mmaher/.codex/sessions/2026/04/28/rollout-2026-04-28T06-12-00-019dd437-d07f-7d01-90d6-b791300aa47a.jsonl",
+          "evaluation_started_at": "2026-04-28T13:12:16.427Z",
+          "evaluation_ended_at": "2026-04-28T13:20:21.350Z",
+          "evaluation_duration_seconds": 484
+        },
+        "snapshot": {
+          "context_window_tokens": {
+            "value": null,
+            "source_url": null
+          },
+          "pricing": {
+            "source_url": null,
+            "input_usd_per_mtok": null,
+            "output_usd_per_mtok": null,
+            "cached_input_usd_per_mtok": null
+          },
+          "swe_bench_verified": {
+            "value": null,
+            "source_url": null
+          },
+          "frontier": {
+            "value": null,
+            "source": "manual",
+            "note": null
+          }
+        },
+        "observed": {
+          "plan_session": {
+            "source_tool": "claude_code",
+            "session_path": "/Users/mmaher/.claude/projects/-Users-mmaher-code-planning-benchmark-control/41be9fc6-efd4-447f-87d0-1ae1fbd04cc4.jsonl",
+            "started_at": "2026-04-27T22:32:39.397Z",
+            "ended_at": "2026-04-28T13:29:57.335Z",
+            "duration_seconds": 53837,
+            "model": "claude-opus-4-7",
+            "provider": "Anthropic",
+            "version": "2.1.119",
+            "collaboration_mode": null,
+            "context_window_tokens": null,
+            "assistant_message_count": 39,
+            "user_message_count": 8,
+            "tool_call_count": 50,
+            "tool_calls_by_name": {
+              "Bash": 49,
+              "ToolSearch": 1
+            },
+            "interrupted_count": 0,
+            "task_complete_count": 0,
+            "input_tokens": 223271,
+            "cached_input_tokens": 1914482,
+            "output_tokens": 21747,
+            "estimated_cost_usd": null,
+            "trusted": true,
+            "untrusted_reason": null
+          },
+          "eval_session": {
+            "source_tool": "codex_cli",
+            "session_path": "/Users/mmaher/.codex/sessions/2026/04/28/rollout-2026-04-28T06-12-00-019dd437-d07f-7d01-90d6-b791300aa47a.jsonl",
+            "started_at": "2026-04-28T13:12:16.427Z",
+            "ended_at": "2026-04-28T13:20:21.350Z",
+            "duration_seconds": 484,
+            "model": "gpt-5.5",
+            "provider": "openai",
+            "version": "0.125.0",
+            "collaboration_mode": "default",
+            "context_window_tokens": 258400,
+            "assistant_message_count": 12,
+            "user_message_count": 3,
+            "tool_call_count": 55,
+            "tool_calls_by_name": {
+              "exec_command": 49,
+              "update_plan": 6
+            },
+            "interrupted_count": 0,
+            "task_complete_count": 1,
+            "input_tokens": 2515492,
+            "cached_input_tokens": 2393216,
+            "output_tokens": 32575,
+            "estimated_cost_usd": null,
+            "trusted": true,
+            "untrusted_reason": null
+          }
+        },
+        "outcome": {
+          "plan_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN.md",
+          "plan_saved": true,
+          "plan_written_at": "2026-04-28T13:09:57.273629Z",
+          "plan_eval_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL.md",
+          "plan_eval_written_at": "2026-04-28T13:17:29.724977Z",
+          "plan_eval_report_path": "/Users/mmaher/code/planning_benchmark_control/runs/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_REPORT.html",
+          "plan_eval_report_generated": true,
+          "plan_eval_report_written_at": "2026-04-28T13:19:54.220790Z",
+          "plan_session_completed_at": "2026-04-28T13:29:57.335Z",
+          "save_blocked_by_mode": false,
+          "artifact_latency_seconds": 0,
+          "completion_state": "complete"
+        }
+      },
+      "artifacts": {
+        "plan_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN.md",
+        "plan_eval_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL.md",
+        "plan_eval_data_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_DATA.json",
+        "plan_eval_report_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/PLAN_EVAL_REPORT.html",
+        "run_metadata_url": "https://github.com/bladnman/planning_benchmark_results/blob/benchmarks/sonnet_4_6__claude_code__high__no_plan_mode__r02/results/run_metadata.json"
       }
     },
     {
