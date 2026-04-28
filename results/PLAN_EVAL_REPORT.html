@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plan Coverage Report</title>
+  <style>
+    :root {
+      --bg: #f5f7f8;
+      --panel: #ffffff;
+      --ink: #1d242b;
+      --muted: #62707a;
+      --line: #dbe1e5;
+      --teal: #168875;
+      --teal-soft: #dff4ee;
+      --amber: #c77a22;
+      --amber-soft: #fff0d7;
+      --red: #b64843;
+      --red-soft: #fae2df;
+      --steel: #53656e;
+      --shadow: 0 18px 44px rgba(24, 35, 42, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 36px 32px 52px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 1.1fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+
+    .score-card,
+    .panel,
+    .risk-row,
+    .gap-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .score-card {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 360px;
+    }
+
+    .eyebrow {
+      color: var(--steel);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 10px;
+      font-size: 34px;
+      line-height: 1.06;
+      letter-spacing: 0;
+      max-width: 520px;
+    }
+
+    .score {
+      font-size: 82px;
+      line-height: 0.92;
+      font-weight: 850;
+      letter-spacing: 0;
+      color: var(--teal);
+      margin-top: 26px;
+    }
+
+    .subscore {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .status-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfcfc;
+    }
+
+    .status-pill strong {
+      display: block;
+      font-size: 24px;
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .status-pill span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      padding: 28px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .brief {
+      font-size: 18px;
+      color: #2c363d;
+      max-width: 690px;
+    }
+
+    .arc {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .arc-step {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fbfcfc;
+      min-height: 145px;
+    }
+
+    .arc-step b {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .arc-step p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .arc-score {
+      margin-top: 12px;
+      font-size: 24px;
+      font-weight: 850;
+      color: var(--teal);
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 12px;
+      border-left: 3px solid var(--amber);
+      padding-left: 10px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      letter-spacing: 0;
+    }
+
+    .meter {
+      margin: 16px 0 18px;
+    }
+
+    .meter-label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .track {
+      width: 100%;
+      height: 12px;
+      background: #edf1f3;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--teal), #45a383);
+    }
+
+    .fill.important {
+      width: 93.28%;
+      background: linear-gradient(90deg, var(--amber), #d9a544);
+    }
+
+    .fill.full {
+      width: 100%;
+    }
+
+    .area-list,
+    .gap-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .area {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid #edf1f3;
+      padding-bottom: 10px;
+      color: #2f3c43;
+      font-size: 14px;
+    }
+
+    .tag {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 12px;
+      font-weight: 800;
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .tag.warn {
+      background: var(--amber-soft);
+      color: #8b5418;
+    }
+
+    .tag.risk {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .risk-table {
+      display: grid;
+      gap: 10px;
+    }
+
+    .risk-row {
+      display: grid;
+      grid-template-columns: 100px 1fr 1.2fr;
+      gap: 14px;
+      align-items: start;
+      padding: 14px 16px;
+      box-shadow: none;
+    }
+
+    .risk-id {
+      font-weight: 850;
+      color: var(--amber);
+    }
+
+    .risk-title {
+      font-weight: 750;
+      color: #243038;
+    }
+
+    .risk-copy {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .gap-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .gap-card {
+      box-shadow: none;
+      padding: 16px;
+      min-height: 190px;
+      border-top: 5px solid var(--amber);
+    }
+
+    .gap-card b {
+      display: block;
+      margin: 8px 0;
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .gap-card p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .callout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .callout .panel {
+      box-shadow: none;
+    }
+
+    .summary-text {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    @media (max-width: 900px) {
+      .main {
+        padding: 24px 18px 42px;
+      }
+
+      .hero,
+      .grid,
+      .callout {
+        grid-template-columns: 1fr;
+      }
+
+      .arc,
+      .status-strip,
+      .gap-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .risk-row {
+        grid-template-columns: 1fr;
+      }
+
+      .score {
+        font-size: 64px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div class="hero">
+      <div class="score-card">
+        <div>
+          <div class="eyebrow">Plan coverage report</div>
+          <h1>Strong plan, with important quality-contract gaps.</h1>
+          <div class="score">95.45%</div>
+          <p class="subscore">90 full, 9 partial, 0 missing across 99 canonical requirements.</p>
+        </div>
+        <div class="status-strip" aria-label="Coverage counts">
+          <div class="status-pill">
+            <strong>30/30</strong>
+            <span>Critical full</span>
+          </div>
+          <div class="status-pill">
+            <strong>58+9p</strong>
+            <span>Important</span>
+          </div>
+          <div class="status-pill">
+            <strong>0</strong>
+            <span>Missing</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel hero-copy">
+        <div>
+          <div class="eyebrow">Readiness posture</div>
+          <p class="brief">The plan is architecturally complete and covers every critical requirement. The remaining risk is concentrated in sync integrity, exact detail-page narrative order, and AI discovery quality controls.</p>
+        </div>
+        <div class="arc" aria-label="Coverage arc">
+          <div class="arc-step">
+            <b>Submitted plan</b>
+            <p>Broad coverage of infrastructure, data, navigation, detail, AI, settings, and export.</p>
+            <div class="arc-score">95.45%</div>
+          </div>
+          <div class="arc-step">
+            <b>Evaluation found</b>
+            <p>Nine important-tier partials. No critical or detail-tier gaps remain.</p>
+            <div class="arc-score">+0 missing</div>
+          </div>
+          <div class="arc-step">
+            <b>Revision target</b>
+            <p>Close nine specification gaps to reach full benchmark coverage.</p>
+            <div class="arc-score">100%</div>
+          </div>
+        </div>
+        <p class="note">No separate revised plan artifact was supplied in this run, so the report shows the submitted plan's evaluated score plus the concrete target for remediation.</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h2>Coverage By Severity</h2>
+        <div class="meter">
+          <div class="meter-label"><span>Critical</span><span>100.00% - 30 of 30</span></div>
+          <div class="track"><div class="fill full"></div></div>
+        </div>
+        <div class="meter">
+          <div class="meter-label"><span>Important</span><span>93.28% - 62.5 of 67</span></div>
+          <div class="track"><div class="fill important"></div></div>
+        </div>
+        <div class="meter">
+          <div class="meter-label"><span>Detail</span><span>100.00% - 2 of 2</span></div>
+          <div class="track"><div class="fill full"></div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>What's Strong</h2>
+        <div class="area-list">
+          <div class="area"><span>Benchmark Runtime &amp; Isolation</span><span class="tag">strong</span></div>
+          <div class="area"><span>Collection Data &amp; Persistence</span><span class="tag">mostly full</span></div>
+          <div class="area"><span>App Navigation &amp; Discover Shell</span><span class="tag">full</span></div>
+          <div class="area"><span>Collection Home &amp; Search</span><span class="tag">full</span></div>
+          <div class="area"><span>Person Detail</span><span class="tag">full</span></div>
+          <div class="area"><span>Settings &amp; Export</span><span class="tag">full</span></div>
+        </div>
+      </div>
+
+      <div class="panel wide">
+        <h2>What's Still At Risk</h2>
+        <div class="risk-table">
+          <div class="risk-row">
+            <div class="risk-id">PRD-028</div>
+            <div class="risk-title">Timestamp usage</div>
+            <div class="risk-copy">Merge conflicts and Scoop freshness are covered, but timestamp-driven sorting is not specified.</div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-id">PRD-033</div>
+            <div class="risk-title">Sync and duplicate merge</div>
+            <div class="risk-copy">The plan lacks duplicate detection and explicit cross-device settings conflict behavior.</div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-id">PRD-051</div>
+            <div class="risk-title">Detail-page narrative order</div>
+            <div class="risk-copy">All sections exist, but the planned order diverges from the supporting detail hierarchy.</div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-id">PRD-066</div>
+            <div class="risk-title">Ask directness</div>
+            <div class="risk-copy">Spoiler safety and confidence are covered; direct-answer acceptance criteria are not.</div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-id">PRD-068</div>
+            <div class="risk-title">Mention click-through</div>
+            <div class="risk-copy">Parsing and fallback are planned, but successful mention tap-to-detail behavior is not explicit.</div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-id">PRD-075</div>
+            <div class="risk-title">Concept definition</div>
+            <div class="risk-copy">Concepts are evocative, but the plan does not explicitly reject genre or plot labels.</div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-id">PRD-076</div>
+            <div class="risk-title">Concept output format</div>
+            <div class="risk-copy">Short, non-generic concepts are planned, but the bullet-only contract is not preserved.</div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-id">PRD-084</div>
+            <div class="risk-title">Surprising but defensible recs</div>
+            <div class="risk-copy">The plan grounds recs in concepts, but does not encode surprise-without-betrayal as a quality bar.</div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-id">PRD-091</div>
+            <div class="risk-title">Discovery validation</div>
+            <div class="risk-copy">Real-show resolution is covered, but rubric scoring and golden-set validation are absent.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel wide">
+        <h2>Top Gaps And Why They Matter</h2>
+        <div class="gap-grid">
+          <div class="gap-card">
+            <span class="tag warn">PRD-033</span>
+            <b>Sync libraries/settings consistently and merge duplicates</b>
+            <p>Without explicit duplicate and settings conflict rules, users can see stale settings or collection divergence.</p>
+          </div>
+          <div class="gap-card">
+            <span class="tag warn">PRD-091</span>
+            <b>Validate discovery with rubric and hard-fail integrity</b>
+            <p>Resolvable recommendations can still regress on voice, taste, specificity, and surprise.</p>
+          </div>
+          <div class="gap-card">
+            <span class="tag warn">PRD-051</span>
+            <b>Preserve Show Detail narrative section order</b>
+            <p>The detail spec defines a reading path, not just a component list. Order affects first impression.</p>
+          </div>
+          <div class="gap-card">
+            <span class="tag warn">PRD-066</span>
+            <b>Answer directly with confident, spoiler-safe recommendations</b>
+            <p>Ask may feel personable but slow or evasive without a direct-answer bar.</p>
+          </div>
+          <div class="gap-card">
+            <span class="tag warn">PRD-076</span>
+            <b>Return bullet-only, 1-3 word, non-generic concepts</b>
+            <p>Loose formatting weakens parser reliability and the crisp concept-chip experience.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="panel">
+        <h2>Stakeholder Confidence</h2>
+        <p class="summary-text">High for architecture, data ownership, collection rules, navigation, settings, export, and the broad AI surface map. Moderate for product feel and validation, because several AI and detail-page requirements need stricter acceptance criteria before execution.</p>
+      </div>
+      <div class="panel">
+        <h2>Remediation Pattern</h2>
+        <p class="summary-text">This does not need a new architecture. It needs tighter specification: timestamp sorting, duplicate and settings merge policy, exact detail ordering, Ask directness tests, concept output constraints, and discovery rubric validation.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
