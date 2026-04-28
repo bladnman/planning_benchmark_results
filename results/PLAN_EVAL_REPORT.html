@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plan Coverage Evaluation</title>
+  <style>
+    :root {
+      --ink: #152029;
+      --muted: #60717f;
+      --line: #d9e2e7;
+      --paper: #f7f9f8;
+      --panel: #ffffff;
+      --teal: #117c78;
+      --teal-soft: #dff3ef;
+      --amber: #b87412;
+      --amber-soft: #fff2d8;
+      --red: #b54343;
+      --blue: #315f9f;
+      --blue-soft: #e7eef9;
+      --shadow: 0 18px 45px rgba(21, 32, 41, 0.10);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.45;
+    }
+    .page { max-width: 1200px; margin: 0 auto; padding: 32px; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+    .hero-main, .panel { background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); border-radius: 8px; }
+    .hero-main { padding: 34px; display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; }
+    .score-ring {
+      width: 178px; height: 178px; border-radius: 50%;
+      background: conic-gradient(var(--teal) 0 95.96%, #e3eceb 95.96% 100%);
+      display: grid; place-items: center;
+    }
+    .score-ring div { width: 126px; height: 126px; border-radius: 50%; background: white; display: grid; place-items: center; text-align: center; }
+    .score-ring b { font-size: 36px; letter-spacing: 0; }
+    .score-ring span { display: block; color: var(--muted); font-size: 12px; text-transform: uppercase; font-weight: 700; }
+    h1 { margin: 0 0 10px; font-size: 38px; line-height: 1.05; letter-spacing: 0; }
+    h2 { margin: 0 0 14px; font-size: 20px; letter-spacing: 0; }
+    h3 { margin: 8px 0 8px; font-size: 16px; letter-spacing: 0; }
+    p { margin: 0; color: var(--muted); }
+    .lede { font-size: 17px; max-width: 620px; }
+    .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; }
+    .metric { border: 1px solid var(--line); border-radius: 8px; padding: 14px; background: #fbfcfc; }
+    .metric strong { display: block; font-size: 24px; }
+    .metric span { color: var(--muted); font-size: 12px; text-transform: uppercase; font-weight: 700; }
+    .arc { padding: 24px; }
+    .arc-step { display: grid; grid-template-columns: 88px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .arc-step:last-child { border-bottom: 0; }
+    .arc-step b { color: var(--blue); font-size: 20px; }
+    .arc-step span { color: var(--muted); display: block; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .panel { padding: 24px; }
+    .severity { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .sev-card { border-radius: 8px; padding: 18px; border: 1px solid var(--line); background: #fbfcfc; }
+    .sev-card strong { font-size: 28px; display: block; }
+    .sev-card span { color: var(--muted); font-weight: 700; text-transform: uppercase; font-size: 12px; }
+    .area-row { display: grid; grid-template-columns: 1fr 220px; gap: 18px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .area-row:last-child { border-bottom: 0; }
+    .area-row span { display: block; color: var(--muted); font-size: 13px; }
+    .area-score { display: grid; grid-template-columns: 44px 1fr; gap: 10px; align-items: center; }
+    .bar { height: 10px; background: #e5ecef; border-radius: 999px; overflow: hidden; }
+    .bar i { display: block; height: 100%; background: var(--teal); border-radius: inherit; }
+    .list-split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 8px 0; }
+    li span { color: var(--amber); font-weight: 700; }
+    .risk-grid, .gap-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .gap-grid { grid-template-columns: repeat(5, 1fr); }
+    .risk-card, .gap-card { border: 1px solid var(--line); border-radius: 8px; padding: 16px; background: #fbfcfc; min-height: 168px; }
+    .risk-top, .gap-id { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 12px; text-transform: uppercase; font-weight: 800; }
+    .pill, .gap-id span { background: var(--amber-soft); color: var(--amber); border-radius: 999px; padding: 3px 8px; }
+    .gap-card { background: linear-gradient(180deg, #fffaf0, #ffffff); border-color: #efd39c; }
+    .gap-card .gap-id { color: var(--amber); }
+    .callout { border-left: 4px solid var(--teal); background: var(--teal-soft); padding: 18px; border-radius: 8px; }
+    .footer { color: var(--muted); font-size: 12px; margin-top: 22px; }
+    @media (max-width: 920px) {
+      .page { padding: 18px; }
+      .hero, .grid, .list-split { grid-template-columns: 1fr; }
+      .hero-main { grid-template-columns: 1fr; }
+      .risk-grid, .gap-grid, .severity, .metric-grid { grid-template-columns: 1fr; }
+      .area-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-main">
+        <div class="score-ring"><div><b>95.96%</b><span>coverage</span></div></div>
+        <div>
+          <h1>Strong plan, with precision gaps left to close.</h1>
+          <p class="lede">The submitted plan covers every critical requirement and most implementation surfaces. Remaining risk is concentrated in important-but-specific product behavior: primary navigation, sync duplicate merging, exact detail hierarchy, hidden status compatibility, timestamp sorting, motion priority, and multi-show concept pool size.</p>
+          <div class="metric-grid">
+            <div class="metric"><strong>91</strong><span>full</span></div>
+            <div class="metric"><strong>8</strong><span>partial</span></div>
+            <div class="metric"><strong>0</strong><span>missing</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel arc">
+        <h2>Readiness Arc</h2>
+        <div class="arc-step"><b>95.96%</b><div><strong>Submitted plan, audited</strong><span>No separate revised plan artifact exists in this run. This score is the current audited state of `results/PLAN.md`.</span></div></div>
+        <div class="arc-step"><b>8</b><div><strong>Gaps identified</strong><span>All are partial important requirements. There are no missing or critical gaps.</span></div></div>
+        <div class="arc-step"><b>100%</b><div><strong>Gap-closed target</strong><span>Explicit acceptance criteria for the eight partials would move this plan to complete coverage.</span></div></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h2>Severity Confidence</h2>
+        <div class="severity">
+          <div class="sev-card"><strong>100%</strong><span>critical</span><p>30 full, 0 partial</p></div>
+          <div class="sev-card"><strong>94%</strong><span>important</span><p>59 full, 8 partial</p></div>
+          <div class="sev-card"><strong>100%</strong><span>detail</span><p>2 full, 0 partial</p></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>What Is Strong</h2>
+        <div class="list-split">
+          <div><p>Fully covered areas:</p><ul><li>Benchmark Runtime &amp; Isolation</li><li>Collection Home &amp; Search</li><li>Ask Chat</li><li>AI Voice, Persona &amp; Quality</li><li>Person Detail</li><li>Settings &amp; Export</li></ul></div>
+          <div><p>Lowest-scoring areas:</p><ul><li>App Navigation &amp; Discover Shell <span>75%</span></li><li>Collection Data &amp; Persistence <span>92%</span></li><li>Show Detail &amp; Relationship UX <span>93%</span></li><li>Concepts, Explore Similar &amp; Alchemy <span>95%</span></li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-bottom:24px;">
+      <h2>Coverage By Functional Area</h2>
+      
+      <div class="area-row">
+        <div>
+          <strong>Benchmark Runtime &amp; Isolation</strong>
+          <span>17 full / 0 partial / 0 missing</span>
+        </div>
+        <div class="area-score"><span>100%</span><div class="bar"><i style="width:100.00%"></i></div></div>
+      </div>
+      <div class="area-row">
+        <div>
+          <strong>Collection Data &amp; Persistence</strong>
+          <span>17 full / 3 partial / 0 missing</span>
+        </div>
+        <div class="area-score"><span>92%</span><div class="bar"><i style="width:92.50%"></i></div></div>
+      </div>
+      <div class="area-row">
+        <div>
+          <strong>App Navigation &amp; Discover Shell</strong>
+          <span>2 full / 2 partial / 0 missing</span>
+        </div>
+        <div class="area-score"><span>75%</span><div class="bar"><i style="width:75.00%"></i></div></div>
+      </div>
+      <div class="area-row">
+        <div>
+          <strong>Collection Home &amp; Search</strong>
+          <span>9 full / 0 partial / 0 missing</span>
+        </div>
+        <div class="area-score"><span>100%</span><div class="bar"><i style="width:100.00%"></i></div></div>
+      </div>
+      <div class="area-row">
+        <div>
+          <strong>Show Detail &amp; Relationship UX</strong>
+          <span>12 full / 2 partial / 0 missing</span>
+        </div>
+        <div class="area-score"><span>93%</span><div class="bar"><i style="width:92.86%"></i></div></div>
+      </div>
+      <div class="area-row">
+        <div>
+          <strong>Ask Chat</strong>
+          <span>10 full / 0 partial / 0 missing</span>
+        </div>
+        <div class="area-score"><span>100%</span><div class="bar"><i style="width:100.00%"></i></div></div>
+      </div>
+      <div class="area-row">
+        <div>
+          <strong>Concepts, Explore Similar &amp; Alchemy</strong>
+          <span>9 full / 1 partial / 0 missing</span>
+        </div>
+        <div class="area-score"><span>95%</span><div class="bar"><i style="width:95.00%"></i></div></div>
+      </div>
+      <div class="area-row">
+        <div>
+          <strong>AI Voice, Persona &amp; Quality</strong>
+          <span>7 full / 0 partial / 0 missing</span>
+        </div>
+        <div class="area-score"><span>100%</span><div class="bar"><i style="width:100.00%"></i></div></div>
+      </div>
+      <div class="area-row">
+        <div>
+          <strong>Person Detail</strong>
+          <span>4 full / 0 partial / 0 missing</span>
+        </div>
+        <div class="area-score"><span>100%</span><div class="bar"><i style="width:100.00%"></i></div></div>
+      </div>
+      <div class="area-row">
+        <div>
+          <strong>Settings &amp; Export</strong>
+          <span>4 full / 0 partial / 0 missing</span>
+        </div>
+        <div class="area-score"><span>100%</span><div class="bar"><i style="width:100.00%"></i></div></div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-bottom:24px;">
+      <h2>Top Gaps And Why They Matter</h2>
+      <div class="gap-grid">
+      <article class="gap-card">
+        <div class="gap-id">PRD-033 <span>important</span></div>
+        <h3>Sync libraries/settings consistently and merge duplicates</h3>
+        <p>The plan covers conflict resolution but does not specify duplicate item detection and transparent duplicate merging across synced libraries.</p>
+      </article>
+      <article class="gap-card">
+        <div class="gap-id">PRD-051 <span>important</span></div>
+        <h3>Preserve Show Detail narrative section order</h3>
+        <p>The listed order moves relationship controls before tags and does not exactly preserve the documented narrative hierarchy from the detail spec.</p>
+      </article>
+      <article class="gap-card">
+        <div class="gap-id">PRD-039 <span>important</span></div>
+        <h3>Keep Find/Discover in persistent primary navigation</h3>
+        <p>The Find routes are planned, but a persistent primary navigation entry is not specified as a concrete UI deliverable.</p>
+      </article>
+      <article class="gap-card">
+        <div class="gap-id">PRD-040 <span>important</span></div>
+        <h3>Keep Settings in persistent primary navigation</h3>
+        <p>The Settings route is planned, but a persistent primary navigation entry is not specified as a concrete UI deliverable.</p>
+      </article>
+      <article class="gap-card">
+        <div class="gap-id">PRD-019 <span>important</span></div>
+        <h3>Support visible statuses plus hidden `Next`</h3>
+        <p>The plan covers the visible status behavior but never specifies the hidden `Next` status in the data model or service rules.</p>
+      </article></div>
+    </section>
+
+    <section class="panel" style="margin-bottom:24px;">
+      <h2>What Is Still At Risk</h2>
+      <div class="risk-grid">
+      <article class="risk-card">
+        <div class="risk-top"><span class="pill">important</span><strong>PRD-019</strong></div>
+        <h3>Support visible statuses plus hidden `Next`</h3>
+        <p>The plan covers the visible status behavior but never specifies the hidden `Next` status in the data model or service rules.</p>
+      </article>
+      <article class="risk-card">
+        <div class="risk-top"><span class="pill">important</span><strong>PRD-028</strong></div>
+        <h3>Use timestamps for sorting, sync, freshness</h3>
+        <p>The plan uses timestamps for sync conflicts and freshness, but does not state a user-facing sorting rule based on the per-field modification timestamps.</p>
+      </article>
+      <article class="risk-card">
+        <div class="risk-top"><span class="pill">important</span><strong>PRD-033</strong></div>
+        <h3>Sync libraries/settings consistently and merge duplicates</h3>
+        <p>The plan covers conflict resolution but does not specify duplicate item detection and transparent duplicate merging across synced libraries.</p>
+      </article>
+      <article class="risk-card">
+        <div class="risk-top"><span class="pill">important</span><strong>PRD-039</strong></div>
+        <h3>Keep Find/Discover in persistent primary navigation</h3>
+        <p>The Find routes are planned, but a persistent primary navigation entry is not specified as a concrete UI deliverable.</p>
+      </article>
+      <article class="risk-card">
+        <div class="risk-top"><span class="pill">important</span><strong>PRD-040</strong></div>
+        <h3>Keep Settings in persistent primary navigation</h3>
+        <p>The Settings route is planned, but a persistent primary navigation entry is not specified as a concrete UI deliverable.</p>
+      </article>
+      <article class="risk-card">
+        <div class="risk-top"><span class="pill">important</span><strong>PRD-051</strong></div>
+        <h3>Preserve Show Detail narrative section order</h3>
+        <p>The listed order moves relationship controls before tags and does not exactly preserve the documented narrative hierarchy from the detail spec.</p>
+      </article>
+      <article class="risk-card">
+        <div class="risk-top"><span class="pill">important</span><strong>PRD-052</strong></div>
+        <h3>Prioritize motion-rich header with graceful fallback</h3>
+        <p>The plan covers header media and fallback states, but does not explicitly prioritize motion or trailers when available.</p>
+      </article>
+      <article class="risk-card">
+        <div class="risk-top"><span class="pill">important</span><strong>PRD-082</strong></div>
+        <h3>Generate shared multi-show concepts with larger option pool</h3>
+        <p>The plan requires shared multi-show concepts but omits the larger option pool expected for multi-show generation.</p>
+      </article></div>
+    </section>
+
+    <section class="grid">
+      <div class="panel callout">
+        <h2>Likely Failure Mode</h2>
+        <p>Execution would likely produce a working, well-partitioned app, but review would surface PRD-fit mismatches: discovery and settings may not be persistently reachable, the detail page may not preserve the intended narrative rhythm, sync can still produce duplicate weirdness, and Alchemy may feel narrower than specified.</p>
+      </div>
+      <div class="panel">
+        <h2>Remediation Focus</h2>
+        <p>Add explicit acceptance criteria for primary navigation, hidden `Next`, duplicate merge rules, timestamp sorting, exact detail-page order, motion-first header behavior, and multi-show concept pool sizing. These are planning refinements, not a new architecture.</p>
+      </div>
+    </section>
+    <p class="footer">Source: results/PLAN_EVAL.md. Generated as a self-contained stakeholder report with no external dependencies.</p>
+  </main>
+</body>
+</html>
